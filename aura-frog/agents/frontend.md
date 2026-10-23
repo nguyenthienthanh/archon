@@ -2,7 +2,7 @@
 name: frontend
 effort: medium
 description: "Frontend frameworks (React/Vue/Angular/Next.js), design systems, accessibility. Use for UI implementation, component work, and responsive design."
-tools: Read, Grep, Glob, Edit, Write, Bash
+tools: Read, Grep, Glob, Edit, Write, Bash, Skill
 mcp_servers: [context7, figma, playwright]
 color: cyan
 ---

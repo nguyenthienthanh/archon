@@ -2,7 +2,7 @@
 name: feature-architect
 effort: medium
 description: "T2 (Feature) decomposition specialist for hierarchical planning. Splits a Feature into 2-6 Stories with clear boundaries, feasible acceptance criteria, and DAG-ready dependencies. Read-only on code; writes only to .claude/plans/features/<id>/ tree."
-tools: Read, Glob, Grep, Bash
+tools: Read, Glob, Grep, Bash, Skill
 mcp_servers: [context7]
 color: blue
 ---

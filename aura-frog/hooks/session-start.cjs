@@ -193,6 +193,20 @@ function emitContextBudgetWarning() {
 }
 
 /**
+ * Index the host's own rules/skills/agents (~/.claude + <project>/.claude) so plugin
+ * routing prefers them, and flag skill files Claude Code will never register.
+ * Disable with AF_HOST_EXTENSIONS_DISABLED=true. Never breaks session start.
+ */
+function emitHostExtensions() {
+  try {
+    const host = require('./lib/host-extensions.cjs');
+    const root = findProjectRoot();
+    const msg = host.formatIndex(host.discover(root), { projectDir: root });
+    if (msg) console.log(msg);
+  } catch { /* non-blocking */ }
+}
+
+/**
  * Build context summary for output (compact, single line)
  */
 function buildContextOutput(config, detections, resolved, memoryResult) {
@@ -272,6 +286,7 @@ async function main() {
       } catch {/* best-effort */}
       emitContextStalenessBanner();
       emitContextBudgetWarning();
+      emitHostExtensions();
       process.exit(0);
     }
 
@@ -439,6 +454,7 @@ async function main() {
 
     emitContextStalenessBanner();
     emitContextBudgetWarning();
+    emitHostExtensions();
 
     // Check if statusLine is configured — one-time hint
     const statusHintFile = path.join(findProjectRoot(), '.claude', 'cache', 'statusline-hint-shown');

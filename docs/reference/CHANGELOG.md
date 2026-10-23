@@ -12,6 +12,29 @@ All notable changes to Aura Frog will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+
+- **Plugin now honours the host's own rules and skills (user + project scope).** Claude Code
+  loads `~/.claude/{rules,skills,agents}` and `<project>/.claude/{rules,skills,agents}`, but Aura
+  Frog's routing only knew its own components, so host skills were bypassed:
+  - all 15 plugin agents lacked the `Skill` tool, so a plugin subagent could never invoke a
+    user/project skill — `Skill` added to every agent's `tools:`;
+  - `subagent-init` printed its context to stderr, which `SubagentStart` does not deliver to the
+    model — it now emits `hookSpecificOutput.additionalContext`, including the host index (unscoped
+    rule paths + skill paths, project first);
+  - `priority-hierarchy` ranked global below the plugin and ignored rules/skills dirs — order is now
+    project > user > plugin, and `agent-detector` prefers a matching host skill.
+- **Host skills Claude Code silently ignores are flagged.** Only `.claude/skills/<name>/SKILL.md`
+  with `description` frontmatter registers; flat `.claude/skills/<name>.md` files never load.
+  `session-start` now prints a `🧩 Host extensions` index plus a warning listing unregistered files.
+
+### Added
+
+- **`scripts/migrate-host-skills.cjs`** — converts flat skill files into `<name>/SKILL.md` and adds
+  missing `name`/`description` frontmatter (description from the `**Trigger:**` line, else heading +
+  first line). Dry run by default, `--apply` to write, `~` targets `~/.claude/skills`.
+- `hooks/lib/host-extensions.cjs` (discovery + index). Opt out: `AF_HOST_EXTENSIONS_DISABLED=true`.
+
 ## [3.8.0-alpha.20] - 2026-10-01 (Startup context budget warning)
 
 ### Added

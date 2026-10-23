@@ -138,6 +138,16 @@ function trackAgentUsage(state, agentType) {
   }
 }
 
+// Host (user + project) rules/skills index for the subagent, or null.
+function buildHostIndex() {
+  try {
+    const host = require('./lib/host-extensions.cjs');
+    const { findProjectRoot } = require('./lib/hook-runtime.cjs');
+    const root = findProjectRoot();
+    return host.formatIndex(host.discover(root), { projectDir: root, forSubagent: true });
+  } catch { return null; }
+}
+
 // Main execution
 function main() {
   const state = loadSessionState();
@@ -243,12 +253,19 @@ function main() {
     }
   }
 
-  // Output context if any
+  // Host rules/skills index — plugin subagents otherwise never learn about them.
+  const hostIndex = buildHostIndex();
+  if (hostIndex) context.push(hostIndex);
+
+  // Output context if any. SubagentStart only delivers stdout JSON
+  // (hookSpecificOutput.additionalContext) to the subagent — stderr on exit 0
+  // reaches the transcript, not the model.
   if (context.length > 0) {
     const header = isTeammate ? '--- Aura Frog Team Context ---' : '--- Aura Frog Context ---';
-    console.error(`\n${header}`);
-    context.forEach(c => console.error(c));
-    console.error('-------------------------------\n');
+    const text = [header, ...context, '-------------------------------'].join('\n');
+    process.stdout.write(JSON.stringify({
+      hookSpecificOutput: { hookEventName: 'SubagentStart', additionalContext: text }
+    }));
   }
 
   // Save updated state
@@ -261,5 +278,5 @@ function main() {
 if (require.main === module) {
   main();
 } else {
-  module.exports = { loadSessionState, detectPhase, getProjectName };
+  module.exports = { loadSessionState, detectPhase, getProjectName, buildHostIndex };
 }
