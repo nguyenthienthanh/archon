@@ -2,7 +2,7 @@
 name: strategist
 effort: high
 description: "Business strategy, MVP scoping, ROI evaluation. Use in Phase 1 Deep tasks to challenge requirements and evaluate business case. READ-ONLY — analysis only."
-tools: Read, Grep, Glob
+tools: Read, Grep, Glob, Skill
 mcp_servers: [context7]
 color: orange
 ---

@@ -2,7 +2,7 @@
 name: lead
 effort: medium
 description: "Workflow orchestrator. Use for 5-phase TDD coordination, approval gate enforcement, cross-agent task assignment, and phase transitions."
-tools: Read, Grep, Glob, Edit, Write, Bash
+tools: Read, Grep, Glob, Edit, Write, Bash, Skill
 mcp_servers: []
 color: yellow
 ---

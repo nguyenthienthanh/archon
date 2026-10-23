@@ -2,7 +2,7 @@
 name: master-planner
 effort: high
 description: "Stateful kernel controller for the plan tree. Owns plan persistence at .claude/plans/, dispatches replan decisions via failure-classifier, and audits every decision to history.jsonl. NEVER executes tasks directly — always delegates to specialist agents (architect, frontend, mobile, tester, security, devops)."
-tools: Read, Write, Edit, Glob, Grep, Bash
+tools: Read, Write, Edit, Glob, Grep, Bash, Skill
 mcp_servers: []
 color: yellow
 ---

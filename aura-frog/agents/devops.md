@@ -2,7 +2,7 @@
 name: devops
 effort: medium
 description: "Docker, Kubernetes, CI/CD, infrastructure-as-code, cloud deployment. Use for containerization, pipelines, and deployment strategy."
-tools: Read, Grep, Glob, Edit, Write, Bash
+tools: Read, Grep, Glob, Edit, Write, Bash, Skill
 mcp_servers: [firebase, slack]
 color: pink
 ---

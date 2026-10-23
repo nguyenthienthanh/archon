@@ -1,6 +1,6 @@
 # Aura Frog OS — Plugin for Claude Code
 
-**System:** Aura Frog v3.8.0-alpha.20 | **Format:** [TOON](https://github.com/toon-format/toon)
+**System:** Aura Frog v3.8.0-alpha.21 | **Format:** [TOON](https://github.com/toon-format/toon)
 **Purpose:** Planning-first LLM OS. Agents + skills + commands + 5-phase TDD + hierarchical planning (T0-T4) + memory tier + pre-flight + L1/L2 conflicts + freeze cascade + self-healing safety gates + MCP security tier + MCP servers. Component counts: see **Resources** below (single source).
 
 ---
@@ -288,4 +288,4 @@ resources[8]{name,location}:
 
 ---
 
-**Version:** 3.8.0-alpha.20
+**Version:** 3.8.0-alpha.21

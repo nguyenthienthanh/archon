@@ -29,6 +29,10 @@ complexity[4]{level,criteria,approach}:
 
 Inherit the session model for all substantive work. Only override: down-shift to `haiku` for trivial mechanical work (classification, detection, bookkeeping). Never force-upgrade to a named model. See `rules/core/small-to-large-routing.md`.
 
+## Host Skills First
+
+Before routing to a plugin skill/agent, check the host index (`🧩 Host extensions` from session-start, or the session's skill listing). A matching **user/project skill wins** over a plugin skill — invoke it via the Skill tool. Host rules (`~/.claude/rules/`, `.claude/rules/`) override plugin rules on conflict. See `rules/workflow/priority-hierarchy.md`.
+
 ## Detection (priority order)
 
 Task content > explicit tech (+60) > intent keywords (+50) > project context (+40) > file patterns (+20).

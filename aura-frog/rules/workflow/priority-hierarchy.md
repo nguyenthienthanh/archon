@@ -19,10 +19,23 @@ Claude Code loads instructions in order and MERGES them. Project linting config 
 
 ```
 0. Project Linting Config    (HIGHEST) — .eslintrc, .prettierrc, tsconfig.json
-1. Project: .claude/CLAUDE.md (HIGH)   — Project-specific overrides
-2. Plugin: aura-frog/CLAUDE.md (MED)   — Aura Frog system instructions
-3. Global: ~/.claude/CLAUDE.md (LOW)   — User's global defaults
+1. Project: CLAUDE.md, .claude/CLAUDE.md, .claude/rules/**, .claude/skills/**, .claude/agents/** (HIGH)
+2. User:    ~/.claude/CLAUDE.md, ~/.claude/rules/**, ~/.claude/skills/**, ~/.claude/agents/** (HIGH)
+3. Plugin:  aura-frog/CLAUDE.md, rules/, skills/, agents/ (DEFAULT)
 ```
+
+**Host extensions beat plugin defaults.** The user's own rules/skills (user + project
+scope) are deliberate choices; Aura Frog's are generic defaults. On conflict the host wins,
+and when a host skill and a plugin skill both match a task, invoke the host skill. A
+security/override rule in `~/.claude/rules/` is never relaxed by a plugin rule.
+
+`session-start` prints the host index (`🧩 Host extensions`) and `subagent-init` injects it
+into every subagent (plugin agents carry the `Skill` tool for this). Disable with
+`AF_HOST_EXTENSIONS_DISABLED=true`.
+
+**Skills Claude Code never registers:** only `.claude/skills/<name>/SKILL.md` with
+`description` frontmatter loads. Flat `.claude/skills/<name>.md` files are silently ignored —
+session-start warns; convert with `node scripts/migrate-host-skills.cjs <project-dir> --apply`.
 
 ---
 
@@ -59,9 +72,10 @@ code_quality_merge[5]{priority,source,behavior}:
 ## Troubleshooting
 
 - Plugin not loading? Check global `~/.claude/CLAUDE.md` points to plugin
-- Overrides not working? Check priority order (project > plugin > global)
+- Overrides not working? Check priority order (project > user > plugin)
+- Host skill never shows up? Check it is `<name>/SKILL.md` with `description` frontmatter (`scripts/migrate-host-skills.cjs`)
 - Context not applied? Run `/project init`, verify `.claude/project-contexts/` exists
 
 ---
 
-**Last Updated:** 2025-12-10
+**Last Updated:** 2026-10-23

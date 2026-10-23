@@ -1,6 +1,6 @@
 {
   "name": "aura-frog",
-  "version": "3.8.0-alpha.20",
+  "version": "3.8.0-alpha.21",
   "description": "Planning-first LLM OS for Claude Code. Hierarchical planning (T0-T4) that survives session reset, forensic reasoning traces, conflict detection, self-healing safety gates, and a 5-phase TDD workflow. 15 agents, 72 rules, 59 skills, 24 commands, 50 hooks.",
   "keywords": [
     "claude",

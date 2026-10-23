@@ -2,7 +2,7 @@
 name: architect
 effort: high
 description: "System design, database schema, API endpoints, backend architecture. Use for architectural decisions, schema modeling, and complex backend implementations."
-tools: Read, Grep, Glob, Edit, Write, Bash
+tools: Read, Grep, Glob, Edit, Write, Bash, Skill
 mcp_servers: [context7, postgres, redis]
 color: blue
 ---

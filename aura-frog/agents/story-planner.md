@@ -2,7 +2,7 @@
 name: story-planner
 effort: medium
 description: "T3 (Story) decomposition for hierarchical planning. Splits a Story into 1-6 atomic Tasks. Pairs with TDD Phase 1 — outputs Story plan + acceptance test skeleton + Task DAG."
-tools: Read, Glob, Grep, Bash
+tools: Read, Glob, Grep, Bash, Skill
 mcp_servers: [context7]
 color: cyan
 ---

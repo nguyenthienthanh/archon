@@ -2,7 +2,7 @@
 name: tester
 effort: medium
 description: "Test strategy, automation, TDD enforcement, coverage analysis. Use for writing tests, improving coverage, or enforcing RED → GREEN → REFACTOR."
-tools: Read, Grep, Glob, Edit, Write, Bash
+tools: Read, Grep, Glob, Edit, Write, Bash, Skill
 mcp_servers: [vitest, playwright]
 color: green
 ---
