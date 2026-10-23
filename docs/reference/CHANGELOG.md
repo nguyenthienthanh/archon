@@ -12,6 +12,8 @@ All notable changes to Aura Frog will be documented in this file.
 
 ## [Unreleased]
 
+## [3.8.0-alpha.21] - 2026-10-23 (Host rules and skills honoured)
+
 ### Fixed
 
 - **Plugin now honours the host's own rules and skills (user + project scope).** Claude Code
