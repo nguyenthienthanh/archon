@@ -21,7 +21,7 @@ let dir;
 let home;
 
 beforeEach(() => {
-  dir = fs.mkdtempSync(path.join(os.tmpdir(), 'af-envrc-'));
+  dir = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'af-envrc-')));
   home = path.join(dir, 'home');
   fs.mkdirSync(home, { recursive: true });
 });

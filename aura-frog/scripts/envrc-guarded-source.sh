@@ -92,22 +92,42 @@ _af_envrc_hash() {
 
 # Expected hash for $2 (the .envrc path) out of trust file $1.
 _af_envrc_expected_hash() {
-  local trust_file="$1" envrc_path="$2"
+  local trust_file="$1" envrc_path="$2" canon_path="$3"
   if command -v jq >/dev/null 2>&1; then
-    jq -r --arg p "$envrc_path" '.[$p].sha256 // empty' "$trust_file" 2>/dev/null
+    if [ -n "$canon_path" ] && [ "$canon_path" != "$envrc_path" ]; then
+      jq -r --arg p "$envrc_path" --arg c "$canon_path" '.[$p].sha256 // .[$c].sha256 // empty' "$trust_file" 2>/dev/null
+    else
+      jq -r --arg p "$envrc_path" '.[$p].sha256 // empty' "$trust_file" 2>/dev/null
+    fi
   else
     # Fallback: line-based extraction. Works with the canonical pretty-printed
     # JSON our writer produces; brittle on hand-edited files (which is fine —
     # we recommend using `af envrc allow` to write the file).
-    awk -v path="\"$envrc_path\":" '
+    local hash=""
+    hash=$(awk -v path="\"$envrc_path\":" '
       $0 ~ path { in_block=1 }
       in_block && /"sha256":/ { gsub(/.*"sha256": *"/, ""); gsub(/".*/, ""); print; exit }
-    ' "$trust_file" 2>/dev/null
+    ' "$trust_file" 2>/dev/null)
+    if [ -z "$hash" ] && [ -n "$canon_path" ] && [ "$canon_path" != "$envrc_path" ]; then
+      hash=$(awk -v path="\"$canon_path\":" '
+        $0 ~ path { in_block=1 }
+        in_block && /"sha256":/ { gsub(/.*"sha256": *"/, ""); gsub(/".*/, ""); print; exit }
+      ' "$trust_file" 2>/dev/null)
+    fi
+    echo "$hash"
   fi
 }
 
 af_envrc_guarded_source() {
   local envrc_path="$PWD/.envrc"
+  local canon_path=""
+  if [ -f "$envrc_path" ]; then
+    if command -v realpath >/dev/null 2>&1; then
+      canon_path=$(realpath "$envrc_path" 2>/dev/null || echo "")
+    else
+      canon_path="$(pwd -P)/.envrc"
+    fi
+  fi
   [ ! -f "$envrc_path" ] && return 0
 
   # Opt-out for users who explicitly want the old behavior — loudly.
@@ -148,7 +168,7 @@ af_envrc_guarded_source() {
   local current_hash expected_hash
   current_hash=$(_af_envrc_hash "$snapshot")
   if [ -n "$current_hash" ]; then
-    expected_hash=$(_af_envrc_expected_hash "$trust_file" "$envrc_path")
+    expected_hash=$(_af_envrc_expected_hash "$trust_file" "$envrc_path" "$canon_path")
     if [ -n "$expected_hash" ] && [ "$current_hash" = "$expected_hash" ]; then
       set -a; . "$snapshot" 2>/dev/null; set +a
     else

@@ -240,6 +240,12 @@ function buildContextOutput(config, detections, resolved, memoryResult) {
  */
 async function main() {
   try {
+    // Universal Cascading Environment Resolver (12-Factor passive resolution)
+    try {
+      const { loadProjectEnv } = require('./lib/env-resolver.cjs');
+      loadProjectEnv(findProjectRoot());
+    } catch { /* graceful degradation */ }
+
     // Read stdin for session data
     let data = {};
     try {

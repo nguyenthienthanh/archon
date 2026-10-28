@@ -60,8 +60,8 @@ function isSupabaseConfigured() {
  * @returns {boolean}
  */
 function isLearningEnabled() {
-  // User can explicitly disable all learning
-  if (process.env.AF_LEARNING_DISABLED === 'true') {
+  // User can explicitly disable all learning via either flag
+  if (process.env.AF_LEARNING_DISABLED === 'true' || process.env.AF_LEARNING_ENABLED === 'false') {
     return false;
   }
   // Otherwise, learning is always enabled (local or Supabase)

@@ -11,11 +11,13 @@ YELLOW='\033[1;33m'
 CYAN='\033[0;36m'
 NC='\033[0m'
 
-# Directories
-RESPONSE_DIR="/tmp/aura-frog/responses"
-SUMMARY_DIR="/tmp/aura-frog/summaries"
+# Directories (user-isolated with secure permissions)
+AURA_TMP_BASE="${TMPDIR:-/tmp}/aura-frog-$(id -u)"
+RESPONSE_DIR="${AURA_TMP_BASE}/responses"
+SUMMARY_DIR="${AURA_TMP_BASE}/summaries"
 
 mkdir -p "$RESPONSE_DIR" "$SUMMARY_DIR"
+chmod 700 "$AURA_TMP_BASE" "$RESPONSE_DIR" "$SUMMARY_DIR" 2>/dev/null || true
 
 usage() {
     echo "Response Save v1.0.0"

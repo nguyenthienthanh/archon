@@ -27,7 +27,7 @@ if [ "$1" = "--from-tool-args" ]; then
     # worse than no path check, because it reads as a clean bill of health.
     # Best-effort extraction, and say out loud that this is the fallback.
     TARGET=$(printf '%s' "$ARGS_JSON" \
-      | sed -n 's/.*"\(file_path\|path\)"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\2/p' \
+      | sed -E -n 's/.*"(file_path|path)"[[:space:]]*:[[:space:]]*"([^"]*)".*/\2/p' \
       | head -1)
     echo "preflight:path-safety WARN: jq not found — path extracted with a brittle fallback." >&2
     echo "  Install jq to restore full pre-flight validation." >&2

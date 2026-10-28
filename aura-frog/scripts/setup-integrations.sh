@@ -263,6 +263,7 @@ cat > "$ENVRC_FILE" << EOF
 # ============================================
 # Jira Integration
 # ============================================
+export JIRA_BASE_URL="$JIRA_URL"
 export JIRA_URL="$JIRA_URL"
 export JIRA_EMAIL="$JIRA_EMAIL"
 export JIRA_API_TOKEN="$JIRA_API_TOKEN"
@@ -272,6 +273,7 @@ export JIRA_DEFAULT_PRIORITY="Medium"
 # ============================================
 # Confluence Integration
 # ============================================
+export CONFLUENCE_BASE_URL="$CONFLUENCE_URL"
 export CONFLUENCE_URL="$CONFLUENCE_URL"
 export CONFLUENCE_EMAIL="$CONFLUENCE_EMAIL"
 export CONFLUENCE_API_TOKEN="$CONFLUENCE_API_TOKEN"
@@ -291,6 +293,7 @@ export SLACK_MENTION_PM="@pm-team"
 # ============================================
 # Figma Integration
 # ============================================
+export FIGMA_API_TOKEN="$FIGMA_API_KEY"
 export FIGMA_API_KEY="$FIGMA_API_KEY"
 export FIGMA_FILE_KEY="$FIGMA_FILE_KEY"
 export FIGMA_MCP_ENABLED="true"
@@ -321,30 +324,24 @@ fi
 
 echo ""
 
-# Phase 5: Setup project .envrc to load .envrc
-echo -e "${BLUE}Phase 5: Setting up project .envrc...${NC}"
+# Phase 5: Verify environment configuration
+echo -e "${BLUE}Phase 5: Verifying environment configuration...${NC}"
 echo ""
 
-CCPM_LOADER="
+if [ "$PROJECT_ENVRC" != "$ENVRC_FILE" ] && [ -f "$PROJECT_ENVRC" ]; then
+  CCPM_LOADER="
 # Aura Frog Integration (auto-generated)
-if [ -f .envrc ]; then
-  source_env .envrc
+if [ -f \"$ENVRC_FILE\" ]; then
+  source_env \"$ENVRC_FILE\"
 fi"
-
-if [ -f "$PROJECT_ENVRC" ]; then
-  if ! grep -q "source_env .envrc" "$PROJECT_ENVRC"; then
+  if ! grep -q "source_env \"$ENVRC_FILE\"" "$PROJECT_ENVRC"; then
     echo "$CCPM_LOADER" >> "$PROJECT_ENVRC"
     echo -e "${GREEN}✅ Updated $PROJECT_ENVRC to load Aura Frog config${NC}"
   else
     echo -e "${YELLOW}ℹ️  $PROJECT_ENVRC already loads Aura Frog config${NC}"
   fi
 else
-  cat > "$PROJECT_ENVRC" << EOF
-# .envrc - Project environment variables
-# This file can be committed (no secrets)
-$CCPM_LOADER
-EOF
-  echo -e "${GREEN}✅ Created $PROJECT_ENVRC${NC}"
+  echo -e "${GREEN}✅ $ENVRC_FILE is ready and self-contained.${NC}"
 fi
 
 echo ""
