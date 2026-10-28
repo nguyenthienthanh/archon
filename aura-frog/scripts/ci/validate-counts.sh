@@ -22,7 +22,11 @@ NC='\033[0m' # No Color
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BASE_DIR="$(dirname "$(dirname "$SCRIPT_DIR")")"
 
-CLAUDE_MD="$BASE_DIR/CLAUDE.md"
+DOC_FILE="$BASE_DIR/AGENTS.md"
+if [ ! -f "$DOC_FILE" ] || ! grep -q "Resources" "$DOC_FILE" 2>/dev/null; then
+  DOC_FILE="$BASE_DIR/CLAUDE.md"
+fi
+CLAUDE_MD="$DOC_FILE"
 PLUGIN_JSON="$BASE_DIR/.claude-plugin/plugin.json"
 
 MISMATCHES=0

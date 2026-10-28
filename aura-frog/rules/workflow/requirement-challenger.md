@@ -53,12 +53,31 @@ depth[3]{complexity,level,max_questions}:
 
 ---
 
+## Socratic Onboarding Protocol (Phase 1 Inception Gate)
+
+Before writing any code or locking the Sprint Contract, engage the user in a disciplined Socratic discovery:
+
+1. **Context Grounding (Read Before Asking):**
+   - Read relevant existing code/specs first. Never ask questions that 10 seconds of grepping would answer.
+
+2. **The 3 Mandatory Socratic Probes:**
+   - **Probe 1 — Scope & Non-Goals:** *"What are we explicitly NOT building in this run?"*
+   - **Probe 2 — Failure Modes & Edge Cases:** *"What should happen when X fails, times out, or returns empty?"*
+   - **Probe 3 — Architectural Dependencies:** *"Are there downstream systems or database models that must be preserved?"*
+
+3. **Present 2 Architectural Trade-Off Approaches:**
+   - **Option A (KISS / Minimalist):** Fast, low-complexity, minimal blast radius.
+   - **Option B (Scalable / Decoupled):** More modular, future-proof, slightly higher initial effort.
+   - *Ask user:* *"Do you prefer Option A or Option B before we lock the Sprint Contract?"*
+
+---
+
 ## Flow
 
-1. **Analyze** what was asked
-2. **Identify** gaps with specific questions
-3. **Present** observations (potential issues, simpler alternatives)
-4. **Confirm**: "If these assumptions are correct, I'll proceed with [approach]. Say 'go ahead' to proceed."
+1. **Analyze** what was asked & inspect relevant files
+2. **Execute Socratic Probes** (1-3 crisp questions)
+3. **Present 2 Trade-off Options**
+4. **Lock Sprint Contract**: Only proceed to Phase 2 (Test RED) after user alignment.
 
 ---
 

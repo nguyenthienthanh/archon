@@ -1,19 +1,20 @@
 {
-  "name": "aura-frog",
-  "version": "3.8.0-alpha.21",
-  "description": "Planning-first LLM OS for software engineering. Hierarchical planning (T0-T4) survives session reset · forensic reasoning traces · L1+L2 conflict detection · self-healing safety gates · per-agent MCP security · durable project-context snapshots · cross-tool porter (Copilot/Codex/Cursor) · CLI dashboard. 15 agents, 5-phase TDD, 72 rules (3-tier), 43 skills, 24 commands, 52 hooks, 6 MCP servers. ~87% markdown. Backward-compatible with /run.",
+  "name": "archon-os",
+  "version": "4.0.0-alpha.1",
+  "description": "Archon — Planning-first LLM OS for software engineering. Hierarchical planning (T0-T4) survives session reset · forensic reasoning traces · L1+L2 conflict detection · self-healing safety gates · Archon Memory Manager · durable project-context snapshots · cross-tool porter (Copilot/Codex/Cursor) · CLI dashboard. 15 agents, 5-phase TDD, 72 rules (3-tier), 43 skills, 24 commands, 53 hooks, 6 MCP servers. ~87% markdown. Backward-compatible with /run.",
   "author": {
     "name": "Nguyen Thien Thanh",
     "email": "nguyenthienthanh.kiyoshi@gmail.com",
     "url": "https://github.com/nguyenthienthanh"
   },
-  "homepage": "https://github.com/nguyenthienthanh/aura-frog",
-  "repository": "https://github.com/nguyenthienthanh/aura-frog",
+  "homepage": "https://github.com/nguyenthienthanh/archon",
+  "repository": "https://github.com/nguyenthienthanh/archon",
   "license": "MIT",
   "keywords": [
     "claude-code",
     "claude-code-plugin",
-    "aura-frog",
+    "archon",
+    "archon-os",
     "ai-agents",
     "workflow",
     "tdd",

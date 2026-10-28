@@ -26,6 +26,13 @@ const path = require('path');
 // Local storage paths
 
 const { findProjectRoot } = require('./hook-runtime.cjs');
+
+// Auto-hydrate project env (Passive 12-factor resolution)
+try {
+  const { loadProjectEnv } = require('./env-resolver.cjs');
+  loadProjectEnv(findProjectRoot());
+} catch { /* non-blocking */ }
+
 const LEARNING_DIR = path.join(findProjectRoot(), '.claude', 'learning');
 const LOCAL_FEEDBACK_FILE = path.join(LEARNING_DIR, 'feedback.json');
 const LOCAL_PATTERNS_FILE = path.join(LEARNING_DIR, 'patterns.json');

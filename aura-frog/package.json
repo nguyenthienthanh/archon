@@ -1,11 +1,13 @@
 {
-  "name": "aura-frog",
-  "version": "3.8.0-alpha.21",
-  "description": "Planning-first LLM OS for Claude Code. Hierarchical planning (T0-T4) that survives session reset, forensic reasoning traces, conflict detection, self-healing safety gates, and a 5-phase TDD workflow. 15 agents, 72 rules, 59 skills, 24 commands, 50 hooks.",
+  "name": "archon-os",
+  "version": "4.0.0-alpha.1",
+  "description": "Archon OS — Planning-First AI Engineering Operating System for Claude Code. Hierarchical planning (T0-T4) that survives session reset, forensic reasoning traces, conflict detection, self-healing safety gates, and a 5-phase TDD workflow. 15 agents, 72 rules, 43 skills, 24 commands, 53 hooks.",
   "keywords": [
     "claude",
     "claude-code",
     "claude-code-plugin",
+    "archon",
+    "archon-os",
     "aura-frog",
     "ai-agents",
     "agent",
@@ -16,13 +18,13 @@
     "llm",
     "developer-tools"
   ],
-  "homepage": "https://github.com/nguyenthienthanh/aura-frog#readme",
+  "homepage": "https://github.com/nguyenthienthanh/archon#readme",
   "bugs": {
-    "url": "https://github.com/nguyenthienthanh/aura-frog/issues"
+    "url": "https://github.com/nguyenthienthanh/archon/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nguyenthienthanh/aura-frog.git",
+    "url": "git+https://github.com/nguyenthienthanh/archon.git",
     "directory": "aura-frog"
   },
   "license": "MIT",
@@ -44,6 +46,7 @@
     "scripts",
     "skills",
     "templates",
+    "AGENTS.md",
     "CLAUDE.md",
     "ccpm-config.example.yaml",
     "settings.example.json"

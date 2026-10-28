@@ -299,6 +299,12 @@ function finish(code) {
 }
 
 function main() {
+  // Universal Passive Environment Hydration (12-Factor, zero shell eval)
+  try {
+    const { loadProjectEnv } = require('./lib/env-resolver.cjs');
+    loadProjectEnv();
+  } catch { /* non-blocking */ }
+
   const specs = process.argv.slice(2).filter(Boolean).map(parseSpec);
   if (specs.length === 0) REAL_EXIT(0);
 

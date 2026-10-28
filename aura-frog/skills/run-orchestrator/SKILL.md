@@ -203,8 +203,12 @@ scaffold_map[5]{phase,files}:
    > Iterating a whole feature: a single `/run` cycles through Phase 1 → 5 for **one task**. To complete a multi-task feature, repeat `/aura-frog:plan next` (or just type `next` while a plan is active) to claim the next ready task, then re-enter `/run` which auto-anchors. Each task gets its own full 5-phase cycle. This is the contract — not "one /run per feature".
 6. Load project context
 7. Verify complexity — suggest lighter approach if simple
-8. Socratic brainstorming (Standard/Deep only)
-9. Challenge requirements (`rules/workflow/requirement-challenger.md`)
+8. **Socratic Onboarding & Discovery (Standard/Deep only)** — Before locking spec, interview user using the 3 mandatory Socratic Probes per `rules/workflow/requirement-challenger.md`:
+   - *Probe 1: Scope & Non-goals* (What is explicitly NOT included?)
+   - *Probe 2: Failure Modes & Edge Cases* (What happens when external services fail, timeouts trigger, or data is invalid?)
+   - *Probe 3: Architecture & Dependencies* (Which subsystems touch this change, and what are the performance/security boundaries?)
+   - Present **2 Trade-off Approaches** (e.g., Fast/Minimal vs. Robust/Extensible).
+9. **Challenge requirements** (`rules/workflow/requirement-challenger.md`) — Never accept vague prompts passively; refine edge cases and clarify ambiguities with the user.
 10. **Sprint Contract** — negotiate "done" criteria before Phase 2 (anchor-aware: cannot weaken plan acceptance without `manual_override.json` audit entry)
 
 ## 5-Phase Workflow

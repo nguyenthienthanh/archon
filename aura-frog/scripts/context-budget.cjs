@@ -82,11 +82,21 @@ function measure(projectDir = process.cwd(), { home = os.homedir() } = {}) {
     if (depth < MAX_IMPORT_DEPTH) for (const ref of importsOf(text, abs)) add(ref, depth + 1);
   };
 
+  add(path.join(home, '.claude', 'AGENTS.md'));
   add(path.join(home, '.claude', 'CLAUDE.md'));
   for (const f of listMarkdown(path.join(home, '.claude', 'rules'))) add(f, 0, { skipScoped: true });
 
+  const instructionNames = [
+    'AGENTS.md',
+    'CLAUDE.md',
+    path.join('.claude', 'AGENTS.md'),
+    path.join('.claude', 'CLAUDE.md'),
+    'AGENTS.local.md',
+    'CLAUDE.local.md'
+  ];
+
   for (let dir = root; ; dir = path.dirname(dir)) {
-    for (const name of ['CLAUDE.md', path.join('.claude', 'CLAUDE.md'), 'CLAUDE.local.md']) add(path.join(dir, name));
+    for (const name of instructionNames) add(path.join(dir, name));
     if (dir === path.dirname(dir)) break;
   }
   for (const f of listMarkdown(path.join(root, '.claude', 'rules'))) add(f, 0, { skipScoped: true });
