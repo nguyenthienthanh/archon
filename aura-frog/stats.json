@@ -1,6 +1,6 @@
 {
-  "version": "4.0.0",
-  "generated": "2026-10-29T09:54:00Z",
+  "version": "4.0.0-alpha.2",
+  "generated": "2026-10-29T10:06:29Z",
   "components": {
     "agents": 15,
     "skills": { "total": 45, "autoInvoke": 10 },
@@ -12,14 +12,14 @@
   },
   "performance": {
     "alwaysLoadedLines": 4699,
-    "alwaysLoadedTokens": 34293,
+    "alwaysLoadedTokens": 34294,
     "savingsPercent": 66,
     "overheadPercent": 17
   },
   "codebase": {
     "cjsLines": 31112,
     "mdLines": 25356,
-    "shLines": 14785,
+    "shLines": 14791,
     "totalFiles": 477
   }
 }
