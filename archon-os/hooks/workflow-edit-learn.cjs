@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog - Workflow Edit Learn Hook
+ * Archon OS - Workflow Edit Learn Hook
  *
  * Fires: SessionStart (see hooks.json — scans for user edits since last session)
  * Purpose: Detect when users have directly edited workflow MD files and extract learnings
@@ -24,7 +24,7 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
-const { recordFeedback, recordPattern, isLearningEnabled } = require('./lib/af-learning.cjs');
+const { recordFeedback, recordPattern, isLearningEnabled } = require('./lib/learning.cjs');
 
 // Cache paths
 
@@ -282,7 +282,7 @@ async function recordUserEdit(filePath, changes, patterns) {
   // Record as correction feedback
   await recordFeedback({
     type: 'correction',
-    projectName: process.env.PROJECT_NAME || process.env.AF_PROJECT_NAME,
+    projectName: process.env.PROJECT_NAME || process.env.ARCHON_PROJECT_NAME,
     reason: `User directly edited workflow file: ${path.basename(filePath)}`,
     metadata: {
       source: 'workflow_edit_detection',
@@ -361,7 +361,7 @@ async function scanWorkflowFiles() {
  * command — the path is a single, literal argument to `git show`.
  */
 function gitShowHead(relPath, cwd = process.cwd()) {
-  const { TIMEOUT_DEFAULT_MS, MAX_BUFFER_LARGE, warnExecLimit } = require('./lib/af-exec.cjs');
+  const { TIMEOUT_DEFAULT_MS, MAX_BUFFER_LARGE, warnExecLimit } = require('./lib/exec.cjs');
   try {
     const { execFileSync } = require('child_process');
     // Buffers a whole committed file — a checked-in bundle or lockfile can be

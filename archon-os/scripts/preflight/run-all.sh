@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Aura Frog Pre-flight: orchestrator
+# Archon OS Pre-flight: orchestrator
 # Dispatches Tier 1 linters based on the tool context. Aggregates exit codes —
 # returns the highest (most severe) exit from any linter.
 #

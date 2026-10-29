@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog - Prompt Logger Hook
+ * Archon OS - Prompt Logger Hook
  *
  * Fires: UserPromptSubmit (async)
  * Purpose: Log user prompts with metadata for usage analysis
@@ -123,7 +123,7 @@ function cleanupOldLogs() {
  */
 function main() {
   // Check if disabled
-  if (process.env.AF_PROMPT_LOGGING === 'false' || process.env.AF_PROMPT_LOGGING === '0') {
+  if (process.env.ARCHON_PROMPT_LOGGING === 'false' || process.env.ARCHON_PROMPT_LOGGING === '0') {
     process.exit(0);
   }
 
@@ -165,10 +165,10 @@ function main() {
       intent: detectIntent(userPrompt),
       complexity: detectComplexity(userPrompt),
       commands: refs.commands,
-      agent: refs.agent || process.env.AF_CURRENT_AGENT || null,
-      phase: process.env.AF_CURRENT_PHASE || null,
-      project: process.env.AF_PROJECT_NAME || process.env.PROJECT_NAME || null,
-      framework: process.env.AF_FRAMEWORK || null,
+      agent: refs.agent || process.env.ARCHON_CURRENT_AGENT || null,
+      phase: process.env.ARCHON_CURRENT_PHASE || null,
+      project: process.env.ARCHON_PROJECT_NAME || process.env.PROJECT_NAME || null,
+      framework: process.env.ARCHON_FRAMEWORK || null,
       sessionId: process.ppid?.toString() || null,
     };
 

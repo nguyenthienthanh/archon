@@ -1,6 +1,10 @@
 'use strict';
+
+// Mirrors legacy AF_* / AURA_FROG_* variables onto their ARCHON_* names. This file
+// reads process.env without going through safe-stdin, so it bridges for itself.
+require('./env-compat.cjs');
 /**
- * Aura Frog — Plans Dir Resolver (JS mirror of scripts/plans/_lib.sh#plans_dir)
+ * Archon OS — Plans Dir Resolver (JS mirror of scripts/plans/_lib.sh#plans_dir)
  *
  * Single source of truth for "where do plan-tree files live?" Used by every
  * hook that reads/writes plan state. Replaces 10 hand-coded
@@ -9,14 +13,14 @@
  * projects.
  *
  * Resolution order (v3.7.3+):
- *   1. process.env.AF_PLANS_DIR — explicit override, path.resolve'd
+ *   1. process.env.ARCHON_PLANS_DIR — explicit override, path.resolve'd
  *   2. <cwd>/.claude/plans  — v3.7.3 default, returned if it exists
  *   3. <cwd>/.aura/plans    — legacy fallback (only if .claude/plans absent)
  *   4. <cwd>/.claude/plans  — absent-tree case (caller is expected to mkdir)
  *
  * The migration helper performs a one-shot `.aura/plans → .claude/plans` rename
  * when only the legacy directory exists and the user has not opted into a
- * custom location via AF_PLANS_DIR. Designed to be called from session-start
+ * custom location via ARCHON_PLANS_DIR. Designed to be called from session-start
  * before any other hook reads plan state.
  */
 
@@ -25,8 +29,8 @@ const path = require('node:path');
 
 function resolvePlansDir(cwd) {
     const root = cwd || process.cwd();
-    if (process.env.AF_PLANS_DIR) {
-        return path.resolve(process.env.AF_PLANS_DIR);
+    if (process.env.ARCHON_PLANS_DIR) {
+        return path.resolve(process.env.ARCHON_PLANS_DIR);
     }
     const claudePath = path.join(root, '.claude', 'plans');
     if (fs.existsSync(claudePath)) return claudePath;
@@ -37,8 +41,8 @@ function resolvePlansDir(cwd) {
 
 function migrateLegacyPlansDir(cwd) {
     const root = cwd || process.cwd();
-    if (process.env.AF_PLANS_DIR) {
-        return { migrated: false, reason: 'AF_PLANS_DIR set — user opted into custom location' };
+    if (process.env.ARCHON_PLANS_DIR) {
+        return { migrated: false, reason: 'ARCHON_PLANS_DIR set — user opted into custom location' };
     }
     const claudePath = path.join(root, '.claude', 'plans');
     const auraPath = path.join(root, '.aura', 'plans');

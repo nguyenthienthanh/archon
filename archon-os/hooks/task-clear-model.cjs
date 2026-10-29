@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 /**
- * Aura Frog — Task Model Clearer (PostToolUse)
+ * Archon OS — Task Model Clearer (PostToolUse)
  *
  * Fires: PostToolUse with matcher "Task"
  * Purpose: Pop the most-recent entry from the model stack written by
  *          task-track-model.cjs. When the stack is empty, remove the file
  *          entirely so the runtime dir stays clean.
  *
- * State file: .aura-frog/runtime/model-stack.jsonl (override with
- *             $AF_MODEL_STACK_FILE, used by tests).
+ * State file: .archon/runtime/model-stack.jsonl, legacy .aura-frog/ still read (override with
+ *             $ARCHON_MODEL_STACK_FILE, used by tests).
  *
  * Fail-open contract: always exit 0. A broken hook must never block a
  * Task completion. Errors go to stderr only.
@@ -19,8 +19,8 @@
 'use strict';
 
 const fs = require('fs');
-const path = require('path');
 const { readStdinSafely, parseStdinJson, installWatchdog } = require('./lib/safe-stdin.cjs');
+const { runtimePath } = require('./lib/runtime-dir.cjs');
 
 /**
  * Pop the last JSONL line from `stackFile`. If popping leaves the file
@@ -77,7 +77,7 @@ function popStackEntry(stackFile) {
  * @returns {{action: 'skip'|'pop'}}
  */
 function processPostToolUse(input, opts) {
-  const stackFile = opts.stackFile || path.join(process.cwd(), '.aura-frog', 'runtime', 'model-stack.jsonl');
+  const stackFile = opts.stackFile || runtimePath(process.cwd(), 'runtime', 'model-stack.jsonl');
   if (!input || typeof input !== 'object') return { action: 'skip' };
   if (input.tool_name !== 'Task') return { action: 'skip' };
   if (!fs.existsSync(stackFile)) return { action: 'skip' };

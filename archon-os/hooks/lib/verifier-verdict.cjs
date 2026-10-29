@@ -29,6 +29,9 @@
  * Pure module: no I/O, no process exit. Entrypoint: `scripts/verify-claim.cjs`.
  */
 
+// Mirrors legacy AF_* / AURA_FROG_* variables onto their ARCHON_* names.
+require('./env-compat.cjs');
+
 const VERDICTS = [
   'SUPPORTED',
   'OVERGENERALIZED',
@@ -91,11 +94,11 @@ function positiveNumber(raw, fallback, { integer = false } = {}) {
 /** Loop cap and acceptance threshold: user-settable, with a default (AC6). */
 function loadVerifierConfig(env = process.env) {
   const source = env || {};
-  const threshold = positiveNumber(source.AF_VERIFIER_THRESHOLD, DEFAULTS.agreementThreshold);
+  const threshold = positiveNumber(source.ARCHON_VERIFIER_THRESHOLD, DEFAULTS.agreementThreshold);
   return {
-    k: positiveNumber(source.AF_VERIFIER_K, DEFAULTS.k, { integer: true }),
+    k: positiveNumber(source.ARCHON_VERIFIER_K, DEFAULTS.k, { integer: true }),
     agreementThreshold: threshold > 1 ? DEFAULTS.agreementThreshold : threshold,
-    loopCap: positiveNumber(source.AF_VERIFIER_LOOP_CAP, DEFAULTS.loopCap, { integer: true }),
+    loopCap: positiveNumber(source.ARCHON_VERIFIER_LOOP_CAP, DEFAULTS.loopCap, { integer: true }),
   };
 }
 

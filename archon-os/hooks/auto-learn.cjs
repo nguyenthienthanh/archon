@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog - Auto-Learn Hook
+ * Archon OS - Auto-Learn Hook
  *
  * Fires: UserPromptSubmit
  * Purpose: Automatically detect corrections/feedback in user messages and record them
@@ -21,7 +21,7 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
-const { recordFeedback, recordPattern, isLearningEnabled } = require('./lib/af-learning.cjs');
+const { recordFeedback, recordPattern, isLearningEnabled } = require('./lib/learning.cjs');
 
 // Cache file paths
 
@@ -589,7 +589,7 @@ async function main() {
     // Record feedback (to local storage or Supabase)
     const feedbackData = {
       type: analysis.type,
-      projectName: process.env.PROJECT_NAME || process.env.AF_PROJECT_NAME,
+      projectName: process.env.PROJECT_NAME || process.env.ARCHON_PROJECT_NAME,
       reason,
       rating: analysis.type === 'approval' ? 5 : 3,
       metadata: {
@@ -602,7 +602,7 @@ async function main() {
         learnableReason: learnableCheck.reason,
         matchedPattern: analysis.matchedPattern,
         matchedKeywords: analysis.matchedKeywords,
-        agent: process.env.AF_CURRENT_AGENT || 'unknown'
+        agent: process.env.ARCHON_CURRENT_AGENT || 'unknown'
       }
     };
 

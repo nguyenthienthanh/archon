@@ -12,7 +12,7 @@ audience: active-user
 
 ## Overview
 
-The Team-Workflow Bridge connects Aura Frog's 5-phase workflow with Claude Agent Teams. When conditions are met (Agent Teams enabled + Deep complexity), phase transitions automatically:
+The Team-Workflow Bridge connects Archon OS's 5-phase workflow with Claude Agent Teams. When conditions are met (Agent Teams enabled + Deep complexity), phase transitions automatically:
 
 1. **Create teams** with per-phase log directories
 2. **Record team activity** in JSONL format
@@ -32,7 +32,7 @@ Phase start
   -> Returns team name for lead to use with TeamCreate()
 
 Teammates spawn
-  -> subagent-init.cjs injects AF_TEAM_LOG_DIR env var
+  -> subagent-init.cjs injects ARCHON_TEAM_LOG_DIR env var
   -> Teammates log actions via team-log-writer.cjs
 
 Phase ends
@@ -129,7 +129,7 @@ node team-bridge.cjs get-active <workflow-id>
 
 ## Log Writer: `team-log-writer.cjs`
 
-Lightweight helper for teammates. Reads `AF_TEAM_LOG_DIR` and `CLAUDE_TEAMMATE_NAME` env vars.
+Lightweight helper for teammates. Reads `ARCHON_TEAM_LOG_DIR` and `CLAUDE_TEAMMATE_NAME` env vars.
 
 ```javascript
 const logger = require('./lib/team-log-writer.cjs');

@@ -1,106 +1,34 @@
-# Aura Frog System Commands
+# /af
 
-Plugin management, learning system, metrics, agents, and setup.
-
-**Category:** System
-**Scope:** Session
+**Alias for `/archon`** — the pre-v4 name, kept so the command you have been typing since v1
+still works.
 
 ---
 
-## /af status
+## Usage
 
-Show plugin status: version, active project, MCP server health, env vars loaded, component counts (agents/skills/rules), and session stats.
-
----
-
-## /af agents
-
-List all available agents with capabilities, or show details for a specific agent.
-
-**Usage:** `/af agents`, `/af agents security`
-
----
-
-## /af metrics
-
-Show metrics dashboard: token usage, workflow completion rates, agent usage, phase durations vs budget, session stats. Aggregates from `.claude/metrics/`.
-
-**Usage:** `/af metrics`, `/af metrics --hooks` (profile hooks), `/af metrics --performance` (plugin overhead)
-
----
-
-## /af learn
-
-Learning system management. Requires Supabase (`SUPABASE_URL`, `SUPABASE_SECRET_KEY`, `AF_LEARNING_ENABLED=true`).
-
-```toon
-subs[5]{sub,purpose}:
-  "/af learn status","Show learning system status + statistics"
-  "/af learn feedback","Submit manual feedback (success/correction/issue/suggestion)"
-  "/af learn analyze","Analyze patterns from Supabase (agents/workflows/feedback)"
-  "/af learn apply","Review and apply pending improvements"
-  "/af learn setup","First-time Supabase schema creation"
+```
+/af status
+/af agents
+/af metrics
+/af learn status
+/af setup cli
 ```
 
----
+Every subcommand of `/archon` is accepted here unchanged. See `commands/archon.md` for the
+full surface.
 
-## /af setup
+## Delegation
 
-Plugin setup and configuration.
+Route the invocation to `/archon` with the arguments untouched. There is no behaviour of its
+own to implement; this file exists only so the slash name resolves.
 
-```toon
-subs[3]{sub,purpose}:
-  "/af setup activate","Quick-activate Aura Frog in current project"
-  "/af setup integrations","Configure JIRA/Confluence/Slack/Figma tokens"
-  "/af setup cli","Install af CLI globally"
-```
+## Why it still exists
 
----
+The plugin was called **Aura Frog** through v3, and `af` was its initials. v4.0.0 renamed it to
+Archon OS. Renaming the command without an alias would break every runbook, README and team
+wiki that quotes `/af status` — none of which the upgrade can reach.
 
-## /af update
+Full account of the rename: `docs/operations/MIGRATION_V4.md`.
 
-Check for plugin updates and install latest version.
-
----
-
-## /af mcp
-
-Show MCP server status: connected/disconnected, last response time, error count.
-
----
-
-## /af prompts
-
-Evaluate prompt quality and Claude Code feature utilization. Scores 0-100 with improvement suggestions.
-
-**Usage:** `/af prompts`, `/af prompts --days 30 --focus efficiency`
-
----
-
-## /af skill create
-
-Create a new reusable skill template.
-
-**Usage:** `/af skill create "my-skill-name"`
-
----
-
-## /af statusline
-
-Install / update / inspect the custom multi-line statusline (identity · 5h+7d limits with reset clock + context% · session $ / burn $/hr / billing-cycle $). Backed by `scripts/statusline-install.sh`; the canonical renderer lives in `scripts/statusline-render.py` and ships with the plugin.
-
-```toon
-statusline[3]{sub,action}:
-  "/af statusline install","Copy the statusline scripts to ~/.claude/ + wire settings.json. Flags: --billing-day N, --plan LABEL, --style cost|af"
-  "/af statusline update","Pull the latest renderer into ~/.claude/ (keeps your wiring + billing/plan)"
-  "/af statusline status","Show active statusline, resolved billing day + plan, cost-refresh + rate-limit cache health"
-```
-
-**Usage:** `/af statusline install --billing-day 9 --plan Max`, `/af statusline update`, `/af statusline status`
-**Details:** `docs/reference/STATUSLINE.md`. Env toggles: `AF_BILLING_DAY`, `AF_PLAN_LABEL`, `AF_CTX_WINDOW`, `AF_STATUSLINE_USAGE_DISABLED`, `NO_COLOR`.
-
----
-
-## Related
-
-- **Skills:** `prompt-evaluator`, `self-improve` (Analyze→Apply learning loop)
+**Deprecation timeline:** soft-deprecated v4.0, warning v5.0, removed v6.0.

@@ -6,7 +6,7 @@ audience: contributor
 
 # Plugin Maintenance Contract
 
-**Audience:** contributors editing the Aura Frog plugin source (`archon-os/agents/`, `skills/`, `rules/`, `commands/`, `hooks/`).
+**Audience:** contributors editing the Archon OS plugin source (`archon-os/agents/`, `skills/`, `rules/`, `commands/`, `hooks/`).
 **When this applies:** only when you ADD, MODIFY, REMOVE, or RENAME one of those files — not on every session.
 
 > This file used to live inline in `.claude/CLAUDE.md`. It was moved here so it stops costing always-on context tokens every session (it only matters when mutating plugin files). `.claude/CLAUDE.md` keeps a one-line pointer to it.
@@ -36,7 +36,7 @@ version_files[4]{file,location}:
   archon-os/.claude-plugin/plugin.json,Source of truth (version field)
   .claude-plugin/marketplace.json,Marketplace version fields
   archon-os/CLAUDE.md,System header + footer
-  .claude/CLAUDE.md,Aura Frog Version header
+  .claude/CLAUDE.md,Archon OS Version header
 ```
 
 **Note:** Banner examples use `{version}` placeholder — no sync needed. All other files had version footers removed to avoid sync drift.
@@ -126,7 +126,7 @@ Rules are NOT auto-loaded. Every rule MUST have ≥1 inbound reference from an a
 
 - Anything the user types as `/<name>` MUST live in `archon-os/commands/<name>.md`.
 - Skills MUST set `user-invocable: false` — hides them from the slash menu so users only see commands.
-- If a skill needs slash exposure → wrap it in a thin `commands/<name>.md` that delegates to the skill (e.g. `/af prompts` wraps the `prompt-evaluator` skill).
+- If a skill needs slash exposure → wrap it in a thin `commands/<name>.md` that delegates to the skill (e.g. `/archon prompts` wraps the `prompt-evaluator` skill).
 - Skills remain triggerable by: AI auto-invoke on description match, explicit prompt mention, or internal invocation from a command/another skill.
 
 **Why:** without it, two slashes resolve to overlapping content, the slash menu fills with knowledge modules users can't act on, and contributors can't tell which file is the source of truth.

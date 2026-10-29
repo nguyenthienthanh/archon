@@ -35,7 +35,7 @@ constraints[6]{rule,enforcement}:
 ## Disable mechanisms (per spec §22.3, §31.3)
 
 - **Per-session:** `/archon-os:heal disable` — sets `.claude/logs/.self-heal-disabled` flag
-- **Permanent:** `AF_SELF_HEAL_DISABLED=true` in `.envrc`
+- **Permanent:** `ARCHON_SELF_HEAL_DISABLED=true` in `.envrc`
 - Hook integration ignores any proposal when disabled
 
 ## Flow (per spec §22.2)

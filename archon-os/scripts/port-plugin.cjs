@@ -1,6 +1,6 @@
 'use strict';
 /**
- * port-plugin.cjs — Cross-tool porter for the Aura Frog universal layer.
+ * port-plugin.cjs — Cross-tool porter for the Archon OS universal layer.
  * FEAT-009 / port script.
  *
  * Exports the plugin's universal instruction layer (rules, skills, agents,
@@ -114,9 +114,9 @@ function readPluginMeta(pluginRoot) {
   const p = path.join(pluginRoot, PLUGIN_JSON_REL);
   try {
     const obj = JSON.parse(fs.readFileSync(p, 'utf8'));
-    return { name: obj.name || 'aura-frog', version: obj.version || 'unknown' };
+    return { name: obj.name || 'archon-os', version: obj.version || 'unknown' };
   } catch (_) {
-    return { name: 'aura-frog', version: 'unknown' };
+    return { name: 'archon-os', version: 'unknown' };
   }
 }
 
@@ -294,7 +294,7 @@ function buildCopilotAreaInstructions(sources) {
       `applyTo: "${applyTo}"`,
       '---',
       '',
-      `# Aura Frog ${cat.charAt(0).toUpperCase() + cat.slice(1)} Rules`,
+      `# Archon OS ${cat.charAt(0).toUpperCase() + cat.slice(1)} Rules`,
       '',
       `> Auto-generated from ${meta.name} v${meta.version}. Category: ${cat} (${ruleList.length} rules).`,
       '',
@@ -329,7 +329,7 @@ function buildAgentsMd(sources) {
   const header = [
     `# AGENTS.md — ${meta.name} v${meta.version}`,
     '',
-    '> Auto-generated from the Aura Frog universal layer for Codex/OpenAI.',
+    '> Auto-generated from the Archon OS universal layer for Codex/OpenAI.',
     `> Source: CLAUDE.md + ${counts.rules} rules + ${counts.skills} skills + ${counts.agents} agents + ${counts.commands} commands.`,
     '> Re-generate: `node archon-os/scripts/port-plugin.cjs codex`',
     '',
@@ -484,7 +484,7 @@ function buildCursorRules(sources) {
 
     const frontmatter = [
       '---',
-      `description: "Aura Frog ${cat} rules — auto-generated from ${meta.name} v${meta.version}"`,
+      `description: "Archon OS ${cat} rules — auto-generated from ${meta.name} v${meta.version}"`,
       `globs: "${globs}"`,
       `alwaysApply: ${alwaysApply}`,
       '---',
@@ -497,7 +497,7 @@ function buildCursorRules(sources) {
     }).join('\n\n---\n\n');
 
     files.push({
-      filename: `aura-frog-${cat}-rules.mdc`,
+      filename: `archon-os-${cat}-rules.mdc`,
       content: frontmatter + bodies + '\n',
     });
   }
@@ -527,12 +527,12 @@ function buildCursorRules(sources) {
 
   const overviewMdc = [
     '---',
-    `description: "Aura Frog agents, skills, and commands overview — ${meta.name} v${meta.version}"`,
+    `description: "Archon OS agents, skills, and commands overview — ${meta.name} v${meta.version}"`,
     'globs: "**/*"',
     'alwaysApply: true',
     '---',
     '',
-    `# Aura Frog — Agents, Skills & Commands`,
+    `# Archon OS — Agents, Skills & Commands`,
     '',
     `> Auto-generated from ${meta.name} v${meta.version}.`,
     `> ${counts.agents} agents · ${counts.skills} skills · ${counts.commands} commands · ${counts.rules} rules.`,
@@ -571,7 +571,7 @@ function buildCursorRules(sources) {
     '',
   ].join('\n');
 
-  files.push({ filename: 'aura-frog-overview.mdc', content: overviewMdc });
+  files.push({ filename: 'archon-os-overview.mdc', content: overviewMdc });
 
   return files;
 }

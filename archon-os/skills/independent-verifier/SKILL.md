@@ -135,12 +135,12 @@ echo '{"attempt":1,"probe_ledger":["claude -p \"/run\""],
 
 ```toon
 config[3]{env,default,meaning}:
-  AF_VERIFIER_K,3,independent samples per verdict
-  AF_VERIFIER_THRESHOLD,0.67,modal fraction an adverse verdict needs to block
-  AF_VERIFIER_LOOP_CAP,2,retries before a human is asked
+  ARCHON_VERIFIER_K,3,independent samples per verdict
+  ARCHON_VERIFIER_THRESHOLD,0.67,modal fraction an adverse verdict needs to block
+  ARCHON_VERIFIER_LOOP_CAP,2,retries before a human is asked
 ```
 
-`AF_CLAIM_GATE=false` disables the PostToolUse scope gate only; the explicit
+`ARCHON_CLAIM_GATE=false` disables the PostToolUse scope gate only; the explicit
 `--gate` / `--aggregate` path stays available.
 
 ---

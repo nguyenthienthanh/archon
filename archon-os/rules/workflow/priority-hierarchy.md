@@ -11,7 +11,7 @@
 
 ## Core Rule
 
-Claude Code loads instructions in order and MERGES them. Project linting config MERGES with Aura Frog rules (conflicts: project wins).
+Claude Code loads instructions in order and MERGES them. Project linting config MERGES with Archon OS rules (conflicts: project wins).
 
 ---
 
@@ -25,13 +25,13 @@ Claude Code loads instructions in order and MERGES them. Project linting config 
 ```
 
 **Host extensions beat plugin defaults.** The user's own rules/skills (user + project
-scope) are deliberate choices; Aura Frog's are generic defaults. On conflict the host wins,
+scope) are deliberate choices; Archon OS's are generic defaults. On conflict the host wins,
 and when a host skill and a plugin skill both match a task, invoke the host skill. A
 security/override rule in `~/.claude/rules/` is never relaxed by a plugin rule.
 
 `session-start` prints the host index (`🧩 Host extensions`) and `subagent-init` injects it
 into every subagent (plugin agents carry the `Skill` tool for this). Disable with
-`AF_HOST_EXTENSIONS_DISABLED=true`.
+`ARCHON_HOST_EXTENSIONS_DISABLED=true`.
 
 **Skills Claude Code never registers:** only `.claude/skills/<name>/SKILL.md` with
 `description` frontmatter loads. Flat `.claude/skills/<name>.md` files are silently ignored —
@@ -46,7 +46,7 @@ code_quality_merge[5]{priority,source,behavior}:
   1,Project linting,Overrides conflicts in layers 2-5
   2,Project conventions,Overrides conflicts in layers 3-5
   3,Project examples,Overrides conflicts in layers 4-5
-  4,Aura Frog rules,Applies where layers 1-3 are silent
+  4,Archon OS rules,Applies where layers 1-3 are silent
   5,Claude defaults,Applies where layers 1-4 are silent
 ```
 
@@ -64,7 +64,7 @@ code_quality_merge[5]{priority,source,behavior}:
 ## When to Use Each Level
 
 - **Project CLAUDE.md:** Project-specific tech stack, overrides, custom agents
-- **Plugin CLAUDE.md:** Standard Aura Frog behavior, core instructions
+- **Plugin CLAUDE.md:** Standard Archon OS behavior, core instructions
 - **Global CLAUDE.md:** Cross-project defaults, personal preferences
 
 ---

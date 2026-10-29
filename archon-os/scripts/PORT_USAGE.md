@@ -1,6 +1,6 @@
 # Port Plugin — Usage Guide
 
-`port-plugin.cjs` exports Aura Frog's universal instruction layer into the native formats of GitHub Copilot, Codex/OpenAI, and Cursor. It automates steps 1–5 of the [Portability Guide](../../docs/PORTABILITY.md).
+`port-plugin.cjs` exports Archon OS's universal instruction layer into the native formats of GitHub Copilot, Codex/OpenAI, and Cursor. It automates steps 1–5 of the [Portability Guide](../../docs/PORTABILITY.md).
 
 ---
 
@@ -87,10 +87,10 @@ Output layout:
 <out>/
   .cursor/
     rules/
-      aura-frog-core-rules.mdc         # Core rules, alwaysApply: true
-      aura-frog-agent-rules.mdc        # Agent rules, alwaysApply: false
-      aura-frog-workflow-rules.mdc     # Workflow rules, alwaysApply: false
-      aura-frog-overview.mdc           # Agents + skills + commands overview
+      archon-os-core-rules.mdc         # Core rules, alwaysApply: true
+      archon-os-agent-rules.mdc        # Agent rules, alwaysApply: false
+      archon-os-workflow-rules.mdc     # Workflow rules, alwaysApply: false
+      archon-os-overview.mdc           # Agents + skills + commands overview
   PORT_MANIFEST.json
 ```
 
@@ -111,7 +111,7 @@ Every run writes a manifest to the output directory:
 ```json
 {
   "target": "codex",
-  "sourcePluginName": "aura-frog",
+  "sourcePluginName": "archon-os",
   "sourceVersion": "3.8.0-alpha.2",
   "generatedAt": "2026-06-03T10:00:00.000Z",
   "counts": {

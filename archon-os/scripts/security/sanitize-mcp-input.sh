@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Aura Frog — MCP Input Sanitizer
+# Archon OS — MCP Input Sanitizer
 #
 # Strips Authorization headers, redacts token-shaped strings, truncates
 # oversized fields. Reads JSON-shape input from stdin, outputs sanitized JSON.

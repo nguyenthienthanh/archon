@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog — Run Deliverables Scaffold (backstop)
+ * Archon OS — Run Deliverables Scaffold (backstop)
  *
  * Fires: PostToolUse (Write | Edit)
  * Purpose: Guarantee the per-phase deliverable .md files exist for a run.

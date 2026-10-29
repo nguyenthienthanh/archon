@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog — MCP Call Gate
+ * Archon OS — MCP Call Gate
  *
  * Fires: PreToolUse (mcp__.*)
  * Purpose: Per-agent allowlist + rate limit + audit logging for MCP calls.
@@ -19,12 +19,12 @@
  *   - Run `scripts/security/sanitize-mcp-input.sh` on input before audit append
  *   - Append sanitized entry to <security-dir>/mcp-audit.jsonl
  *     (lib/security-dir.cjs: .claude/security if present, else .aura/security;
- *      AF_SECURITY_DIR overrides)
+ *      ARCHON_SECURITY_DIR overrides)
  *
  * Configuration:
- *   AF_MCP_AUDIT_DISABLED=true        — skip audit (still enforce allowlist + rate limits)
- *   AF_MCP_SESSION_WINDOW_MS=3600000  — rolling window for the per-session counter reset
- *   AF_MCP_AUDIT_RETENTION_DAYS=30    — pruning happens via session-start sweep, not here
+ *   ARCHON_MCP_AUDIT_DISABLED=true        — skip audit (still enforce allowlist + rate limits)
+ *   ARCHON_MCP_SESSION_WINDOW_MS=3600000  — rolling window for the per-session counter reset
+ *   ARCHON_MCP_AUDIT_RETENTION_DAYS=30    — pruning happens via session-start sweep, not here
  *   plugin.json#mcp_rate_limits       — per-MCP overrides
  *
  * Exit codes:
@@ -60,7 +60,7 @@ const SOFT_WARN_LIMIT = 0.8;
 // reset. The per-session cap is a rate limit, not a lifetime quota — without a
 // window a persisted counter file hard-blocks every future call once it hits
 // max_calls_per_session. Default 1h, matching other AF cache TTLs.
-const SESSION_WINDOW_MS = Number(process.env.AF_MCP_SESSION_WINDOW_MS) || 3600000;
+const SESSION_WINDOW_MS = Number(process.env.ARCHON_MCP_SESSION_WINDOW_MS) || 3600000;
 
 function safeExit(code = 0) { process.exit(code); }
 
@@ -184,7 +184,7 @@ function incrementCounter(server) {
 // ---------- audit appender ----------
 
 function appendAudit(agentName, parsed, toolInput, extra) {
-  if (process.env.AF_MCP_AUDIT_DISABLED === 'true') return;
+  if (process.env.ARCHON_MCP_AUDIT_DISABLED === 'true') return;
 
   const argsRaw = (toolInput !== undefined && toolInput !== null)
     ? (typeof toolInput === 'string' ? toolInput : JSON.stringify(toolInput))

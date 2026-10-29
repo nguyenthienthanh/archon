@@ -1,4 +1,4 @@
-# Aura Frog Skills
+# Archon OS Skills
 
 **Total Skills:** 42 (9 auto-invoking + 33 reference)
 **Format:** [TOON](https://github.com/toon-format/toon) (Token-Optimized)
@@ -159,11 +159,11 @@ skills/[skill-name]/
 Skills are still triggered three ways:
 1. **AI auto-invoke on intent match** — describe what you want ("evaluate my prompts", "review this code") and Claude picks the matching skill
 2. **Explicit prompt mention** — "use the chain-of-verification skill on this report"
-3. **Internal invocation** — a `commands/` file or another skill calls into it (e.g., `/af prompts` → `prompt-evaluator` skill)
+3. **Internal invocation** — a `commands/` file or another skill calls into it (e.g., `/archon prompts` → `prompt-evaluator` skill)
 
 If a skill needs slash exposure for the user → wrap it in a thin `commands/<name>.md` file that delegates here. See the plugin `CLAUDE.md` "ARCHITECTURE RULE — Commands vs Skills Separation".
 
 ---
 
-> **Externalized:** Godot (aura-frog-godot-addon), SEO/GEO (aura-frog-seo-addon)
+> **Externalized:** Godot (archon-os-godot-addon), SEO/GEO (archon-os-seo-addon)
 > **MCP:** JIRA, Figma, Slack, Firebase handled via bundled MCP servers (`.mcp.json`)

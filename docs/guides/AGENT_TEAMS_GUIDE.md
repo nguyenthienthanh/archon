@@ -6,7 +6,7 @@ audience: active-user
 
 # Agent Teams Guide
 
-**Purpose:** Enable and use Claude Agent Teams with Aura Frog
+**Purpose:** Enable and use Claude Agent Teams with Archon OS
 
 ---
 
@@ -45,7 +45,7 @@ export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
 
 ### 3. Verify
 
-The `isAgentTeamsEnabled()` utility in `hooks/lib/af-config-utils.cjs` checks both locations.
+The `isAgentTeamsEnabled()` utility in `hooks/lib/config-utils.cjs` checks both locations.
 
 ---
 
@@ -320,7 +320,7 @@ teams/phase-02-technical-planning/
   tester.jsonl
 ```
 
-Teammates log actions automatically via `team-log-writer.cjs` when `AF_TEAM_LOG_DIR` is set.
+Teammates log actions automatically via `team-log-writer.cjs` when `ARCHON_TEAM_LOG_DIR` is set.
 
 ### Merge Commands
 

@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
+
+# Bridges legacy AF_* / AURA_FROG_* variables onto their ARCHON_* names (v4 rebrand).
+. "$(dirname "${BASH_SOURCE[0]}")/../lib/env-compat.sh"
+
 # =============================================================================
-# Aura Frog — Hook Fan-out Performance Baseline
+# Archon OS — Hook Fan-out Performance Baseline
 #
 # TASK-00025 | STORY-0009 | v3.8.0-alpha.2
 #
@@ -45,7 +49,7 @@ set -euo pipefail
 # find_project_root — identical pattern to scripts/dashboard.sh (v3.8.0-alpha.2)
 # ---------------------------------------------------------------------------
 find_project_root() {
-    if [ -n "${AF_PROJECT_ROOT:-}" ]; then echo "$AF_PROJECT_ROOT"; return; fi
+    if [ -n "${ARCHON_PROJECT_ROOT:-}" ]; then echo "$ARCHON_PROJECT_ROOT"; return; fi
     local d="${1:-$PWD}"
     while [ "$d" != "/" ] && [ -n "$d" ]; do
         if [ -d "$d/.claude" ] || [ -d "$d/.git" ]; then echo "$d"; return; fi
@@ -89,7 +93,7 @@ else
     TIME_FLAG="-v"
 fi
 
-echo "=== Aura Frog Hook Fan-out Baseline ===" >&2
+echo "=== Archon OS Hook Fan-out Baseline ===" >&2
 echo "Platform : $PLATFORM" >&2
 echo "Hooks dir: $HOOKS_DIR" >&2
 echo "Output   : $OUTPUT_PATH" >&2
@@ -173,12 +177,12 @@ for (const h of hooks) {
         encoding: 'utf8',
         env: {
             ...process.env,
-            AF_PREFLIGHT_DISABLED: 'true',
-            AF_TRACE_DISABLED: 'true',
-            AF_TOKEN_TRACKER_DISABLED: 'true',
-            AF_MCP_AUDIT_DISABLED: 'true',
+            ARCHON_PREFLIGHT_DISABLED: 'true',
+            ARCHON_TRACE_DISABLED: 'true',
+            ARCHON_TOKEN_TRACKER_DISABLED: 'true',
+            ARCHON_MCP_AUDIT_DISABLED: 'true',
             CLAUDE_HOOK_PHASE: h.event === 'PostToolUse' ? 'post' : 'pre',
-            AF_PROJECT_ROOT: '${PROJECT_ROOT}'
+            ARCHON_PROJECT_ROOT: '${PROJECT_ROOT}'
         },
         timeout: 10000,
         maxBuffer: 1024 * 1024

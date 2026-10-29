@@ -12,7 +12,7 @@ const CLI = path.join(__dirname, '../verify-claim.cjs');
 const run = (args, input) => spawnSync('node', [CLI, ...args], {
   input: input === undefined ? '' : input,
   encoding: 'utf8',
-  env: { ...process.env, AF_CLAIM_GATE: undefined },
+  env: { ...process.env, ARCHON_CLAIM_GATE: undefined },
 });
 
 const MOTIVATING_RESULT = 'I ran `claude -p "/run"` and got Error: Reached max turns (1). '
@@ -46,11 +46,11 @@ describe('verify-claim --hook (PostToolUse on Task)', () => {
     expect(r.status).toBe(0);
   });
 
-  it('is disabled by AF_CLAIM_GATE=false', () => {
+  it('is disabled by ARCHON_CLAIM_GATE=false', () => {
     const r = spawnSync('node', [CLI, '--hook'], {
       input: JSON.stringify({ tool_name: 'Task', tool_response: MOTIVATING_RESULT }),
       encoding: 'utf8',
-      env: { ...process.env, AF_CLAIM_GATE: 'false' },
+      env: { ...process.env, ARCHON_CLAIM_GATE: 'false' },
     });
     expect(r.status).toBe(0);
   });

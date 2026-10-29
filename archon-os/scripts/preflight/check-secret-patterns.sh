@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Aura Frog Pre-flight: secret-pattern detector
+# Archon OS Pre-flight: secret-pattern detector
 # Scans content (Edit/Write payloads) for credentials being committed accidentally.
 #
 # Exit codes: 0 pass / 1 warn / 2 fail

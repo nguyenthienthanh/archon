@@ -161,7 +161,7 @@ graph_index[5]{aspect,behaviour}:
   Maintained,"`_lib.sh#set_field` patches the affected entry after each mutation — one file read, not a rescan. No-op when the index does not exist."
   Self-healing,"Readers reject it when a node file is missing, newer than the index, or any directory changed since the build (which is how a newly created task is caught), and fall back to their own scan."
   Authority,"The .md files are the source of truth. validate-plan-tree.sh never READS the index — it PRODUCES one, and only from a tree whose invariants passed."
-  Disable,AF_GRAPH_INDEX_DISABLED=true
+  Disable,ARCHON_GRAPH_INDEX_DISABLED=true
 ```
 
 The index can only ever cost time, never accuracy: every consumer keeps the
@@ -199,7 +199,7 @@ These prefixes also bypass any confirmation prompts in the backing scripts (trea
 
 ## Disable mechanism
 
-- `AF_PLAN_ROUTING_DISABLED=true` → skill exits early, `/archon-os:plan` falls back to direct script invocation per command file protocol.
+- `ARCHON_PLAN_ROUTING_DISABLED=true` → skill exits early, `/archon-os:plan` falls back to direct script invocation per command file protocol.
 
 ---
 

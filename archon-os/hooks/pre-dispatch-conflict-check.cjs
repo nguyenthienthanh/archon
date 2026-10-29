@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog — Pre-Dispatch Conflict Check
+ * Archon OS — Pre-Dispatch Conflict Check
  *
  * Fires: PreToolUse (Edit | Write | Bash) — when proposed tool calls would
  *        mutate files that a pending-confirm sibling task also targets.

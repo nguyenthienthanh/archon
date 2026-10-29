@@ -36,7 +36,7 @@ const CDT_CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome
 
 // jest-worker child, copied from a live `ps` while a suite was running.
 const JEST_WORKER = '/opt/homebrew/Cellar/node/26.3.0/bin/node '
-  + '/Users/x/Projects/aura-frog/node_modules/jest-worker/build/workers/processChild.js';
+  + '/Users/x/Projects/archon/node_modules/jest-worker/build/workers/processChild.js';
 
 describe('parsePsLines', () => {
   it('parses pid/ppid/command rows and drops non-matching lines', () => {

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# audit-refs.sh — reference-integrity gate for the Aura Frog plugin.
+# audit-refs.sh — reference-integrity gate for the Archon OS plugin.
 #
 # Runs the zero-orphan + zero-dead-link + user-invocable checks that used to
 # live inline in .claude/CLAUDE.md. Run BEFORE any commit that touches
@@ -66,7 +66,7 @@ echo "▶ Dead file references (path with an extension that does not exist)…"
 # docs/specs/*V3.7.0* = the authoritative V3.7.0 design spec, cited by section
 # across core files; it lives outside the shipped repo (never committed), so the
 # citations stay as provenance and resolve if the spec is added later.
-ALLOW_MISSING='^(scripts/jira-fetch\.sh|scripts/preflight/install-opa\.sh|scripts/reproduce-bug\.sh|hooks/recursion-guard\.cjs|agents/observer\.md|docs/specs/AURA_FROG_V3\.7\.0_TECH_SPEC\.md|docs/specs/V3\.7\.0_DECISIONS\.md)$'
+ALLOW_MISSING='^(scripts/jira-fetch\.sh|scripts/preflight/install-opa\.sh|scripts/reproduce-bug\.sh|hooks/recursion-guard\.cjs|agents/observer\.md|docs/specs/ARCHON_V3\.7\.0_TECH_SPEC\.md|docs/specs/V3\.7\.0_DECISIONS\.md)$'
 while IFS= read -r ref; do
   case "$ref" in
     *'*'*|*'$'*|*'{'*) continue ;;                     # glob / variable

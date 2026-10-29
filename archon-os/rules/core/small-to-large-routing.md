@@ -55,7 +55,7 @@ cheapest tier (haiku)   →   session model (everything else)
 
 ---
 
-## Enforced Defaults in Aura Frog
+## Enforced Defaults in Archon OS
 
 | Agent / Skill | Model | Why |
 |---------------|:-----:|-----|

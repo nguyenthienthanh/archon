@@ -10,7 +10,7 @@ audience: contributor
 
 ## Context
 
-Aura Frog ships L1 (file overlap) + L2 (function/region overlap) conflict detection today (`pre-dispatch-conflict-check.cjs`, deterministic bash/JS). L3 (semantic) and L4 (architectural) are deferred and were pencilled in as **LLM calls**. The `codebase-memory` MCP (opt-in, FEAT-011/STORY-0026) exposes `detect_changes` (impact analysis: what breaks if a node is modified/deleted) and `trace_path` (call-graph traversal). This ADR evaluates a **graph backend** vs the **LLM design** for L3/L4.
+Archon OS ships L1 (file overlap) + L2 (function/region overlap) conflict detection today (`pre-dispatch-conflict-check.cjs`, deterministic bash/JS). L3 (semantic) and L4 (architectural) are deferred and were pencilled in as **LLM calls**. The `codebase-memory` MCP (opt-in, FEAT-011/STORY-0026) exposes `detect_changes` (impact analysis: what breaks if a node is modified/deleted) and `trace_path` (call-graph traversal). This ADR evaluates a **graph backend** vs the **LLM design** for L3/L4.
 
 ## Options compared
 
@@ -32,7 +32,7 @@ Aura Frog ships L1 (file overlap) + L2 (function/region overlap) conflict detect
 **DEFER implementation to a dedicated story, but adopt this shape when built:**
 
 1. **L4 → graph backend as PRIMARY, LLM as fallback.** Use `detect_changes`/`trace_path` when `codebase-memory` is enabled; fall back to the current heuristic/LLM path when it is not. Graph must be an *optional accelerator*, never a hard dependency (most installs won't have it).
-2. **L3 → keep LLM/decision-log** (graph can't judge intent), gated by `AF_CONFLICT_LLM_DISABLED`.
+2. **L3 → keep LLM/decision-log** (graph can't judge intent), gated by `ARCHON_CONFLICT_LLM_DISABLED`.
 3. Do NOT couple the conflict pipeline to a binary the plugin can't install for the user.
 
 **Not adopted now:** writing production L3/L4 code — that is a separate story with its own tests; this spike only fixes the backend choice.

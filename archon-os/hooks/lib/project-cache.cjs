@@ -1,5 +1,5 @@
 /**
- * Aura Frog - Project Detection Cache
+ * Archon OS - Project Detection Cache
  *
  * Caches project detection results (tech stack, file patterns, test infra)
  * to avoid re-scanning the codebase on every task.
@@ -28,7 +28,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { execFileSync } = require('child_process');
-const { TIMEOUT_QUICK_MS, MAX_BUFFER_DEFAULT, warnExecLimit } = require('./af-exec.cjs');
+const { TIMEOUT_QUICK_MS, MAX_BUFFER_DEFAULT, warnExecLimit } = require('./exec.cjs');
 
 // Project contexts directory (persistent project data)
 const PROJECT_CONTEXTS_DIR = '.claude/project-contexts';
@@ -103,7 +103,7 @@ function getProjectName(dir = '.') {
   // Canonical identity wins (STORY-0014): if a context dir already exists under
   // the directory basename, use it. This matches where real context lives and
   // prevents the ghost-dir cache-miss bug where package.json `name`
-  // ("aura-frog-dev") diverged from the context dir basename ("aura-frog").
+  // ("archon-dev") diverged from the context dir basename ("archon").
   const basename = path.basename(absDir);
   try {
     if (fs.existsSync(path.join(absDir, PROJECT_CONTEXTS_DIR, basename))) {
@@ -665,7 +665,7 @@ function detectProject(forceRefresh = false) {
   }
 
   // Import detection functions from config-utils
-  const configUtils = require('./af-config-utils.cjs');
+  const configUtils = require('./config-utils.cjs');
 
   const detection = {
     projectType: configUtils.detectProjectType('auto'),
@@ -945,7 +945,7 @@ function detectProjectInDir(projectDir, forceRefresh = false) {
     process.chdir(absDir);
 
     // Import detection functions from config-utils
-    const configUtils = require('./af-config-utils.cjs');
+    const configUtils = require('./config-utils.cjs');
 
     const detection = {
       projectName: path.basename(absDir),

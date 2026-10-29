@@ -148,7 +148,7 @@ describe('next-task picks the same task with and without the index', () => {
 
     it('behaves identically with the index disabled', () => {
         run(NEXT_TASK, ['--plans-dir', plans, '--rebuild', '--dry-run']);
-        const r = pick([], { AF_GRAPH_INDEX_DISABLED: 'true' });
+        const r = pick([], { ARCHON_GRAPH_INDEX_DISABLED: 'true' });
         expect(r.status).toBe(0);
         expect(r.stdout).toContain('TASK-00001');
     });
@@ -208,7 +208,7 @@ describe('render-plan-tree renders the same tree either way', () => {
 
     it('falls back to the scan when the index is disabled', () => {
         run(RENDER, [plans, '--rebuild']);
-        const r = run(RENDER, [plans], { AF_GRAPH_INDEX_DISABLED: 'true' });
+        const r = run(RENDER, [plans], { ARCHON_GRAPH_INDEX_DISABLED: 'true' });
         expect(r.status).toBe(0);
         expect(ids(r.stdout)).toContain('TASK-00002');
     });

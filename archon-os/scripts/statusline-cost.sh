@@ -1,6 +1,10 @@
 #!/bin/bash
-# Aura Frog plugin — canonical cost/usage statusline entrypoint.
-#   L1  🐸 model · shortened cwd · git branch(+dirty)
+
+# Bridges legacy AF_* / AURA_FROG_* variables onto their ARCHON_* names (v4 rebrand).
+. "$(dirname "${BASH_SOURCE[0]}")/lib/env-compat.sh"
+
+# Archon OS plugin — canonical cost/usage statusline entrypoint.
+#   L1  model · shortened cwd · git branch(+dirty)
 #   L2  5h [bar] % ·reset · 7d % ·reset · ctx %
 #   L3  session ≈$  · cycle¹ ≈$ →proj ≈$ · ≈API-equiv·Claude
 #
@@ -12,11 +16,11 @@
 #  - The 5h capture below is preserved so ~/.claude/limit-reset-notify.sh keeps
 #    working (it hardcodes $HOME/.claude/cache/rate-limits.json). Best-effort; exit 0.
 #
-# Env toggles: AF_BILLING_DAY  AF_PLAN_LABEL  AF_CTX_WINDOW
-#              AF_STATUSLINE_USAGE_DISABLED=1 (hide cycle $)  NO_COLOR=1 (plain)
+# Env toggles: ARCHON_BILLING_DAY  ARCHON_PLAN_LABEL  ARCHON_CTX_WINDOW
+#              ARCHON_STATUSLINE_USAGE_DISABLED=1 (hide cycle $)  NO_COLOR=1 (plain)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-export AF_BILLING_DAY="${AF_BILLING_DAY:-1}"
-export AF_PLAN_LABEL="${AF_PLAN_LABEL:-Claude}"
+export ARCHON_BILLING_DAY="${ARCHON_BILLING_DAY:-1}"
+export ARCHON_PLAN_LABEL="${ARCHON_PLAN_LABEL:-Claude}"
 
 input=$(cat)
 
@@ -40,7 +44,7 @@ input=$(cat)
 # Detached in a subshell with std streams closed so it never holds the render
 # pipe open; portable (no setsid, which macOS lacks). The refresher self-guards
 # with a TTL + lock, so firing it every render is cheap.
-if [ "${AF_STATUSLINE_USAGE_DISABLED:-0}" != "1" ]; then
+if [ "${ARCHON_STATUSLINE_USAGE_DISABLED:-0}" != "1" ]; then
   ( bash "$SCRIPT_DIR/statusline-usage-refresh.sh" >/dev/null 2>&1 </dev/null & ) 2>/dev/null
 fi
 
@@ -51,5 +55,5 @@ fi
 
 # Fallback: minimal one-liner if python3 is unavailable.
 model=$(printf '%s' "$input" | grep -o '"display_name"[[:space:]]*:[[:space:]]*"[^"]*"' | head -1 | sed 's/.*"\([^"]*\)"$/\1/')
-echo "🐸 ${model:-Claude}"
+echo "${model:-Claude}"
 exit 0

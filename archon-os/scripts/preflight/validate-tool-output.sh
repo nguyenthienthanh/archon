@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Aura Frog Pre-flight: tool output sanity
+# Archon OS Pre-flight: tool output sanity
 # Lightweight checks on tool output (post-execution). Verifies output isn't
 # obviously corrupt or hostile (e.g., terminal control sequences, JSON
 # claiming to be JSON but malformed).

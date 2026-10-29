@@ -17,7 +17,7 @@ const {
   readSessionState,
   writeSessionState,
   isAgentTeamsEnabled
-} = require('./lib/af-config-utils.cjs');
+} = require('./lib/config-utils.cjs');
 
 // Default state (used when no session exists)
 const DEFAULT_STATE = {
@@ -52,8 +52,8 @@ function saveSessionState(state) {
 // Detect current workflow phase from environment or files
 function detectPhase() {
   // Check env var first
-  if (process.env.AF_CURRENT_PHASE) {
-    return process.env.AF_CURRENT_PHASE;
+  if (process.env.ARCHON_CURRENT_PHASE) {
+    return process.env.ARCHON_CURRENT_PHASE;
   }
 
   // Check for phase markers in CWD
@@ -261,7 +261,7 @@ function main() {
   // (hookSpecificOutput.additionalContext) to the subagent — stderr on exit 0
   // reaches the transcript, not the model.
   if (context.length > 0) {
-    const header = isTeammate ? '--- Aura Frog Team Context ---' : '--- Aura Frog Context ---';
+    const header = isTeammate ? '--- Archon OS Team Context ---' : '--- Archon OS Context ---';
     const text = [header, ...context, '-------------------------------'].join('\n');
     process.stdout.write(JSON.stringify({
       hookSpecificOutput: { hookEventName: 'SubagentStart', additionalContext: text }

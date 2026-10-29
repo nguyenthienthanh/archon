@@ -349,7 +349,7 @@ server.connect(transport);
 npm run build
 ```
 
-### Adding to Aura Frog
+### Adding to Archon OS
 
 Add your MCP to `.mcp.json`:
 

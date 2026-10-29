@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Aura Frog plugin — canonical cost/usage statusline renderer.
+"""Archon OS plugin — canonical cost/usage statusline renderer.
 
 Reads Claude Code's statusline JSON on stdin and prints a 3-line status:
   L1  identity  : model · shortened cwd · git branch (+dirty)
@@ -19,12 +19,12 @@ from datetime import date
 
 HOME = os.path.expanduser("~")
 CYCLE_CACHE = os.path.join(HOME, ".claude", "cache", "usage-cycle.json")
-BILLING_DAY = int(os.environ.get("AF_BILLING_DAY", "1"))
-CTX_WINDOW = int(os.environ.get("AF_CTX_WINDOW", "200000"))
-PLAN_LABEL = os.environ.get("AF_PLAN_LABEL", "Claude")
+BILLING_DAY = int(os.environ.get("ARCHON_BILLING_DAY", "1"))
+CTX_WINDOW = int(os.environ.get("ARCHON_CTX_WINDOW", "200000"))
+PLAN_LABEL = os.environ.get("ARCHON_PLAN_LABEL", "Claude")
 
 # --- ANSI helpers -----------------------------------------------------------
-NO_COLOR = os.environ.get("NO_COLOR") or os.environ.get("AF_STATUSLINE_NOCOLOR")
+NO_COLOR = os.environ.get("NO_COLOR") or os.environ.get("ARCHON_STATUSLINE_NOCOLOR")
 def c(code, s):
     if NO_COLOR:
         return s
@@ -165,7 +165,7 @@ def context_from_stdin(cw):
     if not isinstance(toks, (int, float)) or toks <= 0:
         return None
     win = cw.get("context_window_size")
-    ovr = os.environ.get("AF_CTX_WINDOW")
+    ovr = os.environ.get("ARCHON_CTX_WINDOW")
     if ovr:
         try:
             win = int(ovr)
@@ -185,9 +185,9 @@ def ctx_window_for(toks, exceeds_200k):
     # Auto-pick the real window: Claude 5-era models run a 1M context and don't
     # compact at 200k, so a fixed 200k denominator pins big sessions at 100%.
     # Honor an explicit override; otherwise 1M once we're clearly past 200k.
-    if os.environ.get("AF_CTX_WINDOW"):
+    if os.environ.get("ARCHON_CTX_WINDOW"):
         try:
-            return int(os.environ["AF_CTX_WINDOW"])
+            return int(os.environ["ARCHON_CTX_WINDOW"])
         except Exception:
             pass
     return 1_000_000 if (exceeds_200k or toks > 200_000) else 200_000
@@ -302,7 +302,7 @@ def main():
 
     # L1 — identity
     l1 = " ".join(x for x in [
-        c(GREEN, "🐸 " + str(model)),
+        c(GREEN, "" + str(model)),
         sep().strip() and dim("·"),
         c(CYAN, short_cwd(cwd)),
         git_segment(cwd),

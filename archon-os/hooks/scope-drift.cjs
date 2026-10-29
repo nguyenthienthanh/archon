@@ -13,7 +13,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { readSessionState } = require('./lib/af-config-utils.cjs');
+const { readSessionState } = require('./lib/config-utils.cjs');
 const { readPromptFromStdin } = require('./lib/safe-stdin.cjs');
 
 // Feature-indicating keywords that suggest new scope

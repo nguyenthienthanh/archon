@@ -10,13 +10,13 @@
  *
  * Behaviour:
  *   - Aggregates tool-call counts + crude byte/token estimates per session
- *   - Warns at 50/70/85% of a configurable budget (AF_TOKEN_BUDGET, default
+ *   - Warns at 50/70/85% of a configurable budget (ARCHON_TOKEN_BUDGET, default
  *     200K — set to 1000000 for Sonnet-4.5 1M contexts)
  *   - Writes session metrics to .claude/metrics/sessions/ for the dashboard
  *   - NEVER displays % numbers as if they were real API counts — the warning
  *     copy says "approx" so users know it's a heuristic
  *
- * Disable: AF_TOKEN_TRACKER_DISABLED=true
+ * Disable: ARCHON_TOKEN_TRACKER_DISABLED=true
  *
  * Exit codes:
  * - 0: Always (informational only)
@@ -28,12 +28,12 @@ const fs = require('fs');
 const { readStdinSafely } = require('./lib/safe-stdin.cjs');
 const path = require('path');
 
-if (process.env.AF_TOKEN_TRACKER_DISABLED === 'true') process.exit(0);
+if (process.env.ARCHON_TOKEN_TRACKER_DISABLED === 'true') process.exit(0);
 
 
 const { findProjectRoot } = require('./lib/hook-runtime.cjs');
 const CACHE_FILE = path.join(findProjectRoot(), '.claude', 'cache', 'token-tracker.json');
-const CONTEXT_LIMIT = parseInt(process.env.AF_TOKEN_BUDGET || '200000', 10);
+const CONTEXT_LIMIT = parseInt(process.env.ARCHON_TOKEN_BUDGET || '200000', 10);
 
 // Token estimation per operation type
 const TOKEN_COSTS = {
@@ -98,7 +98,7 @@ function saveSessionMetrics(tracker, toolName) {
         toolCalls: 0,
         tokensByTool: {},
         tokensByPhase: {},
-        agent: process.env.AF_CURRENT_AGENT || 'unknown',
+        agent: process.env.ARCHON_CURRENT_AGENT || 'unknown',
       };
     }
 
@@ -109,7 +109,7 @@ function saveSessionMetrics(tracker, toolName) {
     metrics.lastUpdated = new Date().toISOString();
 
     // Track phase if available
-    const phase = process.env.AF_CURRENT_PHASE;
+    const phase = process.env.ARCHON_CURRENT_PHASE;
     if (phase) {
       metrics.tokensByPhase[phase] = (metrics.tokensByPhase[phase] || 0) + cost;
     }

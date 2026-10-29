@@ -1,5 +1,5 @@
 /**
- * Aura Frog - Subprocess Limits
+ * Archon OS - Subprocess Limits
  *
  * Shared timeout / maxBuffer defaults for every child_process call made from a
  * hook, plus the one thing that was missing everywhere: making a limit breach

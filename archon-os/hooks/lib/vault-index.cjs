@@ -1,6 +1,10 @@
 'use strict';
+
+// Mirrors legacy AF_* / AURA_FROG_* variables onto their ARCHON_* names. This file
+// reads process.env without going through safe-stdin, so it bridges for itself.
+require('./env-compat.cjs');
 /**
- * Aura Frog — Plan Vault Index
+ * Archon OS — Plan Vault Index
  *
  * Maintains `<plansDir>/graph-index.json`: one adjacency record per plan node,
  * so the common questions about the tree — who is my parent, what are my
@@ -40,7 +44,7 @@
  * deliberately does NOT read the index (a validator that trusts a cache can
  * report a green tree that is actually broken); it rebuilds it instead.
  *
- * Disable entirely: AF_GRAPH_INDEX_DISABLED=true
+ * Disable entirely: ARCHON_GRAPH_INDEX_DISABLED=true
  *
  * @version 1.0.0
  */
@@ -62,7 +66,7 @@ function indexPath(plansDir) {
 }
 
 function isDisabled() {
-    return process.env.AF_GRAPH_INDEX_DISABLED === 'true';
+    return process.env.ARCHON_GRAPH_INDEX_DISABLED === 'true';
 }
 
 // Pure: pull the frontmatter block (between the first two `---` lines) out of a
@@ -379,7 +383,7 @@ function cli(argv) {
         else if (a === '--render') args.render = true;
         else return { code: 1, out: `unknown arg: ${a}\n` };
     }
-    const plansDir = args.plansDir || process.env.AF_PLANS_DIR;
+    const plansDir = args.plansDir || process.env.ARCHON_PLANS_DIR;
     if (!plansDir) return { code: 1, out: '--plans-dir is required\n' };
 
     if (args.rebuild) {

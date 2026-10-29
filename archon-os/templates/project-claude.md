@@ -1,17 +1,17 @@
-# Aura Frog - [PROJECT_NAME]
+# Archon OS - [PROJECT_NAME]
 
 **Project:** [PROJECT_NAME]
 **Tech Stack:** [TECH_STACK]
-**Aura Frog Version:** [AF_VERSION]
+**Archon OS Version:** [ARCHON_VERSION]
 
 ---
 
-<!-- AURA-FROG:START - Do not edit this section manually -->
+<!-- ARCHON OS:START - Do not edit this section manually -->
 <!-- This section is auto-updated by project:regen -->
 
-## Load Aura Frog Plugin
+## Load Archon OS Plugin
 
-**Read and follow:** Aura Frog plugin's `CLAUDE.md` (auto-loaded by plugin system)
+**Read and follow:** Archon OS plugin's `CLAUDE.md` (auto-loaded by plugin system)
 
 This plugin provides rules and skills that auto-load:
 - **Execution:** Follow `rules/core/execution-rules.md`
@@ -36,7 +36,7 @@ Bundled MCP servers auto-invoke based on context:
 
 **Setup:** Copy `.envrc.template` and set tokens.
 
-<!-- AURA-FROG:END -->
+<!-- ARCHON OS:END -->
 
 ---
 
@@ -68,10 +68,10 @@ context_files[4]{file,purpose}:
 ## Project Rules
 
 <!-- Add your project-specific rules, integrations, or instructions here -->
-<!-- This section will NOT be overwritten by Aura Frog updates -->
+<!-- This section will NOT be overwritten by Archon OS updates -->
 
 <!-- USER-CUSTOM:END -->
 
 ---
 
-**Aura Frog Version:** [AF_VERSION] | **Generated:** [DATE]
+**Archon OS Version:** [ARCHON_VERSION] | **Generated:** [DATE]

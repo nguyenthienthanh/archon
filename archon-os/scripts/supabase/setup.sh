@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Aura Frog - Supabase Learning System Setup
+# Archon OS - Supabase Learning System Setup
 #
 # Usage:
 #   ./scripts/supabase/setup.sh           # Run setup
@@ -29,7 +29,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # Help
 show_help() {
   echo ""
-  echo "🐸 Aura Frog - Supabase Learning System Setup"
+  echo "Archon OS - Supabase Learning System Setup"
   echo ""
   echo "Usage:"
   echo "  ./scripts/supabase/setup.sh           Run schema setup"
@@ -168,13 +168,13 @@ main() {
       exit 0
       ;;
     --check)
-      echo -e "\n🐸 ${CYAN}Aura Frog - Learning System Check${NC}\n"
+      echo -e "\n${CYAN}Archon OS - Learning System Check${NC}\n"
       check_env
       check_bootstrap && check_schema
       exit 0
       ;;
     *)
-      echo -e "\n🐸 ${CYAN}Aura Frog - Learning System Setup${NC}\n"
+      echo -e "\n${CYAN}Archon OS - Learning System Setup${NC}\n"
       check_env
       check_bootstrap || exit 1
       check_schema || run_setup

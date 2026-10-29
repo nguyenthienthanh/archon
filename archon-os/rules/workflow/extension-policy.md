@@ -30,7 +30,7 @@ signals[5]{strength,trigger,occurrences_required}:
   Strong,"User says 'add a rule that…' or 'make this a skill'",1
   Medium,"Same correction repeats across recent turns",3
   Medium,"Same multi-step procedure invoked manually",3
-  Weak,"README/CONTRIBUTING references a workflow Aura Frog lacks",2 (combined with another weak)
+  Weak,"README/CONTRIBUTING references a workflow Archon OS lacks",2 (combined with another weak)
 ```
 
 Single weak signals NEVER fire. Counting window: last 10 turns OR current session boundary, whichever is shorter.
@@ -100,7 +100,7 @@ Claude Code loads every `.claude/rules/**/*.md` without `paths:` frontmatter at 
 - **Stays under ~8k chars.** Incident logs, patch histories and quick-refs go to `docs/`, and the rule keeps a short summary plus a pointer.
 - **Gets a one-line entry in the project's CLAUDE.md rule index** so it is still discoverable for chat-only work that touches no file.
 
-Check before and after: `node archon-os/scripts/context-budget.cjs <project>`. Session start also warns once the total passes `AF_CONTEXT_BUDGET_WARN` (default 100k).
+Check before and after: `node archon-os/scripts/context-budget.cjs <project>`. Session start also warns once the total passes `ARCHON_CONTEXT_BUDGET_WARN` (default 100k).
 
 ---
 

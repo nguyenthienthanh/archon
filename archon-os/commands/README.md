@@ -1,6 +1,6 @@
-# Aura Frog Commands
+# Archon OS Commands
 
-**Total:** 24 command files (5 bundled + 1 standalone + 12 hierarchical-planning slash commands + 1 project-extension + 1 session-reset + 1 pre-flight + 3 self-healing/MCP-security/dashboard)
+**Total:** 25 command files (5 bundled + 1 standalone + 12 hierarchical-planning slash commands + 1 project-extension + 1 session-reset + 1 pre-flight + 3 self-healing/MCP-security/dashboard + 1 legacy `/af` alias)
 
 ---
 
@@ -12,7 +12,7 @@ bundled[5]{command,subs,count}:
   /check,"(all)/security/perf/complexity/debt/coverage/deps",7
   /design,"api/db/doc",3
   /project,"init/detect/status/list/switch/refresh/regen/env/sync",9
-  /af,"status/agents/metrics/learn/setup/update/mcp/prompts/skill",9
+  /archon,"status/agents/metrics/learn/setup/update/mcp/prompts/skill",9
 ```
 
 ## Standalone Commands
@@ -93,7 +93,7 @@ During an active run, type bare words: `approve`, `reject`, `modify`, `handoff`.
 
 `commands/` is the **slash surface**. Skills (`archon-os/skills/`) are AI-discoverable knowledge with `user-invocable: false` — they don't appear in the slash menu, but Claude auto-invokes them on intent match.
 
-**Rule:** if a user types `/<name>`, the file MUST live here in `commands/`. If a skill needs slash exposure, wrap it in a thin command file that delegates to the skill (e.g., `/af prompts` → invokes `prompt-evaluator` skill).
+**Rule:** if a user types `/<name>`, the file MUST live here in `commands/`. If a skill needs slash exposure, wrap it in a thin command file that delegates to the skill (e.g., `/archon prompts` → invokes `prompt-evaluator` skill).
 
 This keeps the `/` menu uncluttered (only actionable commands) while preserving full AI discoverability of skill content.
 

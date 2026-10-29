@@ -55,7 +55,7 @@ Before spawning any agent, check:
 
 ### At the hook level (if implemented)
 
-`hooks/recursion-guard.cjs` (future): counts spawn depth via env var `AF_AGENT_DEPTH`. Refuses spawn at depth > 3. Plugin-level backstop.
+`hooks/recursion-guard.cjs` (future): counts spawn depth via env var `ARCHON_AGENT_DEPTH`. Refuses spawn at depth > 3. Plugin-level backstop.
 
 ---
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog - Firebase Debug Log Cleanup Hook
+ * Archon OS - Firebase Debug Log Cleanup Hook
  *
  * Fires: SessionStart
  * Purpose: Prevent firebase-debug.log creation when Firebase is not configured
@@ -24,7 +24,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
-const { TIMEOUT_SLOW_MS, MAX_BUFFER_DEFAULT, warnExecLimit } = require('./lib/af-exec.cjs');
+const { TIMEOUT_SLOW_MS, MAX_BUFFER_DEFAULT, warnExecLimit } = require('./lib/exec.cjs');
 
 // Firebase debug log path
 const FIREBASE_DEBUG_LOG = path.join(process.cwd(), 'firebase-debug.log');

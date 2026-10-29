@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Aura Frog Conflict Detection — L2 (Syntactic / function-overlap)
+# Archon OS Conflict Detection — L2 (Syntactic / function-overlap)
 #
 # Spec §21.2: function/region overlap. Triggers when L1 finds file overlap.
 # For each overlapping file, regex-extract function/class/def declarations

@@ -64,8 +64,8 @@ describe('turn-index module exists and is loadable', () => {
 describe('AC3 — transcript discovery (the root cause of recent_prompts: [])', () => {
   it('derives the project slug the way Claude Code does', () => {
     const { projectSlug } = require(TURN_INDEX);
-    expect(projectSlug('/Users/nguyenthanh/Projects/Personal/aura-frog'))
-      .toBe('-Users-nguyenthanh-Projects-Personal-aura-frog');
+    expect(projectSlug('/Users/nguyenthanh/Projects/Personal/archon'))
+      .toBe('-Users-nguyenthanh-Projects-Personal-archon');
   });
 
   it('finds the newest transcript for a cwd when the hook input carries none', () => {
@@ -276,7 +276,7 @@ describe('AC2 — a cold session can reconstruct the task from the handoff alone
       saved_at: new Date().toISOString(), reason: 'compact',
       project: { kind: 'code', plan_docs: ['docs/ROADMAP.md'] },
       plan: { mission: 'MISSION', initiative: 'INIT-1', feature: 'FEAT-B' },
-      context: { git_branch: 'feat/session-memory', project_name: 'aura-frog' },
+      context: { git_branch: 'feat/session-memory', project_name: 'archon' },
       recent_prompts: ['implement the turn index'],
       modified_files: ['archon-os/hooks/lib/turn-index.cjs'],
       turn_index: ['#1 │ 08:00 │ implement the turn index │ turn-index.cjs │ npx │ feat/session-memory │ uuid-0001'],
@@ -339,30 +339,30 @@ describe('AC3 — the index is refreshed at Stop and injected at SessionStart', 
   });
 
   it('refreshTurnIndex is a no-op, not a throw, when no transcript is reachable', () => {
-    // AF_TRANSCRIPT_PATH is exported by a live session and takes precedence by
+    // ARCHON_TRANSCRIPT_PATH is exported by a live session and takes precedence by
     // design, so the no-transcript case has to be asserted with it cleared.
     const dir = tmpdir('t');
     const p = { root: dir, turnIndexFile: path.join(dir, 'turn-index.tsv') };
-    const saved = process.env.AF_TRANSCRIPT_PATH;
-    delete process.env.AF_TRANSCRIPT_PATH;
+    const saved = process.env.ARCHON_TRANSCRIPT_PATH;
+    delete process.env.ARCHON_TRANSCRIPT_PATH;
     try {
       expect(hooks.refreshTurnIndex(p, null)).toEqual([]);
       expect(fs.existsSync(p.turnIndexFile)).toBe(false);
     } finally {
-      if (saved !== undefined) process.env.AF_TRANSCRIPT_PATH = saved;
+      if (saved !== undefined) process.env.ARCHON_TRANSCRIPT_PATH = saved;
     }
   });
 
   it('an env-named transcript wins over discovery — a live session owns its own', () => {
     const dir = tmpdir('t');
     const file = writeTranscript(dir, [{ prompt: 'from the env' }]);
-    const saved = process.env.AF_TRANSCRIPT_PATH;
-    process.env.AF_TRANSCRIPT_PATH = file;
+    const saved = process.env.ARCHON_TRANSCRIPT_PATH;
+    process.env.ARCHON_TRANSCRIPT_PATH = file;
     try {
       expect(hooks.resolveTranscript({}, { cwd: '/nowhere' })).toBe(file);
     } finally {
-      if (saved === undefined) delete process.env.AF_TRANSCRIPT_PATH;
-      else process.env.AF_TRANSCRIPT_PATH = saved;
+      if (saved === undefined) delete process.env.ARCHON_TRANSCRIPT_PATH;
+      else process.env.ARCHON_TRANSCRIPT_PATH = saved;
     }
   });
 

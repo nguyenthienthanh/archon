@@ -12,8 +12,8 @@ const fs = require('fs');
 const path = require('path');
 const https = require('https');
 
-// Per-project: update-check cache lives with the project's other Aura Frog state.
-// Aura Frog plugin NEVER writes to ~/.claude/ — only to the user's currently-active project.
+// Per-project: update-check cache lives with the project's other Archon OS state.
+// Archon OS plugin NEVER writes to ~/.claude/ — only to the user's currently-active project.
 
 const { findProjectRoot } = require('./lib/hook-runtime.cjs');
 const CACHE_FILE = path.join(findProjectRoot(), '.claude', 'cache', 'archon-os', 'update-cache.json');
@@ -158,13 +158,13 @@ async function main() {
     const isMajor = latestMajor > currentMajor;
 
     const lines = [
-      `🐸 Aura Frog update available: ${currentVersion} → ${latestTag}`,
+      `Archon OS update available: ${currentVersion} → ${latestTag}`,
     ];
     if (isMajor) {
       lines.push(`⚠️  Major version — may include breaking changes`);
       lines.push(`   Read release notes BEFORE updating: https://github.com/${REPO}/releases/tag/${latestTag}`);
     }
-    lines.push('', 'Update: /plugin marketplace update aurafrog');
+    lines.push('', 'Update: /plugin marketplace update archon');
 
     const result = { systemMessage: lines.join('\n') };
     console.log(JSON.stringify(result));

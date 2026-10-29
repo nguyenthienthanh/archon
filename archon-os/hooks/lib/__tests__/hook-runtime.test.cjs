@@ -1172,30 +1172,30 @@ describe('hook-runtime: findProjectRoot', () => {
     });
   });
 
-  describe('AF_PROJECT_ROOT env override', () => {
-    it('honors AF_PROJECT_ROOT when set, ignoring cwd', () => {
+  describe('ARCHON_PROJECT_ROOT env override', () => {
+    it('honors ARCHON_PROJECT_ROOT when set, ignoring cwd', () => {
       const { findProjectRoot } = rt();
-      const oldEnv = process.env.AF_PROJECT_ROOT;
+      const oldEnv = process.env.ARCHON_PROJECT_ROOT;
       try {
-        process.env.AF_PROJECT_ROOT = '/tmp';
+        process.env.ARCHON_PROJECT_ROOT = '/tmp';
         const root = findProjectRoot('/some/other/path');
         expect(root).toBe('/tmp');
       } finally {
-        if (oldEnv === undefined) delete process.env.AF_PROJECT_ROOT;
-        else process.env.AF_PROJECT_ROOT = oldEnv;
+        if (oldEnv === undefined) delete process.env.ARCHON_PROJECT_ROOT;
+        else process.env.ARCHON_PROJECT_ROOT = oldEnv;
       }
     });
 
-    it('resolves AF_PROJECT_ROOT to absolute path', () => {
+    it('resolves ARCHON_PROJECT_ROOT to absolute path', () => {
       const { findProjectRoot } = rt();
-      const oldEnv = process.env.AF_PROJECT_ROOT;
+      const oldEnv = process.env.ARCHON_PROJECT_ROOT;
       try {
-        process.env.AF_PROJECT_ROOT = '/tmp/../tmp';
+        process.env.ARCHON_PROJECT_ROOT = '/tmp/../tmp';
         const root = findProjectRoot();
         expect(root).toBe('/tmp');
       } finally {
-        if (oldEnv === undefined) delete process.env.AF_PROJECT_ROOT;
-        else process.env.AF_PROJECT_ROOT = oldEnv;
+        if (oldEnv === undefined) delete process.env.ARCHON_PROJECT_ROOT;
+        else process.env.ARCHON_PROJECT_ROOT = oldEnv;
       }
     });
   });
@@ -1203,9 +1203,9 @@ describe('hook-runtime: findProjectRoot', () => {
   describe('fallback', () => {
     it('returns the start dir when no marker found anywhere up to /', () => {
       const { findProjectRoot } = rt();
-      const oldEnv = process.env.AF_PROJECT_ROOT;
+      const oldEnv = process.env.ARCHON_PROJECT_ROOT;
       try {
-        delete process.env.AF_PROJECT_ROOT;
+        delete process.env.ARCHON_PROJECT_ROOT;
         // /private (or /) has no .claude or .git — fall back to itself
         const root = findProjectRoot('/private');
         // Either /private (no marker) or /Users (if /Users has .git on dev mac)
@@ -1213,7 +1213,7 @@ describe('hook-runtime: findProjectRoot', () => {
         expect(root.length).toBeGreaterThan(0);
         expect('/private'.startsWith(root) || root === '/private').toBe(true);
       } finally {
-        if (oldEnv !== undefined) process.env.AF_PROJECT_ROOT = oldEnv;
+        if (oldEnv !== undefined) process.env.ARCHON_PROJECT_ROOT = oldEnv;
       }
     });
   });

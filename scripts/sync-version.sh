@@ -1,5 +1,5 @@
 #!/bin/bash
-# Aura Frog Version Sync Script
+# Archon OS Version Sync Script
 # Purpose: Synchronize version numbers across all configuration files
 #
 # SINGLE SOURCE OF TRUTH: archon-os/.claude-plugin/plugin.json
@@ -59,9 +59,13 @@ declare -a MD_FILES=(
   # (It was listed twice here; the second entry did the same substitutions over
   # an already-substituted file.)
   "$PLUGIN_DIR/CLAUDE.md"
-  # Root README: nav line, what's-new heading, sample `/af status` output
+  # Root README: nav line, what's-new heading, sample `/archon status` output
   "$PROJECT_ROOT/README.md"
   # Dropped: "$PROJECT_ROOT/.claude/CLAUDE.md" — does not exist in this repo.
+  # Not listed: "$PLUGIN_DIR/README.md" — it is GENERATED from the root README by
+  # scripts/gen-plugin-readme.sh. Substituting into it directly would make the
+  # generated file diverge from its source, which is the drift that left it four
+  # minor versions behind. Regenerate it after the bump instead.
   # Dropped: "$HOME/.claude/CLAUDE.md" — a release script has no business
   # rewriting a contributor's personal config, and that file carries no version
   # (it is a one-line @AGENTS.md pointer), so the entry only left a stray .bak
@@ -306,6 +310,13 @@ main() {
     print_error "Version sync FAILED: no files were updated ($CURRENT_VERSION -> $NEW_VERSION)"
     exit 1
   fi
+  # The plugin payload's README is derived from the root one, which this script
+  # just rewrote — regenerate rather than leaving the two at different versions.
+  if [ -x "$PROJECT_ROOT/scripts/gen-plugin-readme.sh" ]; then
+    bash "$PROJECT_ROOT/scripts/gen-plugin-readme.sh" >/dev/null && \
+      print_success "Regenerated archon-os/README.md from README.md"
+  fi
+
   print_success "Version sync complete! $CURRENT_VERSION -> $NEW_VERSION ($CHANGED_COUNT file(s) updated)"
   echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 

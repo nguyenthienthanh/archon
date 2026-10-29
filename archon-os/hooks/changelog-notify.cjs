@@ -12,7 +12,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Per-project: release-notes acknowledgement is project-local.
-// Aura Frog plugin NEVER writes to ~/.claude/ — only to the user's currently-active project.
+// Archon OS plugin NEVER writes to ~/.claude/ — only to the user's currently-active project.
 
 const { findProjectRoot } = require('./lib/hook-runtime.cjs');
 const SEEN_FILE = path.join(findProjectRoot(), '.claude', 'cache', 'archon-os', 'last-seen-version.json');
@@ -77,7 +77,7 @@ function main() {
   }
 
   const lines = [
-    `🐸 Aura Frog updated to v${current}!`,
+    `Archon OS updated to v${current}!`,
     '',
     ...highlights.map(h => `  • ${h}`),
     '',

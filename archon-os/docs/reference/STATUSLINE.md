@@ -1,17 +1,17 @@
 # Statusline (cost/usage)
 
-Aura Frog ships an optional custom Claude Code statusline that renders a
+Archon OS ships an optional custom Claude Code statusline that renders a
 three-line status: who/where you are, how much of your rate-limit budgets and
 context window are spent, and what the session and billing cycle cost so far.
 
 It is version-controlled in the plugin under `scripts/` and installed into
-`~/.claude/` on demand via `/af statusline install`.
+`~/.claude/` on demand via `/archon statusline install`.
 
 ## The three-line layout
 
 | Line | Name | Contents |
 | --- | --- | --- |
-| **L1** | identity | `🐸 model` · shortened cwd · git branch (`*` when the tree is dirty) |
+| **L1** | identity | `model` · shortened cwd · git branch (`*` when the tree is dirty) |
 | **L2** | budgets | `5h` limit (bar + % + reset clock) · `7d` limit (% + reset) · `ctx` context % + tokens |
 | **L3** | money | `session ≈$` · `🔥 ≈$/hr` burn rate · `cycle¹ ≈$ →proj ≈$` · `≈API-equiv·<plan>` |
 
@@ -42,11 +42,11 @@ settings env to the statusline command) or in the shell environment.
 
 | Variable | Default | Effect |
 | --- | --- | --- |
-| `AF_BILLING_DAY` | `1` | Day of month the billing cycle anchors on (1–28). Drives cycle window + projection. |
-| `AF_PLAN_LABEL` | `Claude` | Label shown in the `≈API-equiv·<plan>` tag. |
-| `AF_CTX_WINDOW` | auto | Force a fixed context-window denominator (e.g. `200000`). Otherwise auto: 200k, or 1M past 200k. |
-| `AF_STATUSLINE_USAGE_DISABLED` | `0` | `1` hides the cycle `$` and skips the background ccusage refresh entirely. |
-| `NO_COLOR` | unset | Any value renders plain text with no ANSI color (`AF_STATUSLINE_NOCOLOR` also works). |
+| `ARCHON_BILLING_DAY` | `1` | Day of month the billing cycle anchors on (1–28). Drives cycle window + projection. |
+| `ARCHON_PLAN_LABEL` | `Claude` | Label shown in the `≈API-equiv·<plan>` tag. |
+| `ARCHON_CTX_WINDOW` | auto | Force a fixed context-window denominator (e.g. `200000`). Otherwise auto: 200k, or 1M past 200k. |
+| `ARCHON_STATUSLINE_USAGE_DISABLED` | `0` | `1` hides the cycle `$` and skips the background ccusage refresh entirely. |
+| `NO_COLOR` | unset | Any value renders plain text with no ANSI color (`ARCHON_STATUSLINE_NOCOLOR` also works). |
 
 ## Background cost-refresh model
 
@@ -60,7 +60,7 @@ render instead kicks a detached background refresher
 - Runner preference: `bunx ccusage`, falling back to `npx -y ccusage`. If neither
   is present it exits quietly.
 - Writes `~/.claude/cache/usage-cycle.json` atomically (temp file + `mv`).
-- Self-guarded: a TTL (`AF_USAGE_TTL`, default 900s) skips work when the cache is
+- Self-guarded: a TTL (`ARCHON_USAGE_TTL`, default 900s) skips work when the cache is
   fresh for the current cycle, and a `mkdir` lock ensures single-flight, so
   firing it on every render is cheap.
 
@@ -71,18 +71,18 @@ rate-limit percentage and reset epoch from stdin and writes them to
 `~/.claude/cache/rate-limits.json` (absolute path, on purpose). The
 `limit-reset-notify` skill / `~/.claude/limit-reset-notify.sh` hardcodes and
 depends on that file to know when the 5-hour window resets. This capture happens
-regardless of `AF_STATUSLINE_USAGE_DISABLED`.
+regardless of `ARCHON_STATUSLINE_USAGE_DISABLED`.
 
-## The `/af statusline` command
+## The `/archon statusline` command
 
 Install, update, and inspect via the plugin's installer
 (`scripts/statusline-install.sh`):
 
 | Command | Action |
 | --- | --- |
-| `/af statusline install [--billing-day N] [--plan LABEL] [--style cost\|af]` | Copies the 3 scripts into `~/.claude/`, backs up `settings.json` to a timestamped `.bak`, and wires `.statusLine` to run them. `--style cost` (default) points at `statusline-cost.sh`; `--style af` points at the plugin's classic `statusline.sh`. `--billing-day` / `--plan` set `.env.AF_BILLING_DAY` / `.env.AF_PLAN_LABEL`. |
-| `/af statusline update` | Re-copies only the 3 script files into `~/.claude/` (the "pull latest render" path). Does **not** touch `settings.json`, preserving your wiring, billing day, and plan label. |
-| `/af statusline status` | Prints the active `.statusLine.command`, resolved `AF_BILLING_DAY` / `AF_PLAN_LABEL`, whether the usage / rate-limit caches exist (and cache age), and availability of `python3` / `bunx` / `npx`. |
+| `/archon statusline install [--billing-day N] [--plan LABEL] [--style cost\|af]` | Copies the 3 scripts into `~/.claude/`, backs up `settings.json` to a timestamped `.bak`, and wires `.statusLine` to run them. `--style cost` (default) points at `statusline-cost.sh`; `--style af` points at the plugin's classic `statusline.sh`. `--billing-day` / `--plan` set `.env.ARCHON_BILLING_DAY` / `.env.ARCHON_PLAN_LABEL`. |
+| `/archon statusline update` | Re-copies only the 3 script files into `~/.claude/` (the "pull latest render" path). Does **not** touch `settings.json`, preserving your wiring, billing day, and plan label. |
+| `/archon statusline status` | Prints the active `.statusLine.command`, resolved `ARCHON_BILLING_DAY` / `ARCHON_PLAN_LABEL`, whether the usage / rate-limit caches exist (and cache age), and availability of `python3` / `bunx` / `npx`. |
 
 Every `settings.json` edit is backed up first and applied via `python3` for safe
 JSON — never `sed`. The operations are idempotent and fail-safe.

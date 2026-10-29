@@ -1,4 +1,4 @@
-# Aura Frog Templates
+# Archon OS Templates
 
 Document templates used by workflows and commands to generate standardized output.
 

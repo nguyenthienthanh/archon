@@ -1,7 +1,7 @@
 #!/bin/bash
 # Context Compression Generator
 # Creates token-efficient session context in TOON format
-# Aura Frog Plugin Script
+# Archon OS Plugin Script
 
 set -e
 

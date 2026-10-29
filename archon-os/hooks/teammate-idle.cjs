@@ -14,13 +14,16 @@
  * @version 1.0.0
  */
 
+// Mirrors legacy AF_* / AURA_FROG_* variables onto their ARCHON_* names.
+require('./lib/env-compat.cjs');
+
 const fs = require('fs');
 const path = require('path');
 
 const {
   readSessionState,
   isAgentTeamsEnabled
-} = require('./lib/af-config-utils.cjs');
+} = require('./lib/config-utils.cjs');
 
 // Agent specialization to task keyword mapping
 const AGENT_TASK_PATTERNS = {
@@ -78,12 +81,12 @@ function main() {
   const state = readSessionState(sessionId);
 
   // Check 1: Cross-review work available for this role
-  const currentPhase = state?.phase || process.env.AF_CURRENT_PHASE;
+  const currentPhase = state?.phase || process.env.ARCHON_CURRENT_PHASE;
   if (currentPhase && CROSS_REVIEW_PHASES[currentPhase]) {
     const reviewers = CROSS_REVIEW_PHASES[currentPhase];
     if (role && reviewers.includes(role)) {
       // Record cross-review assignment in team log
-      if (process.env.AF_TEAM_LOG_DIR) {
+      if (process.env.ARCHON_TEAM_LOG_DIR) {
         try {
           const teamLogWriter = require('./lib/team-log-writer.cjs');
           teamLogWriter.logAction('cross_review_assigned', `${role} assigned cross-review for Phase ${currentPhase}`, {

@@ -6,7 +6,7 @@ Unified project management. Handles detection, initialization, configuration, co
 
 ## /project init
 
-**Trigger:** First time using Aura Frog in a project, or reconfiguring.
+**Trigger:** First time using Archon OS in a project, or reconfiguring.
 
 Auto-detects project type (React, Next.js, Laravel, Go, Python, Flutter) and creates the full `.claude/` structure: `CLAUDE.md`, `settings.local.json`, `project-contexts/` with 7 context files (project-config.yaml, conventions.md, rules.md, examples.md, repo-map.md, file-registry.yaml, architecture.md), and session-context.toon (12 pattern detections).
 
@@ -34,7 +34,7 @@ Displays detected framework, package manager, primary/secondary agents, test fra
 
 **Trigger:** `/project list` -- list all configured projects.
 
-Shows all Aura Frog-configured projects with their type, path, status, last-used date, team members, and integration status (JIRA, Confluence). Marks the active project. Navigate to a new directory and run `/project init` to add more.
+Shows all Archon OS-configured projects with their type, path, status, last-used date, team members, and integration status (JIRA, Confluence). Marks the active project. Navigate to a new directory and run `/project init` to add more.
 
 ---
 
@@ -58,7 +58,7 @@ Invalidates detection cache and re-scans framework, package manager, project typ
 
 **Trigger:** `/project regen [project-name]` -- regenerate all context files.
 
-Re-scans and updates all 7 context files while preserving manual customizations (marked `<!-- MANUAL -->` or `<!-- CUSTOM -->`). Creates timestamped backup before changes. Re-runs all generator scripts, syncs plugin settings, and updates `.claude/CLAUDE.md` (auto-updates AURA-FROG section, preserves USER-CUSTOM section). Differs from `/project init`: regen updates existing context, init creates from scratch.
+Re-scans and updates all 7 context files while preserving manual customizations (marked `<!-- MANUAL -->` or `<!-- CUSTOM -->`). Creates timestamped backup before changes. Re-runs all generator scripts, syncs plugin settings, and updates `.claude/CLAUDE.md` (auto-updates ARCHON OS section, preserves USER-CUSTOM section). Differs from `/project init`: regen updates existing context, init creates from scratch.
 
 ---
 

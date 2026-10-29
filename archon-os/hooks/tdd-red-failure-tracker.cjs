@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog — TDD RED Failure Tracker
+ * Archon OS — TDD RED Failure Tracker
  *
  * Fires: PostToolUse on Bash when the command looks like a test runner
  * Purpose: In Phase 2 (RED), tests are EXPECTED to fail. This hook distinguishes

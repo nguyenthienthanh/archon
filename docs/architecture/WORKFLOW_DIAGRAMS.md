@@ -4,10 +4,10 @@ status: reference
 audience: power-user
 ---
 
-# Aura Frog Workflow Diagrams
+# Archon OS Workflow Diagrams
 
 **Format:** Mermaid (render with GitHub, VS Code, or mermaid.live)
-**Purpose:** Visual documentation of Aura Frog 5-phase workflow and architecture
+**Purpose:** Visual documentation of Archon OS 5-phase workflow and architecture
 
 ---
 
@@ -36,7 +36,7 @@ graph TB
         CC[Claude Code CLI]
     end
 
-    subgraph "Aura Frog Plugin"
+    subgraph "Archon OS Plugin"
         PM[PM Operations Orchestrator]
         AD[Agent Detector]
         WO[Workflow Orchestrator]
@@ -711,7 +711,7 @@ flowchart TB
     end
 
     subgraph "Temp Storage"
-        TMP[/tmp/aura-frog/agents/]
+        TMP[/tmp/archon/agents/]
     end
 
     MS1 --> MS2

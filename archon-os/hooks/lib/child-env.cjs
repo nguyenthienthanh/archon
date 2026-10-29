@@ -1,7 +1,11 @@
 'use strict';
 
+// Mirrors legacy AF_* / AURA_FROG_* variables onto their ARCHON_* names. This file
+// reads process.env without going through safe-stdin, so it bridges for itself.
+require('./env-compat.cjs');
+
 /**
- * Aura Frog — child-process environment minimiser
+ * Archon OS — child-process environment minimiser
  *
  * Some hooks run code that isn't ours: lint-autofix executes the working repo's
  * own node_modules/.bin or vendor/bin binary on every Write and Edit. Those
@@ -15,7 +19,7 @@
  * tool actually needs to run: PATH, HOME, locale, the NODE_ family, and the
  * plugin's own AF_ and CLAUDE_ wiring.
  *
- * Escape hatch: AF_CHILD_ENV_UNFILTERED=true passes the environment through
+ * Escape hatch: ARCHON_CHILD_ENV_UNFILTERED=true passes the environment through
  * untouched, for a toolchain that genuinely needs a credential-named variable.
  *
  * @version 1.0.0
@@ -61,7 +65,7 @@ function isSecretName(name) {
  * that is how a caller passes a value the child genuinely needs).
  */
 function filterChildEnv(source = process.env, extra = {}) {
-  if (source.AF_CHILD_ENV_UNFILTERED === 'true') return { ...source, ...extra };
+  if (source.ARCHON_CHILD_ENV_UNFILTERED === 'true') return { ...source, ...extra };
   const out = {};
   for (const [k, v] of Object.entries(source)) {
     if (v === undefined) continue;

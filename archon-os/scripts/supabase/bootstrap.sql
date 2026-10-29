@@ -1,4 +1,4 @@
--- Aura Frog - Supabase Bootstrap
+-- Archon OS - Supabase Bootstrap
 -- Run this ONCE in Supabase SQL Editor to enable automatic schema setup
 -- Then run: ./scripts/supabase/setup.sh
 

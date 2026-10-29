@@ -1,6 +1,6 @@
-# Aura Frog Showcase
+# Archon OS Showcase
 
-Real outputs from actual Aura Frog workflow runs. These are not mocked — they show exactly what the plugin produces.
+Real outputs from actual Archon OS workflow runs. These are not mocked — they show exactly what the plugin produces.
 
 ## Sample Workflows
 
@@ -20,7 +20,7 @@ Each sample contains the deliverables from a real workflow run:
 ## Try It Yourself
 
 ```bash
-# Install Aura Frog
+# Install Archon OS
 /plugin marketplace add nguyenthienthanh/archon
 /plugin install archon-os@archon
 

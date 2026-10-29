@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog — JIRA Auto-Fetch
+ * Archon OS — JIRA Auto-Fetch
  *
  * Fires: UserPromptSubmit (async)
  * Purpose: Detect JIRA ticket patterns ([A-Z]{2,10}-[0-9]{1,6}) in user prompts,
@@ -20,7 +20,7 @@
  *     out false positives like UTF-8, RFC-123, HTTP-200
  *
  * Single source of truth:
- *   This hook is the only JIRA-fetch path in Aura Frog. There is no standalone
+ *   This hook is the only JIRA-fetch path in Archon OS. There is no standalone
  *   CLI script — credentials, curl call, and TOON projection all live here.
  *
  * Exit codes:
@@ -35,7 +35,7 @@ const fs = require('fs');
 const { readStdinSafely } = require('./lib/safe-stdin.cjs');
 const path = require('path');
 const { execFileSync } = require('child_process');
-const { guardEndpoint } = require('./lib/af-net-guard.cjs');
+const { guardEndpoint } = require('./lib/net-guard.cjs');
 
 const PLUGIN_ROOT = process.env.CLAUDE_PLUGIN_ROOT || path.join(__dirname, '..');
 const TOON_CONVERTER = path.join(PLUGIN_ROOT, 'scripts', 'json-to-toon.cjs');

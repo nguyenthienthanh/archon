@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog - Learning System Utilities
+ * Archon OS - Learning System Utilities
  *
  * Handles learning storage with dual-mode support:
  * - Supabase: Cloud storage for cross-session memory
@@ -18,8 +18,8 @@
 
 const https = require('https');
 // No `http` here on purpose: this module only ever sends credentialed requests,
-// and af-net-guard refuses any endpoint that is not https.
-const { guardEndpoint } = require('./af-net-guard.cjs');
+// and net-guard refuses any endpoint that is not https.
+const { guardEndpoint } = require('./net-guard.cjs');
 const fs = require('fs');
 const path = require('path');
 
@@ -63,12 +63,12 @@ function isSupabaseConfigured() {
 /**
  * Check if learning system is enabled
  * Learning is ALWAYS enabled by default (uses local storage)
- * Set AF_LEARNING_DISABLED=true to disable completely
+ * Set ARCHON_LEARNING_DISABLED=true to disable completely
  * @returns {boolean}
  */
 function isLearningEnabled() {
   // User can explicitly disable all learning via either flag
-  if (process.env.AF_LEARNING_DISABLED === 'true' || process.env.AF_LEARNING_ENABLED === 'false') {
+  if (process.env.ARCHON_LEARNING_DISABLED === 'true' || process.env.ARCHON_LEARNING_ENABLED === 'false') {
     return false;
   }
   // Otherwise, learning is always enabled (local or Supabase)
@@ -95,7 +95,7 @@ function isLocalMode() {
  * @returns {boolean}
  */
 function isFeedbackEnabled() {
-  return isLearningEnabled() && process.env.AF_FEEDBACK_COLLECTION !== 'false';
+  return isLearningEnabled() && process.env.ARCHON_FEEDBACK_COLLECTION !== 'false';
 }
 
 /**
@@ -103,7 +103,7 @@ function isFeedbackEnabled() {
  * @returns {boolean}
  */
 function isMetricsEnabled() {
-  return isLearningEnabled() && process.env.AF_METRICS_COLLECTION !== 'false';
+  return isLearningEnabled() && process.env.ARCHON_METRICS_COLLECTION !== 'false';
 }
 
 /**
@@ -259,7 +259,7 @@ async function supabaseRequest(table, method = 'POST', data = null, params = {})
   // to build it at all unless the endpoint is https and on the allowlist — this
   // used to fall back to plain `http` for an http:// SUPABASE_URL, which put the
   // key on the wire in the clear.
-  const url = guardEndpoint(`${process.env.SUPABASE_URL}/rest/v1/${table}`, 'supabase', 'af-learning');
+  const url = guardEndpoint(`${process.env.SUPABASE_URL}/rest/v1/${table}`, 'supabase', 'learning');
   if (!url) throw new Error('Supabase endpoint rejected by the outbound guard');
 
   // Add query params
@@ -331,7 +331,7 @@ async function recordFeedback(feedback) {
   }
 
   const data = {
-    session_id: feedback.sessionId || process.env.AF_SESSION_ID,
+    session_id: feedback.sessionId || process.env.ARCHON_SESSION_ID,
     workflow_id: feedback.workflowId,
     project_name: feedback.projectName || process.env.PROJECT_NAME,
     phase: feedback.phase,
@@ -384,8 +384,8 @@ async function recordWorkflowMetrics(metrics) {
     const data = {
       workflow_id: metrics.workflowId,
       project_name: metrics.projectName || process.env.PROJECT_NAME,
-      project_type: metrics.projectType || process.env.AF_PROJECT_TYPE,
-      framework: metrics.framework || process.env.AF_FRAMEWORK,
+      project_type: metrics.projectType || process.env.ARCHON_PROJECT_TYPE,
+      framework: metrics.framework || process.env.ARCHON_FRAMEWORK,
       workflow_type: metrics.workflowType || 'full',
       total_phases: metrics.totalPhases || 5,
       completed_phases: metrics.completedPhases || 0,
@@ -424,7 +424,7 @@ async function recordAgentPerformance(performance) {
 
   try {
     const data = {
-      session_id: performance.sessionId || process.env.AF_SESSION_ID,
+      session_id: performance.sessionId || process.env.ARCHON_SESSION_ID,
       workflow_id: performance.workflowId,
       agent_name: performance.agentName,
       task_type: performance.taskType,
@@ -470,7 +470,7 @@ async function recordWorkflowEvent(event) {
     reason: event.reason,
     attempt_count: event.attemptCount || 1,
     project_name: event.projectName || process.env.PROJECT_NAME,
-    session_id: event.sessionId || process.env.AF_SESSION_ID,
+    session_id: event.sessionId || process.env.ARCHON_SESSION_ID,
     metadata: event.metadata || {},
     created_at: new Date().toISOString()
   };
@@ -626,7 +626,7 @@ async function recordPattern(pattern) {
   try {
     // Same guard as supabaseRequest: https + allowlisted host, or no request.
     const url = guardEndpoint(
-      `${process.env.SUPABASE_URL}/rest/v1/rpc/update_pattern_frequency`, 'supabase', 'af-learning');
+      `${process.env.SUPABASE_URL}/rest/v1/rpc/update_pattern_frequency`, 'supabase', 'learning');
     if (!url) return null;
 
     const data = {
@@ -726,7 +726,7 @@ async function getLearningStatus() {
     metricsEnabled: isMetricsEnabled(),
     supabaseConfigured: isSupabaseConfigured(),
     localMode: isLocalMode(),
-    autoAnalyze: process.env.AF_AUTO_ANALYZE || 'disabled'
+    autoAnalyze: process.env.ARCHON_AUTO_ANALYZE || 'disabled'
   };
 
   if (status.enabled) {

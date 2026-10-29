@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog - Smart Learn Hook
+ * Archon OS - Smart Learn Hook
  *
  * Fires: PostToolUse (Write, Edit, Bash) — dispatched in-process by
  *        learning-dispatch.cjs (no longer registered directly in hooks.json;
@@ -21,7 +21,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { recordPattern, isLearningEnabled, isLocalMode } = require('./lib/af-learning.cjs');
+const { recordPattern, isLearningEnabled, isLocalMode } = require('./lib/learning.cjs');
 
 // Smart learn cache
 

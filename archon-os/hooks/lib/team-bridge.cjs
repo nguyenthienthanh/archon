@@ -2,7 +2,7 @@
 /**
  * Team-Workflow Bridge Library
  *
- * Bridges Aura Frog's 5-phase workflow with Claude Agent Teams.
+ * Bridges Archon OS's 5-phase workflow with Claude Agent Teams.
  * Handles team lifecycle: creation, teardown, rejection, and state tracking.
  *
  * Both a library (require'd by hooks) and CLI (called from phase-transition.sh).
@@ -19,7 +19,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const { isAgentTeamsEnabled } = require('./af-config-utils.cjs');
+const { isAgentTeamsEnabled } = require('./config-utils.cjs');
 
 // Phase slug mapping
 const PHASE_SLUGS = {
@@ -289,7 +289,7 @@ function cliCreateIfNeeded(phase, workflowId) {
   // Read session state for complexity check
   let sessionState = null;
   try {
-    const { readSessionState } = require('./af-config-utils.cjs');
+    const { readSessionState } = require('./config-utils.cjs');
     sessionState = readSessionState(process.ppid?.toString());
   } catch { /* ignore */ }
 

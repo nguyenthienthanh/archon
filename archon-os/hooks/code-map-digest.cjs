@@ -30,7 +30,7 @@
  * Zero LLM tokens, zero dependencies, zero native modules. The map is a derived
  * cache: delete .claude/cache/code-map.json and it regenerates.
  *
- * Disable: AF_CODE_MAP_DISABLED=true
+ * Disable: ARCHON_CODE_MAP_DISABLED=true
  *
  * Exit Codes:
  *   0 - Success (non-blocking)

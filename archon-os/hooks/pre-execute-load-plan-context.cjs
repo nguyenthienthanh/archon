@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog — Pre-Execute: Load Plan Context
+ * Archon OS — Pre-Execute: Load Plan Context
  *
  * Fires: PreToolUse (Bash | Edit | Write | Read)
  * Purpose: Load minimum hierarchical plan context (.claude/plans/) so the

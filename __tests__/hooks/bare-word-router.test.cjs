@@ -137,7 +137,7 @@ describe('main() direct invocation (for coverage)', () => {
     });
 
     test('disabled env var → exit 0, no hint', () => {
-        const rc = main({ cwd: tmpDir, env: { AF_BARE_WORD_ROUTER_DISABLED: 'true' }, prompt: 'next' });
+        const rc = main({ cwd: tmpDir, env: { ARCHON_BARE_WORD_ROUTER_DISABLED: 'true' }, prompt: 'next' });
         expect(rc).toBe(0);
         expect(stderrBuf).toBe('');
     });
@@ -245,8 +245,8 @@ describe('end-to-end hook invocation', () => {
         fs.rmSync(noPlan, { recursive: true, force: true });
     });
 
-    test('AF_BARE_WORD_ROUTER_DISABLED → silent', () => {
-        const r = runHook('next', { env: { AF_BARE_WORD_ROUTER_DISABLED: 'true' } });
+    test('ARCHON_BARE_WORD_ROUTER_DISABLED → silent', () => {
+        const r = runHook('next', { env: { ARCHON_BARE_WORD_ROUTER_DISABLED: 'true' } });
         expect(r.status).toBe(0);
         expect(r.stderr).toBe('');
     });

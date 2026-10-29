@@ -4,11 +4,11 @@ status: current
 audience: active-user
 ---
 
-# Why Teams Ship Faster With Aura Frog
+# Why Teams Ship Faster With Archon OS
 
 ### 1. Smart Flow Selection — Right Effort for Every Task
 
-**Not every task gets the 5-phase workflow.** Aura Frog's `agent-detector` classifies complexity on every message and picks the minimum viable flow:
+**Not every task gets the 5-phase workflow.** Archon OS's `agent-detector` classifies complexity on every message and picks the minimum viable flow:
 
 | Task type | Flow | Gates | Example |
 |-----------|------|:----:|---------|
@@ -119,7 +119,7 @@ Each agent and skill declares its own `model:` in YAML frontmatter. Claude Code 
 |:--------:|--------|-----------------|
 | 1 (highest) | `CLAUDE_CODE_SUBAGENT_MODEL` env var | Override everything — useful for CI or cost control |
 | 2 | Per-invocation `model` parameter | Rare — set at spawn time |
-| 3 | Agent/skill frontmatter `model:` field | **This is where Aura Frog declarations live** |
+| 3 | Agent/skill frontmatter `model:` field | **This is where Archon OS declarations live** |
 | 4 (fallback) | Main session model | Used only if nothing above is set |
 
 **Key point:** frontmatter wins over session model. If you started your session on Opus but invoke `agent-detector`, that skill runs on **haiku** — not Opus. The session model is the *fallback*, not the override.
@@ -160,7 +160,7 @@ Run `project:init` once. Every future session instantly understands your codebas
 
 ### 5. Multi-Agent Teams for Big Features
 
-For complex work, Aura Frog spins up a real team working in parallel:
+For complex work, Archon OS spins up a real team working in parallel:
 
 ```
 lead

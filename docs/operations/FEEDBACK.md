@@ -6,17 +6,17 @@ audience: active-user
 
 # Share Your Experience
 
-Using Aura Frog? We'd love to hear about it!
+Using Archon OS? We'd love to hear about it!
 
 ## How to Share
 
 1. **GitHub Issue** — Open an issue with label `testimonial`
 2. **GitHub Discussion** — Post in Discussions tab
-3. **Twitter/X** — Tag @nguyenthienthanh with #AuraFrog
+3. **Twitter/X** — Tag @nguyenthienthanh with #ArchonOS
 
 ## What's Helpful
 
-- What task did you use Aura Frog for?
+- What task did you use Archon OS for?
 - What was different compared to raw Claude Code?
 - How much time/tokens did it save?
 - Screenshot of a workflow run (optional)

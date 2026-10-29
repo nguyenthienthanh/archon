@@ -49,6 +49,11 @@
 
 const fs = require('node:fs');
 
+// Mirrors legacy AF_* / AURA_FROG_* variables onto their ARCHON_* names before any
+// module reads process.env. Required here because nearly every hook reaches
+// safe-stdin, directly or through hook-runtime, making it the one chokepoint.
+require('./env-compat.cjs');
+
 /**
  * Read stdin (fd 0) only when it's safe to do so without blocking.
  * Returns the raw stdin contents as a trimmed string, or '' if reading

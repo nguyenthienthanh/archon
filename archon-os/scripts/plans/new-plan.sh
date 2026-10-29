@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+
+# Bridges legacy AF_* / AURA_FROG_* variables onto their ARCHON_* names (v4 rebrand).
+. "$(dirname "${BASH_SOURCE[0]}")/../lib/env-compat.sh"
+
 # Create the .claude/plans/ skeleton for hierarchical planning (v3.7.3+).
 # Idempotent — safe to re-run.
 #
@@ -33,7 +37,7 @@ if [ -d "${LEGACY_AURA_PLANS}" ] && [ ! -d "${PLANS_DIR}" ]; then
 ℹ This script will initialize the new .claude/plans/ next to it.
 ℹ Migrate your content manually with:
 ℹ   mv .aura/plans .claude/plans
-ℹ Or set AF_PLANS_DIR=.aura/plans to keep using the legacy location.
+ℹ Or set ARCHON_PLANS_DIR=.aura/plans to keep using the legacy location.
 EOF
 fi
 
@@ -56,8 +60,8 @@ mkdir -p "${CLAUDE_DIR}/memory/archive"
 # MCP audit keeps its own directory, separate from plans. Resolution order
 # matches hooks/lib/security-dir.cjs and _lib.sh#security_dir; .aura/security is
 # still the default so an existing install's audit trail does not move.
-if [ -n "${AF_SECURITY_DIR:-}" ]; then
-    SECURITY_DIR="${AF_SECURITY_DIR}"
+if [ -n "${ARCHON_SECURITY_DIR:-}" ]; then
+    SECURITY_DIR="${ARCHON_SECURITY_DIR}"
 elif [ -d "${PROJECT_ROOT}/.claude/security" ]; then
     SECURITY_DIR="${PROJECT_ROOT}/.claude/security"
 else
@@ -235,7 +239,7 @@ Pre-v3.7.3 used `.aura/plans/`. If you have content there, migrate via:
 mv .aura/plans .claude/plans
 ```
 
-Or override via `AF_PLANS_DIR=.aura/plans` to keep using the old location. The legacy fallback is removed in v4.0.
+Or override via `ARCHON_PLANS_DIR=.aura/plans` to keep using the old location. The legacy fallback is removed in v4.0.
 
 ---
 

@@ -4,7 +4,7 @@ status: reference
 audience: power-user
 ---
 
-# Aura Frog OS Architecture
+# Archon OS OS Architecture
 
 **Version:** 3.2.1
 **Inspired by:** Karpathy's LLM OS mental model
@@ -13,14 +13,14 @@ audience: power-user
 
 ## Conceptual Model
 
-Aura Frog frames Claude Code as an **Operating System** for software engineering. This is a conceptual model — not a literal OS implementation — that helps reason about resource allocation, process management, and memory discipline.
+Archon OS frames Claude Code as an **Operating System** for software engineering. This is a conceptual model — not a literal OS implementation — that helps reason about resource allocation, process management, and memory discipline.
 
 ```
 ┌─────────────────────────────────────────────────────┐
 │                    USER (Human)                     │
 │              Sends tasks, approves gates            │
 ├─────────────────────────────────────────────────────┤
-│                 KERNEL (Claude + Aura Frog)         │
+│                 KERNEL (Claude + Archon OS)         │
 │  ┌──────────┐  ┌──────────┐  ┌───────────────────┐ │
 │  │ Scheduler│  │Orchestr. │  │ Interrupt Handler │ │
 │  │ 5-phase  │  │ dispatch │  │ approval gates    │ │
@@ -49,9 +49,9 @@ Aura Frog frames Claude Code as an **Operating System** for software engineering
 
 ---
 
-## OS ↔ Aura Frog Mapping
+## OS ↔ Archon OS Mapping
 
-| OS Concept | Aura Frog Implementation | Why this mapping |
+| OS Concept | Archon OS Implementation | Why this mapping |
 |------------|-------------------------|------------------|
 | **CPU/Kernel** | Claude + orchestrator rules | Orchestrates, dispatches, verifies |
 | **RAM** | Context window (token budget) | Managed segments, eviction policies |

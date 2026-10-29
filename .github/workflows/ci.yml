@@ -1,4 +1,4 @@
-name: Aura Frog CI
+name: Archon OS CI
 
 on:
   push:
@@ -83,6 +83,13 @@ jobs:
         # live under docs/marketing/ or contain "pre-v" in filename.
         # Spec: FEAT-006 STORY-0007 (v3.7.4).
         run: bash archon-os/scripts/ci/validate-doc-maturity.sh
+
+      - name: Validate plugin README is in sync with the root README
+        # archon-os/README.md is generated from README.md. Both were hand-written
+        # until v4, and they drifted four minor versions apart — the plugin
+        # payload shipped a v3.7.4 README while the root said v4. This gate makes
+        # the drift impossible rather than noticing it later.
+        run: bash scripts/gen-plugin-readme.sh --check
 
   test:
     runs-on: ubuntu-latest

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog - Post Compact Hook
+ * Archon OS - Post Compact Hook
  *
  * Fires: PostCompact (after context compaction completes)
  * Purpose: Verify workflow state survived compaction

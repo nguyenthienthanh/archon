@@ -23,7 +23,7 @@ Stable content that persists across many turns:
 
 | Content | Why cache |
 |---------|-----------|
-| Plugin CLAUDE.md (Aura Frog OS context) | ~3K tokens, loaded every session |
+| Plugin CLAUDE.md (Archon OS OS context) | ~3K tokens, loaded every session |
 | Rule tier loaded per phase (core + agent) | ~5K tokens, stable per phase |
 | Skill SKILL.md content (once invoked) | ~500–2K tokens per skill |
 | Project context files (repo-map, conventions, examples) | ~3–8K tokens, changes rarely |
@@ -46,7 +46,7 @@ Claude Code's cache uses `cache_control: { type: "ephemeral" }` markers. The 4 b
 
 | Breakpoint | What comes before | Hit rate |
 |-----------|-------------------|----------|
-| **1. System + CLAUDE.md** | Aura Frog OS context + project CLAUDE.md | Very high (every turn) |
+| **1. System + CLAUDE.md** | Archon OS OS context + project CLAUDE.md | Very high (every turn) |
 | **2. Rule tier** | Core rules + active agent rules | High (per phase) |
 | **3. Phase deliverables so far** | Approved P1/P2 content as read-only | Medium (grows per phase) |
 | **4. Active skill content** | Current skill's SKILL.md body | Medium (per skill) |

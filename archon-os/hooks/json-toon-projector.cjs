@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog — Generic JSON → TOON Projector
+ * Archon OS — Generic JSON → TOON Projector
  *
  * Fires: PostToolUse (Read | mcp__.*) async
  * Purpose: When a tool call yields JSON destined for context, run a
@@ -29,9 +29,9 @@
  *   saving both tokens and round-trips.
  *
  * Configuration env vars:
- *   AF_JSON_TOON_DISABLED=true  → skip entirely (fallback for debugging)
- *   AF_JSON_TOON_MIN_BYTES=2000 → minimum file/payload size to project
- *   AF_JSON_TOON_MAX_BYTES=1048576 → maximum size; above it the file is skipped
+ *   ARCHON_JSON_TOON_DISABLED=true  → skip entirely (fallback for debugging)
+ *   ARCHON_JSON_TOON_MIN_BYTES=2000 → minimum file/payload size to project
+ *   ARCHON_JSON_TOON_MAX_BYTES=1048576 → maximum size; above it the file is skipped
  *                                    (projection would hold raw + parsed + TOON)
  *
  * Exit codes:
@@ -46,15 +46,15 @@ const fs = require('fs');
 const { readStdinSafely } = require('./lib/safe-stdin.cjs');
 const path = require('path');
 
-if (process.env.AF_JSON_TOON_DISABLED === 'true') process.exit(0);
+if (process.env.ARCHON_JSON_TOON_DISABLED === 'true') process.exit(0);
 
 const PLUGIN_ROOT = process.env.CLAUDE_PLUGIN_ROOT || path.join(__dirname, '..');
 const TOON_CONVERTER_PATH = path.join(PLUGIN_ROOT, 'scripts', 'json-to-toon.cjs');
-const MIN_BYTES = parseInt(process.env.AF_JSON_TOON_MIN_BYTES || '2000', 10);
+const MIN_BYTES = parseInt(process.env.ARCHON_JSON_TOON_MIN_BYTES || '2000', 10);
 // Upper cap. Projecting means holding the raw string + the parsed object + the
 // TOON string at once — three copies. Above this, skipping is cheaper than any
 // context saving the projection could buy, and this hook runs on EVERY Read.
-const MAX_BYTES = parseInt(process.env.AF_JSON_TOON_MAX_BYTES || '1048576', 10);
+const MAX_BYTES = parseInt(process.env.ARCHON_JSON_TOON_MAX_BYTES || '1048576', 10);
 
 // Bounds for the .claude/logs scan (mcp__.* path). Without these the walk
 // recurses an unbounded tree on a hot path.

@@ -4,9 +4,9 @@ status: reference
 audience: contributor
 ---
 
-# Aura Frog Benefits — Why Use This Plugin
+# Archon OS Benefits — Why Use This Plugin
 
-**Purpose:** Explain every capability Aura Frog adds on top of base Claude Code — what it is, how it's applied, why you need it, and concrete use cases.
+**Purpose:** Explain every capability Archon OS adds on top of base Claude Code — what it is, how it's applied, why you need it, and concrete use cases.
 
 **Format per section:** What · How applied · Why you need it · Use cases.
 
@@ -328,7 +328,7 @@ audience: contributor
 
 ### 6.1. Consolidated Command Surface
 
-**What:** A 6-command core (`/run` universal + `/check` quality + `/design` pre-code + `/project` config + `/af` system + `/help`) covers the everyday workflow. v3.7.0 layered an `/archon-os:*` suite on top (plan, expand, freeze, conflicts, heal, mcp, dashboard, preflight, …) for hierarchical planning and safety operations. Total: 24 slash commands.
+**What:** A 6-command core (`/run` universal + `/check` quality + `/design` pre-code + `/project` config + `/archon` system + `/help`) covers the everyday workflow. v3.7.0 layered an `/archon-os:*` suite on top (plan, expand, freeze, conflicts, heal, mcp, dashboard, preflight, …) for hierarchical planning and safety operations. Total: 25 slash commands.
 
 **How applied:** Core commands auto-detect intent. `/run fix login` → bugfix-quick skill. `/run implement X` → 5-phase workflow. `/archon-os:*` commands operate on the plan tree at `.claude/plans/` (v3.7.3+; legacy `.aura/plans/` still resolved via fallback) and never compete with the core surface.
 
@@ -375,7 +375,7 @@ audience: contributor
 
 **What:** Three modes: (1) Usage analytics, (2) Prompt quality scoring (5-dimension), (3) Output variance (N-run stability check).
 
-**How applied:** `/af prompts` runs usage analytics. "evaluate this prompt" triggers quality mode. User triggers variance mode before production.
+**How applied:** `/archon prompts` runs usage analytics. "evaluate this prompt" triggers quality mode. User triggers variance mode before production.
 
 **Why you need it:** Prompts drift in quality over time. Outputs can be unstable across runs. Variance check catches prompts that only sometimes work.
 
@@ -392,7 +392,7 @@ audience: contributor
 
 **What:** Captures user corrections + approval rates + pattern feedback. Auto-generates `learned-rules.md` after 3+ similar corrections.
 
-**How applied:** `hooks/auto-learn.cjs` detects correction patterns, stores them. `/af learn analyze` synthesizes rules.
+**How applied:** `hooks/auto-learn.cjs` detects correction patterns, stores them. `/archon learn analyze` synthesizes rules.
 
 **Why you need it:** You keep fixing the same kinds of mistakes. Learning turns corrections into persistent rules.
 
@@ -405,7 +405,7 @@ audience: contributor
 
 ### 7.2. Metrics & Observability
 
-**What:** `/af metrics`, `/run budget`, `/run progress`, `/run predict`. Token use, phase durations, velocity, rejection rates.
+**What:** `/archon metrics`, `/run budget`, `/run progress`, `/run predict`. Token use, phase durations, velocity, rejection rates.
 
 **How applied:** Hook-collected metrics + TOON-format reports.
 
@@ -414,7 +414,7 @@ audience: contributor
 **Use cases:**
 - Before a task: `/run predict <task>` → "~95K tokens, Deep, feasible in 1 session"
 - During: `/run budget` → "78% used, handoff soon"
-- After: `/af metrics` → team averages, bottlenecks
+- After: `/archon metrics` → team averages, bottlenecks
 
 ---
 
@@ -438,7 +438,7 @@ audience: contributor
 
 ### 8.2. Externalized Addons (Godot, SEO)
 
-**What:** Specialized modules live in separate plugins (`aura-frog-godot-addon`, `aura-frog-seo-addon`) — opt-in, not bundled.
+**What:** Specialized modules live in separate plugins (`archon-os-godot-addon`, `archon-os-seo-addon`) — opt-in, not bundled.
 
 **How applied:** Install the addon if you need it; the core plugin stays lean.
 
@@ -482,7 +482,7 @@ Details: [`docs/PORTABILITY.md`](../PORTABILITY.md).
 
 ---
 
-## Summary — When to Use Aura Frog
+## Summary — When to Use Archon OS
 
 ✅ **Yes, install if you:**
 - Build production code (vs. prototypes)
@@ -497,7 +497,7 @@ Details: [`docs/PORTABILITY.md`](../PORTABILITY.md).
 - Only do throwaway scripts / single-file edits
 - Don't want any workflow overhead
 - Have strict Haiku-only budgets (some features use Sonnet)
-- Prefer minimalist plugins (Aura Frog is substantial — 15 agents, 60 skills, 72 rules)
+- Prefer minimalist plugins (Archon OS is substantial — 15 agents, 60 skills, 72 rules)
 
 🎯 **Best fit:** Teams shipping production features where quality + security + cost control all matter.
 
@@ -529,7 +529,7 @@ v3.7.0 ships eight composable features organized into four themes. Each pillar i
 
 **Use cases:** debugging hallucinations · audit trails · comparing approaches between attempts · onboarding (read past traces) · safety-critical code where evidence matters.
 
-**Disable:** `AF_TRACE_DISABLED=true`.
+**Disable:** `ARCHON_TRACE_DISABLED=true`.
 
 ---
 
@@ -555,7 +555,7 @@ v3.7.0 ships eight composable features organized into four themes. Each pillar i
 
 **Use cases:** regulated environments · team consistency · custom org policies (add your own `.rego` once Tier 2 lands) · defense-in-depth.
 
-**Disable:** `AF_PREFLIGHT_DISABLED=true`.
+**Disable:** `ARCHON_PREFLIGHT_DISABLED=true`.
 
 ---
 
@@ -569,7 +569,7 @@ v3.7.0 ships eight composable features organized into four themes. Each pillar i
 
 **Use cases:** parallel agent work · approval-gate workflows · architectural consistency · audit trails (`conflicts.jsonl`).
 
-**Disable:** `AF_CONFLICT_LLM_DISABLED=true` (no-op in v3.7.0 since L3+L4 are stubs; future-compatible).
+**Disable:** `ARCHON_CONFLICT_LLM_DISABLED=true` (no-op in v3.7.0 since L3+L4 are stubs; future-compatible).
 
 ---
 
@@ -583,7 +583,7 @@ v3.7.0 ships eight composable features organized into four themes. Each pillar i
 
 **Use cases:** stack trace explanations · repeating bugs · library version mismatches · patches with audit trail.
 
-**Disable:** `AF_SELF_HEAL_DISABLED=true` permanent · `/archon-os:heal disable` per-session.
+**Disable:** `ARCHON_SELF_HEAL_DISABLED=true` permanent · `/archon-os:heal disable` per-session.
 
 ---
 
@@ -591,13 +591,13 @@ v3.7.0 ships eight composable features organized into four themes. Each pillar i
 
 **What:** Per-agent MCP allowlist via frontmatter `mcp_servers: [...]`. Audit log to `.aura/security/mcp-audit.jsonl` with secrets sanitized (Authorization headers, Bearer tokens, AWS keys, OpenAI/Anthropic keys all redacted; content >1KB truncated). Per-server rate limits in `plugin.json` — soft warn at 80%, hard block at 100%. The database MCPs (postgres, redis) are **not bundled at all** — a `"disabled": true` flag is ignored by Claude Code, so the only real off switch is absence from `.mcp.json` ([snippets to add them](../operations/MCP_GUIDE.md#optional-servers-not-bundled)). Their policies still apply the moment a project adds them: destructive operations (`DROP TABLE`, `FLUSHDB`) blocked unconditionally regardless of approval.
 
-**How applied:** `mcp-call-gate.cjs` fires on every `mcp__*` PreToolUse. Reads agent identity (currently env var; stdin-JSON migration tracked in [issue #7](https://github.com/nguyenthienthanh/archon/issues/7)). Sliding-window rate limit (60s). Retention sweep on session start: entries older than `AF_AUDIT_RETENTION_DAYS` (default 30) pruned.
+**How applied:** `mcp-call-gate.cjs` fires on every `mcp__*` PreToolUse. Reads agent identity (currently env var; stdin-JSON migration tracked in [issue #7](https://github.com/nguyenthienthanh/archon/issues/7)). Sliding-window rate limit (60s). Retention sweep on session start: entries older than `ARCHON_AUDIT_RETENTION_DAYS` (default 30) pruned.
 
 **Why you need it:** Before v3.7.0, every agent hit every MCP — frontend agent could query production DB. Now architect gets DB; frontend gets Figma + Playwright; security gets nothing (read-only on code). Compliance + forensics for free.
 
 **Use cases:** team environments · compliance · cost control (rate limits) · forensic debugging.
 
-**Disable audit only:** `AF_MCP_AUDIT_DISABLED=true` (enforcement still on).
+**Disable audit only:** `ARCHON_MCP_AUDIT_DISABLED=true` (enforcement still on).
 
 ---
 

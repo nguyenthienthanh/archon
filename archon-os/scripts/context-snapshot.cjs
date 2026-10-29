@@ -11,7 +11,7 @@
  * context dir (.claude/project-contexts/<name>/) with a frontmatter stamp:
  *   - schema      : snapshot format version
  *   - gitHead     : git HEAD sha at generation time
- *   - contentHash : project-type-aware content hash (see af-project-cache)
+ *   - contentHash : project-type-aware content hash (see project-cache)
  *   - generatedAt : ISO timestamp (informational only)
  *
  * A snapshot is "fresh" — reusable without re-scanning — iff the current
@@ -26,7 +26,7 @@ const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
 
-const cache = require('../hooks/lib/af-project-cache.cjs');
+const cache = require('../hooks/lib/project-cache.cjs');
 
 const SNAPSHOT_FILE = 'snapshot.md';
 const SNAPSHOT_SCHEMA_VERSION = 1;

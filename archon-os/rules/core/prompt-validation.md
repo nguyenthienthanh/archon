@@ -96,7 +96,7 @@ Not every prompt needs all 6 dimensions. Match rigor to task size:
 | `/run <task>` | **Yes** — always |
 | `/check`, `/design` | **Yes** if task description is non-trivial |
 | `/project init` | No — fixed setup flow |
-| `/af <subcmd>` | No — admin commands |
+| `/archon <subcmd>` | No — admin commands |
 | `/run modify <changes>` | No — inherits original run's validation |
 | Direct edits (Quick tier, no `/run`) | Only if ambiguous |
 | Phase 1 requirements gathering | **Yes** — reference this rule in `requirement-challenger.md` |

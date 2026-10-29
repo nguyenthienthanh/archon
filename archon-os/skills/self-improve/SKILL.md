@@ -1,12 +1,12 @@
 ---
 name: self-improve
-description: "Full learning loop for the Aura Frog plugin: analyze collected learning data from Supabase to identify success patterns, failure patterns, optimization opportunities, and agent performance trends, then apply learned improvements — update rules, adjust agent routing, modify workflow configurations, and generate knowledge base entries."
+description: "Full learning loop for the Archon OS plugin: analyze collected learning data from Supabase to identify success patterns, failure patterns, optimization opportunities, and agent performance trends, then apply learned improvements — update rules, adjust agent routing, modify workflow configurations, and generate knowledge base entries."
 autoInvoke: false
 priority: 30
 triggers:
   - "/learn analyze"
   - "/learn apply"
-  - "/af learn analyze"
+  - "/archon learn analyze"
   - "self improve"
   - "apply improvements"
   - "analyze learning data"
@@ -37,11 +37,11 @@ Analyze learning data from Supabase: success/failure patterns, optimization oppo
 ### Analyze Usage
 
 ```bash
-/af learn analyze                      # Full analysis
-/af learn analyze --period 30d         # Last 30 days
-/af learn analyze --focus agents       # Agent performance
-/af learn analyze --focus workflows    # Workflow patterns
-/af learn analyze --focus feedback     # User feedback
+/archon learn analyze                      # Full analysis
+/archon learn analyze --period 30d         # Last 30 days
+/archon learn analyze --focus agents       # Agent performance
+/archon learn analyze --focus workflows    # Workflow patterns
+/archon learn analyze --focus feedback     # User feedback
 ```
 
 ### Analyze Process
@@ -86,14 +86,14 @@ Generated: {timestamp} | Period: {dates}
 ### Analyze Environment
 
 ```bash
-AF_LEARNING_ENABLED=true
+ARCHON_LEARNING_ENABLED=true
 SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_SERVICE_KEY=your-service-role-key
 ```
 
 ### Analyze → Apply Handoff
 
-After analysis, improvements can be: reviewed (`/af learn review`), auto-applied (`/af learn apply --auto`, high confidence only), or saved as pending (`/af learn save`). The Apply section below consumes these suggestions.
+After analysis, improvements can be: reviewed (`/archon learn review`), auto-applied (`/archon learn apply --auto`, high confidence only), or saved as pending (`/archon learn save`). The Apply section below consumes these suggestions.
 
 ---
 
@@ -104,10 +104,10 @@ Apply learned improvements: update rules, adjust agent routing, modify workflow 
 ### Apply Usage
 
 ```bash
-/af learn apply                    # Review and apply pending
-/af learn apply --auto             # Auto-apply high-confidence (>=0.8)
-/af learn apply --preview          # Preview without applying
-/af learn apply --id <pattern_id>  # Apply specific pattern
+/archon learn apply                    # Review and apply pending
+/archon learn apply --auto             # Auto-apply high-confidence (>=0.8)
+/archon learn apply --preview          # Preview without applying
+/archon learn apply --id <pattern_id>  # Apply specific pattern
 ```
 
 ---
@@ -128,7 +128,7 @@ types[4]{type,target,example}:
 
 **Approval required** unless: `--auto` AND confidence >= 0.8 AND frequency >= 5.
 
-**Rollback:** Every change creates backup + log. `/af learn rollback <id>` or `--all`.
+**Rollback:** Every change creates backup + log. `/archon learn rollback <id>` or `--all`.
 
 **Validation:** Syntax check, conflict detection, impact assessment before applying.
 
@@ -146,9 +146,9 @@ types[4]{type,target,example}:
 ## Rollback
 
 ```bash
-/af learn rollback <change_id>     # Specific change
-/af learn rollback --list          # List recent changes
-/af learn rollback --all           # All changes from today
+/archon learn rollback <change_id>     # Specific change
+/archon learn rollback --list          # List recent changes
+/archon learn rollback --all           # All changes from today
 ```
 
 ---

@@ -4,11 +4,11 @@ status: current
 audience: active-user
 ---
 
-# Aura Frog Learning System
+# Archon OS Learning System
 
 **Status:** Production Ready
 
-The Learning System enables Aura Frog to improve over time by collecting feedback, analyzing patterns, and generating actionable insights. It works out of the box with local JSON files -- no external services required.
+The Learning System enables Archon OS to improve over time by collecting feedback, analyzing patterns, and generating actionable insights. It works out of the box with local JSON files -- no external services required.
 
 ---
 
@@ -104,10 +104,10 @@ This file is automatically linked via `.claude/LEARNED_PATTERNS.md`, ensuring Cl
 
 | Command | Description |
 |---------|-------------|
-| `/af learn status` | Show learning system status and stats |
-| `/af learn analyze` | Run pattern analysis |
-| `/af learn apply` | Apply learned improvements |
-| `/af learn feedback` | Submit manual feedback |
+| `/archon learn status` | Show learning system status and stats |
+| `/archon learn analyze` | Run pattern analysis |
+| `/archon learn apply` | Apply learned improvements |
+| `/archon learn feedback` | Submit manual feedback |
 
 ---
 
@@ -115,15 +115,15 @@ This file is automatically linked via `.claude/LEARNED_PATTERNS.md`, ensuring Cl
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `AF_LOCAL_LEARNING` | `true` | Enable local learning |
-| `AF_FORCE_LOCAL` | `false` | Force local mode even with Supabase configured |
-| `AF_FEEDBACK_COLLECTION` | `true` | Enable feedback collection |
-| `AF_METRICS_COLLECTION` | `true` | Enable metrics collection |
+| `ARCHON_LOCAL_LEARNING` | `true` | Enable local learning |
+| `ARCHON_FORCE_LOCAL` | `false` | Force local mode even with Supabase configured |
+| `ARCHON_FEEDBACK_COLLECTION` | `true` | Enable feedback collection |
+| `ARCHON_METRICS_COLLECTION` | `true` | Enable metrics collection |
 
 **Disable all learning:**
 ```bash
-export AF_LOCAL_LEARNING="false"
-export AF_LEARNING_ENABLED="false"
+export ARCHON_LOCAL_LEARNING="false"
+export ARCHON_LEARNING_ENABLED="false"
 ```
 
 ---
@@ -142,7 +142,7 @@ export AF_LEARNING_ENABLED="false"
 |-------|----------|
 | Learning not working | Check `.claude/learning/` directory exists |
 | Missing patterns | Smart Learn needs 3+ successes; Auto-Learn needs 3+ similar corrections; 24h dedup window |
-| Check status | Run `/af learn status` -- should show `Mode: local`, pattern and feedback counts |
+| Check status | Run `/archon learn status` -- should show `Mode: local`, pattern and feedback counts |
 
 ---
 
@@ -155,7 +155,7 @@ For teams or multi-machine setups, you can optionally sync learning data to Supa
 # Add to .envrc
 export SUPABASE_URL="https://your-project.supabase.co"
 export SUPABASE_SECRET_KEY="your-secret-key"
-export AF_LEARNING_ENABLED="true"
+export ARCHON_LEARNING_ENABLED="true"
 ```
 
 Then run: `./scripts/supabase/setup.sh`
@@ -166,11 +166,11 @@ Then run: `./scripts/supabase/setup.sh`
 |----------|-------------|
 | `SUPABASE_URL` | Supabase project URL |
 | `SUPABASE_SECRET_KEY` | Supabase secret key |
-| `AF_LEARNING_ENABLED` | Force enable learning (Supabase mode) |
+| `ARCHON_LEARNING_ENABLED` | Force enable learning (Supabase mode) |
 
 **Data Retention (Supabase):** Feedback: 90 days | Metrics: 1 year | Patterns: Indefinite
 
-**Troubleshooting Supabase:** Verify `SUPABASE_URL` and `SUPABASE_SECRET_KEY` are set. Run `/af learn status` to confirm `Mode: supabase`.
+**Troubleshooting Supabase:** Verify `SUPABASE_URL` and `SUPABASE_SECRET_KEY` are set. Run `/archon learn status` to confirm `Mode: supabase`.
 
 ---
 
@@ -185,7 +185,7 @@ Then run: `./scripts/supabase/setup.sh`
 │  ├── feedback-capture.cjs    │      └── af_* tables      │
 │  └── session-metrics.cjs     │                           │
 ├──────────────────────────────────────────────────────────┤
-│  Library: hooks/lib/af-learning.cjs (dual-mode)          │
+│  Library: hooks/lib/learning.cjs (dual-mode)          │
 ├──────────────────────────────────────────────────────────┤
 │  Output: .claude/learning/learned-rules.md               │
 └──────────────────────────────────────────────────────────┘

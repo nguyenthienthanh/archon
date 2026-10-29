@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog - Memory Loader Library
+ * Archon OS - Memory Loader Library
  *
  * Loads learned patterns from Supabase at session start.
  * Caches results locally for Claude to read during session.
@@ -11,7 +11,7 @@
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
-const { guardEndpoint } = require('./af-net-guard.cjs');
+const { guardEndpoint } = require('./net-guard.cjs');
 
 /**
  * Get Supabase configuration from environment
@@ -20,7 +20,7 @@ function getSupabaseConfig() {
   return {
     url: process.env.SUPABASE_URL,
     key: process.env.SUPABASE_PUBLISHABLE_KEY || process.env.SUPABASE_SECRET_KEY,
-    enabled: process.env.AF_LEARNING_ENABLED === 'true'
+    enabled: process.env.ARCHON_LEARNING_ENABLED === 'true'
   };
 }
 
@@ -38,7 +38,7 @@ function supabaseRequest(endpoint, config) {
     // outbound guard first: https only, allowlisted host only. Previously an
     // http:// SUPABASE_URL was accepted here and silently sent to :443 anyway,
     // which made a misconfiguration look like a network failure.
-    const url = guardEndpoint(`${config.url}/rest/v1/${endpoint}`, 'supabase', 'af-memory-loader');
+    const url = guardEndpoint(`${config.url}/rest/v1/${endpoint}`, 'supabase', 'memory-loader');
     if (!url) {
       resolve({ data: null, error: 'Supabase endpoint rejected by the outbound guard' });
       return;

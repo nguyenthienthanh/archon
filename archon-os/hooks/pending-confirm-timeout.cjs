@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog — Pending-Confirm Timeout Warning
+ * Archon OS — Pending-Confirm Timeout Warning
  *
  * Fires: SessionStart (and as a periodic check via session-start cascade)
  * Purpose: Warn the user about T4 tasks that have been in pending-confirm
@@ -9,7 +9,7 @@
  *          conflict detection — easy to forget about.
  *
  * Configuration env:
- *   AF_PENDING_TIMEOUT_HOURS=24  — threshold (default 24h)
+ *   ARCHON_PENDING_TIMEOUT_HOURS=24  — threshold (default 24h)
  *
  * Behavior:
  *   - Silent if no .claude/plans/
@@ -27,13 +27,17 @@
 
 'use strict';
 
+// Mirrors legacy AF_* / AURA_FROG_* variables onto their ARCHON_* names. This file
+// reads process.env without going through safe-stdin, so it bridges for itself.
+require('./lib/env-compat.cjs');
+
 const fs = require('fs');
 const path = require('path');
 const resolvePlansDir = require('./lib/plans-dir.cjs');
 
 const PLANS_DIR = resolvePlansDir();
 const FEATURES_DIR = path.join(PLANS_DIR, 'features');
-const TIMEOUT_HOURS = parseInt(process.env.AF_PENDING_TIMEOUT_HOURS || '24', 10);
+const TIMEOUT_HOURS = parseInt(process.env.ARCHON_PENDING_TIMEOUT_HOURS || '24', 10);
 const TIMEOUT_MS = TIMEOUT_HOURS * 3600 * 1000;
 const MAX_SHOWN = 5;
 

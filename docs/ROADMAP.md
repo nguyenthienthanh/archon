@@ -1,12 +1,12 @@
 ---
-title: Aura Frog — Consolidated Roadmap & Research
+title: Archon OS — Consolidated Roadmap & Research
 last_aligned_with: v4.0.0-alpha.2
 status: current
 audience: contributor
 generated: 2026-07-09
 ---
 
-# Aura Frog — Consolidated Roadmap & Research
+# Archon OS — Consolidated Roadmap & Research
 
 > **Single source of truth for pending work + research.** This document consolidates:
 > the 2026-07-03 three-agent codebase audit, in-session research (codebase-memory-mcp,
@@ -55,12 +55,12 @@ red, it just goes quiet.
 
 ## 2. Research synthesis — memory & codebase understanding for a portable plugin
 
-**Goal:** when aura-frog is installed into an *arbitrary* project, how does the agent gain
+**Goal:** when Archon OS is installed into an *arbitrary* project, how does the agent gain
 persistent "memory" and fast structural understanding without paying a huge token cost each session?
 
 > ⚠️ A fresh external web scan (2025-26 sources) was attempted 2026-07-09 but every search
 > agent hit the session rate limit (resets 14:10 Asia/Saigon). The synthesis below is from
-> the in-session deep-dive on **codebase-memory-mcp** + the map of aura-frog's own memory
+> the in-session deep-dive on **codebase-memory-mcp** + the map of Archon OS's own memory
 > tiers. A follow-up external scan (Obsidian vaults, Serena, vector search) is still open.
 
 ### 2.1 The four approaches
@@ -70,9 +70,9 @@ persistent "memory" and fast structural understanding without paying a huge toke
 | **(a) Code knowledge-graph / AST-indexing MCP** (codebase-memory-mcp, Serena) | tree-sitter + LSP → queryable graph of functions/calls/imports | Very low per query (~100× cheaper than file-by-file); high one-time index | git-poll incremental re-index | 158 langs syntactic, ~9 type-aware | Native binary to install; local SQLite (private) |
 | **(b) Embedding / vector search** | semantic chunks → vector DB | Low query; embedding cost + model dep | must re-embed changed files | language-agnostic | needs embedding model/DB; unbounded retrieval risk |
 | **(c) Obsidian-style linked-markdown vault** | human+AI curated `[[wikilink]]` notes | Bounded (load only headers/links) | manual/curated → drifts | fully portable (plain md) | zero infra; the model curates |
-| **(d) File-registry + snapshot** (aura-frog today) | generated repo-map + file-registry + SHA-stamped snapshot | Bounded (120–800 always-loaded) | git-SHA + content-hash invalidation | fully portable (bash/md) | zero infra |
+| **(d) File-registry + snapshot** (Archon OS today) | generated repo-map + file-registry + SHA-stamped snapshot | Bounded (120–800 always-loaded) | git-SHA + content-hash invalidation | fully portable (bash/md) | zero infra |
 
-### 2.2 What aura-frog already has (mapped)
+### 2.2 What Archon OS already has (mapped)
 
 - **Layered memory, not retrieval** (design philosophy): four physical tiers, each with its own
   load discipline + trust ceiling; token cost bounded regardless of project age.

@@ -12,7 +12,7 @@ audience: power-user
 
 ## Overview
 
-Aura Frog uses multiple configuration files with a clear priority system. Understanding this loading order is crucial for customizing your workflow.
+Archon OS uses multiple configuration files with a clear priority system. Understanding this loading order is crucial for customizing your workflow.
 
 ---
 
@@ -22,7 +22,7 @@ Aura Frog uses multiple configuration files with a clear priority system. Unders
 1. 🔴 **Environment Variables** - Runtime overrides
 2. 🟠 **Project Context Config** - Project-specific settings
 3. 🟡 **Local Settings** - User-specific permissions
-4. 🟢 **Global Aura Frog Config** - Plugin defaults
+4. 🟢 **Global Archon OS Config** - Plugin defaults
 5. 🔵 **Hard-coded Defaults** - Fallback values
 
 **Rule:** Higher priority overwrites lower priority
@@ -42,7 +42,7 @@ Aura Frog uses multiple configuration files with a clear priority system. Unders
 export CCPM_PROJECT="my-project"
 export CCPM_PROJECT_CONTEXT="project-contexts/my-project"
 export JIRA_URL="https://company.atlassian.net"
-export AURA_FROG_DEFAULT_COVERAGE="85"
+export ARCHON_DEFAULT_COVERAGE="85"
 ```
 
 **Scope:** Session-specific, not committed to git
@@ -139,11 +139,11 @@ team:
 
 ---
 
-### 4. Global Aura Frog Config (Plugin Defaults)
+### 4. Global Archon OS Config (Plugin Defaults)
 
 **Location:** `archon-os/ccpm-config.yaml`
 
-**Purpose:** Default Aura Frog settings for all projects
+**Purpose:** Default Archon OS settings for all projects
 
 **Example:**
 ```yaml
@@ -224,7 +224,7 @@ const tddMode = config.tdd_enforcement || 'recommended';
                   │
                   ▼
 ┌─────────────────────────────────────────────────┐
-│  2. Load Global Aura Frog Config                     │
+│  2. Load Global Archon OS Config                     │
 │     archon-os/ccpm-config.yaml                       │
 │     - Overrides defaults                        │
 │     - Sets plugin-wide behavior                 │
@@ -288,7 +288,7 @@ workflow:
 
 **Environment Variable:**
 ```bash
-export AURA_FROG_DEFAULT_COVERAGE="90"
+export ARCHON_DEFAULT_COVERAGE="90"
 ```
 
 **Final Value:** `90` (from environment variable)
@@ -423,7 +423,7 @@ team:
 ```bash
 export CCPM_PROJECT="my-project"
 export JIRA_API_TOKEN="secret"
-export AURA_FROG_DEFAULT_COVERAGE="90"
+export ARCHON_DEFAULT_COVERAGE="90"
 ```
 
 ---
@@ -431,7 +431,7 @@ export AURA_FROG_DEFAULT_COVERAGE="90"
 ## Config File Locations Reference
 
 ```
-~/.claude/plugins/marketplaces/aurafrog/
+~/.claude/plugins/marketplaces/archon/
 └── archon-os/                         # Plugin directory
     ├── ccpm-config.yaml               # 🟢 Global plugin config
     ├── settings.local.json            # 🟡 User permissions (gitignored)
@@ -510,7 +510,7 @@ config:validate
 grep "active_project" archon-os/ccpm-config.yaml
 
 # Check environment variables
-env | grep Aura Frog
+env | grep Archon OS
 env | grep JIRA
 env | grep FIGMA
 
@@ -543,7 +543,7 @@ jq empty archon-os/settings.local.json
 
 # Check env vars
 source archon-os/.envrc
-env | grep Aura Frog
+env | grep Archon OS
 ```
 
 ---
@@ -562,7 +562,7 @@ env | grep Aura Frog
 ```bash
 # Show all config sources
 echo "=== Environment Variables ==="
-env | grep -E "(Aura Frog|JIRA|FIGMA|SLACK)"
+env | grep -E "(Archon OS|JIRA|FIGMA|SLACK)"
 
 echo "=== Active Project ==="
 grep -A 2 "active_project:" archon-os/ccpm-config.yaml

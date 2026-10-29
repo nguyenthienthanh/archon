@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog - Set Active Plan Command
+ * Archon OS - Set Active Plan Command
  *
  * Usage (from Claude):
  *   node hooks/set-active-plan.cjs <plan-path>
@@ -8,14 +8,17 @@
  *   node hooks/set-active-plan.cjs clear
  *
  * This sets the active plan in session state, which will be used
- * by session-start.cjs to inject AF_ACTIVE_PLAN env var.
+ * by session-start.cjs to inject ARCHON_ACTIVE_PLAN env var.
  *
  * @version 1.0.0
  */
 
+// Mirrors legacy AF_* / AURA_FROG_* variables onto their ARCHON_* names.
+require('../hooks/lib/env-compat.cjs');
+
 const fs = require('fs');
 const path = require('path');
-const { readSessionState, writeSessionState } = require('../hooks/lib/af-config-utils.cjs');
+const { readSessionState, writeSessionState } = require('../hooks/lib/config-utils.cjs');
 
 function main() {
   const args = process.argv.slice(2);
@@ -27,7 +30,7 @@ function main() {
   }
 
   // Get session ID from parent process or env
-  const sessionId = process.env.AF_SESSION_ID || process.ppid?.toString();
+  const sessionId = process.env.ARCHON_SESSION_ID || process.ppid?.toString();
 
   if (!sessionId) {
     console.error('Error: No session ID available');

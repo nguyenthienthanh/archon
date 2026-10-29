@@ -28,7 +28,7 @@ sections[6]{name,what_it_shows}:
 ## Static output (default)
 
 ```
-🐸 Aura Frog — Dashboard
+Archon OS — Dashboard
 ─────────────────────────────────────────────────────────────
 Plan tree (5 nodes · 8/8 invariants ✓)
   ▶ INIT-001  ✓ FEAT-A  ✓ FEAT-B  ✓ FEAT-C  ✓ FEAT-D  ▶ FEAT-E

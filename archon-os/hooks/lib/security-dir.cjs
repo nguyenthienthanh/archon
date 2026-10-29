@@ -1,6 +1,10 @@
 'use strict';
+
+// Mirrors legacy AF_* / AURA_FROG_* variables onto their ARCHON_* names. This file
+// reads process.env without going through safe-stdin, so it bridges for itself.
+require('./env-compat.cjs');
 /**
- * Aura Frog — Security Dir Resolver (mirror of lib/plans-dir.cjs)
+ * Archon OS — Security Dir Resolver (mirror of lib/plans-dir.cjs)
  *
  * Single source of truth for "where does the MCP audit log live?" Before this,
  * `path.join(findProjectRoot(), '.aura', 'security', ...)` was written out by
@@ -10,7 +14,7 @@
  * failure the trace files hit when one writer kept its own copy of the layout.
  *
  * Resolution order:
- *   1. process.env.AF_SECURITY_DIR — explicit override, path.resolve'd
+ *   1. process.env.ARCHON_SECURITY_DIR — explicit override, path.resolve'd
  *   2. <root>/.claude/security — preferred, returned if it exists
  *   3. <root>/.aura/security   — current default; every install has this one
  *
@@ -29,8 +33,8 @@ const path = require('node:path');
 
 function resolveSecurityDir(root) {
     const base = root || process.cwd();
-    if (process.env.AF_SECURITY_DIR) {
-        return path.resolve(process.env.AF_SECURITY_DIR);
+    if (process.env.ARCHON_SECURITY_DIR) {
+        return path.resolve(process.env.ARCHON_SECURITY_DIR);
     }
     const claudePath = path.join(base, '.claude', 'security');
     if (fs.existsSync(claudePath)) return claudePath;
@@ -49,8 +53,8 @@ function resolveMcpAuditFile(root) {
  */
 function migrateLegacySecurityDir(root) {
     const base = root || process.cwd();
-    if (process.env.AF_SECURITY_DIR) {
-        return { migrated: false, reason: 'AF_SECURITY_DIR set — user opted into custom location' };
+    if (process.env.ARCHON_SECURITY_DIR) {
+        return { migrated: false, reason: 'ARCHON_SECURITY_DIR set — user opted into custom location' };
     }
     const claudePath = path.join(base, '.claude', 'security');
     const auraPath = path.join(base, '.aura', 'security');

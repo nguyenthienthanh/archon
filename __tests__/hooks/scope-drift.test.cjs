@@ -3,7 +3,7 @@
  * Pure-function tests via require()-from-source.
  */
 
-jest.mock('../../archon-os/hooks/lib/af-config-utils.cjs', () => ({
+jest.mock('../../archon-os/hooks/lib/config-utils.cjs', () => ({
   readSessionState: jest.fn(() => ({})),
 }));
 

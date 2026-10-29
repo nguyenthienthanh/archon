@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 /**
- * Aura Frog — Pre-flight Validation
+ * Archon OS — Pre-flight Validation
  *
  * Fires: PreToolUse (Bash | Edit | Write | Read)
  * Purpose: Run Tier 1 bash linters before tool execution. Block tool call on
  *          fail (exit 2). Surface warning (exit 1) but allow.
  *
  * Behavior:
- *   - Silent if AF_PREFLIGHT_DISABLED=true
+ *   - Silent if ARCHON_PREFLIGHT_DISABLED=true
  *   - Silent if scripts/preflight/run-all.sh missing
- *   - Honors per-call bypass via AF_PREFLIGHT_BYPASS=true (set by /archon-os:preflight bypass)
+ *   - Honors per-call bypass via ARCHON_PREFLIGHT_BYPASS=true (set by /archon-os:preflight bypass)
  *   - On exit 2 from run-all.sh: prints "BLOCKED" message AND exits non-zero
  *     (claude-code blocks the tool when PreToolUse hook exits non-zero)
  *   - On exit 1: prints WARN message, exits 0 (advisory only)
@@ -27,7 +27,7 @@ const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
 
-if (process.env.AF_PREFLIGHT_DISABLED === 'true') process.exit(0);
+if (process.env.ARCHON_PREFLIGHT_DISABLED === 'true') process.exit(0);
 
 const PLUGIN_ROOT = process.env.CLAUDE_PLUGIN_ROOT || path.join(__dirname, '..');
 const RUN_ALL = path.join(PLUGIN_ROOT, 'scripts', 'preflight', 'run-all.sh');

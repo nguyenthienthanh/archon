@@ -63,9 +63,9 @@ describe('loadVerifierConfig — AC6 configurable with a default', () => {
 
   it('honours user overrides', () => {
     const c = loadVerifierConfig({
-      AF_VERIFIER_K: '5',
-      AF_VERIFIER_THRESHOLD: '0.8',
-      AF_VERIFIER_LOOP_CAP: '4',
+      ARCHON_VERIFIER_K: '5',
+      ARCHON_VERIFIER_THRESHOLD: '0.8',
+      ARCHON_VERIFIER_LOOP_CAP: '4',
     });
     expect(c.k).toBe(5);
     expect(c.agreementThreshold).toBe(0.8);
@@ -73,7 +73,7 @@ describe('loadVerifierConfig — AC6 configurable with a default', () => {
   });
 
   it('clamps nonsense back to the default instead of disabling the gate', () => {
-    const c = loadVerifierConfig({ AF_VERIFIER_K: '0', AF_VERIFIER_THRESHOLD: 'abc', AF_VERIFIER_LOOP_CAP: '-3' });
+    const c = loadVerifierConfig({ ARCHON_VERIFIER_K: '0', ARCHON_VERIFIER_THRESHOLD: 'abc', ARCHON_VERIFIER_LOOP_CAP: '-3' });
     expect(c.k).toBe(DEFAULTS.k);
     expect(c.agreementThreshold).toBe(DEFAULTS.agreementThreshold);
     expect(c.loopCap).toBe(DEFAULTS.loopCap);
@@ -292,7 +292,7 @@ describe('evaluateRetry — AC5 a retry must change the EVIDENCE', () => {
   });
 
   it('respects a user-raised loop cap', () => {
-    const cfg4 = loadVerifierConfig({ AF_VERIFIER_LOOP_CAP: '4' });
+    const cfg4 = loadVerifierConfig({ ARCHON_VERIFIER_LOOP_CAP: '4' });
     expect(evaluateRetry({ attempt: 2, probeLedger: ['a'], newProbe: 'b', config: cfg4 }).allowed).toBe(true);
   });
 });
