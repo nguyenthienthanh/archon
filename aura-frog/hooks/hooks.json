@@ -13,6 +13,10 @@
           },
           {
             "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/code-map-digest.cjs\" --session-start"
+          },
+          {
+            "type": "command",
             "async": true,
             "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/dispatch.cjs\" '>update-check' '>test-pattern-extractor' '>pending-confirm-timeout'"
           }
@@ -129,6 +133,10 @@
             "type": "command",
             "async": true,
             "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/task-clear-model.cjs\" 2>&1"
+          },
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/verify-claim.cjs\" --hook"
           }
         ]
       },
@@ -139,6 +147,11 @@
             "type": "command",
             "async": true,
             "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/dispatch.cjs\" '>feature-done-trigger-archive' '>session-reset-trigger' '>post-execute-conflict-rescan' '>run-deliverables-scaffold'"
+          },
+          {
+            "type": "command",
+            "async": true,
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/code-map-digest.cjs\" --post-tool-use"
           }
         ]
       },

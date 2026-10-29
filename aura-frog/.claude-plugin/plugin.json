@@ -1,7 +1,7 @@
 {
   "name": "archon-os",
   "version": "4.0.0-alpha.1",
-  "description": "Archon — Planning-first LLM OS for software engineering. Hierarchical planning (T0-T4) survives session reset · forensic reasoning traces · L1+L2 conflict detection · self-healing safety gates · Archon Memory Manager · durable project-context snapshots · cross-tool porter (Copilot/Codex/Cursor) · CLI dashboard. 15 agents, 5-phase TDD, 72 rules (3-tier), 43 skills, 24 commands, 53 hooks, 6 MCP servers. ~87% markdown. Backward-compatible with /run.",
+  "description": "Archon — Planning-first LLM OS for software engineering. Hierarchical planning (T0-T4) survives session reset · forensic reasoning traces · L1+L2 conflict detection · self-healing safety gates · Archon Memory Manager · durable project-context snapshots · cross-tool porter (Copilot/Codex/Cursor) · CLI dashboard. 15 agents, 5-phase TDD, 73 rules (3-tier), 45 skills, 24 commands, 54 hooks, 6 MCP servers. ~87% markdown. Backward-compatible with /run.",
   "author": {
     "name": "Nguyen Thien Thanh",
     "email": "nguyenthienthanh.kiyoshi@gmail.com",

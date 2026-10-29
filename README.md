@@ -311,9 +311,9 @@ Expected output:
 🐸 Aura Frog v3.8.0-alpha.19 — Ready
   Agents:   15 loaded (lead, architect, frontend, mobile, tester, security, devops, strategist, scanner,
                        master-planner, feature-architect, story-planner, replanner, epic-summarizer, conflict-arbiter)
-  Skills:   43 available (10 auto-invoke, 33 on-demand)
-  Rules:    72 loaded (22 core + 20 agent + 30 workflow)
-  Hooks:    52 registered
+  Skills:   45 available (10 auto-invoke, 35 on-demand)
+  Rules:    73 loaded (22 core + 20 agent + 31 workflow)
+  Hooks:    54 registered
   MCP:      context7, playwright, vitest, firebase, figma, slack
 ```
 
@@ -441,10 +441,10 @@ Details: `rules/core/execution-rules.md`, `skills/agent-detector/SKILL.md`, `ski
 | Component | Count | Why it matters |
 |-----------|:-----:|----------------|
 | **Agents** | 15 | Right expert auto-selected per task (build + review + planning + safety roles) |
-| **Skills** | 43 | 10 auto-invoke on context, 33 on-demand (incl. `design-vision-loop`) |
+| **Skills** | 45 | 10 auto-invoke on context, 33 on-demand (incl. `design-vision-loop`) |
 | **Commands** | 24 | Core: `/run`, `/check`, `/design`, `/project`, `/af`, `/help` + `/aura-frog:*` hierarchical-planning suite (14 user-facing + 10 legacy `/aura-frog:plan-<verb>` alias stubs) |
-| **Rules** | 72 | 3-tier loading (22 core + 20 agent + 30 workflow) — only what's needed |
-| **Hooks** | 52 | Conditional — skip processing for non-code files (v3.7.2 adds `bare-word-router.cjs`) |
+| **Rules** | 73 | 3-tier loading (22 core + 20 agent + 30 workflow) — only what's needed |
+| **Hooks** | 54 | Conditional — skip processing for non-code files (v3.7.2 adds `bare-word-router.cjs`) |
 | **Backing scripts** | 12 | Hierarchical-planning operations (v3.7.2): `new-plan`, `validate-plan-tree`, `render-plan-tree` + 9 new (`expand`, `next`, `freeze`, `thaw`, `archive`, `conflicts`, `replan`, `promote`, `undo`) + `resolve-node` + `_lib` |
 | **MCP Servers** | 6 | All enabled — every `.mcp.json` entry starts, so opt-in servers are unbundled ([snippets](docs/operations/MCP_GUIDE.md#optional-servers-not-bundled)) |
 | **Tests** | 317 | Coverage gate at 25% statements floor; +102 tests in v3.7.2 (38 plan scripts + 64 bare-word router) |
@@ -629,7 +629,7 @@ Honest comparison with two popular plugins in the ecosystem (April 2026).
 | | **Aura Frog** | **wshobson/agents** | **Superpowers** |
 |---|---|---|---|
 | **Agents** | 15 curated | 184 across 78 plugins | ~20 |
-| **Skills** | 43 | 150 | Small focused set |
+| **Skills** | 45 | 150 | Small focused set |
 | **Commands** | 24 (14 user-facing + 10 legacy aliases) | 98 | ~10 |
 | **Workflow** | 5-phase TDD with 2 gates | No structured workflow | Phase-gated workflow |
 | **Agent routing** | Task-content Layer 0 override | Manual `/agent-name` | Similar to Aura Frog |
@@ -704,7 +704,7 @@ Use this checklist:
 | **Getting Started** | [GET_STARTED.md](docs/getting-started/GET_STARTED.md) |
 | **First Workflow Tutorial** | [FIRST_WORKFLOW_TUTORIAL.md](docs/getting-started/FIRST_WORKFLOW_TUTORIAL.md) |
 | **All Commands (24)** | [commands/README.md](aura-frog/commands/README.md) |
-| **All Skills (43)** | [skills/README.md](aura-frog/skills/README.md) |
+| **All Skills (45)** | [skills/README.md](aura-frog/skills/README.md) |
 | **Agent Teams Guide** | [AGENT_TEAMS_GUIDE.md](docs/guides/AGENT_TEAMS_GUIDE.md) |
 | **MCP Setup** | [MCP_GUIDE.md](docs/operations/MCP_GUIDE.md) |
 | **Hooks & Lifecycle** | [hooks/README.md](aura-frog/hooks/README.md) |

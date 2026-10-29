@@ -1,4 +1,10 @@
 'use strict';
+/*
+ * The plugin's name is read from plugin.json, never spelled out here. It was
+ * hardcoded as 'aura-frog' and went red the moment the v4 rebrand landed —
+ * a test asserting a literal the product no longer uses tells you nothing
+ * about the porter, which is what this file is for.
+ */
 /**
  * port-plugin.test.cjs — Tests for the cross-tool porter script (FEAT-009).
  *
@@ -19,6 +25,11 @@ const os   = require('node:os');
 const path = require('node:path');
 
 const porter = require('../port-plugin.cjs');
+
+/** Single source of truth for the plugin's own name. */
+const PLUGIN_NAME = JSON.parse(fs.readFileSync(
+  path.join(__dirname, '..', '..', '.claude-plugin', 'plugin.json'), 'utf8',
+)).name;
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -80,8 +91,8 @@ describe('collectUniversalLayer', () => {
     expect(sources.meta.version.length).toBeGreaterThan(0);
   });
 
-  test('meta.name equals "aura-frog" (from plugin.json)', () => {
-    expect(sources.meta.name).toBe('aura-frog');
+  test('meta.name equals the name in plugin.json', () => {
+    expect(sources.meta.name).toBe(PLUGIN_NAME);
   });
 
   test('rules object has core, agent, workflow keys', () => {
@@ -456,7 +467,7 @@ describe('writePortBundle: copilot', () => {
 
   test('copilot-instructions.md contains plugin name', () => {
     const content = fs.readFileSync(path.join(tmpDir, '.github', 'copilot-instructions.md'), 'utf8');
-    expect(content).toContain('aura-frog');
+    expect(content).toContain(PLUGIN_NAME);
   });
 
   test('writes at least one .github/instructions/*.instructions.md file', () => {

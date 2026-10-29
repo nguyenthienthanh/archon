@@ -154,9 +154,9 @@ core_paths[12]{topic,path}:
 resources[8]{name,location}:
   Agents (15),agents/
   Commands (24),commands/
-  Rules (72),rules/{core|agent|workflow}/
-  Skills (43),skills/
-  Hooks (53),hooks/
+  Rules (73),rules/{core|agent|workflow}/
+  Skills (45),skills/
+  Hooks (54),hooks/
   MCP (6),.mcp.json
   AI References,docs/
   Human Docs,docs/README.md
