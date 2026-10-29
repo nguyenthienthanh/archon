@@ -21,7 +21,7 @@ Forensic reproducibility. Append-only; never calls an LLM, never edits plan file
 
 `file_read` · `output_claim` (with `grounded: bool` + `grounded_by`) · `tool_call` · `tool_result` · `decision` · `phase_transition`.
 
-**Grounding rule (spec §11.1):** an `output_claim` is grounded when ≥1 prior `file_read` in the same trace covers the named file/function/symbol. Ungrounded claims are flagged and surfaced via `/aura-frog:trace --hallucinations`.
+**Grounding rule (spec §11.1):** an `output_claim` is grounded when ≥1 prior `file_read` in the same trace covers the named file/function/symbol. Ungrounded claims are flagged and surfaced via `/archon-os:trace --hallucinations`.
 
 ## Budget
 

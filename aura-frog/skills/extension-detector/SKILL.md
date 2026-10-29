@@ -41,12 +41,12 @@ When a signal fires, the skill MUST:
 1. **Pause and surface** — never write a file as a side effect of detection
 2. **Show a one-line proposal** — `Proposed: project skill "<name>" (.claude/skills/<name>/SKILL.md). Reason: <signal>. Create? (y/n)`
 3. **Wait for explicit yes** — `y`, `yes`, `confirm`, `go ahead`, `do it` count as yes; anything else (including silence, ambiguity, or "let me think") = no
-4. **On yes:** delegate to `/aura-frog:extend create <kind> <name>` — the command owns actual file authoring + audit
+4. **On yes:** delegate to `/archon-os:extend create <kind> <name>` — the command owns actual file authoring + audit
 5. **On no:** drop the proposal, do NOT re-surface within the same turn, but track for re-detection if the signal repeats
 
 ## What this skill does NOT do
 
-- Does NOT write any file directly (delegates to `/aura-frog:extend`)
+- Does NOT write any file directly (delegates to `/archon-os:extend`)
 - Does NOT write to `aura-frog/skills/`, `aura-frog/rules/`, `aura-frog/commands/` — plugin pollution is forbidden
 - Does NOT auto-create even on strong signals (human-in-the-loop is the whole point)
 - Does NOT detect patterns across projects (project-isolated; signals only count within the current project)
@@ -54,7 +54,7 @@ When a signal fires, the skill MUST:
 
 ## Detection budget
 
-To prevent fatigue, max **1 proposal per turn**, max **3 proposals per session**. After session cap, defer further proposals to `/aura-frog:extend list` (user-initiated review).
+To prevent fatigue, max **1 proposal per turn**, max **3 proposals per session**. After session cap, defer further proposals to `/archon-os:extend list` (user-initiated review).
 
 ## What gets created (kinds)
 
@@ -76,7 +76,7 @@ Project-level files load AFTER plugin-level files, so they can shadow or extend 
 
 ## Tie-Ins
 
-- **Command:** `/aura-frog:extend` — only consumer; this skill never writes files itself
+- **Command:** `/archon-os:extend` — only consumer; this skill never writes files itself
 - **Rule:** `rules/workflow/extension-policy.md` — formalizes detection thresholds + project-claude-only constraint
 - **Rule:** `rules/core/no-assumption.md` — confirmation requirement aligns with broader ask-when-uncertain principle
 - **Skill:** `agent-detector` — if extension would change agent routing, agent-detector's behavior should be referenced

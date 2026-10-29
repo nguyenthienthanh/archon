@@ -9,7 +9,7 @@
  * Behavior:
  *   - Silent if AF_PREFLIGHT_DISABLED=true
  *   - Silent if scripts/preflight/run-all.sh missing
- *   - Honors per-call bypass via AF_PREFLIGHT_BYPASS=true (set by /aura-frog:preflight bypass)
+ *   - Honors per-call bypass via AF_PREFLIGHT_BYPASS=true (set by /archon-os:preflight bypass)
  *   - On exit 2 from run-all.sh: prints "BLOCKED" message AND exits non-zero
  *     (claude-code blocks the tool when PreToolUse hook exits non-zero)
  *   - On exit 1: prints WARN message, exits 0 (advisory only)
@@ -182,7 +182,7 @@ if (stderr) process.stderr.write(stderr);
 if (exitCode === 2) {
   process.stderr.write(
     `[preflight] BLOCKED — pre-flight failure (exit 2). To bypass for the next call only:\n` +
-    `  /aura-frog:preflight bypass <reason>\n`
+    `  /archon-os:preflight bypass <reason>\n`
   );
   process.exit(2);
 }

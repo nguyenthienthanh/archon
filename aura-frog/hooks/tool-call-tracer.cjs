@@ -4,7 +4,7 @@
  *
  * Fires: PreToolUse + PostToolUse for Bash | Edit | Write | Read | Grep | Glob
  * Purpose: Emit append-only trace events to .claude/plans/traces/{TASK_ID}.jsonl
- *          Used by /aura-frog:trace and grounding-discipline rule.
+ *          Used by /archon-os:trace and grounding-discipline rule.
  *
  * Behavior:
  *   - Silent if no active task

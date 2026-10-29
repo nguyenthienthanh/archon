@@ -25,16 +25,16 @@ user-invocable: false
 ```toon
 constraints[6]{rule,enforcement}:
   "ONLY F2 (local-logic) or F3 (local-design)","Refuse if classifier returns F1/F4/F5/F6 — those need different paths"
-  "ONLY proposes; NEVER applies","Output is always a proposal artifact; user runs /aura-frog:heal accept <id> to apply"
+  "ONLY proposes; NEVER applies","Output is always a proposal artifact; user runs /archon-os:heal accept <id> to apply"
   "Confidence < 0.7 → don't propose","Surface raw findings only; user decides if a fix is even reachable"
   "Counts toward replan_budget","Same node-level budget enforcement as replanner (per replan-thresholds.md)"
   "Max 1 self-heal per task","Once a task accepts a self-heal patch, no further auto-proposals for that task"
-  "Session cap: 5 proposals total","Anti-fatigue + anti-loop; after 5, defer to manual /aura-frog:plan-replan"
+  "Session cap: 5 proposals total","Anti-fatigue + anti-loop; after 5, defer to manual /archon-os:plan-replan"
 ```
 
 ## Disable mechanisms (per spec §22.3, §31.3)
 
-- **Per-session:** `/aura-frog:heal disable` — sets `.claude/logs/.self-heal-disabled` flag
+- **Per-session:** `/archon-os:heal disable` — sets `.claude/logs/.self-heal-disabled` flag
 - **Permanent:** `AF_SELF_HEAL_DISABLED=true` in `.envrc`
 - Hook integration ignores any proposal when disabled
 
@@ -106,7 +106,7 @@ The proposal lives at `.claude/plans/proposals/HEAL-<TASK_ID>-<NNN>.yaml` until 
 - **Agent:** `replanner` — alternative path for F4/F5 (this skill never trespasses)
 - **Rule:** `rules/workflow/replan-thresholds.md` — shared budget semantics
 - **Rule:** `rules/workflow/checkpoint-discipline.md` — pre-mutation snapshot before applying accepted proposals
-- **Command:** `/aura-frog:heal diagnose|status|disable|accept`
+- **Command:** `/archon-os:heal diagnose|status|disable|accept`
 - **MCP:** `context7` — sole external knowledge source (rate-limited via mcp-call-gate)
 - **File:** `.claude/plans/proposals/HEAL-*.yaml` — proposal artifacts
 - **File:** `.claude/memory/permanent_memory.md` — Gotchas / Anti-patterns sections cross-referenced

@@ -34,16 +34,6 @@ if [ ! -d "${PLANS_DIR}" ]; then
 fi
 
 # ---- helpers ----
-get_field() {
-    local file="$1"; local field="$2"
-    awk -v f="$field" '
-        /^---$/ { c++; next }
-        c == 1 && $1 == f":" {
-            sub(/^[^:]*: */, ""); sub(/^["'"'"']|["'"'"']$/, "")
-            print; exit
-        }
-    ' "$file" 2>/dev/null
-}
 
 # ---- special tokens ----
 case "${INPUT}" in
@@ -78,7 +68,14 @@ case "${INPUT}" in
 esac
 
 # ---- collect candidates ----
-ALL_NODES=$(find "${PLANS_DIR}" -name '*.md' -not -path '*/archive/*' 2>/dev/null || true)
+# Same node-file definition as validate-plan-tree.sh and
+# hooks/lib/vault-index.cjs#listNodeFiles: checkpoints are history, not nodes.
+# Without the checkpoints exclusion this returned the snapshot BEFORE the live
+# node and still exited 0, breaking this script's own documented contract that
+# a multi-match exits 1.
+ALL_NODES=$(find "${PLANS_DIR}" -name '*.md' \
+    -not -path '*/archive/*' -not -path '*/checkpoints/*' \
+    -not -name 'README.md' -not -name 'INDEX.md' 2>/dev/null || true)
 [ -z "${ALL_NODES}" ] && exit 2
 
 # Pass 1: exact ID match (case-insensitive on the input; IDs in files are canonical case)

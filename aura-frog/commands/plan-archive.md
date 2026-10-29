@@ -1,15 +1,15 @@
-# /aura-frog:plan-archive &lt;id&gt;
+# /archon-os:plan-archive &lt;id&gt;
 
-**Compress a completed branch.** Alias for `/aura-frog:plan archive <id>` (v3.7.2+).
+**Compress a completed branch.** Alias for `/archon-os:plan archive <id>` (v3.7.2+).
 
 ---
 
 ## Usage
 
 ```
-/aura-frog:plan-archive FEAT-005
-/aura-frog:plan-archive INIT-001 --summary-text "..."
-/aura-frog:plan-archive FEAT-005 --force
+/archon-os:plan-archive FEAT-005
+/archon-os:plan-archive INIT-001 --summary-text "..."
+/archon-os:plan-archive FEAT-005 --force
 ```
 
 ## Delegation

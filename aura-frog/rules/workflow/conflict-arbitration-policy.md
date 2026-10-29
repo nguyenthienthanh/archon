@@ -5,7 +5,7 @@
 # Rule: Conflict Arbitration Policy
 
 **Priority:** Critical
-**Applies To:** `conflict-arbiter` agent, `pre-dispatch-conflict-check` + `post-execute-conflict-rescan` hooks, `/aura-frog:plan-conflicts` command
+**Applies To:** `conflict-arbiter` agent, `pre-dispatch-conflict-check` + `post-execute-conflict-rescan` hooks, `/archon-os:plan-conflicts` command
 
 ---
 
@@ -23,7 +23,7 @@ This rule formalizes the decision table the arbiter uses, the cycle guard, and t
 resolutions[6]{path,trigger,result,auto_or_manual}:
   auto_thaw,"L1 conflict + blocker.status==done + output compatible","frozen → planned, re-queue",auto
   auto_discard,"L1 conflict + blocker.status==done + output incompatible","frozen → planned with replan_required:true",auto
-  user_priority,"/aura-frog:plan-conflicts resolve <id> <choice>","user picks accept-proposed / accept-blocker / sequential / freeze-both / escalate",manual
+  user_priority,"/archon-os:plan-conflicts resolve <id> <choice>","user picks accept-proposed / accept-blocker / sequential / freeze-both / escalate",manual
   sequential_reorder,"L2 conflict, DAG reorder feasible","one task becomes depends_on the other; both stay planned",auto
   replan,"L2/L3/L4 conflict, no reorder, replan_budget remaining","Replanner creates alternative",auto
   escalate,"replan_budget exhausted OR cycle detected (3+ arbitrations)","human action — surface to user",auto-detect-then-manual-action
@@ -128,7 +128,7 @@ A blocker that ended up touching different files than initially planned can stil
 - **Auto-arbitrating L3/L4 conflicts** — those need semantic understanding; never auto-apply
 - **Cascading freeze to siblings** — descendants only per Q10
 - **Arbitrating without checkpoint** — pre-mutation snapshot is mandatory (`checkpoint-discipline.md`)
-- **Resolving the same conflict_id twice** — `/aura-frog:plan-conflicts resolve` refuses; reopen requires explicit re-detection
+- **Resolving the same conflict_id twice** — `/archon-os:plan-conflicts resolve` refuses; reopen requires explicit re-detection
 - **Resetting replan_budget on auto_discard** — only thaw with full success or human override resets
 - **Logging only to conflicts.jsonl** — every arbitration MUST also append to history.jsonl (single source of truth for ops)
 
@@ -142,7 +142,7 @@ A blocker that ended up touching different files than initially planned can stil
 - **Skill:** `conflict-detector` — sole producer of conflict findings
 - **Skill:** `failure-classifier` — F6 routes to this rule's decision table
 - **Hooks:** `pre-dispatch-conflict-check.cjs`, `post-execute-conflict-rescan.cjs`
-- **Commands:** `/aura-frog:plan-freeze`, `/aura-frog:plan-thaw`, `/aura-frog:plan-conflicts`
+- **Commands:** `/archon-os:plan-freeze`, `/archon-os:plan-thaw`, `/archon-os:plan-conflicts`
 - **Companion rule:** `rules/workflow/replan-thresholds.md` — replan_budget enforcement (shared cycle-guard pattern)
 - **Companion rule:** `rules/workflow/plan-lifecycle.md` — frozen state semantics
 - **Companion rule:** `rules/workflow/checkpoint-discipline.md` — pre-mutation snapshots

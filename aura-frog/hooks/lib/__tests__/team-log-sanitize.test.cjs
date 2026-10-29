@@ -10,7 +10,7 @@ const { sanitizeAgentName } = require('../../../../aura-frog/hooks/lib/team-log-
 describe('sanitizeAgentName', () => {
   it('passes a normal agent name through unchanged', () => {
     expect(sanitizeAgentName('frontend')).toBe('frontend');
-    expect(sanitizeAgentName('aura-frog:architect'.replace(/[^A-Za-z0-9._-]/g, '_'))).toBeTruthy();
+    expect(sanitizeAgentName('archon-os:architect'.replace(/[^A-Za-z0-9._-]/g, '_'))).toBeTruthy();
   });
 
   it('neutralizes path separators and traversal', () => {

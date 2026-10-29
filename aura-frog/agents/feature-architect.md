@@ -19,7 +19,7 @@ A Feature is a user-facing capability (e.g., "user authentication"). Stories are
 
 ## When invoked
 
-- `/aura-frog:plan-expand FEAT-XXX` (T2 → T3 decomposition)
+- `/archon-os:plan-expand FEAT-XXX` (T2 → T3 decomposition)
 - After replanner triggers a Feature-level rewrite (Milestone B+)
 - master-planner detects T2 needs decomposition (active T2 has no children)
 
@@ -59,7 +59,7 @@ A Feature is a user-facing capability (e.g., "user authentication"). Stories are
 
 ## Anti-patterns
 
-- Generating 10+ Stories per Feature (Feature is too coarse — recommend `/aura-frog:plan-promote`)
+- Generating 10+ Stories per Feature (Feature is too coarse — recommend `/archon-os:plan-promote`)
 - Acceptance criteria that aren't testable ("should feel intuitive" — vague)
 - Stories that span multiple TDD cycles (split into multiple Stories)
 - Cross-Story file overlaps without explicit DAG ordering (will trigger conflict-detector in Milestone D+)
@@ -67,7 +67,7 @@ A Feature is a user-facing capability (e.g., "user authentication"). Stories are
 ## Tie-Ins
 
 - **Spec:** §8.3, §6.4 (Feature schema), §6.5 (Story schema)
-- **Agent:** master-planner — dispatches feature-architect on `/aura-frog:plan-expand FEAT-*`
+- **Agent:** master-planner — dispatches feature-architect on `/archon-os:plan-expand FEAT-*`
 - **Agent:** strategist — feeds T1 context to feature-architect via `parent` field
 - **Agent:** story-planner — receives Stories for further T3→T4 decomposition
 - **Skill:** self-consistency — when 2+ valid Story decompositions exist, vote between them

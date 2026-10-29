@@ -15,17 +15,17 @@ When the user types `/run <task>`, Claude MUST execute these steps in order. Do 
 2. **Run agent-detector** to classify complexity (Quick / Standard / Deep / Project) and pick the flow per the detection table below.
 3. **Escalation check (v3.7.2+)** — Before creating the run state, evaluate the escalation heuristic from `rules/workflow/run-plan-bridge.md`. If the task scores weight ≥ 3 AND no plan tree exists, emit the 3-option prompt (`plan` / `deep` / `details`). See `skills/run-orchestrator/SKILL.md` Step 0 for full semantics. Override prefixes:
    - `/run task: <desc>` — force task mode (Quick/Standard/Deep), skip escalation.
-   - `/run project: <desc>` — force project mode; write `.claude/cache/pending-plan-bootstrap.json` and invoke `/aura-frog:plan` directly.
+   - `/run project: <desc>` — force project mode; write `.claude/cache/pending-plan-bootstrap.json` and invoke `/archon-os:plan` directly.
    - `AF_ESCALATION_DISABLED=true` — opts out per-session.
 4. **Create the run state file** at `.claude/logs/runs/<run-id>/run-state.json` per `skills/run-orchestrator/SKILL.md` Step 0b. **MANDATORY** — do not proceed without it. If escalation ran and the user picked `deep`, record `escalation_declined: true` in run-state.
    - **Scaffold phase deliverables** (Step 0.5): `bash "${CLAUDE_PLUGIN_ROOT}/scripts/workflow/scaffold-phase-deliverables.sh" <run-id> 1` — the per-phase .md documents (REQUIREMENTS.md, TECH_SPEC.md, …) must exist on disk before phase work starts, and again on every phase advance. The `run-deliverables-scaffold` hook backstops this on every run-state.json write, but do not rely on it silently — fill the scaffolds in; files left as templates block the approval gate (`rules/workflow/workflow-deliverables.md`). Skip only for Quick/direct runs.
 5. **Apply the Run ↔ Plan bridge** (`rules/workflow/run-plan-bridge.md`):
    - `.claude/plans/active.json#active.task` set → auto-anchor; deliverables sync back to the plan tree on Phase 5.
-   - Active feature without claimed task → suggest `/aura-frog:plan next`.
+   - Active feature without claimed task → suggest `/archon-os:plan next`.
    - No plan + escalation prompt was emitted in Step 3 (the trigger heuristic owns this case now).
    - `AF_RUN_PLAN_BRIDGE_DISABLED=true` disables the bridge entirely (also disables Step 3 escalation).
 6. **Announce the chosen flow** to the user transparently: "Detected: Standard → single-agent inline (no plan). Say `deep` to escalate." When anchored, also state the anchor: "Anchored to TASK-00101 (story STORY-0042, feature FEAT-A)."
-7. **Then** execute the chosen flow. For Deep, follow the 5-phase workflow in run-orchestrator. For Standard/Quick, lighter flow per the table. For Project (escalated via Step 3), the run handed off to `/aura-frog:plan` and this invocation terminates.
+7. **Then** execute the chosen flow. For Deep, follow the 5-phase workflow in run-orchestrator. For Standard/Quick, lighter flow per the table. For Project (escalated via Step 3), the run handed off to `/archon-os:plan` and this invocation terminates.
 
 If any step fails, surface the failure to the user — do not silently fall through to direct implementation.
 
@@ -77,16 +77,16 @@ Force mode (skip brainstorming): prefix with `must do:`, `just do:`, `exactly:`.
 **Mode-override prefixes** (v3.7.2+, control the escalation check):
 
 - `/run task: <desc>` — force task mode; skip the project-mode escalation check.
-- `/run project: <desc>` — force project mode; write `pending-plan-bootstrap.json` and route to `/aura-frog:plan`.
+- `/run project: <desc>` — force project mode; write `pending-plan-bootstrap.json` and route to `/archon-os:plan`.
 - `AF_ESCALATION_DISABLED=true` — per-session opt-out of the escalation check.
 
 **Feature anchor prefix** (v3.7.3+, link a run to a T2 feature):
 
 - `/run feature: FEAT-A <desc>` — anchor a new run to the named feature. After Step 0b (run-state creation), call `scripts/plans/link-run.sh link <run-id> FEAT-A --status in_progress` to write both sides: `run-state.json#feature_id` + the feature's `## Runs` table. Deliverables sync back to the plan tree on Phase 5.
 - `/run feature: JIRA-1234 <desc>` — same, with a ticket-ID-prefixed feature folder.
-- The feature must already exist (`/aura-frog:plan` first if not). For a fresh feature + run, use `/run project: <desc>` (escalates to plan bootstrap, then anchors).
+- The feature must already exist (`/archon-os:plan` first if not). For a fresh feature + run, use `/run project: <desc>` (escalates to plan bootstrap, then anchors).
 
-> ⚠️ **Anchoring to a plan never skips the 5-phase TDD.** A `/run` anchored to FEAT-A still runs Phase 1 → 2 → 3 → 4 → 5 against the task. The plan tree feeds Phase 1 (acceptance criteria, design notes) and Phase 2 (test scaffolds) — it does **not** replace them. **Phase 2 (Test RED) is mandatory** even when the plan already documents acceptance criteria, because acceptance criteria are intent and failing tests are executable contracts. One `/run` covers one task's full 5-phase cycle; iterating a feature means looping `/aura-frog:plan next` + `/run` per task.
+> ⚠️ **Anchoring to a plan never skips the 5-phase TDD.** A `/run` anchored to FEAT-A still runs Phase 1 → 2 → 3 → 4 → 5 against the task. The plan tree feeds Phase 1 (acceptance criteria, design notes) and Phase 2 (test scaffolds) — it does **not** replace them. **Phase 2 (Test RED) is mandatory** even when the plan already documents acceptance criteria, because acceptance criteria are intent and failing tests are executable contracts. One `/run` covers one task's full 5-phase cycle; iterating a feature means looping `/archon-os:plan next` + `/run` per task.
 
 ---
 

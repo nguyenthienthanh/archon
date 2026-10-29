@@ -5,13 +5,13 @@
 # Rule: Checkpoint Discipline
 
 **Priority:** High
-**Applies To:** master-planner before any plan-tree mutation; `/aura-frog:plan-undo` consumer
+**Applies To:** master-planner before any plan-tree mutation; `/archon-os:plan-undo` consumer
 
 ---
 
 ## Core Principle
 
-**Every plan-tree mutation is preceded by a checkpoint snapshot. `/aura-frog:plan-undo` restores the latest checkpoint.**
+**Every plan-tree mutation is preceded by a checkpoint snapshot. `/archon-os:plan-undo` restores the latest checkpoint.**
 
 Reversibility is not optional — it's the safety net that lets master-planner make autonomous decisions in Milestone B+.
 
@@ -25,8 +25,8 @@ Before applying any of these mutations:
 2. `revision` increment caused by content edit
 3. Children list reorder, add, or remove
 4. Replanner-applied proposals
-5. `/aura-frog:plan-archive` runs (Milestone C)
-6. `/aura-frog:plan-promote` tier change
+5. `/archon-os:plan-archive` runs (Milestone C)
+6. `/archon-os:plan-promote` tier change
 
 NOT checkpointed (cosmetic):
 
@@ -60,7 +60,7 @@ Fallback for nodes whose file path can't be resolved (rare — archived/orphan):
 
 The node's pre-mutation state is one opaque base64 blob (`node_state_before_b64`) — there is no parsed frontmatter/body split, no sibling or parent snapshot, and no branch/dirty flags.
 
-**git_sha tracking** (per spec §17.1): every checkpoint records the current `HEAD` sha at capture time. This lets `/aura-frog:plan-undo` (and the conflict-rescan compatibility check) diff what actually changed while the node was active.
+**git_sha tracking** (per spec §17.1): every checkpoint records the current `HEAD` sha at capture time. This lets `/archon-os:plan-undo` (and the conflict-rescan compatibility check) diff what actually changed while the node was active.
 
 ---
 
@@ -73,13 +73,13 @@ retention[3]{rule,limit}:
   size_cap,50 MB,"all checkpoints/ dirs under .claude/plans/ total"
 ```
 
-Pruning runs in `/aura-frog:plan-archive` (lazy, not a daemon) via the `plan-archivist` skill — checkpoint compression is part of branch archival; there is no standalone prune script.
+Pruning runs in `/archon-os:plan-archive` (lazy, not a daemon) via the `plan-archivist` skill — checkpoint compression is part of branch archival; there is no standalone prune script.
 
 ---
 
 ## Restore semantics
 
-`/aura-frog:plan-undo {NODE_ID}` (or defaulting to the deepest active node) — implemented by `scripts/plans/undo-decision.sh`:
+`/archon-os:plan-undo {NODE_ID}` (or defaulting to the deepest active node) — implemented by `scripts/plans/undo-decision.sh`:
 
 1. Find latest `<node_folder>/checkpoints/*.json` (lexicographic max — ISO timestamps sort correctly); fall back to the legacy flat `.claude/plans/checkpoints/{NODE_ID}.*.json`
 2. Refuse if no checkpoint found → "no checkpoint for {NODE_ID}"
@@ -92,7 +92,7 @@ Pruning runs in `/aura-frog:plan-archive` (lazy, not a daemon) via the `plan-arc
 
 ## Multi-step undo
 
-Each `/aura-frog:plan-undo` restores ONE checkpoint. To undo further, the user runs `/aura-frog:plan-undo` again (LIFO order). After 5 undos (the retention cap), older checkpoints are gone.
+Each `/archon-os:plan-undo` restores ONE checkpoint. To undo further, the user runs `/archon-os:plan-undo` again (LIFO order). After 5 undos (the retention cap), older checkpoints are gone.
 
 ---
 
@@ -119,7 +119,7 @@ Each `/aura-frog:plan-undo` restores ONE checkpoint. To undo further, the user r
 
 - **Spec:** §11.3 (checkpoint), §15 (storage)
 - **Agent:** `master-planner` — only writer of checkpoints
-- **Command:** `/aura-frog:plan-undo` — only consumer
+- **Command:** `/archon-os:plan-undo` — only consumer
 - **Rule:** `rules/workflow/replan-thresholds.md` — replan-triggered checkpoints
 - **Rule:** `rules/workflow/plan-lifecycle.md` — status-transition triggered checkpoints
-- **Command:** `/aura-frog:plan-archive` — checkpoint pruning + branch compression (via the `plan-archivist` skill)
+- **Command:** `/archon-os:plan-archive` — checkpoint pruning + branch compression (via the `plan-archivist` skill)

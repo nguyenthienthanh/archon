@@ -124,13 +124,28 @@ function main() {
     // Get project root (current working directory)
     const projectRoot = process.cwd();
 
-    // Load patterns
+    // Load patterns.
+    //
+    // Two lists, deliberately. `.afignore` describes directories not worth
+    // SCANNING ("blocked from scanning to save tokens", per its own header) —
+    // it is a token-economy list, not a safety boundary. DEFAULT_BLOCKED is the
+    // safety boundary: nobody should be writing into node_modules, dist or .git.
+    //
+    // Applying .afignore to writes made the plugin contradict itself: this repo
+    // lists `__tests__`, and the plugin's own rules make Phase 2 Test RED
+    // mandatory, so creating the required failing test was blocked by the
+    // plugin that required it. Writes therefore consult DEFAULT_BLOCKED only.
     const customPatterns = loadCustomPatterns(projectRoot);
-    const allPatterns = [...DEFAULT_BLOCKED, ...customPatterns];
+    const scanPatterns = [...DEFAULT_BLOCKED, ...customPatterns];
+    const writePatterns = DEFAULT_BLOCKED;
+
+    const toolName = data.tool_name || data.tool || '';
+    const isWrite = /^(Write|Edit|MultiEdit|NotebookEdit)$/.test(toolName);
 
     // Check file_path parameter (Read, Write, Edit tools)
     const filePath = toolInput.file_path || toolInput.path || '';
-    if (filePath && isBlocked(filePath, allPatterns)) {
+    const pathPatterns = isWrite ? writePatterns : scanPatterns;
+    if (filePath && isBlocked(filePath, pathPatterns)) {
       console.error(`⛔ Blocked: ${filePath} (contains blocked directory)`);
       process.exit(2);
     }
@@ -138,7 +153,7 @@ function main() {
     // Check command parameter (Bash tool)
     const command = toolInput.command || '';
     if (command && !isAllowedBuildCommand(command)) {
-      const matched = findBlockedInCommand(command, allPatterns);
+      const matched = findBlockedInCommand(command, scanPatterns);
       if (matched) {
         console.error(`⛔ Blocked: command accesses ${matched}`);
         process.exit(2);
@@ -147,7 +162,7 @@ function main() {
 
     // Check pattern parameter (Glob, Grep tools)
     const pattern = toolInput.pattern || '';
-    if (pattern && isBlocked(pattern, allPatterns)) {
+    if (pattern && isBlocked(pattern, scanPatterns)) {
       console.error(`⛔ Blocked: pattern ${pattern} (contains blocked directory)`);
       process.exit(2);
     }

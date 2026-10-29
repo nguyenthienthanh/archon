@@ -133,7 +133,7 @@ function getAllowlist(agentId) {
   const candidatePaths = [
     path.join(AGENTS_DIR, `${agentId}.md`),
     path.join(AGENTS_DIR, 'reference', `${agentId}.md`),
-    path.join(AGENTS_DIR, `${agentId.replace(/^aura-frog:/, '')}.md`),
+    path.join(AGENTS_DIR, `${agentId.replace(/^archon-os:/, '')}.md`),
   ];
   for (const p of candidatePaths) {
     if (!fs.existsSync(p)) continue;
@@ -279,7 +279,7 @@ function main() {
       `[mcp-call-gate] BLOCKED: rate limit hit for "${parsed.server}"\n` +
       `  per-minute: ${counter.last_minute.length}/${limits.max_calls_per_minute}\n` +
       `  per-session: ${counter.session}/${limits.max_calls_per_session}\n` +
-      `  to override: /aura-frog:mcp reset-limits --mcp ${parsed.server}\n`
+      `  to override: /archon-os:mcp reset-limits --mcp ${parsed.server}\n`
     );
     safeExit(2);
   }

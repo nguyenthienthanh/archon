@@ -4,7 +4,7 @@
  *
  * Fires: PostToolUse (Write)
  * Purpose: After epic-summarizer writes a new section to permanent_memory.md,
- *          surface a one-line prompt suggesting the user run /aura-frog:reset-session.
+ *          surface a one-line prompt suggesting the user run /archon-os:reset-session.
  *
  * Detection:
  *   - Tail history.jsonl for the most recent epic_summarized event
@@ -81,7 +81,7 @@ function main() {
 
   process.stderr.write(
     `[session-reset] Epic ${featureId} distilled to permanent_memory.md\n` +
-    '  Run /aura-frog:reset-session to clear conversation context (history + memory + plan tree preserved).\n',
+    '  Run /archon-os:reset-session to clear conversation context (history + memory + plan tree preserved).\n',
   );
 }
 

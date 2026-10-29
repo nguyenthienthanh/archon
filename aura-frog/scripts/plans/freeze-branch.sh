@@ -106,7 +106,7 @@ while IFS= read -r d; do
 done <<< "$DESCENDANTS"
 
 if ! require_no_regression "$PLANS_DIR" "$VIOLATIONS_BEFORE"; then
-    echo "checkpoints saved at ${PLANS_DIR}/checkpoints/ — restore via /aura-frog:plan undo" >&2
+    echo "checkpoints saved at ${PLANS_DIR}/checkpoints/ — restore via /archon-os:plan undo" >&2
     exit 4
 fi
 

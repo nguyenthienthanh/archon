@@ -1,4 +1,4 @@
-# /aura-frog:reset-session
+# /archon-os:reset-session
 
 **Distill the active Epic (T2 Feature) into permanent_memory and offer to start a fresh session.** Preserves history.jsonl, plan tree, conflict cache.
 
@@ -7,11 +7,11 @@
 ## Usage
 
 ```
-/aura-frog:reset-session                       # default: distill active Feature, prompt to reset
-/aura-frog:reset-session --feature FEAT-007    # explicit feature ID (overrides active)
-/aura-frog:reset-session --initiative INIT-001 # rare — distill at T1 level (quarterly use)
-/aura-frog:reset-session --dry-run             # show what would be distilled without writing
-/aura-frog:reset-session --no-prompt           # skip the reset confirmation (distill only)
+/archon-os:reset-session                       # default: distill active Feature, prompt to reset
+/archon-os:reset-session --feature FEAT-007    # explicit feature ID (overrides active)
+/archon-os:reset-session --initiative INIT-001 # rare — distill at T1 level (quarterly use)
+/archon-os:reset-session --dry-run             # show what would be distilled without writing
+/archon-os:reset-session --no-prompt           # skip the reset confirmation (distill only)
 ```
 
 ## Protocol (imperative)
@@ -56,7 +56,7 @@ Useful for previewing before a real distillation.
 |---|---|
 | epic-summarizer fails (timeout, write error) | History event `event: epic_summarize_failed`; no reset prompt; user runs again later |
 | permanent_memory.md exceeds 8,000 tokens | Oldest Epic section auto-moved to `.claude/memory/archive/` per session-reset-policy |
-| Active feature not in `done` status | Refuse; suggest `/aura-frog:plan-status` to see why |
+| Active feature not in `done` status | Refuse; suggest `/archon-os:plan-status` to see why |
 | No `.claude/plans/` exists | Refuse with hint: "no plan tree; nothing to distill" |
 
 ## Tie-Ins
@@ -66,4 +66,4 @@ Useful for previewing before a real distillation.
 - **Skill:** `permanent-memory-loader` — auto-loads the new section in subsequent sessions
 - **Rule:** `rules/workflow/session-reset-policy.md` — defines triggers, distillation rules, what's preserved
 - **Hook:** `hooks/session-reset-trigger.cjs` — auto-fires this command on T2 done (with user prompt)
-- **Companion command:** `/aura-frog:plan-archive` — compresses the plan tree branch (separate concern from memory distillation)
+- **Companion command:** `/archon-os:plan-archive` — compresses the plan tree branch (separate concern from memory distillation)
