@@ -1,5 +1,5 @@
 /**
- * Tests for aura-frog/hooks/lint-autofix.cjs
+ * Tests for archon-os/hooks/lint-autofix.cjs
  * Pure-function tests via require()-from-source.
  */
 
@@ -7,7 +7,7 @@ const {
   getAvailableLinters,
   isLinterAvailable,
   extractFilePath,
-} = require('../../aura-frog/hooks/lint-autofix.cjs');
+} = require('../../archon-os/hooks/lint-autofix.cjs');
 
 describe('lint-autofix', () => {
   describe('extractFilePath', () => {

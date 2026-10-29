@@ -127,8 +127,8 @@ claude    # Restart
 ### Commands not showing
 ```bash
 /plugin list                                    # Check installed
-/plugin marketplace add nguyenthienthanh/aura-frog  # Re-add
-/plugin install aura-frog@aurafrog              # Reinstall
+/plugin marketplace add nguyenthienthanh/archon  # Re-add
+/plugin install archon-os@archon              # Reinstall
 ```
 
 ---

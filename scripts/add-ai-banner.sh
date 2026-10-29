@@ -76,12 +76,12 @@ process_file() {
 # Skills
 while IFS= read -r f; do
   process_file "$f"
-done < <(find aura-frog/skills -maxdepth 2 -name 'SKILL.md' -type f | sort)
+done < <(find archon-os/skills -maxdepth 2 -name 'SKILL.md' -type f | sort)
 
 # Rules (exclude READMEs)
 while IFS= read -r f; do
   process_file "$f"
-done < <(find aura-frog/rules -name '*.md' ! -name 'README.md' -type f | sort)
+done < <(find archon-os/rules -name '*.md' ! -name 'README.md' -type f | sort)
 
 echo ""
 echo "Summary:"

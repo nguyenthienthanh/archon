@@ -6,7 +6,7 @@ audience: contributor
 
 # Plugin Maintenance Contract
 
-**Audience:** contributors editing the Aura Frog plugin source (`aura-frog/agents/`, `skills/`, `rules/`, `commands/`, `hooks/`).
+**Audience:** contributors editing the Aura Frog plugin source (`archon-os/agents/`, `skills/`, `rules/`, `commands/`, `hooks/`).
 **When this applies:** only when you ADD, MODIFY, REMOVE, or RENAME one of those files — not on every session.
 
 > This file used to live inline in `.claude/CLAUDE.md`. It was moved here so it stops costing always-on context tokens every session (it only matters when mutating plugin files). `.claude/CLAUDE.md` keeps a one-line pointer to it.
@@ -21,21 +21,21 @@ On EVERY change, update ALL relevant files to keep them consistent.
 
 | Component | Files to Update |
 |-----------|-----------------|
-| **Agents** | `aura-frog/agents/README.md` (index + count), `aura-frog/CLAUDE.md` (Process Table + Resources), `.claude-plugin/plugin.json` (description) |
-| **Skills** | `aura-frog/skills/README.md` (index + count), `aura-frog/CLAUDE.md` (Auto-Invoke list + Resources), `.claude-plugin/plugin.json` (description) |
-| **Rules** | `aura-frog/rules/README.md` (index + count + categories), `aura-frog/CLAUDE.md` (Resources) |
-| **Hooks** | `aura-frog/hooks/README.md` (index + count) |
-| **Commands** | `aura-frog/commands/README.md` (index + count) |
+| **Agents** | `archon-os/agents/README.md` (index + count), `archon-os/CLAUDE.md` (Process Table + Resources), `.claude-plugin/plugin.json` (description) |
+| **Skills** | `archon-os/skills/README.md` (index + count), `archon-os/CLAUDE.md` (Auto-Invoke list + Resources), `.claude-plugin/plugin.json` (description) |
+| **Rules** | `archon-os/rules/README.md` (index + count + categories), `archon-os/CLAUDE.md` (Resources) |
+| **Hooks** | `archon-os/hooks/README.md` (index + count) |
+| **Commands** | `archon-os/commands/README.md` (index + count) |
 
-> **Single-source rule (v3.8.0):** counts live in the per-component `README.md` files and the `aura-frog/CLAUDE.md` **Resources** table. Do not restate counts in prose elsewhere — drift starts the moment a number appears twice.
+> **Single-source rule (v3.8.0):** counts live in the per-component `README.md` files and the `archon-os/CLAUDE.md` **Resources** table. Do not restate counts in prose elsewhere — drift starts the moment a number appears twice.
 
 ### Version references (only these files carry the plugin version)
 
 ```toon
 version_files[4]{file,location}:
-  aura-frog/.claude-plugin/plugin.json,Source of truth (version field)
+  archon-os/.claude-plugin/plugin.json,Source of truth (version field)
   .claude-plugin/marketplace.json,Marketplace version fields
-  aura-frog/CLAUDE.md,System header + footer
+  archon-os/CLAUDE.md,System header + footer
   .claude/CLAUDE.md,Aura Frog Version header
 ```
 
@@ -88,7 +88,7 @@ bash scripts/release.sh publish 3.8.0-alpha.9
 
 When you ADD/MODIFY/REMOVE an agent/skill/rule file, maintain the YAML frontmatter schema.
 
-### Agent frontmatter (`aura-frog/agents/*.md`) — required fields
+### Agent frontmatter (`archon-os/agents/*.md`) — required fields
 
 ```yaml
 ---
@@ -105,7 +105,7 @@ Review **every field** for role-appropriateness:
 - Fast-path agents (scanner) → `model: haiku`
 - Orchestrator (lead) → no model override (inherits)
 
-### Skill frontmatter (`aura-frog/skills/*/SKILL.md`) — supported fields
+### Skill frontmatter (`archon-os/skills/*/SKILL.md`) — supported fields
 
 Only these are officially supported (per docs.claude.com/skills):
 `name`, `description`, `when_to_use`, `argument-hint`, `disable-model-invocation`, `user-invocable`, `allowed-tools`, `model`, `effort`, `context`, `agent`, `hooks`, `paths`, `shell`.
@@ -114,7 +114,7 @@ Only these are officially supported (per docs.claude.com/skills):
 - **NOT official:** `autoInvoke` (opt out via `disable-model-invocation: true`).
 - **NOT official:** `priority` (order via `description` specificity).
 
-### Rules (`aura-frog/rules/**/*.md`)
+### Rules (`archon-os/rules/**/*.md`)
 
 Rules are NOT auto-loaded. Every rule MUST have ≥1 inbound reference from an agent, skill, or CLAUDE.md. If adding a rule, cite its path from the owning agent/skill's "Related Rules" section.
 
@@ -124,7 +124,7 @@ Rules are NOT auto-loaded. Every rule MUST have ≥1 inbound reference from an a
 
 `commands/` is the user-typed slash surface. `skills/` is AI-discoverable knowledge. They do NOT overlap on triggers.
 
-- Anything the user types as `/<name>` MUST live in `aura-frog/commands/<name>.md`.
+- Anything the user types as `/<name>` MUST live in `archon-os/commands/<name>.md`.
 - Skills MUST set `user-invocable: false` — hides them from the slash menu so users only see commands.
 - If a skill needs slash exposure → wrap it in a thin `commands/<name>.md` that delegates to the skill (e.g. `/af prompts` wraps the `prompt-evaluator` skill).
 - Skills remain triggerable by: AI auto-invoke on description match, explicit prompt mention, or internal invocation from a command/another skill.

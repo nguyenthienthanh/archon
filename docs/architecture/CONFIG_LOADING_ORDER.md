@@ -33,7 +33,7 @@ Aura Frog uses multiple configuration files with a clear priority system. Unders
 
 ### 1. Environment Variables (Highest Priority)
 
-**Location:** `aura-frog/.envrc` or system environment
+**Location:** `archon-os/.envrc` or system environment
 
 **Purpose:** Runtime configuration, integration credentials
 
@@ -105,7 +105,7 @@ team:
 
 ### 3. Local Settings (User-Specific)
 
-**Location:** `aura-frog/settings.local.json`
+**Location:** `archon-os/settings.local.json`
 
 **Purpose:** Claude Code permissions, auto-approval settings
 
@@ -135,13 +135,13 @@ team:
 - ✅ Safety settings
 - ✅ User preferences
 
-**Template:** `aura-frog/settings.example.json`
+**Template:** `archon-os/settings.example.json`
 
 ---
 
 ### 4. Global Aura Frog Config (Plugin Defaults)
 
-**Location:** `aura-frog/ccpm-config.yaml`
+**Location:** `archon-os/ccpm-config.yaml`
 
 **Purpose:** Default Aura Frog settings for all projects
 
@@ -225,7 +225,7 @@ const tddMode = config.tdd_enforcement || 'recommended';
                   ▼
 ┌─────────────────────────────────────────────────┐
 │  2. Load Global Aura Frog Config                     │
-│     aura-frog/ccpm-config.yaml                       │
+│     archon-os/ccpm-config.yaml                       │
 │     - Overrides defaults                        │
 │     - Sets plugin-wide behavior                 │
 └─────────────────┬───────────────────────────────┘
@@ -233,7 +233,7 @@ const tddMode = config.tdd_enforcement || 'recommended';
                   ▼
 ┌─────────────────────────────────────────────────┐
 │  3. Load Local Settings                         │
-│     aura-frog/settings.local.json                    │
+│     archon-os/settings.local.json                    │
 │     - User permissions                          │
 │     - Auto-approval settings                    │
 └─────────────────┬───────────────────────────────┘
@@ -250,7 +250,7 @@ const tddMode = config.tdd_enforcement || 'recommended';
                   ▼
 ┌─────────────────────────────────────────────────┐
 │  5. Apply Environment Variables                 │
-│     aura-frog/.envrc or system env                   │
+│     archon-os/.envrc or system env                   │
 │     - Runtime overrides                         │
 │     - Integration credentials                   │
 └─────────────────┬───────────────────────────────┘
@@ -343,7 +343,7 @@ workflow:
 ## Configuration Scopes
 
 ### Plugin-Wide Configuration
-**File:** `aura-frog/ccpm-config.yaml`
+**File:** `archon-os/ccpm-config.yaml`
 
 **Controls:**
 - Default agent settings
@@ -390,7 +390,7 @@ team:
 ---
 
 ### User-Specific Configuration
-**File:** `aura-frog/settings.local.json`
+**File:** `archon-os/settings.local.json`
 
 **Controls:**
 - Permissions
@@ -432,7 +432,7 @@ export AURA_FROG_DEFAULT_COVERAGE="90"
 
 ```
 ~/.claude/plugins/marketplaces/aurafrog/
-└── aura-frog/                         # Plugin directory
+└── archon-os/                         # Plugin directory
     ├── ccpm-config.yaml               # 🟢 Global plugin config
     ├── settings.local.json            # 🟡 User permissions (gitignored)
     ├── settings.example.json          # Template for settings.local.json
@@ -507,7 +507,7 @@ config:validate
 **Manual Check:**
 ```bash
 # Check which project is active
-grep "active_project" aura-frog/ccpm-config.yaml
+grep "active_project" archon-os/ccpm-config.yaml
 
 # Check environment variables
 env | grep Aura Frog
@@ -515,7 +515,7 @@ env | grep JIRA
 env | grep FIGMA
 
 # Check if project context exists
-ls -la .claude/project-contexts/$(grep "name:" aura-frog/ccpm-config.yaml | head -1 | cut -d'"' -f2)
+ls -la .claude/project-contexts/$(grep "name:" archon-os/ccpm-config.yaml | head -1 | cut -d'"' -f2)
 ```
 
 ---
@@ -536,13 +536,13 @@ ls -la .claude/project-contexts/$(grep "name:" aura-frog/ccpm-config.yaml | head
 **Debug:**
 ```bash
 # Validate YAML syntax
-yamllint aura-frog/ccpm-config.yaml
+yamllint archon-os/ccpm-config.yaml
 
 # Validate JSON syntax
-jq empty aura-frog/settings.local.json
+jq empty archon-os/settings.local.json
 
 # Check env vars
-source aura-frog/.envrc
+source archon-os/.envrc
 env | grep Aura Frog
 ```
 
@@ -565,7 +565,7 @@ echo "=== Environment Variables ==="
 env | grep -E "(Aura Frog|JIRA|FIGMA|SLACK)"
 
 echo "=== Active Project ==="
-grep -A 2 "active_project:" aura-frog/ccpm-config.yaml
+grep -A 2 "active_project:" archon-os/ccpm-config.yaml
 
 echo "=== Project Context ==="
 cat .claude/project-contexts/*/project-config.yaml 2>/dev/null | head -20

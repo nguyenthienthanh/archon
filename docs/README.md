@@ -6,7 +6,7 @@ audience: active-user
 
 # Aura Frog Documentation
 
-Central index for all human-readable documentation. AI-consumed docs live in `aura-frog/`.
+Central index for all human-readable documentation. AI-consumed docs live in `archon-os/`.
 
 > **Latest — v3.7.3** (2026-05-12): Plans now live at `.claude/plans/` (legacy `.aura/plans/` still works via fallback until v4.0), `{ID}_{kebab-slug}/` folder schema across all tiers, bidirectional run↔feature linking, statusline shows `mode {step} agent` (cost segment removed), Phase 2 picks unit/integration/e2e BEFORE writing (no more silent e2e skip on UI/auth/payment tasks), TTY-hang fixed in 14 hooks, Node 20/22 back in CI. See [CHANGELOG](reference/CHANGELOG.md#373---2026-05-12).
 >
@@ -16,9 +16,9 @@ Central index for all human-readable documentation. AI-consumed docs live in `au
 
 ## Source of Truth
 
-When information lives in multiple places, **`docs/` wins**. Plugin internals (`aura-frog/skills/`, `aura-frog/rules/`, `aura-frog/CLAUDE.md`) are AI-consumed references — optimised for Claude's execution-time loading, not for human onboarding. Every skill and rule file now carries an **AI-consumed reference** banner header pointing back at this tree.
+When information lives in multiple places, **`docs/` wins**. Plugin internals (`archon-os/skills/`, `archon-os/rules/`, `archon-os/CLAUDE.md`) are AI-consumed references — optimised for Claude's execution-time loading, not for human onboarding. Every skill and rule file now carries an **AI-consumed reference** banner header pointing back at this tree.
 
-If you find drift between `docs/` and `aura-frog/`: file an issue tagged `doc-drift`. Maintainer resolves by aligning `aura-frog/` to `docs/` — never the other way around.
+If you find drift between `docs/` and `archon-os/`: file an issue tagged `doc-drift`. Maintainer resolves by aligning `archon-os/` to `docs/` — never the other way around.
 
 **Key canonical sources:**
 
@@ -98,12 +98,12 @@ If you find drift between `docs/` and `aura-frog/`: file an issue tagged `doc-dr
 
 ## Plugin Internals (AI-consumed)
 
-These live in `aura-frog/` and are optimized for Claude to read:
+These live in `archon-os/` and are optimized for Claude to read:
 
-- [Agents](../aura-frog/agents/README.md) — 15 agents with capabilities
-- [Skills](../aura-frog/skills/README.md) — 60 skills (9 auto-invoke + 51 on-demand)
-- [Commands](../aura-frog/commands/README.md) — 24 commands (core `/run`, `/check`, `/design`, `/project`, `/af`, `/help` + `/archon-os:*` hierarchical-planning suite)
-- [Rules](../aura-frog/rules/README.md) — 72 rules (3-tier loading: 22 core / 20 agent / 30 workflow)
-- [Hooks](../aura-frog/hooks/README.md) — 51 lifecycle hooks
-- [Templates](../aura-frog/templates/README.md) — 20 document templates (incl. phase deliverable skeletons)
-- [Scripts](../aura-frog/scripts/README.md) — Utility scripts
+- [Agents](../archon-os/agents/README.md) — 15 agents with capabilities
+- [Skills](../archon-os/skills/README.md) — 60 skills (9 auto-invoke + 51 on-demand)
+- [Commands](../archon-os/commands/README.md) — 24 commands (core `/run`, `/check`, `/design`, `/project`, `/af`, `/help` + `/archon-os:*` hierarchical-planning suite)
+- [Rules](../archon-os/rules/README.md) — 72 rules (3-tier loading: 22 core / 20 agent / 30 workflow)
+- [Hooks](../archon-os/hooks/README.md) — 51 lifecycle hooks
+- [Templates](../archon-os/templates/README.md) — 20 document templates (incl. phase deliverable skeletons)
+- [Scripts](../archon-os/scripts/README.md) — Utility scripts

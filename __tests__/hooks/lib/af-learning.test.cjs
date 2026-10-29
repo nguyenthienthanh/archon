@@ -1,6 +1,6 @@
 'use strict';
 /**
- * Tests for the REAL aura-frog/hooks/lib/af-learning.cjs module.
+ * Tests for the REAL archon-os/hooks/lib/af-learning.cjs module.
  *
  * History: this suite previously asserted against functions copy-pasted into
  * the test file ("Replicate pure functions from source"), so it passed no
@@ -19,7 +19,7 @@ const path = require('node:path');
 const TMP_ROOT = fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()), 'af-learning-test-'));
 process.env.AF_PROJECT_ROOT = TMP_ROOT;
 
-const learning = require('../../../aura-frog/hooks/lib/af-learning.cjs');
+const learning = require('../../../archon-os/hooks/lib/af-learning.cjs');
 
 const LEARNING_DIR = path.join(TMP_ROOT, '.claude', 'learning');
 const WORKFLOW_EVENTS_FILE = path.join(LEARNING_DIR, 'workflow-events.json');

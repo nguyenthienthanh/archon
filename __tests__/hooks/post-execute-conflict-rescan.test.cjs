@@ -22,7 +22,7 @@ const {
   latestCheckpointFile,
   readTaskStatus,
   checkCompatibility,
-} = require('../../aura-frog/hooks/post-execute-conflict-rescan.cjs');
+} = require('../../archon-os/hooks/post-execute-conflict-rescan.cjs');
 
 const NOW = 1_000_000_000_000; // fixed clock; tests pass now explicitly (no Date.now)
 const iso = (ms) => new Date(ms).toISOString();

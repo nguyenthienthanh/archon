@@ -24,7 +24,7 @@ REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$REPO_ROOT"
 
 # Read current version
-VERSION=$(python3 -c "import json; print(json.load(open('aura-frog/stats.json'))['version'])" 2>/dev/null || echo "3.7.4")
+VERSION=$(python3 -c "import json; print(json.load(open('archon-os/stats.json'))['version'])" 2>/dev/null || echo "3.7.4")
 VERSION_TAG="v${VERSION}"
 
 DRY_RUN=0

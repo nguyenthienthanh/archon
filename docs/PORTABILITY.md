@@ -97,7 +97,7 @@ Coverage numbers are **estimates based on documented feature overlap** — not m
 A one-command porter generates the universal layer in each target tool's native format:
 
 ```bash
-node aura-frog/scripts/port-plugin.cjs <target> [--out <dir>] [--dry-run]
+node archon-os/scripts/port-plugin.cjs <target> [--out <dir>] [--dry-run]
 #   target: copilot | codex | cursor | all
 ```
 
@@ -108,14 +108,14 @@ node aura-frog/scripts/port-plugin.cjs <target> [--out <dir>] [--dry-run]
 | `cursor` | `.cursor/rules/*.mdc` (`description`/`globs`/`alwaysApply`) | One rule doc per category + an overview |
 | `all` | all three | Each run also writes `PORT_MANIFEST.json` |
 
-The porter automates steps 1–5 of the manual guide below. See `aura-frog/scripts/PORT_USAGE.md` for details. It does **not** port the hook layer (step 2) — that remains a per-tool engineering task.
+The porter automates steps 1–5 of the manual guide below. See `archon-os/scripts/PORT_USAGE.md` for details. It does **not** port the hook layer (step 2) — that remains a per-tool engineering task.
 
 ## Porting Guide for Contributors
 
 If you want to adapt Aura Frog for your tool (or extend the porter to a new target):
 
-1. **Copy the universal layer as-is:** `aura-frog/rules/`, `aura-frog/skills/`, `aura-frog/agents/`, `aura-frog/commands/` — or run the porter above
-2. **Rewrite `aura-frog/hooks/`** in your tool's extension language (CommonJS, Python, Lua, etc.)
+1. **Copy the universal layer as-is:** `archon-os/rules/`, `archon-os/skills/`, `archon-os/agents/`, `archon-os/commands/` — or run the porter above
+2. **Rewrite `archon-os/hooks/`** in your tool's extension language (CommonJS, Python, Lua, etc.)
 3. **Map event names** per the table above — each Aura Frog hook script maps to one or more of your tool's events
 4. **Adjust paths:** Claude Code convention `.claude/logs/runs/` becomes `.cursor/runs/` or whatever your tool uses
 5. **Translate `.mcp.json`** to your tool's MCP config format (most accept the same JSON schema)

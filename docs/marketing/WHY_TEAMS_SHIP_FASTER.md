@@ -137,7 +137,7 @@ Why we hard-code certain models:
 - Starting on **Sonnet** → everything runs ≤ sonnet (haiku calls still haiku). No Opus unless you escalate the session.
 - Want everything on one model? Set `CLAUDE_CODE_SUBAGENT_MODEL=opus` (env var at top of resolution order) — overrides every frontmatter declaration.
 
-**Not what you want?** Edit the `model:` field in `aura-frog/agents/<name>.md` frontmatter. Remove the line to inherit session model. Change to `opus`/`sonnet`/`haiku` to lock. See the Frontmatter Maintenance Rule in `.claude/CLAUDE.md`.
+**Not what you want?** Edit the `model:` field in `archon-os/agents/<name>.md` frontmatter. Remove the line to inherit session model. Change to `opus`/`sonnet`/`haiku` to lock. See the Frontmatter Maintenance Rule in `.claude/CLAUDE.md`.
 
 ### 3. Complex Features Get Debated Before Built
 

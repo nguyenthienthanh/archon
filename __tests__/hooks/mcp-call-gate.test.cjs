@@ -1,5 +1,5 @@
 /**
- * Tests for aura-frog/hooks/mcp-call-gate.cjs
+ * Tests for archon-os/hooks/mcp-call-gate.cjs
  * Pure-function tests via require()-from-source (module is require-safe:
  * the imperative gate body only runs under `require.main === module`).
  *
@@ -18,7 +18,7 @@ const {
   computeUsage,
   SESSION_WINDOW_MS,
   DEFAULT_LIMITS,
-} = require('../../aura-frog/hooks/mcp-call-gate.cjs');
+} = require('../../archon-os/hooks/mcp-call-gate.cjs');
 
 describe('mcp-call-gate — tool name resolution (P0-1 core)', () => {
   it('resolves the tool name from the stdin payload object', () => {
@@ -62,7 +62,7 @@ describe('mcp-call-gate — parseMcpToolName', () => {
     expect(parseMcpToolName('mcp__figma__get_file')).toEqual({ server: 'figma', method: 'get_file' });
   });
   it('parses plugin-prefixed form', () => {
-    expect(parseMcpToolName('mcp__plugin_aura-frog_slack__post_message'))
+    expect(parseMcpToolName('mcp__plugin_archon-os_slack__post_message'))
       .toEqual({ server: 'slack', method: 'post_message' });
   });
   it('returns null for non-mcp / malformed', () => {

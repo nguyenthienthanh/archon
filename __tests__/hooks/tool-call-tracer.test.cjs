@@ -1,5 +1,5 @@
 /**
- * Tests for aura-frog/hooks/tool-call-tracer.cjs
+ * Tests for archon-os/hooks/tool-call-tracer.cjs
  *
  * The whole tracer used to run at module scope with process.exit() on require.
  * Restructured into a main() (FEAT-007 / issue #5), exposing the pure helpers.
@@ -24,7 +24,7 @@ const {
   hashFileBounded,
   hash,
   extractReadPath,
-} = require('../../aura-frog/hooks/tool-call-tracer.cjs');
+} = require('../../archon-os/hooks/tool-call-tracer.cjs');
 
 let dir;
 beforeEach(() => { dir = fs.mkdtempSync(path.join(os.tmpdir(), 'tct-')); });

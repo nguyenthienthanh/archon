@@ -21,8 +21,8 @@ Each sample contains the deliverables from a real workflow run:
 
 ```bash
 # Install Aura Frog
-/plugin marketplace add nguyenthienthanh/aura-frog
-/plugin install aura-frog@aurafrog
+/plugin marketplace add nguyenthienthanh/archon
+/plugin install archon-os@archon
 
 # Run a workflow
 workflow:start "Your task here"

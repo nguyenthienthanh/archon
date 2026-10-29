@@ -3,8 +3,8 @@
  * FEAT-007 / issue #5: security-critical-warn and commit-attribution.
  */
 
-const { TIERS, classifyTier } = require('../../aura-frog/hooks/security-critical-warn.cjs');
-const { needsAttributionWarning } = require('../../aura-frog/hooks/commit-attribution.cjs');
+const { TIERS, classifyTier } = require('../../archon-os/hooks/security-critical-warn.cjs');
+const { needsAttributionWarning } = require('../../archon-os/hooks/commit-attribution.cjs');
 
 describe('security-critical-warn — classifyTier', () => {
   it.each([

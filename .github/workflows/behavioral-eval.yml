@@ -48,16 +48,16 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
           cd /tmp/cc-plugin-eval
-          npx cc-plugin-eval run -p $GITHUB_WORKSPACE/aura-frog --dry-run \
+          npx cc-plugin-eval run -p $GITHUB_WORKSPACE/archon-os --dry-run \
             || echo "eval CLI surface drifted upstream — see workflow comment"
 
       - name: Check regression against baseline
         continue-on-error: true
         run: |
           if [ -f eval-results.json ]; then
-            node aura-frog/scripts/ci/check-eval-regression.cjs \
+            node archon-os/scripts/ci/check-eval-regression.cjs \
               --current eval-results.json \
-              --baseline aura-frog/eval-baseline.json \
+              --baseline archon-os/eval-baseline.json \
               --threshold 0.85 \
               --max-drop 0.10
           else

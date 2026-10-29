@@ -1,5 +1,5 @@
 /**
- * Tests for aura-frog/hooks/security-scan.cjs
+ * Tests for archon-os/hooks/security-scan.cjs
  * Pure-function tests via require()-from-source.
  */
 
@@ -8,7 +8,7 @@ const {
   SCANNABLE,
   scanContent,
   isScannable,
-} = require('../../aura-frog/hooks/security-scan.cjs');
+} = require('../../archon-os/hooks/security-scan.cjs');
 
 describe('security-scan', () => {
   describe('isScannable', () => {

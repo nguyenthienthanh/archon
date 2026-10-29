@@ -1,2 +1,2 @@
 <!-- Archon OS Root Instruction Bridge -->
-@aura-frog/AGENTS.md
+@archon-os/AGENTS.md

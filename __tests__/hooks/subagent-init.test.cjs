@@ -1,15 +1,15 @@
 /**
- * Tests for aura-frog/hooks/subagent-init.cjs
+ * Tests for archon-os/hooks/subagent-init.cjs
  *
  * saveSessionState (writes real state) and trackAgentUsage (reads fd 0, which
  * would block or throw under a test runner) are not exported.
  */
 
-const { loadSessionState, detectPhase, getProjectName } = require('../../aura-frog/hooks/subagent-init.cjs');
+const { loadSessionState, detectPhase, getProjectName } = require('../../archon-os/hooks/subagent-init.cjs');
 
 describe('subagent-init', () => {
   it('does not export the state writer or the stdin reader', () => {
-    const api = require('../../aura-frog/hooks/subagent-init.cjs');
+    const api = require('../../archon-os/hooks/subagent-init.cjs');
     expect(api.saveSessionState).toBeUndefined();
     expect(api.trackAgentUsage).toBeUndefined();
   });

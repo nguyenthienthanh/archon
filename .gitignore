@@ -5,20 +5,20 @@ __MACOSX/
 **/__MACOSX/
 
 # Local configuration files
-aura-frog/.env
-aura-frog/.envrc
-aura-frog/.envrc.local
-aura-frog/*.env
-aura-frog/settings.local.json
-aura-frog/ccpm-config.yaml
-aura-frog/active-workflow.txt
+archon-os/.env
+archon-os/.envrc
+archon-os/.envrc.local
+archon-os/*.env
+archon-os/settings.local.json
+archon-os/ccpm-config.yaml
+archon-os/active-workflow.txt
 
 # Workflow execution data
 # Ignore all files in logs/ but keep folder structure (.gitkeep files)
-aura-frog/logs/**/*
-!aura-frog/logs/.gitkeep
-!aura-frog/logs/**/.gitkeep
-aura-frog/contexts/
+archon-os/logs/**/*
+!archon-os/logs/.gitkeep
+!archon-os/logs/**/.gitkeep
+archon-os/contexts/
 
 # IDE
 .vscode/
@@ -34,7 +34,7 @@ aura-frog/contexts/
 *~
 
 # Archive
-aura-frog/archive/
+archon-os/archive/
 .claude
 .envrc
 

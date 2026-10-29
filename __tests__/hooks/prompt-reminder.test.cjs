@@ -1,9 +1,9 @@
 /**
- * Tests for aura-frog/hooks/prompt-reminder.cjs
+ * Tests for archon-os/hooks/prompt-reminder.cjs
  * Pure-function tests via require()-from-source (no re-declaration).
  */
 
-jest.mock('../../aura-frog/hooks/lib/af-config-utils.cjs', () => ({
+jest.mock('../../archon-os/hooks/lib/af-config-utils.cjs', () => ({
   readSessionState: jest.fn(() => ({})),
 }));
 
@@ -13,9 +13,9 @@ const { spawnSync } = require('node:child_process');
 const {
   needsTddReminder,
   needsApprovalReminder,
-} = require('../../aura-frog/hooks/prompt-reminder.cjs');
+} = require('../../archon-os/hooks/prompt-reminder.cjs');
 
-const HOOK = path.join(__dirname, '..', '..', 'aura-frog', 'hooks', 'prompt-reminder.cjs');
+const HOOK = path.join(__dirname, '..', '..', 'archon-os', 'hooks', 'prompt-reminder.cjs');
 
 describe('prompt-reminder', () => {
   describe('needsTddReminder', () => {

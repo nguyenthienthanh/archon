@@ -1,9 +1,9 @@
 /**
- * Tests for aura-frog/hooks/smart-learn.cjs
+ * Tests for archon-os/hooks/smart-learn.cjs
  * Pure-function tests via require()-from-source.
  */
 
-jest.mock('../../aura-frog/hooks/lib/af-learning.cjs', () => ({
+jest.mock('../../archon-os/hooks/lib/af-learning.cjs', () => ({
   recordPattern: jest.fn(),
   isLearningEnabled: jest.fn(() => true),
   isLocalMode: jest.fn(() => true),
@@ -12,7 +12,7 @@ jest.mock('../../aura-frog/hooks/lib/af-learning.cjs', () => ({
 const {
   detectCodePatterns,
   extractBashPattern,
-} = require('../../aura-frog/hooks/smart-learn.cjs');
+} = require('../../archon-os/hooks/smart-learn.cjs');
 
 describe('smart-learn', () => {
   describe('detectCodePatterns', () => {

@@ -10,7 +10,7 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 
-const { readJsonlTail, DEFAULT_MAX_BYTES } = require('../../../aura-frog/hooks/lib/jsonl-tail.cjs');
+const { readJsonlTail, DEFAULT_MAX_BYTES } = require('../../../archon-os/hooks/lib/jsonl-tail.cjs');
 
 describe('jsonl-tail — readJsonlTail', () => {
   let dir;

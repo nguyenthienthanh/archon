@@ -5,7 +5,7 @@
  * the stdin payload; the per-tool code/command field is extracted at call sites.
  */
 
-const { resolveToolContext } = require('../../aura-frog/hooks/smart-learn.cjs');
+const { resolveToolContext } = require('../../archon-os/hooks/smart-learn.cjs');
 
 describe('smart-learn.resolveToolContext', () => {
   it('reads tool_name, tool_input, tool_response from stdin', () => {

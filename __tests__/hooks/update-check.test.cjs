@@ -1,5 +1,5 @@
 /**
- * Tests for aura-frog/hooks/update-check.cjs
+ * Tests for archon-os/hooks/update-check.cjs
  *
  * checkForUpdate (network) and writeCache (writes the real cache) are not exercised.
  */
@@ -9,7 +9,7 @@ const {
   readCache,
   shouldCheck,
   compareVersions,
-} = require('../../aura-frog/hooks/update-check.cjs');
+} = require('../../archon-os/hooks/update-check.cjs');
 
 describe('update-check — compareVersions', () => {
   describe('numeric core', () => {
@@ -90,7 +90,7 @@ describe('update-check — environment readers', () => {
 
   it('getCurrentVersion reads the real plugin.json when pointed at it', () => {
     const saved = process.env.CLAUDE_PLUGIN_ROOT;
-    process.env.CLAUDE_PLUGIN_ROOT = require('path').join(process.cwd(), 'aura-frog');
+    process.env.CLAUDE_PLUGIN_ROOT = require('path').join(process.cwd(), 'archon-os');
     try {
       expect(getCurrentVersion()).toMatch(/^\d+\.\d+\.\d+/);
     } finally {

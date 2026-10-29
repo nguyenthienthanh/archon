@@ -15,7 +15,7 @@ audience: power-user
 
 **Aura Frog uses TWO files working together:**
 1. **Project `.claude/CLAUDE.md`** - Lightweight loader (tells Claude to read plugin)
-2. **Plugin `aura-frog/CLAUDE.md`** - Complete Aura Frog system instructions
+2. **Plugin `archon-os/CLAUDE.md`** - Complete Aura Frog system instructions
 
 **Why Both Files?**
 - ✅ Claude Code ONLY auto-loads project `.claude/CLAUDE.md` (not plugin)
@@ -65,7 +65,7 @@ Aura Frog uses a **dual-file loader + project context** architecture:
 
 **Plugin CLAUDE.md (System):**
 ```
-~/.claude/plugins/marketplaces/aurafrog/aura-frog/CLAUDE.md
+~/.claude/plugins/marketplaces/archon/archon-os/CLAUDE.md
 ```
 - Contains ALL system instructions (~600 lines)
 - Single source of truth
@@ -164,10 +164,10 @@ Update when changing core Aura Frog behavior:
 - Adding new features
 
 **How:**
-1. Update `aura-frog/CLAUDE.md` in repository
+1. Update `archon-os/CLAUDE.md` in repository
 2. Bump version: `./scripts/sync-version.sh X.Y.Z`
 3. Update CHANGELOG.md
-4. Users update via: `/plugin update aura-frog@aurafrog`
+4. Users update via: `/plugin update archon-os@archon`
 
 ### When to Update Project Context
 
@@ -203,7 +203,7 @@ Run `project:regen` when:
 **Solution:**
 ```bash
 /plugin list  # Verify installation
-/plugin install aura-frog@aurafrog  # Install if missing
+/plugin install archon-os@archon  # Install if missing
 ```
 
 ### Issue: "Project context not loading"
@@ -257,10 +257,10 @@ project:init
 
 ## Related Documentation
 
-- **Plugin CLAUDE.md:** `../../aura-frog/CLAUDE.md`
+- **Plugin CLAUDE.md:** `../../archon-os/CLAUDE.md`
 - **Project Context Structure:** See `project:init` command
 - **Getting Started:** [GET_STARTED.md](../getting-started/GET_STARTED.md)
-- **Project Initialization:** `../../aura-frog/commands/project/init.md`
+- **Project Initialization:** `../../archon-os/commands/project/init.md`
 
 ---
 

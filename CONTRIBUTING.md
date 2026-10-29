@@ -2,17 +2,17 @@
 
 <img alt="The Archon OS owl watching a plan tree" src="assets/brand/mascot.svg" width="520">
 
-# Contributing to Aura Frog
+# Contributing to Archon OS
 
 ### A Plugin for [Claude Code](https://docs.anthropic.com/en/docs/claude-code)
 
-> **Code with main character energy** ✨
+> **Planning-first AI engineering** — plans that survive a session reset
 
 </div>
 
 ---
 
-Thank you for your interest in contributing to Aura Frog! This is a plugin for **[Claude Code](https://docs.anthropic.com/en/docs/claude-code)** (Anthropic's official CLI for Claude). This guide will help you get started.
+Thank you for your interest in contributing to Archon OS! This is a plugin for **[Claude Code](https://docs.anthropic.com/en/docs/claude-code)** (Anthropic's official CLI for Claude). This guide will help you get started.
 
 ---
 
@@ -51,8 +51,8 @@ This project follows the [Contributor Covenant](https://www.contributor-covenant
 ```bash
 # Fork the repository on GitHub
 # Then clone your fork
-git clone https://github.com/YOUR-USERNAME/aura-frog.git
-cd aura-frog
+git clone https://github.com/YOUR-USERNAME/archon.git
+cd archon
 ```
 
 ---
@@ -63,16 +63,16 @@ cd aura-frog
 
 ```bash
 # In Claude Code, add your local repository as a marketplace
-/plugin marketplace add /path/to/your/aura-frog
+/plugin marketplace add /path/to/your/archon
 
 # Install from your local marketplace
-/plugin install aura-frog@local-dev
+/plugin install archon-os@local-dev
 ```
 
 ### 2. Create Local Settings
 
 ```bash
-cd aura-frog
+cd archon-os
 cp settings.example.json settings.local.json
 ```
 
@@ -88,26 +88,36 @@ cp .envrc.template .envrc
 ## Project Structure
 
 ```
-aura-frog/                           # Repository root
-├── aura-frog/                       # Main plugin directory
-│   ├── CLAUDE.md                    # Core AI instructions
-│   ├── .mcp.json                    # Bundled MCP servers config (6 servers, all enabled)
-│   ├── agents/                      # 15 specialized agents
-│   ├── commands/                    # 24 commands (core /run /check /design /project /af /help + /archon-os:* hierarchical-planning suite)
-│   ├── skills/                      # 60 skills (9 auto-invoke + 51 reference)
-│   ├── rules/                       # 72 quality rules (22 core + 20 agent + 30 workflow)
-│   ├── hooks/                       # 51 lifecycle hooks (.cjs scripts)
+<repo root>
+├── archon-os/                       # Main plugin directory
+│   ├── AGENTS.md                    # Canonical AI instructions
+│   ├── CLAUDE.md                    # Legacy bridge → @AGENTS.md
+│   ├── .mcp.json                    # Bundled MCP servers config
+│   ├── stats.json                   # Generated component counts (single source)
+│   ├── agents/                      # Specialized agent definitions
+│   ├── commands/                    # Slash commands (/run /check /design /project /archon /help + /archon-os:* planning suite)
+│   ├── skills/                      # Skills (auto-invoke + on-demand reference)
+│   ├── rules/                       # Quality rules (core + agent + workflow)
+│   ├── hooks/                       # Lifecycle hooks (.cjs scripts)
 │   ├── docs/                        # AI reference docs + phase guides
 │   ├── templates/                   # Document templates
-│   ├── scripts/                     # Bash + Node integration scripts (CI, plans, preflight, workflow, security)
+│   ├── scripts/                     # Bash + Node scripts (CI, plans, preflight, workflow, security)
 │   └── project-contexts/            # Project templates
-├── assets/                          # Logo and images
-├── scripts/                         # Development scripts
+├── __tests__/                       # Jest suites for hooks + scripts
+├── assets/brand/                    # Brand marks (SVG sources + derived PNG)
+├── docs/                            # Human docs (architecture, guides, ADRs, reference)
+├── scripts/                         # Repo-level scripts
 │   ├── af                           # CLI wrapper
+│   ├── audit/                       # Reference-integrity + portability gates
 │   └── sync-version.sh              # Version synchronization
 ├── CONTRIBUTING.md                  # This file
 └── README.md                        # Project overview
 ```
+
+**Component counts** are not written down here on purpose. Run
+`archon-os/scripts/ci/generate-stats.sh` and read `archon-os/stats.json`;
+`archon-os/scripts/ci/validate-readme-counts.sh` is the gate that keeps the
+README honest about them.
 
 ---
 
@@ -179,16 +189,19 @@ git commit -am "chore: Bump version to 1.0.0"
 
 ### Files with Version Numbers
 
-The sync script updates:
-- `aura-frog/.claude-plugin/plugin.json`
-- `aura-frog/CLAUDE.md`
-- `aura-frog/GET_STARTED.md`
-- `aura-frog/QUICKSTART.md`
-- `README.md`
+The sync script updates (the authoritative list is `MD_FILES` / `JSON_FILES` /
+`YAML_FILES` in `scripts/sync-version.sh`):
+- `archon-os/.claude-plugin/plugin.json`
+- `.claude-plugin/marketplace.json`
+- `archon-os/CLAUDE.md` — the canonical-instructions comment
+- `README.md` — nav line and the sample `/af status` output
+- `archon-os/ccpm-config.yaml` — only if you generated one locally (gitignored)
 
 **Manual Update:**
-- `aura-frog/CHANGELOG.md` - Add release notes
-- `aura-frog/agents/README.md`, `aura-frog/skills/README.md`, `aura-frog/commands/README.md`, etc. - Update version footers
+- `docs/reference/CHANGELOG.md` — add release notes
+
+> Version footers were removed from the component READMEs in v2.1.0+, so there
+> is nothing to bump in `agents/README.md`, `skills/README.md` and friends.
 
 ---
 
@@ -220,16 +233,16 @@ The sync script updates:
    - Setup guides, integration guides, troubleshooting
    - Organized into: getting-started, architecture, guides, operations, reference
 
-2. **AI Documentation** (`aura-frog/docs/`)
+2. **AI Documentation** (`archon-os/docs/`)
    - Compact TOON-formatted references for Claude
    - Phase definitions
 
-3. **Agent Documentation** (`aura-frog/agents/`)
+3. **Agent Documentation** (`archon-os/agents/`)
    - Agent capabilities
    - Configuration
    - Examples
 
-4. **Command Documentation** (`aura-frog/commands/`)
+4. **Command Documentation** (`archon-os/commands/`)
    - Command usage
    - Parameters
    - Examples
@@ -237,7 +250,7 @@ The sync script updates:
 ### Updating Documentation
 
 When adding features:
-1. Update relevant guide in `docs/` (human docs) or `aura-frog/docs/` (AI refs)
+1. Update relevant guide in `docs/` (human docs) or `archon-os/docs/` (AI refs)
 2. Update `README.md` if user-facing
 3. Add examples to appropriate files
 4. Update `docs/reference/CHANGELOG.md`
@@ -257,7 +270,7 @@ When adding features:
 **Test Checklist:**
 ```bash
 # 1. Plugin installation
-/plugin install aura-frog@local-dev
+/plugin install archon-os@local-dev
 
 # 2. Project initialization
 cd ~/test-project
@@ -275,7 +288,7 @@ mcp:status
 
 ### Integration Testing
 
-Aura Frog uses bundled MCP servers for integrations (JIRA, Figma, Confluence, Slack).
+Archon OS uses bundled MCP servers for integrations (JIRA, Figma, Confluence, Slack).
 
 **Testing MCP Integrations:**
 
@@ -311,7 +324,7 @@ Every PR that touches `skills/`, `agents/`, `commands/`, or `rules/` automatical
 
 - Auto-invoke skills only (the 5 skills with `autoInvoke: true`)
 - 5 scenarios per skill, auto-generated for diversity
-- Compared against `aura-frog/eval-baseline.json`
+- Compared against `archon-os/eval-baseline.json`
 
 ### Thresholds
 
@@ -324,18 +337,18 @@ CI fails if either threshold breaks. If that happens, check the `eval-results.js
 
 ```bash
 # From repo root, after cc-plugin-eval is installed (see EVAL_SETUP.md)
-npx cc-plugin-eval run -p ./aura-frog \
+npx cc-plugin-eval run -p ./archon-os \
   --components skills --filter "autoInvoke:true" \
   --output eval-results.json
 
-node aura-frog/scripts/ci/check-eval-regression.cjs \
+node archon-os/scripts/ci/check-eval-regression.cjs \
   --current eval-results.json \
-  --baseline aura-frog/eval-baseline.json
+  --baseline archon-os/eval-baseline.json
 ```
 
 ### Updating the baseline
 
-Regenerate `aura-frog/eval-baseline.json` when:
+Regenerate `archon-os/eval-baseline.json` when:
 - Adding a new auto-invoke skill
 - Substantially rewriting a skill description in a way that improves accuracy
 
@@ -464,7 +477,7 @@ git push origin main --tags
 
 **Questions?**
 - 📖 Read the [documentation](docs/README.md)
-- 🐛 Check [existing issues](https://github.com/nguyenthienthanh/aura-frog/issues)
+- 🐛 Check [existing issues](https://github.com/nguyenthienthanh/archon/issues)
 - 💬 Open a new issue for discussion
 
 **Found a Bug?**
@@ -494,6 +507,6 @@ By contributing, you agree that your contributions will be licensed under the MI
 
 ---
 
-**Thank you for contributing to Aura Frog!**
+**Thank you for contributing to Archon OS!**
 
 Your contributions help make AI-powered project management better for everyone.

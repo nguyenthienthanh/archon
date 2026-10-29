@@ -17,7 +17,7 @@ const {
   findCoLocatedTraces,
   pruneStaleRunDirs,
   pruneJsonlByTimestamp,
-} = require('../../aura-frog/hooks/session-start.cjs');
+} = require('../../archon-os/hooks/session-start.cjs');
 
 const DAY = 24 * 3600 * 1000;
 const OLD_TS = new Date(Date.now() - 60 * DAY).toISOString();
@@ -314,13 +314,13 @@ describe('pruneJsonlByTimestamp — streaming rewrite', () => {
 describe('session-start — stale session state sweep', () => {
   const {
     sweepStaleSessionState,
-  } = require('../../aura-frog/hooks/session-start.cjs');
+  } = require('../../archon-os/hooks/session-start.cjs');
   const {
     SESSION_STATE_MAX_AGE_MS,
     readSessionState,
     writeSessionState,
     getSessionTempPath,
-  } = require('../../aura-frog/hooks/lib/af-config-utils.cjs');
+  } = require('../../archon-os/hooks/lib/af-config-utils.cjs');
 
   let tmp;
   const NOW = Date.now();

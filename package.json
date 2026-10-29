@@ -5,7 +5,7 @@
   "scripts": {
     "test": "jest --config jest.config.cjs",
     "test:watch": "jest --config jest.config.cjs --watch",
-    "lint": "eslint --max-warnings=121 aura-frog/hooks/"
+    "lint": "eslint --max-warnings=121 archon-os/hooks/"
   },
   "devDependencies": {
     "jest": "^29.7.0",

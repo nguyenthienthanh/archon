@@ -1,5 +1,5 @@
 /**
- * Tests for aura-frog/hooks/auto-learn.cjs
+ * Tests for archon-os/hooks/auto-learn.cjs
  * Pure-function tests via require()-from-source.
  */
 
@@ -8,7 +8,7 @@ const {
   categorizeCorrection,
   isLearnableFeedback,
   generateHash,
-} = require('../../aura-frog/hooks/auto-learn.cjs');
+} = require('../../archon-os/hooks/auto-learn.cjs');
 
 describe('auto-learn', () => {
   describe('generateHash', () => {

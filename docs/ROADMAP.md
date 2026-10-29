@@ -46,7 +46,7 @@ generated: 2026-07-09
 > ⚠️ `priority:` is written in FEAT-F's frontmatter but **no script reads it** —
 > `grep "priority:" scripts/plans/` returns nothing. It is a label for humans, not a scheduler.
 
-Counts: regenerate with `bash aura-frog/scripts/ci/generate-stats.sh`; `stats.json` is the single
+Counts: regenerate with `bash archon-os/scripts/ci/generate-stats.sh`; `stats.json` is the single
 source and `scripts/ci/validate-readme-counts.sh` is the gate. Do not hand-copy them here — a
 hand-copied count is correct until the next file is added, and when it is wrong it does not go
 red, it just goes quiet.

@@ -1,5 +1,5 @@
 /**
- * Tests for aura-frog/hooks/session-start.cjs — session cache staleness rules.
+ * Tests for archon-os/hooks/session-start.cjs — session cache staleness rules.
  *
  * cacheStaleReason is pure (every environment fact is an argument), so these run
  * without touching the real .claude/cache or the working tree's git state.
@@ -21,7 +21,7 @@ const {
   listFiles,
   pruneJsonlByTimestamp,
   emitContextStalenessBanner,
-} = require('../../aura-frog/hooks/session-start.cjs');
+} = require('../../archon-os/hooks/session-start.cjs');
 
 const TTL = 60 * 60 * 1000; // 1 hour, mirrors SESSION_CACHE_TTL
 const NOW = 1_700_000_000_000;

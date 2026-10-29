@@ -32,7 +32,7 @@ Walk-through with the example input:
 
 ### 1.1 Hook chain fires before Claude sees the prompt
 
-`UserPromptSubmit` hooks fire in the order declared in `aura-frog/hooks.json`. Each hook is a fresh Node process (~50 ms cold start). Total budget for the chain is ~250 ms.
+`UserPromptSubmit` hooks fire in the order declared in `archon-os/hooks.json`. Each hook is a fresh Node process (~50 ms cold start). Total budget for the chain is ~250 ms.
 
 ```mermaid
 sequenceDiagram
@@ -62,7 +62,7 @@ sequenceDiagram
 
 ### 1.2 Command file pulls in the orchestrator skill
 
-Claude sees `/archon-os:plan`, opens `aura-frog/commands/plan.md`, and that file's "Execution Protocol" requires reading `aura-frog/skills/plan-orchestrator/SKILL.md` in full before any routing decision.
+Claude sees `/archon-os:plan`, opens `archon-os/commands/plan.md`, and that file's "Execution Protocol" requires reading `archon-os/skills/plan-orchestrator/SKILL.md` in full before any routing decision.
 
 ```
 commands/plan.md (user-facing surface)
@@ -102,7 +102,7 @@ Stage 1 is a string compare. Stage 2 is regex. Stage 3 is the only path that cos
 
 ### 1.4 The first real agent — `strategist`
 
-`new-plan.sh` does not write the plan tree directly. It hands off to the `strategist` agent via the Agent-tool subagent mechanism. Frontmatter on `aura-frog/agents/strategist.md`:
+`new-plan.sh` does not write the plan tree directly. It hands off to the `strategist` agent via the Agent-tool subagent mechanism. Frontmatter on `archon-os/agents/strategist.md`:
 
 ```yaml
 ---
@@ -635,10 +635,10 @@ This is an explicit engineering trade-off vs. "let the agent figure it out." Aur
 
 - **Pillar overview:** [`README.md § 1 · Hierarchical Planning`](../../README.md#1--hierarchical-planning--) — the marketing-flavored summary with diagrams.
 - **Schema spec:** generated `INDEX.md` at `.claude/plans/INDEX.md` (auto-emitted by `new-plan.sh`) — canonical file layout.
-- **Skill playbook:** [`aura-frog/skills/plan-orchestrator/SKILL.md`](../../aura-frog/skills/plan-orchestrator/SKILL.md) — the 11-verb dispatcher.
-- **Plan-loader budget math:** [`aura-frog/skills/plan-loader/SKILL.md`](../../aura-frog/skills/plan-loader/SKILL.md) — how the 800-token ceiling holds.
-- **Grounding discipline rule:** [`aura-frog/rules/core/grounding-discipline.md`](../../aura-frog/rules/core/grounding-discipline.md) — the anti-hallucination contract.
-- **Memory trust policy:** [`aura-frog/rules/core/memory-trust-policy.md`](../../aura-frog/rules/core/memory-trust-policy.md) — source-ranked confidence ceilings.
-- **Failure classifier taxonomy:** [`aura-frog/skills/failure-classifier/SKILL.md`](../../aura-frog/skills/failure-classifier/SKILL.md) — F1–F6 rules.
-- **Conflict arbitration policy:** [`aura-frog/rules/workflow/conflict-arbitration-policy.md`](../../aura-frog/rules/workflow/conflict-arbitration-policy.md) — the L1–L4 decision table.
-- **Self-healing rules:** [`aura-frog/skills/self-healing-orchestrator/SKILL.md`](../../aura-frog/skills/self-healing-orchestrator/SKILL.md) — the propose-never-apply contract.
+- **Skill playbook:** [`archon-os/skills/plan-orchestrator/SKILL.md`](../../archon-os/skills/plan-orchestrator/SKILL.md) — the 11-verb dispatcher.
+- **Plan-loader budget math:** [`archon-os/skills/plan-loader/SKILL.md`](../../archon-os/skills/plan-loader/SKILL.md) — how the 800-token ceiling holds.
+- **Grounding discipline rule:** [`archon-os/rules/core/grounding-discipline.md`](../../archon-os/rules/core/grounding-discipline.md) — the anti-hallucination contract.
+- **Memory trust policy:** [`archon-os/rules/core/memory-trust-policy.md`](../../archon-os/rules/core/memory-trust-policy.md) — source-ranked confidence ceilings.
+- **Failure classifier taxonomy:** [`archon-os/skills/failure-classifier/SKILL.md`](../../archon-os/skills/failure-classifier/SKILL.md) — F1–F6 rules.
+- **Conflict arbitration policy:** [`archon-os/rules/workflow/conflict-arbitration-policy.md`](../../archon-os/rules/workflow/conflict-arbitration-policy.md) — the L1–L4 decision table.
+- **Self-healing rules:** [`archon-os/skills/self-healing-orchestrator/SKILL.md`](../../archon-os/skills/self-healing-orchestrator/SKILL.md) — the propose-never-apply contract.

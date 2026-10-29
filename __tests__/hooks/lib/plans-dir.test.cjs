@@ -15,7 +15,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const os = require('node:os');
 
-const LIB = path.join(__dirname, '..', '..', '..', 'aura-frog', 'hooks', 'lib', 'plans-dir.cjs');
+const LIB = path.join(__dirname, '..', '..', '..', 'archon-os', 'hooks', 'lib', 'plans-dir.cjs');
 
 describe('resolvePlansDir() — resolution order', () => {
     let tmpDir;
@@ -160,7 +160,7 @@ describe('no production hook hard-codes .aura/plans/', () => {
     // Regression test for the v3.7.3 sweep gap: 8 hooks were missed.
     // After the fix, every hook that referenced `.aura/plans/` must either
     // (a) be removed, or (b) route through lib/plans-dir.cjs.
-    const HOOKS_DIR = path.join(__dirname, '..', '..', '..', 'aura-frog', 'hooks');
+    const HOOKS_DIR = path.join(__dirname, '..', '..', '..', 'archon-os', 'hooks');
 
     test('no hook file constructs the path literal ".aura/plans" outside lib/ or user-facing messages', () => {
         const offenders = [];

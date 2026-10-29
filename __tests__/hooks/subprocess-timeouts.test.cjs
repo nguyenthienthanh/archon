@@ -10,7 +10,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const ROOT = path.join(__dirname, '..', '..', 'aura-frog', 'hooks');
+const ROOT = path.join(__dirname, '..', '..', 'archon-os', 'hooks');
 
 function listSources(dir) {
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap((ent) => {

@@ -12,7 +12,7 @@ const fs = require('node:fs');
 const os = require('node:os');
 const { spawnSync } = require('node:child_process');
 
-const LIB = path.join(__dirname, '..', '..', '..', 'aura-frog', 'hooks', 'lib', 'safe-stdin.cjs');
+const LIB = path.join(__dirname, '..', '..', '..', 'archon-os', 'hooks', 'lib', 'safe-stdin.cjs');
 const { readStdinSafely, parseStdinJson, readPromptFromStdin } = require(LIB);
 
 describe('readStdinSafely() — never hangs', () => {

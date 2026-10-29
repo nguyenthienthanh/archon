@@ -105,7 +105,7 @@ audience: contributor
 
 ### WS-1 — Skill `design-vision-loop` (mới) — ưu tiên cao nhất
 
-**File:** `aura-frog/skills/design-vision-loop/SKILL.md` (+ `references/critique-rubric.md`, `references/viewport-matrix.md`)
+**File:** `archon-os/skills/design-vision-loop/SKILL.md` (+ `references/critique-rubric.md`, `references/viewport-matrix.md`)
 
 **Trigger:** sau khi frontend agent build/sửa UI component/page; hoặc user yêu cầu "check UI", "làm đẹp hơn"; auto-invoke ở Phase 4 review cho UI tasks.
 
@@ -123,7 +123,7 @@ audience: contributor
 
 ### WS-2 — Nâng cấp `frontend-aesthetics` → v2 (align với Anthropic frontend-design skill)
 
-**File sửa:** `aura-frog/skills/frontend-aesthetics/SKILL.md`
+**File sửa:** `archon-os/skills/frontend-aesthetics/SKILL.md`
 
 Thay đổi (giữ house style flat/clean/1-accent hiện có làm constraint layer riêng):
 1. Thêm **two-pass process** (A4): Pass 1 = compact design plan (4–6 named hex, ≥2 type roles, layout ASCII wireframe, 1 signature element); Pass 2 = self-critique plan against brief ("nếu phần nào đọc như generic default cho mọi page tương tự → revise, nói rõ đã đổi gì và vì sao") — trước khi viết code.
@@ -152,7 +152,7 @@ Thay đổi (giữ house style flat/clean/1-accent hiện có làm constraint la
 
 ### WS-5 — Hook `design-conformance` (deterministic gate)
 
-**File:** `aura-frog/hooks/` + script `scripts/design/check-conformance.sh` — theo pattern bash hook sẵn có của plugin.
+**File:** `archon-os/hooks/` + script `scripts/design/check-conformance.sh` — theo pattern bash hook sẵn có của plugin.
 
 - Trigger: PostToolUse trên Edit/Write file match `*.tsx|*.jsx|*.vue|*.css|*.scss` trong thư mục UI.
 - Checks (grep-based, nhanh, fail-open khi thiếu dependency — bài học từ commit `9fd80cb`):

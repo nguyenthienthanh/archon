@@ -279,7 +279,7 @@ Follow these steps:
 **Solution:**
 ```
 "Please show the approval gate as defined in:
-aura-frog/rules/core/approval-gates.md
+archon-os/rules/core/approval-gates.md
 
 Format should include:
 - Phase summary

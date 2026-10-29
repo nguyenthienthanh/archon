@@ -15,7 +15,7 @@ const {
   PLAYWRIGHT_PATTERN,
   CHROME_DEVTOOLS_PATTERN,
   JEST_WORKER_PATTERN,
-} = require('../../aura-frog/hooks/playwright-reaper.cjs');
+} = require('../../archon-os/hooks/playwright-reaper.cjs');
 
 // A real orphaned playwright Chrome argv (trimmed) — the exact shape the reaper targets.
 const PW_CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome --headless '

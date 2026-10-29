@@ -37,7 +37,7 @@ called Aura Frog.
   depth on a light page and disappears entirely on a dark one.
 - **The wordmark is drawn, not set.** A wordmark that depends on the viewer
   having Futura installed renders differently for every viewer.
-- **`aura-frog/README.md` uses absolute raw URLs**, not relative paths: `assets/`
+- **`archon-os/README.md` uses absolute raw URLs**, not relative paths: `assets/`
   is not in `package.json#files`, so a relative path renders broken on npmjs.com.
 
 ## Palette

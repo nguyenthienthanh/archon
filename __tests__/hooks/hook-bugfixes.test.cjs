@@ -13,9 +13,9 @@ const os = require('os');
 const path = require('path');
 const { spawnSync } = require('child_process');
 
-const sessionState = require('../../aura-frog/hooks/lib/session-state.cjs');
-const taskTrack = require('../../aura-frog/hooks/task-track-model.cjs');
-const POST_COMPACT = path.join(process.cwd(), 'aura-frog', 'hooks', 'post-compact.cjs');
+const sessionState = require('../../archon-os/hooks/lib/session-state.cjs');
+const taskTrack = require('../../archon-os/hooks/task-track-model.cjs');
+const POST_COMPACT = path.join(process.cwd(), 'archon-os', 'hooks', 'post-compact.cjs');
 
 describe('session-state.clearSession (fs import fix)', () => {
   it('returns true when no session file exists (fs.existsSync works, not ReferenceError)', () => {
@@ -41,7 +41,7 @@ describe('task-track-model.resolveAgentFile (CLAUDE_PLUGIN_ROOT fix)', () => {
     const prev = process.env.CLAUDE_PLUGIN_ROOT;
     process.env.CLAUDE_PLUGIN_ROOT = pluginRoot;
     try {
-      // projectRoot has no aura-frog/agents — only the plugin root does.
+      // projectRoot has no archon-os/agents — only the plugin root does.
       const projectRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'proj-'));
       expect(taskTrack.resolveAgentFile('architect', projectRoot)).toBe(agentFile);
       fs.rmSync(projectRoot, { recursive: true, force: true });
@@ -52,12 +52,12 @@ describe('task-track-model.resolveAgentFile (CLAUDE_PLUGIN_ROOT fix)', () => {
     }
   });
 
-  it('still finds the agent under <projectRoot>/aura-frog/agents (dev-repo layout)', () => {
+  it('still finds the agent under <projectRoot>/archon-os/agents (dev-repo layout)', () => {
     const prev = process.env.CLAUDE_PLUGIN_ROOT;
     delete process.env.CLAUDE_PLUGIN_ROOT;
     try {
       const projectRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'proj-'));
-      const dir = path.join(projectRoot, 'aura-frog', 'agents');
+      const dir = path.join(projectRoot, 'archon-os', 'agents');
       fs.mkdirSync(dir, { recursive: true });
       const agentFile = path.join(dir, 'frontend.md');
       fs.writeFileSync(agentFile, '---\nname: frontend\n---\n');

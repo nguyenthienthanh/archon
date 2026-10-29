@@ -12,7 +12,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
-PLUGIN="$ROOT/aura-frog"
+PLUGIN="$ROOT/archon-os"
 FINDINGS=0
 
 scan_dirs=(agents commands hooks rules skills scripts templates project-contexts docs)
@@ -35,7 +35,7 @@ section "D1 region/company/personal-specific tokens"
 D1_PATTERN='philippines|malaysia|\bmanila\b|kuala lumpur|\bringgit\b|\bpeso\b|Asia/(Manila|Kuala_Lumpur)|\bFWD\b|vietlott|hk\.fwd\.com|22892[0-9]|2279[0-9][0-9]|739711739|kiyoshi|nguyenthanh\b|thien ?thanh nguyen|tuyet_mai'
 # Allowlist: the plugin's own GitHub slug is legitimate.
 hits=$(grep -rniE "$D1_PATTERN" "${include[@]}" "${scan_dirs[@]}" 2>/dev/null \
-  | grep -v 'nguyenthienthanh/aura-frog' || true)
+  | grep -v 'nguyenthienthanh/archon' || true)
 count=$( [ -n "$hits" ] && echo "$hits" | wc -l | tr -d ' ' || echo 0 )
 [ -n "$hits" ] && echo "$hits"
 report "$count" "region/company/personal tokens"

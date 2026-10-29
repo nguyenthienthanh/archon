@@ -18,11 +18,11 @@ jobs:
           echo "## Component Count Validation" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
-          AGENTS=$(ls aura-frog/agents/*.md 2>/dev/null | grep -v README | wc -l | tr -d ' ')
-          SKILLS=$(ls -d aura-frog/skills/*/SKILL.md 2>/dev/null | wc -l | tr -d ' ')
-          COMMANDS=$(find aura-frog/commands -name '*.md' ! -name 'README.md' | wc -l | tr -d ' ')
-          RULES=$(find aura-frog/rules -name '*.md' ! -name 'README.md' | wc -l | tr -d ' ')
-          HOOKS=$(ls aura-frog/hooks/*.cjs 2>/dev/null | wc -l | tr -d ' ')
+          AGENTS=$(ls archon-os/agents/*.md 2>/dev/null | grep -v README | wc -l | tr -d ' ')
+          SKILLS=$(ls -d archon-os/skills/*/SKILL.md 2>/dev/null | wc -l | tr -d ' ')
+          COMMANDS=$(find archon-os/commands -name '*.md' ! -name 'README.md' | wc -l | tr -d ' ')
+          RULES=$(find archon-os/rules -name '*.md' ! -name 'README.md' | wc -l | tr -d ' ')
+          HOOKS=$(ls archon-os/hooks/*.cjs 2>/dev/null | wc -l | tr -d ' ')
 
           echo "| Component | Count |" >> $GITHUB_STEP_SUMMARY
           echo "|-----------|-------|" >> $GITHUB_STEP_SUMMARY
@@ -33,7 +33,7 @@ jobs:
           echo "| Hooks | $HOOKS |" >> $GITHUB_STEP_SUMMARY
 
           # Verify expected counts from plugin.json
-          DESC=$(grep '"description"' aura-frog/.claude-plugin/plugin.json)
+          DESC=$(grep '"description"' archon-os/.claude-plugin/plugin.json)
 
           # plugin.json description uses "15 agents" not "15 specialized agents" — fixed in v3.7.2.
           EXPECTED_AGENTS=$(echo "$DESC" | grep -oP '\d+ agents' | grep -oP '\d+' | head -1)
@@ -73,7 +73,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
 
           PASS=true
-          for hook in aura-frog/hooks/*.cjs aura-frog/hooks/lib/*.cjs; do
+          for hook in archon-os/hooks/*.cjs archon-os/hooks/lib/*.cjs; do
             [ ! -f "$hook" ] && continue
             name=$(basename "$hook")
             if node --check "$hook" 2>/dev/null; then
@@ -89,7 +89,7 @@ jobs:
           echo "All hooks parse successfully" >> $GITHUB_STEP_SUMMARY
 
       - name: "Check hook parity (Fires: header vs hooks.json registration)"
-        run: node aura-frog/scripts/ci/validate-hook-parity.cjs
+        run: node archon-os/scripts/ci/validate-hook-parity.cjs
 
   validate-structure:
     name: Validate File Structure
@@ -116,19 +116,19 @@ jobs:
           # exist on the current tree. Routing-related deletions/renames since
           # earlier versions: router.md removed (agent-detector skill owns
           # routing); workflow-orchestrator → run-orchestrator (renamed);
-          # CHANGELOG.md lives at docs/reference/, not aura-frog/.
-          check_exists "aura-frog/.claude-plugin/plugin.json"
-          check_exists "aura-frog/CLAUDE.md"
+          # CHANGELOG.md lives at docs/reference/, not archon-os/.
+          check_exists "archon-os/.claude-plugin/plugin.json"
+          check_exists "archon-os/CLAUDE.md"
           check_exists "docs/reference/CHANGELOG.md"
-          check_exists "aura-frog/hooks/hooks.json"
-          check_exists "aura-frog/rules/core/"
-          check_exists "aura-frog/rules/agent/"
-          check_exists "aura-frog/rules/workflow/"
-          check_exists "aura-frog/agents/lead.md"
-          check_exists "aura-frog/skills/agent-detector/SKILL.md"
-          check_exists "aura-frog/skills/run-orchestrator/SKILL.md"
-          check_exists "aura-frog/skills/plan-orchestrator/SKILL.md"
-          check_exists "aura-frog/.mcp.json"
+          check_exists "archon-os/hooks/hooks.json"
+          check_exists "archon-os/rules/core/"
+          check_exists "archon-os/rules/agent/"
+          check_exists "archon-os/rules/workflow/"
+          check_exists "archon-os/agents/lead.md"
+          check_exists "archon-os/skills/agent-detector/SKILL.md"
+          check_exists "archon-os/skills/run-orchestrator/SKILL.md"
+          check_exists "archon-os/skills/plan-orchestrator/SKILL.md"
+          check_exists "archon-os/.mcp.json"
 
           [ "$PASS" = false ] && exit 1
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -144,5 +144,5 @@ jobs:
         run: |
           echo "## Performance Report" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
-          bash aura-frog/scripts/measure-performance.sh >> $GITHUB_STEP_SUMMARY
+          bash archon-os/scripts/measure-performance.sh >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY

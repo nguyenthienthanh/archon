@@ -325,7 +325,7 @@ You: "approve"
 Expected output:
 
 ```
-🐸 Aura Frog v3.8.0-alpha.19 — Ready
+🦉 Archon OS v4.0.0-alpha.2 — Ready
   Agents:   15 loaded (lead, architect, frontend, mobile, tester, security, devops, strategist, scanner,
                        master-planner, feature-architect, story-planner, replanner, epic-summarizer, conflict-arbiter)
   Skills:   45 available (10 auto-invoke, 35 on-demand)
@@ -378,7 +378,7 @@ Scans your codebase and creates 7 context files (framework, conventions, rules, 
 
 - **`af` CLI for health checks outside Claude Code** — `/af setup cli` or [manual symlink](docs/operations/INSTALLATION.md#cli-symlink--af-outside-claude-code).
 - **MCP tokens (Figma / Slack / Firebase / Supabase)** — `cp .envrc.template .envrc`, fill in tokens. Full template + per-token notes in [INSTALLATION.md § Environment variables](docs/operations/INSTALLATION.md#environment-variables--envrc).
-- **Skills-only mode on Codex / Gemini CLI / OpenCode** — `cp -r aura-frog/skills/* <platform-skills-dir>/`. Hooks, agent detection, subagent spawning, and MCP servers are Claude Code exclusive; everything else is portable (see [Works Across AI Coding Tools](#works-across-ai-coding-tools)).
+- **Skills-only mode on Codex / Gemini CLI / OpenCode** — `cp -r archon-os/skills/* <platform-skills-dir>/`. Hooks, agent detection, subagent spawning, and MCP servers are Claude Code exclusive; everything else is portable (see [Works Across AI Coding Tools](#works-across-ai-coding-tools)).
 
 ### Start Your First Workflow
 
@@ -472,7 +472,7 @@ Full workflow target: **≤30K tokens** across all 5 phases.
 
 ## Command Reference
 
-The top 8 commands cover every everyday workflow. Full reference + every subcommand + flag → [aura-frog/commands/README.md](aura-frog/commands/README.md).
+The top 8 commands cover every everyday workflow. Full reference + every subcommand + flag → [archon-os/commands/README.md](archon-os/commands/README.md).
 
 | Command | What it does | Subcommands / flags |
 |---|---|---|
@@ -482,7 +482,7 @@ The top 8 commands cover every everyday workflow. Full reference + every subcomm
 | **`/design`** | Design artifacts from a description. | `api` · `db` · `doc` (ADR / runbook) |
 | **`/project`** | Project context lifecycle. | `init` · `status` · `refresh` · `regen` · `env` · `sync` |
 | **`/af`** | Plugin management + learning system. | `status` · `agents` · `metrics` · `learn {status,analyze,apply,feedback}` · `setup` · `mcp` · `prompts` · `skill` |
-| **`/archon-os:heal`** / **`:mcp`** / **`:dashboard`** / **`:trace`** / **`:preflight`** / **`:reset-session`** / **`:extend`** | Safety + ops + observability + project-level extension authoring. | See [commands/README.md](aura-frog/commands/README.md) |
+| **`/archon-os:heal`** / **`:mcp`** / **`:dashboard`** / **`:trace`** / **`:preflight`** / **`:reset-session`** / **`:extend`** | Safety + ops + observability + project-level extension authoring. | See [commands/README.md](archon-os/commands/README.md) |
 | **`/help`** | Contextual help. | `/help <command>` · `/help agents` · `/help hooks` |
 
 **Context-aware bare verbs** when a `/run` is active: `approve` · `reject <reason>` · `modify <changes>` · `handoff` · `status` · `progress` · `rollback` · `stop`. No slash prefix needed.
@@ -576,7 +576,7 @@ cat .claude/settings.json   # Should reference plugin hooks
 
 If still nothing, check plugin.json path:
 ```bash
-ls ~/.claude/plugins/marketplaces/aurafrog/aura-frog/hooks/hooks.json
+ls ~/.claude/plugins/marketplaces/archon/archon-os/hooks/hooks.json
 ```
 </details>
 
@@ -609,7 +609,7 @@ This overrides every agent/skill `model:` declaration. See [Per-Agent Model Over
 /run worktree: <task>    # Automatically creates isolated worktree + runs there
 ```
 
-Each worktree has its own state in `.claude/logs/runs/<id>/`. See [Git skill](aura-frog/skills/git/SKILL.md) (worktree isolation section).
+Each worktree has its own state in `.claude/logs/runs/<id>/`. See [Git skill](archon-os/skills/git/SKILL.md) (worktree isolation section).
 
 For full multi-agent parallel work, enable Agent Teams:
 ```bash
@@ -630,9 +630,9 @@ AF_PROMPT_LOGGING=false      # Skip prompt metadata logging
 AF_LEARNING_ENABLED=false    # Skip all learning hooks
 ```
 
-Or disable at the source by editing `aura-frog/hooks/hooks.json` (comment out the matcher).
+Or disable at the source by editing `archon-os/hooks/hooks.json` (comment out the matcher).
 
-Full hook list: [hooks/README.md](aura-frog/hooks/README.md).
+Full hook list: [hooks/README.md](archon-os/hooks/README.md).
 </details>
 
 More issues: [TROUBLESHOOTING.md](docs/operations/TROUBLESHOOTING.md).
@@ -720,11 +720,11 @@ Use this checklist:
 | **All Documentation** | [docs/README.md](docs/README.md) |
 | **Getting Started** | [GET_STARTED.md](docs/getting-started/GET_STARTED.md) |
 | **First Workflow Tutorial** | [FIRST_WORKFLOW_TUTORIAL.md](docs/getting-started/FIRST_WORKFLOW_TUTORIAL.md) |
-| **All Commands (24)** | [commands/README.md](aura-frog/commands/README.md) |
-| **All Skills (45)** | [skills/README.md](aura-frog/skills/README.md) |
+| **All Commands (24)** | [commands/README.md](archon-os/commands/README.md) |
+| **All Skills (45)** | [skills/README.md](archon-os/skills/README.md) |
 | **Agent Teams Guide** | [AGENT_TEAMS_GUIDE.md](docs/guides/AGENT_TEAMS_GUIDE.md) |
 | **MCP Setup** | [MCP_GUIDE.md](docs/operations/MCP_GUIDE.md) |
-| **Hooks & Lifecycle** | [hooks/README.md](aura-frog/hooks/README.md) |
+| **Hooks & Lifecycle** | [hooks/README.md](archon-os/hooks/README.md) |
 | **Troubleshooting** | [TROUBLESHOOTING.md](docs/operations/TROUBLESHOOTING.md) |
 | **Changelog** | [CHANGELOG.md](docs/reference/CHANGELOG.md) |
 
@@ -737,7 +737,7 @@ Claude = Kernel          Context Window = RAM           Project Files = Disk
 Agents = Processes       5-Phase TDD = Scheduler        MCP = Device Drivers
 TOON = Compression       Approval Gates = Interrupts    Handoffs = IPC
 
-aura-frog/
+archon-os/
 ├── agents/         15 processes (auto-dispatched per task)
 ├── skills/         43 skills (10 auto-invoke + 33 on-demand)
 ├── commands/       24 commands (core /run /check /design /project /af /help + /archon-os:* hierarchical-planning suite)

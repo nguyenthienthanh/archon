@@ -1,5 +1,5 @@
 /**
- * Tests for aura-frog/hooks/phase-checkpoint.cjs
+ * Tests for archon-os/hooks/phase-checkpoint.cjs
  *
  * createCheckpoint and writeCache are NOT exported and must never be called from
  * a test: createCheckpoint runs `git add -A` + `git commit` against the real
@@ -20,14 +20,14 @@ const {
   getCacheFile,
   readCache,
   isIndexLocked,
-} = require('../../aura-frog/hooks/phase-checkpoint.cjs');
+} = require('../../archon-os/hooks/phase-checkpoint.cjs');
 
 const HOOK_SRC = fs.readFileSync(
-  path.join(__dirname, '../../aura-frog/hooks/phase-checkpoint.cjs'), 'utf8');
+  path.join(__dirname, '../../archon-os/hooks/phase-checkpoint.cjs'), 'utf8');
 
 describe('phase-checkpoint', () => {
   it('does not export the repo-mutating helpers', () => {
-    const api = require('../../aura-frog/hooks/phase-checkpoint.cjs');
+    const api = require('../../archon-os/hooks/phase-checkpoint.cjs');
     expect(api.createCheckpoint).toBeUndefined();
     expect(api.writeCache).toBeUndefined();
   });

@@ -1,5 +1,5 @@
 /**
- * Tests for aura-frog/hooks/firebase-cleanup.cjs
+ * Tests for archon-os/hooks/firebase-cleanup.cjs
  *
  * Only isFirebaseConfigured is exercised. cleanupDebugLog is deliberately NOT
  * called: it unlinks firebase-debug.log from the real process.cwd() (the path is
@@ -7,7 +7,7 @@
  * test must not delete a file out of the working repo.
  */
 
-const { isFirebaseConfigured } = require('../../aura-frog/hooks/firebase-cleanup.cjs');
+const { isFirebaseConfigured } = require('../../archon-os/hooks/firebase-cleanup.cjs');
 
 const ENV_KEYS = ['FIREBASE_TOKEN', 'GOOGLE_APPLICATION_CREDENTIALS'];
 let saved;

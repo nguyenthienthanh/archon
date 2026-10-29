@@ -3,12 +3,12 @@
 # Zero dependencies, pure bash
 # Install: af setup cli
 
-REPO="nguyenthienthanh/aura-frog"
+REPO="nguyenthienthanh/archon"
 
 # Auto-detect plugin location
 find_plugin_dir() {
   # 1. Marketplace install (most users)
-  local marketplace="$HOME/.claude/plugins/marketplaces/aurafrog/aura-frog"
+  local marketplace="$HOME/.claude/plugins/marketplaces/archon/archon-os"
   [ -d "$marketplace" ] && echo "$marketplace" && return
 
   # 2. Local repo (developers)
@@ -198,7 +198,7 @@ case "${1:-help}" in
     echo ""
     echo "Run in Claude Code:"
     echo "  /plugin marketplace add $REPO"
-    echo "  /plugin install aura-frog@aurafrog"
+    echo "  /plugin install archon-os@archon"
     echo ""
     echo "Then install the CLI:"
     echo "  af setup cli"

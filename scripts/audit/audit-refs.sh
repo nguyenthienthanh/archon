@@ -14,10 +14,10 @@
 
 set -uo pipefail
 
-# Resolve repo root from this script's location, then operate inside aura-frog/.
+# Resolve repo root from this script's location, then operate inside archon-os/.
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-cd "$REPO_ROOT/aura-frog" || { echo "FATAL: aura-frog/ not found"; exit 1; }
+cd "$REPO_ROOT/archon-os" || { echo "FATAL: archon-os/ not found"; exit 1; }
 
 fail=0
 
@@ -53,7 +53,8 @@ while IFS= read -r path; do
     echo "  DEAD: $path"
     fail=1
   fi
-done < <(grep -rhoE '(rules/[a-z]+|skills/[a-z-]+|agents/[a-z-]+)' --include="*.md" . | sort -u)
+done < <(grep -rhoE '(~/\.claude/)?(rules/[a-z]+|skills/[a-z-]+|agents/[a-z-]+)' --include="*.md" . \
+           | grep -v '^~/' | sort -u)
 
 echo "▶ Dead file references (path with an extension that does not exist)…"
 # The check above only sees narrow component/dir refs. This one catches refs
@@ -72,13 +73,13 @@ while IFS= read -r ref; do
     *NNN*|*service-name*|*-description*) continue ;;   # doc templates
   esac
   echo "$ref" | grep -qE "$ALLOW_MISSING" && continue  # intentional missing
-  # scripts/ and docs/ live at the repo root, one level above aura-frog/.
+  # scripts/ and docs/ live at the repo root, one level above archon-os/.
   if [ ! -e "$ref" ] && [ ! -e "../$ref" ]; then
     echo "  DEAD FILE: $ref"
     fail=1
   fi
-done < <(grep -rhoE '(rules|skills|agents|commands|hooks|scripts|docs)/[A-Za-z0-9_./-]+\.(md|sh|cjs|js|json|ya?ml)' \
-           --include="*.md" . | sed -E 's/[.,:;)]+$//' | sort -u)
+done < <(grep -rhoE '(~/\.claude/)?(rules|skills|agents|commands|hooks|scripts|docs)/[A-Za-z0-9_./-]+\.(md|sh|cjs|js|json|ya?ml)' \
+           --include="*.md" . | grep -v '^~/' | sed -E 's/[.,:;)]+$//' | sort -u)
 
 echo "▶ Skills missing 'user-invocable: false'…"
 for f in skills/*/SKILL.md; do

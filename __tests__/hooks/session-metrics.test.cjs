@@ -1,10 +1,10 @@
 /**
- * Tests for aura-frog/hooks/session-metrics.cjs
+ * Tests for archon-os/hooks/session-metrics.cjs
  *
  * sendWorkflowMetrics / sendAgentMetrics are not exported — they post metrics.
  */
 
-const { findActiveWorkflow, extractPatterns } = require('../../aura-frog/hooks/session-metrics.cjs');
+const { findActiveWorkflow, extractPatterns } = require('../../archon-os/hooks/session-metrics.cjs');
 
 describe('session-metrics — extractPatterns', () => {
   // Pure: builds a pattern list from (state, metrics).

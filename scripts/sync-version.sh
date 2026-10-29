@@ -2,7 +2,7 @@
 # Aura Frog Version Sync Script
 # Purpose: Synchronize version numbers across all configuration files
 #
-# SINGLE SOURCE OF TRUTH: aura-frog/.claude-plugin/plugin.json
+# SINGLE SOURCE OF TRUTH: archon-os/.claude-plugin/plugin.json
 #
 # Usage:
 #   ./scripts/sync-version.sh           # Sync all files to current version
@@ -23,14 +23,14 @@ NC='\033[0m' # No Color
 # Configuration
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
-PLUGIN_DIR="$PROJECT_ROOT/aura-frog"
+PLUGIN_DIR="$PROJECT_ROOT/archon-os"
 
 # Single source of truth
 SOURCE_FILE="$PLUGIN_DIR/.claude-plugin/plugin.json"
 
 # Version pattern (ERE, used with `sed -E` — portable across BSD and GNU sed).
 # Prerelease suffix allows dots/digits: 3.8.0-alpha.7 is this project's scheme
-# (same regex as aura-frog/scripts/release.sh).
+# (same regex as archon-os/scripts/release.sh).
 VERSION_PATTERN='[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?'
 
 # Count of files actually modified — the script FAILS if this stays 0
@@ -55,16 +55,17 @@ declare -a JSON_FILES=(
 # Only files that still carry the plugin version
 # (most files had version footers removed to avoid sync issues)
 declare -a MD_FILES=(
-  # Main plugin entry point (header + footer)
+  # Legacy bridge: carries the version in its canonical-instructions comment.
+  # (It was listed twice here; the second entry did the same substitutions over
+  # an already-substituted file.)
   "$PLUGIN_DIR/CLAUDE.md"
-  # Banner in CLAUDE.md references version
-  "$PLUGIN_DIR/CLAUDE.md"
-  # Project CLAUDE.md
-  "$PROJECT_ROOT/.claude/CLAUDE.md"
-  # Root README (badge)
+  # Root README: nav line, what's-new heading, sample `/af status` output
   "$PROJECT_ROOT/README.md"
-  # Global CLAUDE.md (user home)
-  "$HOME/.claude/CLAUDE.md"
+  # Dropped: "$PROJECT_ROOT/.claude/CLAUDE.md" — does not exist in this repo.
+  # Dropped: "$HOME/.claude/CLAUDE.md" — a release script has no business
+  # rewriting a contributor's personal config, and that file carries no version
+  # (it is a one-line @AGENTS.md pointer), so the entry only left a stray .bak
+  # in their home directory.
 )
 
 declare -a YAML_FILES=(
@@ -74,7 +75,7 @@ declare -a YAML_FILES=(
 print_header() {
   echo ""
   echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-  echo -e "📦 Aura Frog Version Sync Script"
+  echo -e "📦 Archon OS Version Sync Script"
   echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
   echo ""
 }
@@ -172,14 +173,20 @@ update_md_version() {
 
   cp "$file" "$file.bak"
 
+  # Dots are regex metacharacters; escape them before matching a literal version.
+  local cur_esc
+  cur_esc=$(printf '%s' "$CURRENT_VERSION" | sed -E 's/[.]/\\./g')
+
   # Update various version patterns in markdown
   sed_inplace "$file" \
     -e "s/\*\*Version:\*\* $VERSION_PATTERN/\*\*Version:\*\* $new_version/g" \
     -e "s/Version: $VERSION_PATTERN/Version: $new_version/g" \
-    -e "s/\*\*System:\*\* Aura Frog v$VERSION_PATTERN/\*\*System:\*\* Aura Frog v$new_version/g" \
-    -e "s/\*\*Plugin:\*\* Aura Frog v$VERSION_PATTERN/\*\*Plugin:\*\* Aura Frog v$new_version/g" \
-    -e "s/AURA FROG v$VERSION_PATTERN/AURA FROG v$new_version/g" \
-    -e "s/Aura Frog v$VERSION_PATTERN/Aura Frog v$new_version/g"
+    -e "s/\*\*System:\*\* Archon OS v$VERSION_PATTERN/\*\*System:\*\* Archon OS v$new_version/g" \
+    -e "s/\*\*Plugin:\*\* Archon OS v$VERSION_PATTERN/\*\*Plugin:\*\* Archon OS v$new_version/g" \
+    -e "s/ARCHON OS v$VERSION_PATTERN/ARCHON OS v$new_version/g" \
+    -e "s/Archon OS v$VERSION_PATTERN/Archon OS v$new_version/g" \
+    -e "s/see AGENTS\.md \(v$VERSION_PATTERN\)/see AGENTS.md (v$new_version)/g" \
+    -e "s/v$cur_esc highlights/v$new_version highlights/g"
 
   if diff -q "$file" "$file.bak" > /dev/null; then
     print_warning "No changes: $(basename "$file")"
@@ -288,7 +295,7 @@ main() {
   done
 
   # Note: Version footers were removed from most files (v2.1.0+).
-  # Only plugin.json, marketplace.json, CLAUDE.md, .claude/CLAUDE.md, and README.md carry the version now.
+  # Only plugin.json, marketplace.json, CLAUDE.md and README.md carry the version now.
 
   echo ""
   echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"

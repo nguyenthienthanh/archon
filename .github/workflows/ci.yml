@@ -18,17 +18,17 @@ jobs:
           node-version: '20'
 
       - name: Validate TOON format
-        run: bash aura-frog/scripts/ci/validate-toon.sh
+        run: bash archon-os/scripts/ci/validate-toon.sh
 
       - name: Validate config
-        run: bash aura-frog/scripts/ci/validate-config.sh
+        run: bash archon-os/scripts/ci/validate-config.sh
 
       - name: Validate counts consistency
-        run: bash aura-frog/scripts/ci/validate-counts.sh
+        run: bash archon-os/scripts/ci/validate-counts.sh
 
       - name: Check for broken markdown links
         # Scan README.md, MIGRATION_TO_V3.7.md, CONTRIBUTING.md, docs/**/*.md
-        # AND aura-frog/**/*.md. For each `](path)` link that isn't
+        # AND archon-os/**/*.md. For each `](path)` link that isn't
         # http://, https://, # (anchor), or mailto:, assert the target
         # exists either relative to the link's containing file OR relative
         # to the repo root. Strip ?query and #anchor from the path. Path
@@ -51,7 +51,7 @@ jobs:
               fi
             done < <(grep -oP '\]\((?!http|#|mailto)([^)]+)\)' "$file" 2>/dev/null | sed 's/\](//' | sed 's/)//' || true)
           done < <(
-            find aura-frog -name "*.md" -not -path "*/node_modules/*"
+            find archon-os -name "*.md" -not -path "*/node_modules/*"
             find docs -name "*.md" 2>/dev/null
             ls README.md MIGRATION_TO_V3.7.md CONTRIBUTING.md 2>/dev/null
           )
@@ -66,14 +66,14 @@ jobs:
         # (table cells, link labels, banner lines). Doesn't flag narrative
         # prose. Covers what validate-counts.sh misses (it only scans
         # plugin.json + CLAUDE.md).
-        run: bash aura-frog/scripts/ci/validate-readme-counts.sh
+        run: bash archon-os/scripts/ci/validate-readme-counts.sh
 
       - name: Validate docs syntax (no pre-v3.7 commands)
         # Blocks stale `workflow:start`, `agent:list`, `bugfix:quick`,
         # `learn:*`, `project:reload-env`, and pre-v3.7 verb forms from
         # re-entering docs/. Companion to scripts/audit/stale-cmd-check.sh
         # (broader audit). Spec: FEAT-006 STORY-0005 (v3.7.4).
-        run: bash aura-frog/scripts/ci/validate-docs-syntax.sh
+        run: bash archon-os/scripts/ci/validate-docs-syntax.sh
 
       - name: Validate doc maturity frontmatter
         # Every docs/**/*.md must have last_aligned_with + status + audience
@@ -82,7 +82,7 @@ jobs:
         # version; status=needs_review is a warning; status=archive must
         # live under docs/marketing/ or contain "pre-v" in filename.
         # Spec: FEAT-006 STORY-0007 (v3.7.4).
-        run: bash aura-frog/scripts/ci/validate-doc-maturity.sh
+        run: bash archon-os/scripts/ci/validate-doc-maturity.sh
 
   test:
     runs-on: ubuntu-latest
@@ -153,11 +153,11 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Generate stats.json
-        run: bash aura-frog/scripts/ci/generate-stats.sh
+        run: bash archon-os/scripts/ci/generate-stats.sh
 
       - name: Commit stats.json if changed
         run: |
-          cd aura-frog
+          cd archon-os
           if ! git diff --quiet stats.json 2>/dev/null; then
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
