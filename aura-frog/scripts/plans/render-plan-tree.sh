@@ -48,16 +48,6 @@ if graph_index_render "$PLANS_DIR"; then
     exit 0
 fi
 
-get_field() {
-    local file="$1"; local field="$2"
-    awk -v f="$field" '
-        /^---$/ { c++; next }
-        c == 1 && $1 == f":" {
-            sub(/^[^:]*: */, ""); sub(/^["'"'"']|["'"'"']$/, "")
-            print; exit
-        }
-    ' "$file" 2>/dev/null
-}
 
 # Status icon
 icon() {

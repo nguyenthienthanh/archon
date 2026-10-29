@@ -8,11 +8,27 @@
 #     1. Explicit positional arg (caller passed it)
 #     2. $AF_PLANS_DIR env var
 #     3. Default ".claude/plans"
+#   An explicit path may be the plans dir itself OR a project root containing
+#   .claude/plans (or legacy .aura/plans); both resolve correctly.
 #     4. Legacy fallback ".aura/plans" (if it exists and .claude/plans does not)
 #   The legacy fallback is removed in v4.0.
 # ---------------------------------------------------------------------------
 plans_dir() {
     if [ -n "${1:-}" ]; then
+        # Accept EITHER a plans dir or a project root. Sibling scripts disagree
+        # on what their positional means (new-plan.sh documents `[project-root]`,
+        # this family documents `[plans-dir]`), and passing the wrong one used to
+        # resolve to a path with no nodes — which the validator then reported as
+        # a clean tree. Resolving both shapes removes the footgun instead of
+        # relying on every caller remembering which script it is talking to.
+        if [ -d "$1/.claude/plans" ]; then
+            echo "$1/.claude/plans"
+            return 0
+        fi
+        if [ -d "$1/.aura/plans" ]; then
+            echo "$1/.aura/plans"
+            return 0
+        fi
         echo "$1"
         return 0
     fi
@@ -139,7 +155,7 @@ get_field() {
     awk -v f="$field" '
         /^---$/ { c++; next }
         c == 1 && $1 == f":" {
-            sub(/^[^:]*: */, ""); sub(/^["'"'"']|["'"'"']$/, "")
+            sub(/^[^:]*: */, ""); sub(/^["'"'"']/, ""); sub(/["'"'"']$/, "")
             print; exit
         }
     ' "$file" 2>/dev/null

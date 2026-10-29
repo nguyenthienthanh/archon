@@ -34,16 +34,6 @@ if [ ! -d "${PLANS_DIR}" ]; then
 fi
 
 # ---- helpers ----
-get_field() {
-    local file="$1"; local field="$2"
-    awk -v f="$field" '
-        /^---$/ { c++; next }
-        c == 1 && $1 == f":" {
-            sub(/^[^:]*: */, ""); sub(/^["'"'"']|["'"'"']$/, "")
-            print; exit
-        }
-    ' "$file" 2>/dev/null
-}
 
 # ---- special tokens ----
 case "${INPUT}" in
