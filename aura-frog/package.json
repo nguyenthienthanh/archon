@@ -1,6 +1,6 @@
 {
   "name": "archon-os",
-  "version": "4.0.0-alpha.1",
+  "version": "4.0.0-alpha.2",
   "description": "Archon OS \u2014 Planning-First AI Engineering Operating System for Claude Code. Hierarchical planning (T0-T4) that survives session reset, forensic reasoning traces, conflict detection, self-healing safety gates, and a 5-phase TDD workflow. 15 agents, 72 rules, 43 skills, 24 commands, 52 hooks.",
   "keywords": [
     "claude",

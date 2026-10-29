@@ -12,6 +12,135 @@ All notable changes to Aura Frog will be documented in this file.
 
 ## [Unreleased]
 
+## [4.0.0-alpha.2] - 2026-10-29 (Session memory, independent verifier, code map, flat dispatch, Archon OS brand)
+
+### Added
+
+- **Session memory — a turn index over the transcript Claude Code already writes (FEAT-B).**
+  The transcript was never lost: every turn lands in
+  `~/.claude/projects/<slug>/<session-id>.jsonl` — **3.5 MB, 1620 lines, 73 user
+  prompts** on one measured session — and compaction shrinks the *context window*
+  without touching that file. The memory was intact on disk and nothing read it
+  back. `hooks/lib/turn-index.cjs` now renders one line per turn
+  (`#NN │ hh:mm │ headline │ files │ cmds │ branch │ uuid`), refreshed at `Stop`
+  and before a compaction, injected at `SessionStart` (also the post-compaction
+  entry point, `source: "compact"`). Each line carries the turn's **uuid**, so the
+  agent reads that exact turn instead of trusting a summary. It is a **derived
+  cache** — every write rebuilds it from the transcript and a rebuild is
+  byte-identical — and it **points at** `history.jsonl` for decisions rather than
+  restating them. Live-verified: 17 turns indexed, injected payload **5,853 of the
+  10,000-character cap**. No embeddings, no vector store, no third-party key.
+- **Independent verifier — a second opinion that is not the producer's (FEAT-E).**
+  `scripts/verify-claim.cjs`, backed by two libs. `claim-scope-gate.cjs` is
+  deterministic and costs **zero model calls**: a universal quantifier backed by
+  ≤1 distinct probe is blocked, and it names the confounder it found
+  (`max_turns_limit`, `command_name_not_found`,
+  `builtin_unavailable_in_print_mode`). `verifier-verdict.cjs` runs k=3 fresh blind
+  samples, **deletes each model's self-reported confidence**, and derives
+  confidence from modal agreement; every authority branch is `min(prior, derived)`,
+  so a verdict can never be talked upward. `--aggregate` **refuses to issue a
+  verdict at all** when the grader is the producer. Measured on a 10-claim labelled
+  corpus with zero model calls: recall 2/2 `wrong_cause`, 1/1 `overgeneralization`,
+  0/1 `factual_inaccuracy`, 0/1 `unsupported_provenance` — misses reported as
+  `needs_model_arm` rather than averaged away; false-positive rate on TRUE claims
+  **0.00**. **Chain-of-Verification is kept, not replaced**: the deletion gate says
+  keep because the Haiku arm was never measured (`measurement: null`, not invented)
+  and a scan from `git ls-files` finds **21** referencing files where the spec
+  assumed 4.
+- **Code map — a startup digest that says where to look (FEAT-F).**
+  `hooks/lib/code-map.cjs` takes its population from `git ls-files`, extracts
+  imports with a comment/string/regex-aware lexical pass (zero dependencies, zero
+  native), and caches on `(path, mtime, size)`. Measured on this repo: **282 files,
+  56,720 LOC, 229 edges, 0 unresolved**; digest **1,611 chars** against the 10,000
+  cap (6.2× headroom); **190 ms cold, 130 ms warm, 70 ms** to queue a changed path.
+  Over budget it **names the tiers it dropped**. Its first real run surfaced a test
+  requiring a module that did not exist yet.
+- **`rules/workflow/three-role-dispatch.md` — flat dispatch (FEAT-G).** Departments
+  and leads are dropped for three roles: a **specialist** that owns one job and may
+  not hand it to a peer and then bless the result, an **observer** that watches and
+  neither does the work nor grades it, and an **independent verifier** that is not
+  the producer and does not share its context. `agents/lead.md` amended: **`lead`
+  loses the final verdict**, keeping coordination, observation and the approval
+  gates. Adds the two gates the spec was missing — a *"do not build this"* gate
+  routed to the existing read-only `strategist`, and a spend ceiling.
+- **`docs/adr/ADR-002` and `ADR-003`** record the dispatch and session-memory
+  decisions, which otherwise lived only in `.claude/plans/` — a **gitignored**
+  directory, and therefore invisible to anyone reading the repo.
+- **New brand (`assets/brand/`).** The mark is an owl: an *archon* was an Athenian
+  magistrate, the owl is Athena's, and it is the one that **watches** — now a
+  literal role in the dispatch model. Vector sources plus derived rasters, with
+  `build.sh` regenerating every PNG and `brand.json` holding the palette and
+  rationale.
+
+### Fixed
+
+- **CI had been red on every run since 2026-10-28**, from the v4.0.0-alpha.1
+  commit, for two reasons the commit introduced and did not check: `stats.json`
+  said 53 hooks while `README.md` said 52, failing the count gate; and the AMM
+  files pushed eslint from 121 to **123 warnings** past the `--max-warnings=121`
+  ratchet. Both resolved — counts regenerate from source, and deleting the dead
+  AMM files returns the warning count to 121.
+- **The handoff could not resume anything (FEAT-B).** Three defects, all in
+  `compact-handoff.cjs`: a hook invoked without stdin got no `transcript_path` and
+  the code treated that as *"no transcript exists"* (`recent_prompts: []`,
+  `session_id: null`); `context: {}` because every field came from an unset env var
+  and `JSON.stringify` drops `undefined`; and prompts clipped at **300 characters
+  each**, shorter than most real requests, so the handoff kept each ask's opening
+  clause and dropped the part saying what to do. Now: transcript discovery,
+  on-disk fallbacks per field, and one stated budget spent newest-first.
+- **Six plan-tooling gates reported success on bad input (FEAT-D).** `get_field`
+  stripped only the first quote (four verbatim copies, **three shadowing the
+  `_lib.sh` they had just sourced**); `validate-plan-tree.sh` exited 0 on a path
+  with no nodes; `plans_dir`'s positional meant *plans dir* to one script and
+  *project root* to another; INVARIANT 7 checked `depends_on` cycles only at
+  tier 4; `.afignore` — a token-economy **scan** list — was applied to **writes**,
+  so the plugin blocked creation of the Phase-2 RED tests it requires; and
+  checkpoint snapshots counted as plan nodes, which made `resolve-node.sh` return
+  two rows with **exit 0**, snapshot first, so a mutating caller would write into
+  history and report success.
+- **Archon Memory Manager deleted — it never ran.** `tool-output-slicer.cjs`
+  computed a virtualized output and then **discarded it**; the hook was `"async":
+  true` (and PostToolUse cannot rewrite a tool result anyway); the vault was **0
+  bytes, 0 files**; and the *installed* plugin contained neither file. Removed with
+  a 14-identifier zero-reference proof and a prefix-match guard confirming
+  `permanent-memory-loader` and `af-memory-loader` survive.
+- **453 dispatch strings still named the old plugin prefix** across 98 files. Plugin
+  agents are namespaced by `plugin.json#name`, so `aura-frog:architect` resolved to
+  nothing once the plugin became `archon-os`. `CHANGELOG.md` deliberately excluded —
+  a changelog is a historical record.
+- **Two broken images in the README that ships to npm and the marketplace.**
+  `aura-frog/README.md` pointed at `assets/logo/...` relative to `aura-frog/`, where
+  `assets/` does not exist — and `assets/` is not in `package.json#files`, so a
+  relative path could never have worked there. Now absolute raw URLs.
+- **`port-plugin.test.cjs` had been red since the v4 rebrand**, asserting the
+  literal `'aura-frog'`. It reads the name from `plugin.json`.
+- **Three stale claims in the README maturity report**, two of which said something
+  was *missing* that had shipped: `hooks/lib/hook-runtime.cjs` "doesn't exist yet"
+  (it is 699 lines and **39 hooks require it**), "Node 20/22 hangs, reduced to Node
+  18 only" (CI runs the full `['18','20','22']` matrix), and "317 tests" (the suite
+  is **1803**). Corrected inline rather than quietly deleted.
+
+### Changed
+
+- **Mission constraint relaxed from "zero runtime dependencies" to "zero NATIVE
+  dependencies."** A pure-JS, self-contained package with no transitive
+  dependencies may be taken when it buys correctness otherwise unreachable.
+- **38 MB of brand PNG removed.** Nine files, every one ≥2048px, **six with zero
+  references anywhere in the repo**, and a `favicon.png` that was 2048×2048 and
+  4.4 MB. Replaced by 248 KB of vector sources and derived rasters, including the
+  dark banner the old set never had.
+- Component counts now regenerate from source: **15 agents · 45 skills · 73 rules ·
+  24 commands · 53 hooks**.
+
+### Notes
+
+- **v4.0.0-alpha.1 shipped without a CHANGELOG entry or a git tag.** Its rebrand to
+  `archon-os` is folded into this release's history rather than reconstructed as a
+  separate entry.
+- **npm package name changes to `archon-os`.** `aura-frog` on npm stops at
+  `3.8.0-alpha.21`.
+
+
 ## [3.8.0-alpha.21] - 2026-10-23 (Host rules and skills honoured)
 
 ### Fixed
