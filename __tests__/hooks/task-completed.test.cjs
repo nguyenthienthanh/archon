@@ -1,11 +1,11 @@
 /**
- * Tests for aura-frog/hooks/task-completed.cjs — the two pure completion-gate
+ * Tests for archon-os/hooks/task-completed.cjs — the two pure completion-gate
  * predicates, made importable by FEAT-007 / issue #5. parseTaskInput (reads
  * stdin) and main (process I/O) stay unexported.
  */
 
 const { checkTddViolation, checkApprovalPending } =
-  require('../../aura-frog/hooks/task-completed.cjs');
+  require('../../archon-os/hooks/task-completed.cjs');
 
 describe('task-completed — checkTddViolation', () => {
   it.each(['5a', '5b', '5c'])(

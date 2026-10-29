@@ -5,7 +5,7 @@
 #   A. Pre-v3.7 verb syntax (workflow:start, agent:list, bugfix:quick, learn:*,
 #      project:reload-env, hooks/pre-phase.md, hooks/post-phase.md). Definitive
 #      removals — flag every occurrence.
-#   B. /archon-os:<word> references — verify <word> exists at aura-frog/commands/<word>.md
+#   B. /archon-os:<word> references — verify <word> exists at archon-os/commands/<word>.md
 #      (these are namespaced slash commands; unambiguous).
 #   C. Bare slash commands in markdown inline-code (backtick-quoted /<word>) —
 #      verify <word> exists. Restricting to backtick context avoids ~99% of path
@@ -43,7 +43,7 @@ is_exempt() {
   return 1
 }
 
-# Build canonical slash-command set from aura-frog/commands/*.md +
+# Build canonical slash-command set from archon-os/commands/*.md +
 # Claude Code built-ins (compact, clear, help, init, model, etc. — primitives
 # the runtime provides, not plugin commands).
 declare -A CANONICAL
@@ -51,7 +51,7 @@ while IFS= read -r f; do
   name="$(basename "$f" .md)"
   [ "$name" = "README" ] && continue
   CANONICAL["$name"]=1
-done < <(find aura-frog/commands -maxdepth 1 -name '*.md' 2>/dev/null)
+done < <(find archon-os/commands -maxdepth 1 -name '*.md' 2>/dev/null)
 
 # Claude Code built-in slash commands (per docs.claude.com/claude-code).
 CLAUDE_BUILTINS=(
@@ -123,7 +123,7 @@ while IFS= read -r f; do
       cmd="${cmd%%[^a-z0-9-]*}"  # truncate at first non-alphanum-dash
       [ -z "$cmd" ] && continue
       if [ -z "${CANONICAL[$cmd]:-}" ]; then
-        emit "$f" "$lineno" "/archon-os:$cmd" "command not in aura-frog/commands/"
+        emit "$f" "$lineno" "/archon-os:$cmd" "command not in archon-os/commands/"
       fi
     done < <(printf '%s\n' "$content" | grep -oE '/archon-os:[a-z][a-z0-9-]*' || true)
   done < <(grep -nE '/archon-os:[a-z]' "$f" 2>/dev/null || true)
@@ -162,11 +162,18 @@ while IFS= read -r f; do
       esac
       # Skip the namespaced form (handled in Pass B)
       case "$cmd" in
-        aura-frog) continue ;;
+        archon-os) continue ;;
+      esac
+      # Claude Code's OWN built-in commands. They are not in archon-os/commands/
+      # and never will be, so checking them against the plugin's command set
+      # reports a stale reference for a command that works fine. Docs legitimately
+      # cite these when explaining how the plugin sits in the host.
+      case "$cmd" in
+        context|reload-plugins|plugin|compact|clear|model|init|resume|cost|doctor|login|logout|config|memory|vim|terminal-setup|bug|review|pr-comments|add-dir|agents|status|export|hooks|permissions|privacy-settings|release-notes|todos|upgrade|usage) continue ;;
       esac
       # Verify against canonical
       if [ -z "${CANONICAL[$cmd]:-}" ]; then
-        emit "$f" "$lineno" "/$cmd" "bare slash-command not in aura-frog/commands/"
+        emit "$f" "$lineno" "/$cmd" "bare slash-command not in archon-os/commands/"
       fi
     done < <(printf '%s\n' "$content" | grep -oE '`[^`]+`' || true)
   done < <(grep -n '`' "$f" 2>/dev/null || true)

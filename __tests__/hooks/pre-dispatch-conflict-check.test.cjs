@@ -1,5 +1,5 @@
 /**
- * Tests for aura-frog/hooks/pre-dispatch-conflict-check.cjs
+ * Tests for archon-os/hooks/pre-dispatch-conflict-check.cjs
  *
  * The whole detection pipeline used to run at module scope with process.exit()
  * on require. It was restructured into a main() (FEAT-007 / issue #5), exposing
@@ -15,7 +15,7 @@ const {
   isPendingStatus,
   buildConflictRecord,
   findSiblings,
-} = require('../../aura-frog/hooks/pre-dispatch-conflict-check.cjs');
+} = require('../../archon-os/hooks/pre-dispatch-conflict-check.cjs');
 
 describe('pre-dispatch-conflict-check — isPendingStatus', () => {
   it.each(['planned', 'blocked', 'blocked-on-confirm'])('%s is pending', (s) => {

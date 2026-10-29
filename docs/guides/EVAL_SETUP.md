@@ -32,7 +32,7 @@ npm install && npm run build
 
 ## Aura Frog Eval Config
 
-The plugin ships `aura-frog/.eval-config.yaml` with sensible defaults:
+The plugin ships `archon-os/.eval-config.yaml` with sensible defaults:
 
 ```yaml
 execution:
@@ -62,23 +62,23 @@ Override via CLI flags when needed.
 ### Estimate cost first
 
 ```bash
-npx cc-plugin-eval run -p ./aura-frog --dry-run
+npx cc-plugin-eval run -p ./archon-os --dry-run
 ```
 
 ### Full eval
 
 ```bash
 export ANTHROPIC_API_KEY=sk-ant-...
-npx cc-plugin-eval run -p ./aura-frog --config aura-frog/.eval-config.yaml
+npx cc-plugin-eval run -p ./archon-os --config archon-os/.eval-config.yaml
 ```
 
 ### Focused eval (auto-invoke skills only — what CI runs)
 
 ```bash
-npx cc-plugin-eval run -p ./aura-frog \
+npx cc-plugin-eval run -p ./archon-os \
   --components skills \
   --filter "autoInvoke:true" \
-  --output aura-frog/eval-results.json
+  --output archon-os/eval-results.json
 ```
 
 ---
@@ -115,20 +115,20 @@ Example output shape:
 
 ## Generating the Baseline
 
-The baseline file `aura-frog/eval-baseline.json` is what CI compares against. Regenerate when:
+The baseline file `archon-os/eval-baseline.json` is what CI compares against. Regenerate when:
 
 - Adding new auto-invoke skills
 - Substantially rewriting skill descriptions
 - After a proven improvement you want to lock in
 
 ```bash
-npx cc-plugin-eval run -p ./aura-frog \
+npx cc-plugin-eval run -p ./archon-os \
   --components skills \
   --filter "autoInvoke:true" \
-  --output aura-frog/eval-baseline.json
+  --output archon-os/eval-baseline.json
 ```
 
-Commit `aura-frog/eval-baseline.json` so CI has something to compare against.
+Commit `archon-os/eval-baseline.json` so CI has something to compare against.
 
 **First baseline note:** not yet committed. First run happens after CI infrastructure is in place and an API key is configured (see below).
 
@@ -138,7 +138,7 @@ Commit `aura-frog/eval-baseline.json` so CI has something to compare against.
 
 `.github/workflows/behavioral-eval.yml` runs this eval on every PR that touches skills, agents, commands, or rules. See the workflow file for details.
 
-Regression check: `aura-frog/scripts/ci/check-eval-regression.cjs` compares current results against the baseline. Fails if:
+Regression check: `archon-os/scripts/ci/check-eval-regression.cjs` compares current results against the baseline. Fails if:
 
 - Trigger accuracy < 85% on any auto-invoke skill
 - Accuracy drops > 10% from baseline
@@ -150,9 +150,9 @@ Regression check: `aura-frog/scripts/ci/check-eval-regression.cjs` compares curr
 For contributors editing skills:
 
 ```bash
-# 1. Make changes to aura-frog/skills/*/SKILL.md
+# 1. Make changes to archon-os/skills/*/SKILL.md
 # 2. Run focused eval locally (faster than full)
-npx cc-plugin-eval run -p ./aura-frog --components skills \
+npx cc-plugin-eval run -p ./archon-os --components skills \
   --filter "name:your-skill-name"
 # 3. Check the output for trigger accuracy
 # 4. If accuracy dropped, iterate on the description

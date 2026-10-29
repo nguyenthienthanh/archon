@@ -4,9 +4,9 @@
  */
 
 const { validateStateFile, collectWarnings, STATE_PATHS } =
-  require('../../aura-frog/hooks/post-compact.cjs');
+  require('../../archon-os/hooks/post-compact.cjs');
 const { composeContextLines } =
-  require('../../aura-frog/hooks/pre-execute-load-plan-context.cjs');
+  require('../../archon-os/hooks/pre-execute-load-plan-context.cjs');
 
 describe('post-compact — validateStateFile', () => {
   // The field names below are the ones the writers actually emit: the workflow
@@ -88,7 +88,7 @@ describe('post-compact — accepts what compact-handoff actually writes', () => 
   it('collectWarnings is silent on a handoff written by saveHandoff()', () => {
     let saveHandoff;
     jest.isolateModules(() => {
-      ({ saveHandoff } = require('../../aura-frog/hooks/compact-handoff.cjs'));
+      ({ saveHandoff } = require('../../archon-os/hooks/compact-handoff.cjs'));
     });
     expect(saveHandoff()).not.toBe(false);
 
@@ -102,7 +102,7 @@ describe('post-compact — accepts what compact-handoff actually writes', () => 
   it('collectWarnings is silent on the paused workflow-state saveHandoff() writes', () => {
     let saveHandoff;
     jest.isolateModules(() => {
-      ({ saveHandoff } = require('../../aura-frog/hooks/compact-handoff.cjs'));
+      ({ saveHandoff } = require('../../archon-os/hooks/compact-handoff.cjs'));
     });
     saveHandoff();
 
@@ -148,7 +148,7 @@ describe('pre-execute-load-plan-context — composeContextLines', () => {
   });
 });
 
-const { composeBanner } = require('../../aura-frog/hooks/session-start-restore-active.cjs');
+const { composeBanner } = require('../../archon-os/hooks/session-start-restore-active.cjs');
 
 describe('session-start-restore-active — composeBanner', () => {
   it('shows a feature with its story and task', () => {

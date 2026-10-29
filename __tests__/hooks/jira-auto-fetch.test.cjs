@@ -1,5 +1,5 @@
 /**
- * Tests for aura-frog/hooks/jira-auto-fetch.cjs
+ * Tests for archon-os/hooks/jira-auto-fetch.cjs
  *
  * fetchTicket (network), writeCacheFromFetch / showEnvHintOnce (write into the
  * real repo) and safeExit (process.exit) are deliberately not exercised.
@@ -14,7 +14,7 @@ const {
   cachePath,
   cacheFresh,
   readCachedJson,
-} = require('../../aura-frog/hooks/jira-auto-fetch.cjs');
+} = require('../../archon-os/hooks/jira-auto-fetch.cjs');
 
 const ENV_KEYS = ['JIRA_BASE_URL', 'JIRA_EMAIL', 'JIRA_API_TOKEN', 'JIRA_PROJECT_PREFIXES'];
 let saved;

@@ -8,7 +8,7 @@
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
-const m = require('../../aura-frog/hooks/task-track-model.cjs');
+const m = require('../../archon-os/hooks/task-track-model.cjs');
 
 describe('parseEffortFromFrontmatter', () => {
   it('reads a valid effort tier', () => {
@@ -25,7 +25,7 @@ describe('parseEffortFromFrontmatter', () => {
 describe('processPreToolUse — model/effort resolution', () => {
   function mkAgent(model, effort) {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'tt-'));
-    const dir = path.join(root, 'aura-frog', 'agents');
+    const dir = path.join(root, 'archon-os', 'agents');
     fs.mkdirSync(dir, { recursive: true });
     const fm = ['---', 'name: architect', model ? `model: ${model}` : '', effort ? `effort: ${effort}` : '', '---', ''].filter(Boolean).join('\n');
     fs.writeFileSync(path.join(dir, 'architect.md'), fm);

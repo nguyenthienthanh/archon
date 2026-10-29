@@ -12,7 +12,7 @@
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
-const mod = require('../../aura-frog/hooks/workflow-edit-learn.cjs');
+const mod = require('../../archon-os/hooks/workflow-edit-learn.cjs');
 
 describe('workflow-edit-learn — gitShowHead injection safety (P0-2)', () => {
   it('exports gitShowHead', () => {

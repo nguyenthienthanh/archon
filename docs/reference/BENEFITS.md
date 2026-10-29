@@ -591,7 +591,7 @@ v3.7.0 ships eight composable features organized into four themes. Each pillar i
 
 **What:** Per-agent MCP allowlist via frontmatter `mcp_servers: [...]`. Audit log to `.aura/security/mcp-audit.jsonl` with secrets sanitized (Authorization headers, Bearer tokens, AWS keys, OpenAI/Anthropic keys all redacted; content >1KB truncated). Per-server rate limits in `plugin.json` — soft warn at 80%, hard block at 100%. The database MCPs (postgres, redis) are **not bundled at all** — a `"disabled": true` flag is ignored by Claude Code, so the only real off switch is absence from `.mcp.json` ([snippets to add them](../operations/MCP_GUIDE.md#optional-servers-not-bundled)). Their policies still apply the moment a project adds them: destructive operations (`DROP TABLE`, `FLUSHDB`) blocked unconditionally regardless of approval.
 
-**How applied:** `mcp-call-gate.cjs` fires on every `mcp__*` PreToolUse. Reads agent identity (currently env var; stdin-JSON migration tracked in [issue #7](https://github.com/nguyenthienthanh/aura-frog/issues/7)). Sliding-window rate limit (60s). Retention sweep on session start: entries older than `AF_AUDIT_RETENTION_DAYS` (default 30) pruned.
+**How applied:** `mcp-call-gate.cjs` fires on every `mcp__*` PreToolUse. Reads agent identity (currently env var; stdin-JSON migration tracked in [issue #7](https://github.com/nguyenthienthanh/archon/issues/7)). Sliding-window rate limit (60s). Retention sweep on session start: entries older than `AF_AUDIT_RETENTION_DAYS` (default 30) pruned.
 
 **Why you need it:** Before v3.7.0, every agent hit every MCP — frontend agent could query production DB. Now architect gets DB; frontend gets Figma + Playwright; security gets nothing (read-only on code). Compliance + forensics for free.
 

@@ -1,5 +1,5 @@
 /**
- * Tests for aura-frog/hooks/prompt-logger.cjs
+ * Tests for archon-os/hooks/prompt-logger.cjs
  * Pure-function tests via require()-from-source.
  */
 
@@ -7,7 +7,7 @@ const {
   detectIntent,
   detectComplexity,
   extractReferences,
-} = require('../../aura-frog/hooks/prompt-logger.cjs');
+} = require('../../archon-os/hooks/prompt-logger.cjs');
 
 describe('prompt-logger', () => {
   describe('detectIntent', () => {

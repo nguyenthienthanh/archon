@@ -7,7 +7,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const os = require('node:os');
 
-const SCRIPTS_DIR = path.join(__dirname, '..', '..', 'aura-frog', 'scripts', 'plans');
+const SCRIPTS_DIR = path.join(__dirname, '..', '..', 'archon-os', 'scripts', 'plans');
 
 function mktmp() {
     return fs.mkdtempSync(path.join(os.tmpdir(), 'plans-test-'));

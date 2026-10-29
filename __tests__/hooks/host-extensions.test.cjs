@@ -6,8 +6,8 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 
-const host = require('../../aura-frog/hooks/lib/host-extensions.cjs');
-const { migrate, describe: describeSkill } = require('../../aura-frog/scripts/migrate-host-skills.cjs');
+const host = require('../../archon-os/hooks/lib/host-extensions.cjs');
+const { migrate, describe: describeSkill } = require('../../archon-os/scripts/migrate-host-skills.cjs');
 
 function write(file, text) {
   fs.mkdirSync(path.dirname(file), { recursive: true });

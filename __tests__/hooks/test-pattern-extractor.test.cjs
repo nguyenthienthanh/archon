@@ -1,5 +1,5 @@
 /**
- * Tests for aura-frog/hooks/test-pattern-extractor.cjs
+ * Tests for archon-os/hooks/test-pattern-extractor.cjs
  * extractPatterns reads a real file, so each case writes a throwaway fixture.
  */
 
@@ -10,7 +10,7 @@ const path = require('path');
 const {
   findRecentTestFiles,
   extractPatterns,
-} = require('../../aura-frog/hooks/test-pattern-extractor.cjs');
+} = require('../../archon-os/hooks/test-pattern-extractor.cjs');
 
 let dir;
 beforeAll(() => { dir = fs.mkdtempSync(path.join(os.tmpdir(), 'tpe-')); });

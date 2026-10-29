@@ -14,7 +14,7 @@ const {
   localBin,
   detectTestRunner,
   acquireRunLock,
-} = require('../../aura-frog/hooks/auto-test-runner.cjs');
+} = require('../../archon-os/hooks/auto-test-runner.cjs');
 
 describe('auto-test-runner.resolveFilePath', () => {
   it('reads tool_input.file_path from stdin', () => {

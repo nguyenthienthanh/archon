@@ -1,5 +1,5 @@
 /**
- * Tests for aura-frog/hooks/scout-block.cjs
+ * Tests for archon-os/hooks/scout-block.cjs
  *
  * Imports pure functions directly from the production hook — NO re-declaration.
  * Coverage reports under `npx jest --coverage` reflect real source touched.
@@ -14,10 +14,10 @@ const {
   isAllowedBuildCommand,
   loadCustomPatterns,
   findBlockedInCommand,
-} = require('../../aura-frog/hooks/scout-block.cjs');
+} = require('../../archon-os/hooks/scout-block.cjs');
 
 const { spawnSync } = require('child_process');
-const HOOK = path.join(__dirname, '../../aura-frog/hooks/scout-block.cjs');
+const HOOK = path.join(__dirname, '../../archon-os/hooks/scout-block.cjs');
 const runHook = (toolInput, env = {}) => spawnSync('node', [HOOK], {
   input: JSON.stringify({ tool_input: toolInput }),
   env: { ...process.env, ...env },

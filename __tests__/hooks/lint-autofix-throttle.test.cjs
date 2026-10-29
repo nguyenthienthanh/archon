@@ -1,5 +1,5 @@
 /**
- * Throttling tests for aura-frog/hooks/lint-autofix.cjs
+ * Throttling tests for archon-os/hooks/lint-autofix.cjs
  *
  * The hook fires on EVERY Write|Edit and used to re-probe every linter, re-lint
  * unchanged files, and let concurrent Writes stack linter processes. These
@@ -19,7 +19,7 @@ beforeEach(() => {
   jest.resetModules();
   tmpRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'af-lint-throttle-'));
   process.env.AF_PROJECT_ROOT = tmpRoot;
-  hook = require('../../aura-frog/hooks/lint-autofix.cjs');
+  hook = require('../../archon-os/hooks/lint-autofix.cjs');
 });
 
 afterEach(() => {
@@ -138,7 +138,7 @@ describe('lint-autofix: availability cache', () => {
   it('reloads a verdict from disk in a fresh process (cold memo)', () => {
     hook.isLinterAvailable('gofmt');
     jest.resetModules();
-    const reloaded = require('../../aura-frog/hooks/lint-autofix.cjs');
+    const reloaded = require('../../archon-os/hooks/lint-autofix.cjs');
     const cacheFile = path.join(tmpRoot, '.claude', 'cache', 'lint-availability.json');
     const before = fs.statSync(cacheFile).mtimeMs;
     reloaded.isLinterAvailable('gofmt');

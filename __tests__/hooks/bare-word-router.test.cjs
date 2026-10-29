@@ -11,7 +11,7 @@ const path = require('node:path');
 const os = require('node:os');
 const { spawnSync } = require('node:child_process');
 
-const HOOK = path.join(__dirname, '..', '..', 'aura-frog', 'hooks', 'bare-word-router.cjs');
+const HOOK = path.join(__dirname, '..', '..', 'archon-os', 'hooks', 'bare-word-router.cjs');
 const { classify, PLAN_VERBS, MAX_WORDS, planActive, main, emitHint, readPrompt } = require(HOOK);
 
 describe('classify() pure function', () => {

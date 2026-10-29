@@ -9,8 +9,8 @@ const os = require('os');
 const path = require('path');
 const { spawnSync } = require('child_process');
 
-const SCAN = path.join(process.cwd(), 'aura-frog', 'hooks', 'security-scan.cjs');
-const { resolveScanPath } = require('../../aura-frog/hooks/security-scan.cjs');
+const SCAN = path.join(process.cwd(), 'archon-os', 'hooks', 'security-scan.cjs');
+const { resolveScanPath } = require('../../archon-os/hooks/security-scan.cjs');
 
 describe('security-scan.resolveScanPath', () => {
   it('reads tool_input.file_path from stdin', () => {

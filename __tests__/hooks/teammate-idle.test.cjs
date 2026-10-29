@@ -1,14 +1,14 @@
 /**
- * Tests for aura-frog/hooks/teammate-idle.cjs, thinking-boost.cjs and
+ * Tests for archon-os/hooks/teammate-idle.cjs, thinking-boost.cjs and
  * changelog-notify.cjs — the read-only halves of three small hooks made
  * importable by FEAT-007 / issue #5.
  *
  * changelog-notify.setLastSeen stays unexported: it writes the real marker file.
  */
 
-const { getTeammateName, getTeammateRole } = require('../../aura-frog/hooks/teammate-idle.cjs');
-const { readSessionState } = require('../../aura-frog/hooks/thinking-boost.cjs');
-const changelog = require('../../aura-frog/hooks/changelog-notify.cjs');
+const { getTeammateName, getTeammateRole } = require('../../archon-os/hooks/teammate-idle.cjs');
+const { readSessionState } = require('../../archon-os/hooks/thinking-boost.cjs');
+const changelog = require('../../archon-os/hooks/changelog-notify.cjs');
 
 const KEY = 'CLAUDE_TEAMMATE_NAME';
 let saved;

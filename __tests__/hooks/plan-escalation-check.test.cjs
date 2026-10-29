@@ -1,5 +1,5 @@
 /**
- * Tests for aura-frog/hooks/plan-escalation-check.cjs
+ * Tests for archon-os/hooks/plan-escalation-check.cjs
  * Pure-function tests + end-to-end stdin invocation.
  */
 
@@ -12,9 +12,9 @@ const {
   ESCALATION_THRESHOLD,
   computeWeight,
   classify,
-} = require('../../aura-frog/hooks/plan-escalation-check.cjs');
+} = require('../../archon-os/hooks/plan-escalation-check.cjs');
 
-const HOOK = path.join(__dirname, '..', '..', 'aura-frog', 'hooks', 'plan-escalation-check.cjs');
+const HOOK = path.join(__dirname, '..', '..', 'archon-os', 'hooks', 'plan-escalation-check.cjs');
 
 describe('plan-escalation-check', () => {
   describe('computeWeight', () => {

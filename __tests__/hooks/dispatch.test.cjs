@@ -16,7 +16,7 @@ const DISPATCH = path.join(
   __dirname,
   "..",
   "..",
-  "aura-frog",
+  "archon-os",
   "hooks",
   "dispatch.cjs",
 );
@@ -147,7 +147,7 @@ describe("stdin replay", () => {
       __dirname,
       "..",
       "..",
-      "aura-frog",
+      "archon-os",
       "hooks",
       "lib",
       "safe-stdin.cjs",

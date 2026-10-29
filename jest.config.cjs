@@ -1,6 +1,6 @@
 module.exports = {
   testEnvironment: 'node',
-  roots: ['<rootDir>/__tests__', '<rootDir>/aura-frog/hooks/lib/__tests__', '<rootDir>/aura-frog/scripts/__tests__'],
+  roots: ['<rootDir>/__tests__', '<rootDir>/archon-os/hooks/lib/__tests__', '<rootDir>/archon-os/scripts/__tests__'],
   testMatch: ['**/*.test.cjs'],
 
   // Worker fan-out is the plugin's main RAM lever, and it scales with the
@@ -19,9 +19,9 @@ module.exports = {
   coverageDirectory: 'coverage',
   coveragePathIgnorePatterns: ['/node_modules/', '/__tests__/'],
   collectCoverageFrom: [
-    'aura-frog/hooks/*.cjs',
-    'aura-frog/hooks/lib/*.cjs',
-    '!aura-frog/hooks/.eslintrc.cjs',
+    'archon-os/hooks/*.cjs',
+    'archon-os/hooks/lib/*.cjs',
+    '!archon-os/hooks/.eslintrc.cjs',
   ],
   // No-regression gate: each floor sits just under the CURRENT measured level,
   // so a drop fails CI while normal run-to-run jitter does not.

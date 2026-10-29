@@ -4,7 +4,7 @@
  * saw empty args and never projected anything. Now reads tool_input.
  */
 
-const { getToolArgs } = require('../../aura-frog/hooks/json-toon-projector.cjs');
+const { getToolArgs } = require('../../archon-os/hooks/json-toon-projector.cjs');
 
 describe('json-toon-projector.getToolArgs', () => {
   it('returns the stdin tool_input object', () => {

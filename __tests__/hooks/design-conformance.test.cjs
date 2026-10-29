@@ -1,5 +1,5 @@
 /**
- * Tests for aura-frog/hooks/design-conformance.cjs
+ * Tests for archon-os/hooks/design-conformance.cjs
  * Pure-function tests via require()-from-source.
  */
 
@@ -8,7 +8,7 @@ const {
   scanContent,
   isScannable,
   isTokenFile,
-} = require('../../aura-frog/hooks/design-conformance.cjs');
+} = require('../../archon-os/hooks/design-conformance.cjs');
 
 const has = (findings, cat) => findings.some((f) => f.category === cat);
 

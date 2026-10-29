@@ -9,7 +9,7 @@
  *   - the default runner set is [feedback-capture, smart-learn]
  */
 
-const { dispatch, defaultRunners } = require('../../aura-frog/hooks/learning-dispatch.cjs');
+const { dispatch, defaultRunners } = require('../../archon-os/hooks/learning-dispatch.cjs');
 
 describe('learning-dispatch.dispatch', () => {
   it('invokes every runner with the same raw input', async () => {
@@ -61,7 +61,7 @@ describe('learning-dispatch.dispatch', () => {
 
   it('default runners resolve to callable module.run functions', () => {
     // require() resolves lazily inside each thunk; assert the modules expose run().
-    expect(typeof require('../../aura-frog/hooks/feedback-capture.cjs').run).toBe('function');
-    expect(typeof require('../../aura-frog/hooks/smart-learn.cjs').run).toBe('function');
+    expect(typeof require('../../archon-os/hooks/feedback-capture.cjs').run).toBe('function');
+    expect(typeof require('../../archon-os/hooks/smart-learn.cjs').run).toBe('function');
   });
 });

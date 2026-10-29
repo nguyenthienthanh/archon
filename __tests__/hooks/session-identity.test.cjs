@@ -7,8 +7,8 @@
  */
 
 const path = require('path');
-const cfg = require('../../aura-frog/hooks/lib/af-config-utils.cjs');
-const sessionState = require('../../aura-frog/hooks/lib/session-state.cjs');
+const cfg = require('../../archon-os/hooks/lib/af-config-utils.cjs');
+const sessionState = require('../../archon-os/hooks/lib/session-state.cjs');
 
 describe('resolveSessionId (writer key) matches the reader key', () => {
   it('with AF_SESSION_ID unset, resolves to process.ppid', () => {

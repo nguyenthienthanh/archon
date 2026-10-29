@@ -1,9 +1,9 @@
 /**
- * Tests for aura-frog/hooks/scope-drift.cjs
+ * Tests for archon-os/hooks/scope-drift.cjs
  * Pure-function tests via require()-from-source.
  */
 
-jest.mock('../../aura-frog/hooks/lib/af-config-utils.cjs', () => ({
+jest.mock('../../archon-os/hooks/lib/af-config-utils.cjs', () => ({
   readSessionState: jest.fn(() => ({})),
 }));
 
@@ -12,7 +12,7 @@ const {
   calculateOverlap,
   FEATURE_TRIGGERS,
   STOPWORDS,
-} = require('../../aura-frog/hooks/scope-drift.cjs');
+} = require('../../archon-os/hooks/scope-drift.cjs');
 
 describe('scope-drift', () => {
   describe('extractKeywords', () => {

@@ -23,7 +23,7 @@ const os = require('os');
 const path = require('path');
 const { spawnSync } = require('child_process');
 
-const RENDER = path.join(process.cwd(), 'aura-frog', 'scripts', 'statusline-render.py');
+const RENDER = path.join(process.cwd(), 'archon-os', 'scripts', 'statusline-render.py');
 
 function render(payload, env = {}) {
   const res = spawnSync('python3', [RENDER], {

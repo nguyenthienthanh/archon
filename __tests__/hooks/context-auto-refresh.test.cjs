@@ -17,7 +17,7 @@ const fs   = require('node:fs');
 const os   = require('node:os');
 const path = require('node:path');
 
-const hook = require('../../aura-frog/hooks/context-auto-refresh.cjs');
+const hook = require('../../archon-os/hooks/context-auto-refresh.cjs');
 
 function mkTmp(prefix) { return fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()), prefix)); }
 function rmTmp(dir) { try { fs.rmSync(dir, { recursive: true, force: true }); } catch (_) {} }

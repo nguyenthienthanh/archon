@@ -14,14 +14,14 @@ const { spawnSync } = require('child_process');
 
 const REAL_SCRIPT = path.join(process.cwd(), 'scripts', 'audit', 'audit-refs.sh');
 
-// Build a minimal repo: a copy of audit-refs.sh + an aura-frog/ tree with no
+// Build a minimal repo: a copy of audit-refs.sh + an archon-os/ tree with no
 // rules/ or skills/ (so only the dead-file check can fail), plus a doc ref.
 function buildFixture(refTarget, createTarget) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'ar-'));
   const auditDir = path.join(root, 'scripts', 'audit');
   fs.mkdirSync(auditDir, { recursive: true });
   fs.copyFileSync(REAL_SCRIPT, path.join(auditDir, 'audit-refs.sh'));
-  const af = path.join(root, 'aura-frog');
+  const af = path.join(root, 'archon-os');
   fs.mkdirSync(path.join(af, 'docs'), { recursive: true });
   fs.writeFileSync(path.join(af, 'docs', 'note.md'), `See \`${refTarget}\` for details.\n`);
   if (createTarget) {

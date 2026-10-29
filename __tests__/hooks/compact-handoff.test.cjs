@@ -1,5 +1,5 @@
 /**
- * Tests for aura-frog/hooks/compact-handoff.cjs
+ * Tests for archon-os/hooks/compact-handoff.cjs
  *
  * Pure helpers are called in-process. Anything that writes runs the hook as a
  * subprocess with AF_PROJECT_ROOT pointed at a tmp dir, so the working repo's
@@ -8,7 +8,7 @@
 
 const {
   generateResumeContext,
-} = require('../../aura-frog/hooks/compact-handoff.cjs');
+} = require('../../archon-os/hooks/compact-handoff.cjs');
 
 const HANDOFF = {
   workflow: {
@@ -62,7 +62,7 @@ describe('compact-handoff', () => {
   });
 
   describe('slugify', () => {
-    const { slugify } = require('../../aura-frog/hooks/compact-handoff.cjs');
+    const { slugify } = require('../../archon-os/hooks/compact-handoff.cjs');
     it('strips Vietnamese diacritics and punctuation', () => {
       expect(slugify('Làm Truyện')).toBe('lam-truyen');
       expect(slugify('Đèn Ông Sao — Dán Dở!')).toBe('den-ong-sao-dan-do');
@@ -74,7 +74,7 @@ describe('compact-handoff', () => {
     const fs = require('fs');
     const os = require('os');
     const path = require('path');
-    const { sessionTitle } = require('../../aura-frog/hooks/compact-handoff.cjs');
+    const { sessionTitle } = require('../../archon-os/hooks/compact-handoff.cjs');
     it('prefers the latest custom-title, then ai-title, else null', () => {
       const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'af-title-'));
       const f = path.join(dir, 't.jsonl');
@@ -91,7 +91,7 @@ describe('compact-handoff', () => {
   });
 
   describe('shouldSaveOnStop', () => {
-    const { shouldSaveOnStop } = require('../../aura-frog/hooks/compact-handoff.cjs');
+    const { shouldSaveOnStop } = require('../../archon-os/hooks/compact-handoff.cjs');
 
     it('saves at or above the threshold', () => {
       expect(shouldSaveOnStop({ usage: 70, threshold: 70 })).toBe(true);
@@ -109,7 +109,7 @@ describe('compact-handoff', () => {
     const os = require('os');
     const path = require('path');
     const { spawnSync } = require('child_process');
-    const HOOK = path.join(__dirname, '..', '..', 'aura-frog', 'hooks', 'compact-handoff.cjs');
+    const HOOK = path.join(__dirname, '..', '..', 'archon-os', 'hooks', 'compact-handoff.cjs');
 
     let root;
     let savedEnv;
@@ -149,7 +149,7 @@ describe('compact-handoff', () => {
     });
 
     it('findActiveRun ignores completed runs', () => {
-      const { findActiveRun } = require('../../aura-frog/hooks/compact-handoff.cjs');
+      const { findActiveRun } = require('../../archon-os/hooks/compact-handoff.cjs');
       writeRun('done-run', 'completed');
       expect(findActiveRun()).toBeNull();
       writeRun('live-run', 'in_progress', { next_action: 'write RED tests' });
@@ -160,7 +160,7 @@ describe('compact-handoff', () => {
     });
 
     it('recentUserPrompts keeps real prompts and skips tool results + injected tags', () => {
-      const { recentUserPrompts } = require('../../aura-frog/hooks/compact-handoff.cjs');
+      const { recentUserPrompts } = require('../../archon-os/hooks/compact-handoff.cjs');
       const file = writeTranscript([
         { type: 'user', message: { content: 'first ask' } },
         { type: 'assistant', message: { content: [{ type: 'text', text: 'ok' }] } },
@@ -173,7 +173,7 @@ describe('compact-handoff', () => {
     });
 
     it('recentUserPrompts widens the window when the last prompt is behind lots of tool output', () => {
-      const { recentUserPrompts } = require('../../aura-frog/hooks/compact-handoff.cjs');
+      const { recentUserPrompts } = require('../../archon-os/hooks/compact-handoff.cjs');
       const noise = { type: 'assistant', message: { content: [{ type: 'text', text: 'x'.repeat(1000) }] } };
       const file = writeTranscript([
         { type: 'user', message: { content: 'the real ask' } },
@@ -184,7 +184,7 @@ describe('compact-handoff', () => {
     });
 
     it('recentUserPrompts keeps slash-command prompts that carry args', () => {
-      const { recentUserPrompts } = require('../../aura-frog/hooks/compact-handoff.cjs');
+      const { recentUserPrompts } = require('../../archon-os/hooks/compact-handoff.cjs');
       const file = writeTranscript([
         { type: 'user', message: { content: '<command-message>archon-os:run</command-message>\n<command-name>/archon-os:run</command-name>\n<command-args>fix handoff naming</command-args>' } },
         { type: 'user', message: { content: '<command-name>/clear</command-name>\n<command-args></command-args>' } },

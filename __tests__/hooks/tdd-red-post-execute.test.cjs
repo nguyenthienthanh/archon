@@ -11,8 +11,8 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 
-const tdd = require('../../aura-frog/hooks/tdd-red-failure-tracker.cjs');
-const { buildHistoryEvent } = require('../../aura-frog/hooks/post-execute-update-node.cjs');
+const tdd = require('../../archon-os/hooks/tdd-red-failure-tracker.cjs');
+const { buildHistoryEvent } = require('../../archon-os/hooks/post-execute-update-node.cjs');
 
 describe('tdd-red-failure-tracker — isTestRunner', () => {
   it.each([
@@ -60,7 +60,7 @@ describe('tdd-red-failure-tracker — buildDecisionEvent', () => {
 });
 
 describe('tdd-red-failure-tracker — shares the tracer store', () => {
-  const tracer = require('../../aura-frog/hooks/tool-call-tracer.cjs');
+  const tracer = require('../../archon-os/hooks/tool-call-tracer.cjs');
 
   let dir;
   beforeEach(() => { dir = fs.mkdtempSync(path.join(os.tmpdir(), 'tdd-')); });

@@ -26,7 +26,7 @@ The 5-phase `/run` flow and the plan tree are **not** duplicated — `rules/work
 
 | # | Problem | Evidence |
 |---|---------|----------|
-| P1 | **Auto-invoke layer rests on frontmatter the platform ignores.** 9 skills declare `autoInvoke: true` / `priority` / `triggers` — fields `docs/reference/MAINTENANCE.md` §2 itself lists as *not official*. 37 skills use non-official `triggers:` vs 23 using official `when_to_use`. Only description text actually drives invocation. Plan-context loading and trace recording are *already* enforced by real hooks (`pre-execute-load-plan-context.cjs`, `tool-call-tracer.cjs`) — the skills duplicating them are redundant. | `skills/agent-detector/SKILL.md:4`, `MAINTENANCE.md` §2, `aura-frog/CLAUDE.md` "Auto-Invoke Skills" |
+| P1 | **Auto-invoke layer rests on frontmatter the platform ignores.** 9 skills declare `autoInvoke: true` / `priority` / `triggers` — fields `docs/reference/MAINTENANCE.md` §2 itself lists as *not official*. 37 skills use non-official `triggers:` vs 23 using official `when_to_use`. Only description text actually drives invocation. Plan-context loading and trace recording are *already* enforced by real hooks (`pre-execute-load-plan-context.cjs`, `tool-call-tracer.cjs`) — the skills duplicating them are redundant. | `skills/agent-detector/SKILL.md:4`, `MAINTENANCE.md` §2, `archon-os/CLAUDE.md` "Auto-Invoke Skills" |
 | P2 | **Session/workflow state has no owner.** Phase/workflow state lives in ≥6 stores — `os.tmpdir()/af-session-{ppid}.json`, `.claude/cache/workflow-state.json`, `.claude/logs/workflows/<id>/workflow-state.json`, `active-workflow.txt` (two candidate dirs), `.claude/workflows/current-phase.txt` — and each hook resolves them in a *different order* (`compact-handoff.cjs`: files→env; `subagent-init.cjs`: env→files; `session-metrics.cjs`: pointer→mtime). Two hooks can disagree about the current phase. `compact-handoff.cjs` never even requires the `session-state.cjs` library. | `compact-handoff.cjs:26`, `subagent-init.cjs:53-78,167-169`, `session-metrics.cjs:28-66` |
 | P3 | **Always-loaded context budget is broken and misreported.** Core rules tier ≈10k words while every budget doc claims ~2k tokens; every-turn skills burn ~13k words/turn; with 60 skills the plugin almost certainly overflows Claude Code's skill-listing budget (1% of context window; overflow silently drops descriptions of least-used skills — killing their triggering). | `rules/README.md:14`, `skills/permanent-memory-loader/SKILL.md`, [docs: skills](https://code.claude.com/docs/en/skills) |
 | P4 | **Dead config layer.** `ccpm-config.yaml` ships a 9-phase workflow nothing reads; `.mcp.json` carries 5 `disabled: true` servers that Claude Code starts anyway (measured: ~3.3 GB across wrappers); CI commits derived `stats.json` back to main after nearly every merge. | `ccpm-config.yaml:29`, `.mcp.json`, `.github/workflows/ci.yml:151` |
@@ -47,7 +47,7 @@ One module owns session/workflow state; everything else goes through it.
 - Migrate all 37 skills from `triggers:` → official `when_to_use`; delete `autoInvoke`/`priority` fields everywhere.
 - Every-message guarantees move to the layer that can actually guarantee them: **hooks**. `UserPromptSubmit` already injects context deterministically; agent-detector's routing table becomes a hook-injected reminder (or an honest description-matched skill with no every-message claim).
 - Delete the two skills that duplicate existing deterministic hooks (plan-loader narration, trace-recorder narration) or reduce them to thin docs pointing at the hooks.
-- Fix `aura-frog/CLAUDE.md` "Auto-Invoke" section to describe the real mechanism.
+- Fix `archon-os/CLAUDE.md` "Auto-Invoke" section to describe the real mechanism.
 - Official boundary ([best-practices](https://code.claude.com/docs/en/best-practices)): facts → CLAUDE.md; procedures → skills; must-happen-every-time → hooks.
 
 ### W3 — Hook hygiene (keep dispatch, align it with the platform)
@@ -62,7 +62,7 @@ The platform contract ([docs: hooks](https://code.claude.com/docs/en/hooks)): ma
 
 ### W4 — Context budget diet
 
-- `aura-frog/CLAUDE.md` → ~60 lines of universal facts + a pointer manifest (progressive disclosure; [source](https://alexop.dev/posts/stop-bloating-your-claude-md-progressive-disclosure-ai-coding-tools/)). Procedures move to skills; enforcement moves to hooks; anything a linter enforces gets deleted from prose.
+- `archon-os/CLAUDE.md` → ~60 lines of universal facts + a pointer manifest (progressive disclosure; [source](https://alexop.dev/posts/stop-bloating-your-claude-md-progressive-disclosure-ai-coding-tools/)). Procedures move to skills; enforcement moves to hooks; anything a linter enforces gets deleted from prose.
 - Skill listing: run `/doctor` to measure the listing's real cost; mark workflow-style skills `disable-model-invocation: true` (zero listing cost, still user-invocable); shorten descriptions with trigger keywords first (1,536-char per-skill truncation); keep SKILL.md bodies <500 lines with detail in `references/` files.
 - Re-measure the rules tiers honestly (`wc -w`), publish real numbers, and fold rarely-loaded rule content into skill `references/` (skills are the platform's only true lazy-load primitive).
 - Front-load the critical 5k tokens of every auto-triggered skill body — that's all that survives post-compaction re-attachment.
@@ -166,7 +166,7 @@ Baselines below are measured on this repo at v3.8.0-alpha.10, not estimated. Eve
 
 **Trade-offs**
 
-- **`ccpm-config.yaml` is not as dead as the audit claimed.** Verified: `aura-frog/scripts/ci/validate-config.sh` and `scripts/sync-version.sh` both reference it, plus 4 docs. Deleting it means touching a CI gate — so this is a real change, not a file removal.
+- **`ccpm-config.yaml` is not as dead as the audit claimed.** Verified: `archon-os/scripts/ci/validate-config.sh` and `scripts/sync-version.sh` both reference it, plus 4 docs. Deleting it means touching a CI gate — so this is a real change, not a file removal.
 - **Dropping the `stats.json` auto-commit removes a self-healing property.** Counts currently self-correct on every merge; without it, drift returns unless `validate-counts.sh` + `validate-readme-counts.sh` are trusted to catch it. They are stricter than they were (alpha.10 hardened both), but the safety net moves from "fixed automatically" to "build fails".
 - **Users who opted into a removed MCP server must re-add it by hand.** `MCP_GUIDE.md` now carries per-server snippets, which makes this an inconvenience rather than a loss — but it is still a manual step imposed on someone else.
 

@@ -8,8 +8,8 @@ const os = require('os');
 const path = require('path');
 
 const { shouldTriggerArchive, readFeatureStatus } =
-  require('../../aura-frog/hooks/feature-done-trigger-archive.cjs');
-const { findPromptableSummarize } = require('../../aura-frog/hooks/session-reset-trigger.cjs');
+  require('../../archon-os/hooks/feature-done-trigger-archive.cjs');
+const { findPromptableSummarize } = require('../../archon-os/hooks/session-reset-trigger.cjs');
 
 const jl = (events) => events.map((e) => JSON.stringify(e));
 

@@ -1,5 +1,5 @@
 /**
- * Tests for aura-frog/hooks/pending-confirm-timeout.cjs
+ * Tests for archon-os/hooks/pending-confirm-timeout.cjs
  *
  * The walk + warning used to run at module scope with process.exit() on require.
  * It was restructured into a main() (FEAT-007 / issue #5) with the decision and
@@ -11,7 +11,7 @@ const {
   parseFrontmatterField,
   evaluateTaskFile,
   formatWarning,
-} = require('../../aura-frog/hooks/pending-confirm-timeout.cjs');
+} = require('../../archon-os/hooks/pending-confirm-timeout.cjs');
 
 const NOW = 1_700_000_000_000;
 const HOUR = 3600 * 1000;

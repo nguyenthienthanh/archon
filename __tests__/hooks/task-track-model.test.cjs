@@ -1,5 +1,5 @@
 /**
- * Tests for aura-frog/hooks/task-track-model.cjs and task-clear-model.cjs.
+ * Tests for archon-os/hooks/task-track-model.cjs and task-clear-model.cjs.
  *
  * Pattern follows scout-block.test.cjs — pure functions are exported from the
  * hook modules and exercised directly. The hook's CLI entry point is guarded
@@ -16,8 +16,8 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 
-const track = require('../../aura-frog/hooks/task-track-model.cjs');
-const clear = require('../../aura-frog/hooks/task-clear-model.cjs');
+const track = require('../../archon-os/hooks/task-track-model.cjs');
+const clear = require('../../archon-os/hooks/task-clear-model.cjs');
 
 const {
   mapModelDisplay,
@@ -39,7 +39,7 @@ function mkTmp() {
 }
 
 function writeAgent(dir, slug, frontmatter) {
-  const agentsDir = path.join(dir, 'aura-frog', 'agents');
+  const agentsDir = path.join(dir, 'archon-os', 'agents');
   fs.mkdirSync(agentsDir, { recursive: true });
   const file = path.join(agentsDir, `${slug}.md`);
   fs.writeFileSync(file, frontmatter);
@@ -130,12 +130,12 @@ describe('task-track-model — pure helpers', () => {
     beforeEach(() => { tmpRoot = mkTmp(); });
     afterEach(() => { fs.rmSync(tmpRoot, { recursive: true, force: true }); });
 
-    it('finds an agent under aura-frog/agents/', () => {
+    it('finds an agent under archon-os/agents/', () => {
       const file = writeAgent(tmpRoot, 'my-agent', '---\nmodel: claude-sonnet-4-6\n---\n');
       expect(resolveAgentFile('my-agent', tmpRoot)).toBe(file);
     });
 
-    it('falls back to .claude/agents/ when not under aura-frog/agents/', () => {
+    it('falls back to .claude/agents/ when not under archon-os/agents/', () => {
       const projAgents = path.join(tmpRoot, '.claude', 'agents');
       fs.mkdirSync(projAgents, { recursive: true });
       const file = path.join(projAgents, 'local-agent.md');
@@ -158,12 +158,12 @@ describe('task-track-model — pure helpers', () => {
     it('builds a complete entry with mapped display', () => {
       const e = buildStackEntry({
         subagentType: 'archon-os:code-reviewer',
-        agentFile: '/path/aura-frog/agents/code-reviewer.md',
+        agentFile: '/path/archon-os/agents/code-reviewer.md',
         model: 'claude-sonnet-4-6',
         sessionId: 'sess-123',
       });
       expect(e.phase).toBe('code-reviewer');
-      expect(e.agent_file).toBe('/path/aura-frog/agents/code-reviewer.md');
+      expect(e.agent_file).toBe('/path/archon-os/agents/code-reviewer.md');
       expect(e.model).toBe('claude-sonnet-4-6');
       expect(e.model_display).toBe('Sonnet 4.6');
       expect(e.session_id).toBe('sess-123');

@@ -5,7 +5,7 @@
  * left `tool` undefined so the hook exited on every invocation.
  */
 
-const { extractToolFields } = require('../../aura-frog/hooks/feedback-capture.cjs');
+const { extractToolFields } = require('../../archon-os/hooks/feedback-capture.cjs');
 
 describe('feedback-capture.extractToolFields', () => {
   it('reads the real PostToolUse contract fields', () => {

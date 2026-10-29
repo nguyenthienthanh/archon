@@ -44,16 +44,16 @@ If your Claude Code build doesn't yet support `/plugin marketplace add`, or you 
 
 ```bash
 mkdir -p ~/.claude/plugins/marketplaces/aurafrog
-git clone https://github.com/nguyenthienthanh/aura-frog.git \
-  ~/.claude/plugins/marketplaces/aurafrog/aura-frog
+git clone https://github.com/nguyenthienthanh/archon.git \
+  ~/.claude/plugins/marketplaces/archon/archon-os
 
-cd ~/.claude/plugins/marketplaces/aurafrog/aura-frog
+cd ~/.claude/plugins/marketplaces/archon/archon-os
 cp settings.example.json settings.local.json   # REQUIRED
 ```
 
 Restart Claude Code to register the plugin. `/help` should now show Aura Frog commands.
 
-**Uninstall** (either install path): `/plugin uninstall aura-frog@aurafrog`.
+**Uninstall** (either install path): `/plugin uninstall archon-os@archon`.
 
 ---
 
@@ -123,7 +123,7 @@ Full triage list in [TROUBLESHOOTING.md](TROUBLESHOOTING.md). Install-specific F
 | Symptom | Likely cause | Fix |
 |---|---|---|
 | `/plugin marketplace add` errors | Older Claude Code build | Update Claude Code or use [manual install](#manual-install-no-marketplace) |
-| Plugin installed but `/help` shows nothing new | Marketplace not refreshed | Restart Claude Code; re-run `/plugin install aura-frog@aurafrog` |
+| Plugin installed but `/help` shows nothing new | Marketplace not refreshed | Restart Claude Code; re-run `/plugin install archon-os@archon` |
 | `.envrc` not picked up | Not in project root, or trust gate denied | `cd` to project root; run `af envrc allow` |
 | Hooks fail with permission errors | `~/.claude/plugins/` perms drift | `chmod -R u+r ~/.claude/plugins/marketplaces/aurafrog/` |
 | MCP server silently no-ops | Missing env var | Check the MCP's required env in `.mcp.json` |

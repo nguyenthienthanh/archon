@@ -11,14 +11,14 @@ const {
   capPatternBlocks,
   MAX_PATTERN_BLOCKS,
   MAX_PATTERN_COUNTS,
-} = require('../../aura-frog/hooks/auto-learn.cjs');
+} = require('../../archon-os/hooks/auto-learn.cjs');
 
 const {
   trimKeyedMap,
   trimCache,
   MAP_MAX_KEYS,
   SUB_PATTERN_MAX_KEYS,
-} = require('../../aura-frog/hooks/smart-learn.cjs');
+} = require('../../archon-os/hooks/smart-learn.cjs');
 
 describe('auto-learn: cache.patterns cap', () => {
   it('holds the cap after N+1 inserts', () => {

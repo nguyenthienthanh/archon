@@ -13,7 +13,7 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 
-const { collectRecentJson } = require('../../aura-frog/hooks/json-toon-projector.cjs');
+const { collectRecentJson } = require('../../archon-os/hooks/json-toon-projector.cjs');
 
 let root;
 const NOW = Date.now();

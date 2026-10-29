@@ -38,8 +38,8 @@ estimated_reading_time: 8 minutes
 In the Claude Code chat, run two commands:
 
 ```bash
-/plugin marketplace add nguyenthienthanh/aura-frog
-/plugin install aura-frog@aurafrog
+/plugin marketplace add nguyenthienthanh/archon
+/plugin install archon-os@archon
 ```
 
 That's it. Aura Frog is now installed globally and available in every Claude Code session.
@@ -138,7 +138,7 @@ Pick one based on what you want to learn:
 Top 5 install-time questions — fuller fixes in [TROUBLESHOOTING.md](../operations/TROUBLESHOOTING.md).
 
 1. **`/plugin marketplace add` reports an error.** Make sure your Claude Code is recent enough to support marketplace plugins (Anthropic ships this in current builds). If not, use the [manual install path](../operations/INSTALLATION.md#manual-install).
-2. **`/help` doesn't show Aura Frog commands.** Re-run `/plugin install aura-frog@aurafrog`; check that `~/.claude/plugins/marketplaces/aurafrog/aura-frog/` exists.
+2. **`/help` doesn't show Aura Frog commands.** Re-run `/plugin install archon-os@archon`; check that `~/.claude/plugins/marketplaces/archon/archon-os/` exists.
 3. **First `/run` doesn't auto-detect a flow.** Type a more concrete verb-noun task description (e.g. `/run add password reset to the login form`). Force flow with prefixes: `/run task: …` / `/run project: …`. Disable escalation per-session with `AF_ESCALATION_DISABLED=true`.
 4. **An approval gate seems stuck.** Type bare `status` to see what's pending, or bare `rollback` to revert to the last checkpoint. Full action list above.
 5. **MCP server didn't fire.** Some MCPs need env vars (`FIGMA_API_TOKEN`, `SLACK_BOT_TOKEN`, `firebase login`). They silently no-op if unset — see [MCP_GUIDE.md](../operations/MCP_GUIDE.md) for per-MCP setup.

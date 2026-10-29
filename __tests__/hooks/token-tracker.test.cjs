@@ -1,5 +1,5 @@
 /**
- * Tests for aura-frog/hooks/token-tracker.cjs
+ * Tests for archon-os/hooks/token-tracker.cjs
  * Pure-function tests via require()-from-source.
  */
 
@@ -12,7 +12,7 @@ const {
   THRESHOLDS,
   CONTEXT_LIMIT,
   estimateFileTokens,
-} = require('../../aura-frog/hooks/token-tracker.cjs');
+} = require('../../archon-os/hooks/token-tracker.cjs');
 
 describe('token-tracker', () => {
   describe('TOKEN_COSTS', () => {

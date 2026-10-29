@@ -5,7 +5,7 @@
  * bridges the tool context to the env vars run-all.sh consumes.
  */
 
-const { buildChildEnv, jqAvailable } = require('../../aura-frog/hooks/pre-flight-validate.cjs');
+const { buildChildEnv, jqAvailable } = require('../../archon-os/hooks/pre-flight-validate.cjs');
 
 describe('pre-flight-validate.buildChildEnv', () => {
   it('bridges a Write tool_input to the env run-all.sh reads', () => {
@@ -53,7 +53,7 @@ describe('pre-flight-validate.jqAvailable (fail-open on missing jq)', () => {
  * bash tree spawned, matched nothing, and exited 0 on every search.
  */
 describe('pre-flight-validate — tools with no applicable check', () => {
-  const { NO_CHECKS_APPLY } = require('../../aura-frog/hooks/pre-flight-validate.cjs');
+  const { NO_CHECKS_APPLY } = require('../../archon-os/hooks/pre-flight-validate.cjs');
 
   it('lists exactly the read-only search tools', () => {
     expect([...NO_CHECKS_APPLY].sort()).toEqual(['Glob', 'Grep']);

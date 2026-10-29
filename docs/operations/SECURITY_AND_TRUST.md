@@ -25,12 +25,12 @@ Claude Code plugins use a **decentralized, trust-based model** similar to:
 
 **Trusted Source:**
 ```bash
-/plugin marketplace add nguyenthienthanh/aura-frog
+/plugin marketplace add nguyenthienthanh/archon
 ```
 
 **Verify authenticity:**
 - ✅ GitHub owner: **nguyenthienthanh** (Nguyen Thien Thanh)
-- ✅ Official repo: https://github.com/nguyenthienthanh/aura-frog
+- ✅ Official repo: https://github.com/nguyenthienthanh/archon
 - ✅ Email: nguyenthienthanh.kiyoshi@gmail.com
 
 ---
@@ -43,7 +43,7 @@ Claude Code plugins use a **decentralized, trust-based model** similar to:
 
 1. **Fork the repository:**
    ```
-   Original: nguyenthienthanh/aura-frog ✅ SAFE
+   Original: nguyenthienthanh/archon ✅ SAFE
    Fork:     attacker/ccpm-malware ⚠️ DANGEROUS
    ```
 
@@ -67,7 +67,7 @@ Claude Code plugins use a **decentralized, trust-based model** similar to:
 1. **Verify the GitHub URL**
    ```bash
    # ✅ CORRECT - Official repository
-   /plugin marketplace add nguyenthienthanh/aura-frog
+   /plugin marketplace add nguyenthienthanh/archon
 
    # ⚠️ WRONG - Unknown fork
    /plugin marketplace add random-user/ccpm-something
@@ -155,7 +155,7 @@ When you install Aura Frog, it can access:
 1. **Only add trusted marketplaces:**
    ```bash
    # ✅ Official Aura Frog
-   /plugin marketplace add nguyenthienthanh/aura-frog
+   /plugin marketplace add nguyenthienthanh/archon
    ```
 
 2. **Review code before installation:**
@@ -172,11 +172,11 @@ When you install Aura Frog, it can access:
    ```bash
    # Check changelog before updating
    git log  # Review changes
-   /plugin update aura-frog@aurafrog
+   /plugin update archon-os@archon
    ```
 
 5. **Report suspicious activity:**
-   - Create issue: https://github.com/nguyenthienthanh/aura-frog/issues
+   - Create issue: https://github.com/nguyenthienthanh/archon/issues
    - Email: nguyenthienthanh.kiyoshi@gmail.com
 
 ### For Plugin Developers (Like Me)
@@ -207,13 +207,13 @@ When you install Aura Frog, it can access:
 
 **Official installation command:**
 ```bash
-/plugin marketplace add nguyenthienthanh/aura-frog
-/plugin install aura-frog@aurafrog
+/plugin marketplace add nguyenthienthanh/archon
+/plugin install archon-os@archon
 ```
 
 **Verification checklist:**
 
-- [ ] GitHub URL is exactly: `nguyenthienthanh/aura-frog`
+- [ ] GitHub URL is exactly: `nguyenthienthanh/archon`
 - [ ] Repository owner is: **nguyenthienthanh**
 - [ ] Plugin name is: **aura-frog**
 - [ ] Marketplace name is: **aurafrog**
@@ -265,7 +265,7 @@ We'll:
 - Review code before adding marketplace
 
 **Official Aura Frog:**
-- Repository: `nguyenthienthanh/aura-frog`
+- Repository: `nguyenthienthanh/archon`
 - Owner: Nguyen Thien Thanh (nguyenthienthanh)
 - Email: nguyenthienthanh.kiyoshi@gmail.com
 
@@ -281,6 +281,6 @@ We'll:
 
 Official installation:
 ```bash
-/plugin marketplace add nguyenthienthanh/aura-frog
-/plugin install aura-frog@aurafrog
+/plugin marketplace add nguyenthienthanh/archon
+/plugin install archon-os@archon
 ```
