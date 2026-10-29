@@ -4,7 +4,7 @@ status: current
 audience: first-time
 ---
 
-# Aura Frog — 60-Second Quickstart
+# Archon OS — 60-Second Quickstart
 
 > v3.7.x syntax. The current command surface is `/run` (universal entry point with intent detection) + `/archon-os:*` (plan / heal / mcp / trace / dashboard) + `/af` (status / agents / learn). Older `workflow:*`-prefixed verbs from v3.6 are documented in `MIGRATION_TO_V3.7.md`.
 
@@ -41,13 +41,13 @@ For a project-scope task that touches 5+ features, `/run` will offer to escalate
 /af status
 
 # Update to latest
-/plugin marketplace update aurafrog
+/plugin marketplace update archon
 
 # Restart Claude Code after update
 /exit
 ```
 
-**Auto-check:** Aura Frog checks for updates daily. Set `AF_UPDATE_CHECK=false` to disable.
+**Auto-check:** Archon OS checks for updates daily. Set `AF_UPDATE_CHECK=false` to disable.
 
 ## Essential Commands
 

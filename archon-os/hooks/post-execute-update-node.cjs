@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog — Post-Execute: Update Node Status
+ * Archon OS — Post-Execute: Update Node Status
  *
  * Fires: PostToolUse (Bash | Edit | Write | Read)
  * Purpose: When a tool execution completes, update the active T4 task's status

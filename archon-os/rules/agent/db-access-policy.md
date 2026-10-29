@@ -85,4 +85,4 @@ These regex patterns match in `scripts/security/sanitize-mcp-input.sh` before MC
 - **Hook:** `hooks/mcp-call-gate.cjs` — primary enforcer
 - **Script:** `scripts/security/sanitize-mcp-input.sh` — input sanitization + destructive-pattern detection
 - **Skill:** `mcp-security-auditor` — read-side companion (reads the audit log)
-- **MCPs:** `mcp__plugin_archon-os_postgres__*`, `mcp__plugin_aura-frog_redis__*` (not bundled in `.mcp.json` — a `disabled` flag is ignored by Claude Code, so they are omitted entirely; this policy applies the moment a project adds them per `docs/operations/MCP_GUIDE.md § Optional Servers`)
+- **MCPs:** `mcp__plugin_archon-os_postgres__*`, `mcp__plugin_archon-os_redis__*` (not bundled in `.mcp.json` — a `disabled` flag is ignored by Claude Code, so they are omitted entirely; this policy applies the moment a project adds them per `docs/operations/MCP_GUIDE.md § Optional Servers`)

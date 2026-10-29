@@ -9,7 +9,7 @@ last_aligned_with: 3.7.4
 
 ## Why
 
-Aura Frog routes work to subagents via per-agent `model:` frontmatter
+Archon OS routes work to subagents via per-agent `model:` frontmatter
 (`archon-os/agents/<id>.md`). When the main session runs Opus and dispatches
 a Sonnet subagent through the `Task` tool, the statusline previously kept
 showing the session model — there was no signal that the cheaper/faster
@@ -40,7 +40,7 @@ that surfaces the per-step model on the statusline.
    appends one JSONL line to the stack.
 2. `archon-os/scripts/statusline.sh` reads `tail -n 1` of the stack on
    every render. When non-empty, it switches from the idle format to:
-   `🐸 AF v{ver} │ ▶ {phase} │ {step_model} ⏱{duration} │ session: {session_model} │ {ctx}% ctx`.
+   `🦉 AF v{ver} │ ▶ {phase} │ {step_model} ⏱{duration} │ session: {session_model} │ {ctx}% ctx`.
 3. `archon-os/hooks/task-clear-model.cjs` fires on `PostToolUse(Task)` and
    pops the most-recent line. When the stack is empty, the file is removed.
 

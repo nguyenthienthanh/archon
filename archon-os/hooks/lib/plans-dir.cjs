@@ -1,6 +1,6 @@
 'use strict';
 /**
- * Aura Frog — Plans Dir Resolver (JS mirror of scripts/plans/_lib.sh#plans_dir)
+ * Archon OS — Plans Dir Resolver (JS mirror of scripts/plans/_lib.sh#plans_dir)
  *
  * Single source of truth for "where do plan-tree files live?" Used by every
  * hook that reads/writes plan state. Replaces 10 hand-coded

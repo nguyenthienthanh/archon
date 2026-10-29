@@ -1,5 +1,5 @@
 #!/bin/bash
-# Aura Frog Hook Profiler
+# Archon OS Hook Profiler
 # Measures execution time and output size for all registered hooks
 #
 # Usage: bash archon-os/scripts/profile-hooks.sh [iterations]

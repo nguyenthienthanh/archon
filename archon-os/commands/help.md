@@ -8,7 +8,7 @@
 ## Output
 
 ```markdown
-## Aura Frog — Command Reference
+## Archon OS — Command Reference
 
 **Core:**
 - /run <task> — Auto-detect and execute (feature/bugfix/refactor/test/deploy/review)

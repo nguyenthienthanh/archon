@@ -11,7 +11,7 @@ set -e
 
 CONFIG_FILE="${1:-ccpm-config.yaml}"
 
-echo "🔍 Validating Aura Frog configuration..."
+echo "🔍 Validating Archon OS configuration..."
 
 # Skip silently when the file is absent — this is the normal state for the
 # plugin repo itself (only user projects have a runtime ccpm-config.yaml).

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Aura Frog plugin — canonical cost/usage statusline renderer.
+"""Archon OS plugin — canonical cost/usage statusline renderer.
 
 Reads Claude Code's statusline JSON on stdin and prints a 3-line status:
   L1  identity  : model · shortened cwd · git branch (+dirty)
@@ -302,7 +302,7 @@ def main():
 
     # L1 — identity
     l1 = " ".join(x for x in [
-        c(GREEN, "🐸 " + str(model)),
+        c(GREEN, "🦉 " + str(model)),
         sep().strip() and dim("·"),
         c(CYAN, short_cwd(cwd)),
         git_segment(cwd),

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog - Feedback Capture Hook
+ * Archon OS - Feedback Capture Hook
  *
  * Fires: PostToolUse (after Edit, Write operations) — dispatched in-process by
  *        learning-dispatch.cjs (no longer registered directly in hooks.json;
@@ -157,12 +157,12 @@ async function run(data) {
           }
         });
 
-        console.log('🐸 Learning: Recorded correction feedback');
+        console.log('🦉 Learning: Recorded correction feedback');
       }
     }
   } catch (error) {
     // Non-blocking - don't fail the tool use
-    console.error(`🐸 Feedback hook error: ${error.message}`);
+    console.error(`🦉 Feedback hook error: ${error.message}`);
   }
 }
 

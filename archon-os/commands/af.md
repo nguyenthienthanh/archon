@@ -1,4 +1,4 @@
-# Aura Frog System Commands
+# Archon OS System Commands
 
 Plugin management, learning system, metrics, agents, and setup.
 
@@ -50,7 +50,7 @@ Plugin setup and configuration.
 
 ```toon
 subs[3]{sub,purpose}:
-  "/af setup activate","Quick-activate Aura Frog in current project"
+  "/af setup activate","Quick-activate Archon OS in current project"
   "/af setup integrations","Configure JIRA/Confluence/Slack/Figma tokens"
   "/af setup cli","Install af CLI globally"
 ```

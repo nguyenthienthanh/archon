@@ -50,11 +50,11 @@ sequenceDiagram
 ```
 $ /run "Add JWT authentication to the /api routes"
 
-🐸 agent-detector (haiku):
+🦉 agent-detector (haiku):
    Complexity: Deep · Agent: architect (primary), security (reviewer)
    Model: sonnet · Estimated tokens: ~95K
 
-🐸 Sprint Contract — confirm before Phase 2:
+🦉 Sprint Contract — confirm before Phase 2:
    Scope:     JWT middleware, /login + /refresh endpoints, user model
    Done when: 5 tests passing, 0 critical security findings, coverage ≥80%
    Out of scope: password reset, 2FA, social auth

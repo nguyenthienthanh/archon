@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog — MCP Call Gate
+ * Archon OS — MCP Call Gate
  *
  * Fires: PreToolUse (mcp__.*)
  * Purpose: Per-agent allowlist + rate limit + audit logging for MCP calls.

@@ -6,7 +6,7 @@ audience: active-user
 
 # Behavioral Eval Setup
 
-Automated trigger-accuracy testing for Aura Frog skills, agents, and commands using [`cc-plugin-eval`](https://github.com/sjnims/cc-plugin-eval). Catches regression when skill descriptions drift or rules are edited.
+Automated trigger-accuracy testing for Archon OS skills, agents, and commands using [`cc-plugin-eval`](https://github.com/sjnims/cc-plugin-eval). Catches regression when skill descriptions drift or rules are edited.
 
 ---
 
@@ -30,7 +30,7 @@ npm install && npm run build
 
 ---
 
-## Aura Frog Eval Config
+## Archon OS Eval Config
 
 The plugin ships `archon-os/.eval-config.yaml` with sensible defaults:
 
@@ -163,7 +163,7 @@ npx cc-plugin-eval run -p ./archon-os --components skills \
 
 ## Cost Management
 
-Per-run cost depends on component count and scenario count. For Aura Frog's 5 auto-invoke skills × 5 scenarios each = 25 scenarios, typical cost is ~$0.30–$1.00 on Sonnet. Full eval across all 44 skills is ~$5–$10.
+Per-run cost depends on component count and scenario count. For Archon OS's 5 auto-invoke skills × 5 scenarios each = 25 scenarios, typical cost is ~$0.30–$1.00 on Sonnet. Full eval across all 44 skills is ~$5–$10.
 
 **Budget guards:**
 - `max_budget_usd: 10.0` in config hard-stops if exceeded

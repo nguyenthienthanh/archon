@@ -5,7 +5,7 @@
   <img alt="Archon OS — a planning-first LLM operating system for software engineering" src="assets/brand/banner-light.png" width="860">
 </picture>
 
-# Aura Frog
+# Archon OS
 
 ### A planning-first LLM Operating System for software engineering.
 
@@ -106,7 +106,7 @@ No structure. No tests. No quality gates. Every session starts from scratch. Eve
 
 ## The Solution
 
-Aura Frog treats Claude Code as an **Operating System** — Claude is the kernel, agents are processes, and the context window is managed RAM. You describe the task. Aura Frog classifies complexity, picks the right flow (direct edit · bugfix TDD · full 5-phase), dispatches the right agent, and compresses context automatically so you never lose decisions.
+Archon OS treats Claude Code as an **Operating System** — Claude is the kernel, agents are processes, and the context window is managed RAM. You describe the task. Archon OS classifies complexity, picks the right flow (direct edit · bugfix TDD · full 5-phase), dispatches the right agent, and compresses context automatically so you never lose decisions.
 
 **Right effort for every task. You only approve when it matters (0 gates for typos, up to 2 for architecture).**
 
@@ -156,7 +156,7 @@ flowchart TB
 
 ---
 
-## 🐸 The 8 Pillars of the Planning-First LLM OS
+## 🦉 The 8 Pillars of the Planning-First LLM OS
 
 v3.7.0 introduced **eight features** that compose into one cohesive OS; v3.7.2 + v3.7.3 polished their entry points + storage layout (notably Pillar 1). Each pillar solves a real failure mode of shipping with an AI agent. Status legend: ✅ shipped · 🚧 queued for v3.8+.
 
@@ -250,7 +250,7 @@ Disable any pillar individually via env var: `AF_SELF_HEAL_DISABLED`, `AF_MCP_AU
 
 ## Works Across AI Coding Tools
 
-Aura Frog's 72 rules, 43 skills, and 15 agents are **~87% portable** (weighted average) because they're markdown conventions, not tool-specific code. Only the thin hook layer needs adapters.
+Archon OS's 72 rules, 43 skills, and 15 agents are **~87% portable** (weighted average) because they're markdown conventions, not tool-specific code. Only the thin hook layer needs adapters.
 
 | Tool | Status | Coverage |
 |------|--------|:--------:|
@@ -258,7 +258,7 @@ Aura Frog's 72 rules, 43 skills, and 15 agents are **~87% portable** (weighted a
 | ![Codex](https://img.shields.io/badge/Codex-adapter_planning-yellow) Q2 2026 | ~85% |
 | ![Cursor](https://img.shields.io/badge/Cursor-planned-lightgrey) Q2 2026 | ~80% |
 
-**Why this matters:** When you invest in Aura Frog's TDD discipline, gotcha-only expert skills, and agent architecture, that investment survives tool switches. Only the thin adapter layer changes.
+**Why this matters:** When you invest in Archon OS's TDD discipline, gotcha-only expert skills, and agent architecture, that investment survives tool switches. Only the thin adapter layer changes.
 
 [Read the Portability Guide →](docs/PORTABILITY.md)
 
@@ -267,7 +267,7 @@ Aura Frog's 72 rules, 43 skills, and 15 agents are **~87% portable** (weighted a
 ## Before & After
 
 <table>
-<tr><th width="450">❌ Without Aura Frog</th><th width="450">✅ With Aura Frog</th></tr>
+<tr><th width="450">❌ Without Archon OS</th><th width="450">✅ With Archon OS</th></tr>
 <tr>
 <td>
 
@@ -284,13 +284,13 @@ Claude: *rewrites everything from scratch*
 ```
 You: "Add user authentication"
 
-🐸 Phase 1: "JWT or OAuth2? Here are trade-offs.
+🦉 Phase 1: "JWT or OAuth2? Here are trade-offs.
    3 endpoints needed. Approve?"
 
 You: "approve"
 
-🐸 Phase 2-3: 5 tests → all GREEN.
-🐸 Phase 4-5: Reviewed. Documented. Done.
+🦉 Phase 2-3: 5 tests → all GREEN.
+🦉 Phase 4-5: Reviewed. Documented. Done.
 ```
 
 </td>
@@ -394,7 +394,7 @@ See the [Walkthrough](#walkthrough-a-real-workflow-in-action) below for a comple
 |---------|--------------|-----|
 | `/plugin install` fails | Marketplace cache | Run `/plugin marketplace refresh` |
 | Hooks not firing | `.claude/settings.json` missing hook config | `/af setup integrations` re-installs |
-| `af: command not found` | PATH missing plugin scripts dir | Add `$HOME/.claude/plugins/marketplaces/aurafrog/scripts` to `$PATH` |
+| `af: command not found` | PATH missing plugin scripts dir | Add `$HOME/.claude/plugins/marketplaces/archon/scripts` to `$PATH` |
 | State not saving during `/run` | Hook path drift (pre-v3.7) | Upgrade to 3.7+ (state path fixed) |
 | Claude uses wrong agent | No `/project init` yet | Run `/project init` to load conventions |
 
@@ -408,7 +408,7 @@ A complete transcript of implementing JWT auth with `/run` — 18 minutes, 2 app
 
 ---
 
-## Why Teams Ship Faster With Aura Frog
+## Why Teams Ship Faster With Archon OS
 
 Smart flow selection · multi-agent orchestration · approval gates that don't block · context economy · TDD enforcement · JIRA integration. Full prose with examples and rationale in [docs/marketing/WHY_TEAMS_SHIP_FASTER.md](docs/marketing/WHY_TEAMS_SHIP_FASTER.md).
 
@@ -416,7 +416,7 @@ Smart flow selection · multi-agent orchestration · approval gates that don't b
 
 ## Routing Strategies
 
-Aura Frog picks one of three execution strategies per task — you never configure it manually.
+Archon OS picks one of three execution strategies per task — you never configure it manually.
 
 ```mermaid
 flowchart TB
@@ -643,13 +643,13 @@ More issues: [TROUBLESHOOTING.md](docs/operations/TROUBLESHOOTING.md).
 
 Honest comparison with two popular plugins in the ecosystem (April 2026).
 
-| | **Aura Frog** | **wshobson/agents** | **Superpowers** |
+| | **Archon OS** | **wshobson/agents** | **Superpowers** |
 |---|---|---|---|
 | **Agents** | 15 curated | 184 across 78 plugins | ~20 |
 | **Skills** | 45 | 150 | Small focused set |
 | **Commands** | 24 (14 user-facing + 10 legacy aliases) | 98 | ~10 |
 | **Workflow** | 5-phase TDD with 2 gates | No structured workflow | Phase-gated workflow |
-| **Agent routing** | Task-content Layer 0 override | Manual `/agent-name` | Similar to Aura Frog |
+| **Agent routing** | Task-content Layer 0 override | Manual `/agent-name` | Similar to Archon OS |
 | **TDD enforcement** | ✅ Mandatory RED→GREEN→REFACTOR | ❌ Per-agent | ✅ Phase-gated |
 | **Context management** | 3-tier (MicroCompact / AutoCompact / ManualCompact) | ❌ Base Claude Code | Partial |
 | **Approval gates** | 2 (P1 + P3) | ❌ | Multiple |
@@ -657,7 +657,7 @@ Honest comparison with two popular plugins in the ecosystem (April 2026).
 | **Best fit** | Teams shipping production features with TDD discipline | Extending with niche specialists | Structured workflows for research/writing |
 | **Weakness** | Steeper learning curve | Agent sprawl (184 is a lot) | Smaller ecosystem |
 
-**Not competing — different optimization targets.** Aura Frog optimizes for *production code quality* (TDD + security review). wshobson optimizes for *breadth of specialists*. Superpowers optimizes for *structured thinking over code*.
+**Not competing — different optimization targets.** Archon OS optimizes for *production code quality* (TDD + security review). wshobson optimizes for *breadth of specialists*. Superpowers optimizes for *structured thinking over code*.
 
 Combine freely — plugins coexist in Claude Code.
 
@@ -709,7 +709,7 @@ Use this checklist:
 - ✅ MCP-heavy workflows (Figma + Firebase + Slack + DBs) → per-agent allowlists + audit log
 - ⚠️ Single-file edits / quick prototypes → workflow overhead may not pay off; use `/run task: …` to bypass
 - ⚠️ Haiku-only budget — some features (planning, conflict, design phases) prefer Sonnet/Opus
-- ⚠️ Minimalist-plugin preference — Aura Frog is substantial; see the component counts above (generated, not hand-written)
+- ⚠️ Minimalist-plugin preference — Archon OS is substantial; see the component counts above (generated, not hand-written)
 
 ---
 
@@ -768,7 +768,7 @@ MIT — See [LICENSE](LICENSE)
 
 <img alt="The Archon OS owl watching a plan tree" src="assets/brand/mascot.svg" width="520">
 
-### Your AI writes code. Aura Frog runs the OS.
+### Your AI writes code. Archon OS runs the OS.
 
 **[Install Now](#-install)** · **[Tutorial](docs/getting-started/FIRST_WORKFLOW_TUTORIAL.md)** · **[Report Issue](https://github.com/nguyenthienthanh/archon/issues)**
 

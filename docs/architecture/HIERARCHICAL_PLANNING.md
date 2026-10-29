@@ -220,7 +220,7 @@ A common failure mode after the plan tree exists: the user runs `/run feature: F
 
 ## Stage 2 — Memory architecture: four physical tiers (no vector DB)
 
-A frequent misread: "AI plus planning ⇒ vector DB / RAG." Aura Frog does neither. The memory model is four layers stacked on the local filesystem, each with a different load policy.
+A frequent misread: "AI plus planning ⇒ vector DB / RAG." Archon OS does neither. The memory model is four layers stacked on the local filesystem, each with a different load policy.
 
 ```mermaid
 flowchart TB
@@ -327,7 +327,7 @@ Stale wisdom never overrides fresh evidence. A fresh `file_read` always wins ove
 
 ## Stage 3 — Anti-hallucination: deterministic, not LLM-judged
 
-Aura Frog's grounding discipline is enforced by an O(1) check against an append-only trace, not by asking another LLM "does this claim look right?"
+Archon OS's grounding discipline is enforced by an O(1) check against an append-only trace, not by asking another LLM "does this claim look right?"
 
 ### Mechanism 1 — Grounding check (per-claim, O(1))
 
@@ -362,7 +362,7 @@ def check_output_claim(claim, prior_events):
 User-facing surface (`/archon-os:trace`):
 
 ```text
-🐸 47 events recorded:
+🦉 47 events recorded:
    ✓ 14 file_read  (grounded evidence)
    ✓ 8  tool_call
    ✓ 24 output_claim  (23 grounded, 1 flagged)
@@ -410,14 +410,14 @@ Concrete consequence: "I remember from a past Epic" can never override "I just r
 
 ## Stage 4 — Agent coordination: separation, not consensus
 
-Aura Frog deliberately rejects the panel-of-experts pattern (AutoGen / MetaGPT / chain-of-debate). Reasons:
+Archon OS deliberately rejects the panel-of-experts pattern (AutoGen / MetaGPT / chain-of-debate). Reasons:
 
 - Agents agree with each other too quickly (in-group confirmation bias)
 - N agents = N× token cost per decision
 - "Who wins" is ambiguous when they disagree
 - Accountability vanishes when something goes wrong
 
-Aura Frog uses **role separation + sequential review** with a hard rule: **the reviewer is never the builder**.
+Archon OS uses **role separation + sequential review** with a hard rule: **the reviewer is never the builder**.
 
 ```mermaid
 flowchart LR
@@ -585,7 +585,7 @@ Decision rules are regex over signals — no LLM call.
 F2 / F3 with budget remaining and confidence ≥ 0.7 triggers `self-healing-orchestrator`. It **proposes** a patch and **stops**. The user approves via `/archon-os:heal accept <id>`.
 
 ```
-🐸 Self-diagnosed (confidence 0.85, F3 local design):
+🦉 Self-diagnosed (confidence 0.85, F3 local design):
 
 Error: AssertionError — expected callback URL to use a query param.
 
@@ -615,7 +615,7 @@ circuit_breaker:
     final_escalation: human
 ```
 
-A T4 task that exhausts its replan_budget escalates to its T3 story for replan. If T3 replan also exhausts, escalate to T2. T2 exhaustion → human. The escalation ladder is what makes Aura Frog **not** an AutoGPT-style infinite loop: the worst-case token spend is bounded.
+A T4 task that exhausts its replan_budget escalates to its T3 story for replan. If T3 replan also exhausts, escalate to T2. T2 exhaustion → human. The escalation ladder is what makes Archon OS **not** an AutoGPT-style infinite loop: the worst-case token spend is bounded.
 
 ---
 
@@ -627,7 +627,7 @@ A T4 task that exhausts its replan_budget escalates to its T3 story for replan. 
 | More up-front design (plan tree shape, frontmatter discipline) | Forensic audit — every decision is traceable |
 | More approval gates than fully-autonomous agents | No silent failures — escalation goes to a human |
 
-This is an explicit engineering trade-off vs. "let the agent figure it out." Aura Frog optimises for **predictable cost, audit trail, and bounded blast radius** — three properties that matter when you ship to production.
+This is an explicit engineering trade-off vs. "let the agent figure it out." Archon OS optimises for **predictable cost, audit trail, and bounded blast radius** — three properties that matter when you ship to production.
 
 ---
 

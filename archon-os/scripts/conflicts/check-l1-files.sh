@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Aura Frog Conflict Detection — L1 (Lexical / file-overlap)
+# Archon OS Conflict Detection — L1 (Lexical / file-overlap)
 #
 # Spec §21.2: file-set intersection. Always run. p95 <100ms.
 # Compares proposed task's `artifacts[].path` against pending-confirm sibling

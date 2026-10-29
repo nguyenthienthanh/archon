@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Aura Frog — child-process environment minimiser
+ * Archon OS — child-process environment minimiser
  *
  * Some hooks run code that isn't ours: lint-autofix executes the working repo's
  * own node_modules/.bin or vendor/bin binary on every Write and Edit. Those

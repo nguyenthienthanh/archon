@@ -46,7 +46,6 @@ echo "  └── config.json       # Visual testing config"
 # Create default config.json
 cat > "$VISUAL_PATH/config.json" << 'EOF'
 {
-  "$schema": "https://aura-frog.dev/schemas/visual-config.json",
   "version": "1.0.0",
   "thresholds": {
     "web": 0.5,
@@ -86,7 +85,6 @@ echo -e "${GREEN}Created config.json${NC}"
 # Create example design tokens
 cat > "$VISUAL_PATH/tokens/design-tokens.json" << 'EOF'
 {
-  "$schema": "https://aura-frog.dev/schemas/design-tokens.json",
   "font": {
     "family": {
       "primary": "Inter",
@@ -167,7 +165,6 @@ echo -e "${GREEN}Created example design-tokens.json${NC}"
 # Create example spec file
 cat > "$VISUAL_PATH/spec/example.spec.json" << 'EOF'
 {
-  "$schema": "https://aura-frog.dev/schemas/design-spec.json",
   "id": "example-component",
   "viewport": {
     "width": 1280,

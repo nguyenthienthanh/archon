@@ -12,7 +12,7 @@ audience: power-user
 
 ## 📊 Overview
 
-Aura Frog v1.2+ supports **multiple concurrent workflows** with independent state management.
+Archon OS v1.2+ supports **multiple concurrent workflows** with independent state management.
 
 ---
 
@@ -873,6 +873,6 @@ echo "legacy-workflow" > active-workflow.txt
 ---
 
 *Version: 1.0.0*  
-*Added: Aura Frog v1.2*  
+*Added: Archon OS v1.2*  
 *Multi-workflow support*
 

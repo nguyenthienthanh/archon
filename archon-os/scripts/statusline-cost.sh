@@ -1,6 +1,6 @@
 #!/bin/bash
-# Aura Frog plugin — canonical cost/usage statusline entrypoint.
-#   L1  🐸 model · shortened cwd · git branch(+dirty)
+# Archon OS plugin — canonical cost/usage statusline entrypoint.
+#   L1  🦉 model · shortened cwd · git branch(+dirty)
 #   L2  5h [bar] % ·reset · 7d % ·reset · ctx %
 #   L3  session ≈$  · cycle¹ ≈$ →proj ≈$ · ≈API-equiv·Claude
 #
@@ -51,5 +51,5 @@ fi
 
 # Fallback: minimal one-liner if python3 is unavailable.
 model=$(printf '%s' "$input" | grep -o '"display_name"[[:space:]]*:[[:space:]]*"[^"]*"' | head -1 | sed 's/.*"\([^"]*\)"$/\1/')
-echo "🐸 ${model:-Claude}"
+echo "🦉 ${model:-Claude}"
 exit 0

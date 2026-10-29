@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Aura Frog - Submit Manual Feedback
+# Archon OS - Submit Manual Feedback
 # Usage: ./scripts/learn/submit-feedback.sh [type] [message] [severity]
 #
 # Types: success, correction, agent-issue, workflow-issue, suggestion
@@ -135,7 +135,7 @@ interactive_mode() {
 
 # Help
 show_help() {
-  echo "Aura Frog - Submit Manual Feedback"
+  echo "Archon OS - Submit Manual Feedback"
   echo ""
   echo "Usage:"
   echo "  ./scripts/learn/submit-feedback.sh                    # Interactive mode"

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog — Post-Execute Conflict Rescan
+ * Archon OS — Post-Execute Conflict Rescan
  *
  * Fires: PostToolUse (Edit | Write) async
  * Purpose: When a blocker task transitions to `done`, scan frozen siblings

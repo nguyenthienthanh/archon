@@ -7,7 +7,7 @@
     "subject": "owl",
     "why": "An archon is an Athenian magistrate, and the owl is Athena's — the one that watches. The dispatch model now has a literal observer role (rules/workflow/three-role-dispatch.md), so the mark is the watcher, not a decoration.",
     "style": "flat geometric, no gradients, no glow",
-    "predecessor": "the Aura Frog frog mark — retired with the name at v4.0.0"
+    "predecessor": "the Archon OS frog mark — retired with the name at v4.0.0"
   },
   "palette": {
     "jade": "#0E7C5A",

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog — Session Reset Trigger
+ * Archon OS — Session Reset Trigger
  *
  * Fires: PostToolUse (Write)
  * Purpose: After epic-summarizer writes a new section to permanent_memory.md,

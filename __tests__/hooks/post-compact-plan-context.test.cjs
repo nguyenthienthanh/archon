@@ -153,21 +153,21 @@ const { composeBanner } = require('../../archon-os/hooks/session-start-restore-a
 describe('session-start-restore-active — composeBanner', () => {
   it('shows a feature with its story and task', () => {
     expect(composeBanner({ active: { feature: 'FEAT-A', story: 'S1', task: 'T1' } }))
-      .toEqual(['🐸 Active plan: FEAT-A', 'Story: S1', 'Task: T1']);
+      .toEqual(['🦉 Active plan: FEAT-A', 'Story: S1', 'Task: T1']);
   });
 
   it('prefers feature over initiative and mission', () => {
     expect(composeBanner({ active: { feature: 'F', initiative: 'I', mission: 'M' } }))
-      .toEqual(['🐸 Active plan: F']);
+      .toEqual(['🦉 Active plan: F']);
   });
 
   it('falls back to initiative when there is no feature', () => {
     expect(composeBanner({ active: { initiative: 'INIT-1', mission: 'M' } }))
-      .toEqual(['🐸 Active plan: INIT-1']);
+      .toEqual(['🦉 Active plan: INIT-1']);
   });
 
   it('falls back to mission when there is neither feature nor initiative', () => {
-    expect(composeBanner({ active: { mission: 'Ship it' } })).toEqual(['🐸 Active mission: Ship it']);
+    expect(composeBanner({ active: { mission: 'Ship it' } })).toEqual(['🦉 Active mission: Ship it']);
   });
 
   it('is empty for no active anchor or a malformed object', () => {

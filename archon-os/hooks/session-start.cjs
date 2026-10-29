@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog - SessionStart Hook
+ * Archon OS - SessionStart Hook
  *
  * Fires: Once per session (startup, resume, clear, compact)
  * Purpose: Load config, detect project info, inject env vars, output context
@@ -173,7 +173,7 @@ function emitContextStalenessBanner() {
     const raw = JSON.parse(fs.readFileSync(detectionPath, 'utf-8'));
     const s = cache.getCacheStaleness(raw, '.');
     if (s.stale && s.reason) {
-      console.log(`🐸 Project context cache is stale (${s.reason}) — will rebuild on next scan. Run /project refresh to force now.`);
+      console.log(`🦉 Project context cache is stale (${s.reason}) — will rebuild on next scan. Run /project refresh to force now.`);
     }
   } catch { /* non-blocking */ }
 }
@@ -267,7 +267,7 @@ async function main() {
       const { migrateLegacyPlansDir } = require('./lib/plans-dir.cjs');
       const migration = migrateLegacyPlansDir();
       if (migration.migrated) {
-        console.log(`🐸 Migrated legacy .aura/plans → .claude/plans (v3.7.3 schema). Source: ${migration.from}`);
+        console.log(`🦉 Migrated legacy .aura/plans → .claude/plans (v3.7.3 schema). Source: ${migration.from}`);
       } else if (migration.error) {
         console.log(`⚠️  Legacy .aura/plans migration failed: ${migration.error}. Run manually: mv .aura/plans .claude/plans`);
       }
@@ -280,7 +280,7 @@ async function main() {
       for (const [key, value] of Object.entries(cached.envVars || {})) {
         if (value) writeEnv(envFile, key, value);
       }
-      console.log(`🐸 Session ${source} (cached). ${cached.contextSummary || ''}`);
+      console.log(`🦉 Session ${source} (cached). ${cached.contextSummary || ''}`);
       // Emit plugin prefix banner on cached fast-path too
       try {
         const pluginJsonPath = path.join(__dirname, '..', '.claude-plugin', 'plugin.json');
@@ -441,9 +441,9 @@ async function main() {
     });
 
     if (contextSummary) {
-      console.log(`🐸 Session ${source}. ${contextSummary}`);
+      console.log(`🦉 Session ${source}. ${contextSummary}`);
     } else {
-      console.log(`🐸 Session ${source}.`);
+      console.log(`🦉 Session ${source}.`);
     }
 
     // Emit plugin prefix banner — single source of truth for Agent tool dispatch.
@@ -474,7 +474,7 @@ async function main() {
           hasStatusLine = !!settings.statusLine;
         }
         if (!hasStatusLine) {
-          console.log('💡 Tip: Enable Aura Frog status line for always-visible agent/phase info (0 tokens). Run: project:sync-settings');
+          console.log('💡 Tip: Enable Archon OS status line for always-visible agent/phase info (0 tokens). Run: project:sync-settings');
         }
         // Mark hint as shown
         const hintDir = path.dirname(statusHintFile);
@@ -498,7 +498,7 @@ async function main() {
           // Stale markers: hard-coded `│ P%s │` printf, or AF_PHASE="-" default.
           const isStale = /\|\s*P%s\s*\|/.test(shimContent) || /AF_PHASE\s*=\s*"-"/.test(shimContent);
           if (isStale) {
-            const pluginShim = path.join(home, '.claude', 'plugins', 'marketplaces', 'aurafrog', 'archon-os', 'scripts', 'statusline-shim.sh');
+            const pluginShim = path.join(home, '.claude', 'plugins', 'marketplaces', 'archon', 'archon-os', 'scripts', 'statusline-shim.sh');
             console.log('⚠️  Detected stale ~/.claude/statusline-command.sh (renders `P-` instead of mode/step/agent).');
             console.log(`   Fix:  cp '${pluginShim}' '${userShim}' && chmod +x '${userShim}'`);
             console.log('   Or point settings.json directly at the plugin: see archon-os/settings.example.json');
@@ -526,7 +526,7 @@ async function main() {
 
     process.exit(0);
   } catch (error) {
-    console.error(`🐸 SessionStart hook error: ${error.message}`);
+    console.error(`🦉 SessionStart hook error: ${error.message}`);
     process.exit(0); // Non-blocking
   }
 }

@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Aura Frog — outbound endpoint guard
+ * Archon OS — outbound endpoint guard
  *
  * Every outbound request this plugin makes carries a long-lived credential: the
  * Supabase service key (apikey + Bearer) for the learning tier, a base64 Jira

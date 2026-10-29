@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog — Tool Call Tracer
+ * Archon OS — Tool Call Tracer
  *
  * Fires: PreToolUse + PostToolUse for Bash | Edit | Write | Read | Grep | Glob
  * Purpose: Emit append-only trace events to .claude/plans/traces/{TASK_ID}.jsonl

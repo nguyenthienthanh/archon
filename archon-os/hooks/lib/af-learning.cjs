@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog - Learning System Utilities
+ * Archon OS - Learning System Utilities
  *
  * Handles learning storage with dual-mode support:
  * - Supabase: Cloud storage for cross-session memory

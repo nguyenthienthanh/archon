@@ -1,12 +1,12 @@
-# Aura Frog Hooks System
+# Archon OS Hooks System
 
-**Purpose:** Configure Claude Code lifecycle hooks for Aura Frog workflows
+**Purpose:** Configure Claude Code lifecycle hooks for Archon OS workflows
 
 ---
 
 ## hooks.json Structure
 
-Aura Frog uses Claude Code hooks to enhance workflow automation and safety.
+Archon OS uses Claude Code hooks to enhance workflow automation and safety.
 
 ### File Location
 ```
@@ -63,7 +63,7 @@ env_vars[16]{var,description}:
 
 **Example Output:**
 ```
-🐸 Session startup. Type: single-repo | PM: pnpm | Framework: nextjs | Suggested: 241223-user-auth
+🦉 Session startup. Type: single-repo | PM: pnpm | Framework: nextjs | Suggested: 241223-user-auth
 ```
 
 **Script:** `hooks/session-start.cjs`
@@ -131,7 +131,7 @@ No "type continue" step: after an auto-compact Claude continues the turn with th
 
 **Example injected context:**
 ```
-# 🔄 Aura Frog — resume: Auth work
+# 🔄 Archon OS — resume: Auth work
 
 Handoff `auth-work` · saved 2026-09-13T10:00:00Z · resume with `/run resume auth-work`
 
@@ -556,7 +556,7 @@ work surfaces the planning choice even when `/run` isn't typed.
 **Example:**
 ```
 User: "rewrite the whole auth system and migrate from Auth0 to Cognito, rollout v2.0"
-Hook: 🐸 plan-escalation: task scores 4 (≥3) on the escalation rubric —
+Hook: 🦉 plan-escalation: task scores 4 (≥3) on the escalation rubric —
       signals: shipping_scope, scope_verbs. No active plan tree.
 ```
 
@@ -638,7 +638,7 @@ User: "Implement JWT authentication for the API"
 
 **Example:**
 ```
---- Aura Frog Context ---
+--- Archon OS Context ---
 📍 Phase: 3
 📋 Plan: plans/241223-user-profile
 📦 Project: my-app

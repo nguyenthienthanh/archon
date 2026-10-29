@@ -7,15 +7,15 @@ audience: power-user
 # CLAUDE.md File Architecture
 
 **Last Updated:** 2025-11-27
-**Purpose:** Explain Aura Frog's dual-file loader CLAUDE.md architecture with Skills system
+**Purpose:** Explain Archon OS's dual-file loader CLAUDE.md architecture with Skills system
 
 ---
 
 ## 🚨 Architecture Decision: Dual-File Loader Architecture
 
-**Aura Frog uses TWO files working together:**
+**Archon OS uses TWO files working together:**
 1. **Project `.claude/CLAUDE.md`** - Lightweight loader (tells Claude to read plugin)
-2. **Plugin `archon-os/CLAUDE.md`** - Complete Aura Frog system instructions
+2. **Plugin `archon-os/CLAUDE.md`** - Complete Archon OS system instructions
 
 **Why Both Files?**
 - ✅ Claude Code ONLY auto-loads project `.claude/CLAUDE.md` (not plugin)
@@ -32,11 +32,11 @@ audience: power-user
 
 ```
 1. .claude/CLAUDE.md (project) ← HIGHEST (if exists, overrides plugin)
-2. ~/.claude/plugins/.../CLAUDE.md (plugin) ← Aura Frog uses this
+2. ~/.claude/plugins/.../CLAUDE.md (plugin) ← Archon OS uses this
 3. ~/.claude/CLAUDE.md (global) ← LOWEST
 ```
 
-**Aura Frog Strategy:**
+**Archon OS Strategy:**
 - ✅ Creates lightweight `.claude/CLAUDE.md` in projects (loader file)
 - ✅ Project CLAUDE.md tells Claude to read plugin CLAUDE.md
 - ✅ Plugin CLAUDE.md contains ALL system instructions
@@ -46,10 +46,10 @@ audience: power-user
 
 ## Architecture Overview
 
-Aura Frog uses a **dual-file loader + project context** architecture:
+Archon OS uses a **dual-file loader + project context** architecture:
 
 1. **Project CLAUDE.md** (Loader) - Tells Claude to read plugin CLAUDE.md
-2. **Plugin CLAUDE.md** (System) - ALL Aura Frog instructions (single source of truth)
+2. **Plugin CLAUDE.md** (System) - ALL Archon OS instructions (single source of truth)
 3. **Project Context** (Data) - Project-specific conventions, rules, examples
 
 ### File Locations
@@ -157,7 +157,7 @@ Aura Frog uses a **dual-file loader + project context** architecture:
 
 ### When to Update Plugin CLAUDE.md
 
-Update when changing core Aura Frog behavior:
+Update when changing core Archon OS behavior:
 - Adding new agents
 - Changing workflow logic
 - Updating approval gates

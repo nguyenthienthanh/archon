@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Aura Frog — CLI Dashboard
+# Archon OS — CLI Dashboard
 #
 # Terse one-screen view of plan tree, active task, conflicts, freezes,
 # token budget, MCP usage, pre-flight bypass count.
@@ -153,7 +153,7 @@ section_preflight() {
 # ---------- main render ----------
 
 render_static() {
-  echo "🐸 Aura Frog — Dashboard"
+  echo "🦉 Archon OS — Dashboard"
   echo "─────────────────────────────────────────────────────────────"
   if [ -n "$SECTION" ]; then
     "section_${SECTION}"

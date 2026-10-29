@@ -6,7 +6,7 @@ audience: active-user
 
 # Confluence Operations Guide
 
-**Complete guide for Confluence integration with Aura Frog Team Agents**
+**Complete guide for Confluence integration with Archon OS Team Agents**
 
 ---
 

@@ -4,11 +4,11 @@ status: current
 audience: active-user
 ---
 
-# Aura Frog Learning System
+# Archon OS Learning System
 
 **Status:** Production Ready
 
-The Learning System enables Aura Frog to improve over time by collecting feedback, analyzing patterns, and generating actionable insights. It works out of the box with local JSON files -- no external services required.
+The Learning System enables Archon OS to improve over time by collecting feedback, analyzing patterns, and generating actionable insights. It works out of the box with local JSON files -- no external services required.
 
 ---
 

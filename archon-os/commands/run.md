@@ -1,6 +1,6 @@
 # Run Commands
 
-The universal entry point. Type `/run <task>` and Aura Frog auto-detects intent: feature, bugfix, refactor, test, deploy, review — then runs the right flow.
+The universal entry point. Type `/run <task>` and Archon OS auto-detects intent: feature, bugfix, refactor, test, deploy, review — then runs the right flow.
 
 **Category:** Core
 **Scope:** Session

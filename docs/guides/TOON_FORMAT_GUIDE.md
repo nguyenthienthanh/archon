@@ -20,7 +20,7 @@ TOON (Token-Oriented Object Notation) is an open-source format created by the [t
 - **Documentation:** https://toonformat.dev
 - **NPM Package:** `@toon-format/toon`
 
-Aura Frog uses TOON format under the MIT license to optimize token usage in AI-readable documents.
+Archon OS uses TOON format under the MIT license to optimize token usage in AI-readable documents.
 
 ---
 
@@ -107,7 +107,7 @@ apis[2]{method,endpoint,request,response}:
 
 ---
 
-## TOON in Aura Frog
+## TOON in Archon OS
 
 ### TECH_SPEC.md Format
 

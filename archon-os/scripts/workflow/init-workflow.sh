@@ -239,7 +239,7 @@ ${additional_context}
 
 - **Project Root:** $(pwd)
 - **User:** ${USER}
-- **Aura Frog Version:** 4.0.0
+- **Archon OS Version:** 4.0.0
 
 ## Directory Structure
 
@@ -333,7 +333,7 @@ detect_agents() {
 show_banner() {
     echo ""
     echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-    echo -e "${BLUE}🐸 Aura Frog Workflow Initialization v2.0${NC}"
+    echo -e "${BLUE}🦉 Archon OS Workflow Initialization v2.0${NC}"
     echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     echo ""
 }

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog — Bare-Word Plan Router (UserPromptSubmit)
+ * Archon OS — Bare-Word Plan Router (UserPromptSubmit)
  *
  * Fires only when:
  *   1. .claude/plans/active.json exists (project has a plan tree)
@@ -100,7 +100,7 @@ function emitHint(verb, prompt) {
   // Claude reads stderr; this hint is metadata, not user-facing output.
   const target = `/archon-os:plan ${prompt}`;
   process.stderr.write(
-    `\n🐸 plan-router: bare-word verb '${verb}' detected; treat as: ${target}\n`
+    `\n🦉 plan-router: bare-word verb '${verb}' detected; treat as: ${target}\n`
   );
 }
 

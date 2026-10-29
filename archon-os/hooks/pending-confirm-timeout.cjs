@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog — Pending-Confirm Timeout Warning
+ * Archon OS — Pending-Confirm Timeout Warning
  *
  * Fires: SessionStart (and as a periodic check via session-start cascade)
  * Purpose: Warn the user about T4 tasks that have been in pending-confirm

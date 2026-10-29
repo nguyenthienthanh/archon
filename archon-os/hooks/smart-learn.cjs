@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog - Smart Learn Hook
+ * Archon OS - Smart Learn Hook
  *
  * Fires: PostToolUse (Write, Edit, Bash) — dispatched in-process by
  *        learning-dispatch.cjs (no longer registered directly in hooks.json;

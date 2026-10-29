@@ -86,7 +86,7 @@ This rule tells Claude the policy. Compliance depends on orchestrator respecting
 | User realized Phase 1 requirement was wrong | `/run reopen 1` then re-approve |
 | Security review in P4 revealed P1 design flaw | `/run reopen 1` — security takes priority |
 | Test failure in P4 traced back to P2 test gap | `/run reopen 2` — tests need expansion |
-| Minor wording fix in approved doc | **Don't reopen — leave it.** Post-workflow edits are outside Aura Frog's audit scope. |
+| Minor wording fix in approved doc | **Don't reopen — leave it.** Post-workflow edits are outside Archon OS's audit scope. |
 
 ---
 

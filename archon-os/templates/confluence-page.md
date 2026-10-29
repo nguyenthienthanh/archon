@@ -100,4 +100,4 @@ What is deliberately left open, where and when it gets settled.
 
 ----
 
-_Generated with [Aura Frog|https://github.com/nguyenthienthanh/archon] · Updated: [YYYY-MM-DD]_
+_Generated with [Archon OS|https://github.com/nguyenthienthanh/archon] · Updated: [YYYY-MM-DD]_

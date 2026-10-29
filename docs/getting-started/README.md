@@ -5,7 +5,7 @@ audience: first-time
 estimated_reading_time: 30 minutes (3 docs combined)
 ---
 
-# Getting Started with Aura Frog
+# Getting Started with Archon OS
 
 Read these in order. Each builds on the previous.
 

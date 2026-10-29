@@ -1,7 +1,7 @@
 # Project Examples
 
 **Project:** Your Project Name  
-**Purpose:** Provide concrete examples for Aura Frog to use in workflows
+**Purpose:** Provide concrete examples for Archon OS to use in workflows
 
 ---
 

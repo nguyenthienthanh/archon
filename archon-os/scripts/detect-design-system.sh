@@ -1,6 +1,6 @@
 #!/bin/bash
 # =============================================================================
-# Aura Frog - Design System Detection Script
+# Archon OS - Design System Detection Script
 # =============================================================================
 # Detects the design system used in a project by analyzing:
 # 1. package.json dependencies

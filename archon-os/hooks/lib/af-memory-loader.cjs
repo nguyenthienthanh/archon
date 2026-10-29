@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog - Memory Loader Library
+ * Archon OS - Memory Loader Library
  *
  * Loads learned patterns from Supabase at session start.
  * Caches results locally for Claude to read during session.

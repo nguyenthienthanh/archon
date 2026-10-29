@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog — JS-side atomic counter mint.
+ * Archon OS — JS-side atomic counter mint.
  *
  * Increments a `.counters.json` counter under a mkdir-based lock that shares
  * the SAME `${file}.lock` path the bash `_lib.sh with_lock` uses, so JS hooks

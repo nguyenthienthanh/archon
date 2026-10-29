@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog — Learning Dispatch (PostToolUse)
+ * Archon OS — Learning Dispatch (PostToolUse)
  *
  * Fires: PostToolUse with matcher "Write|Edit|Bash"
  * Purpose: Consolidate the per-Write/per-Bash learning hooks into ONE node

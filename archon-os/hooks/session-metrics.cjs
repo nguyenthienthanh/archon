@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog - Session Metrics Hook
+ * Archon OS - Session Metrics Hook
  *
  * Fires: On session Stop
  * Purpose: Collect and send session metrics to Supabase learning system
@@ -189,7 +189,7 @@ async function sendWorkflowMetrics(workflowId, stateFile) {
  * Track agent usage from session state
  */
 async function sendAgentMetrics() {
-  // Try to read from Aura Frog session state
+  // Try to read from Archon OS session state
   const { readSessionState, writeSessionState } = require('./lib/af-config-utils.cjs');
   const sessionId = process.ppid?.toString();
 
@@ -244,7 +244,7 @@ async function main() {
       const result = await sendWorkflowMetrics(workflow.workflowId, workflow.stateFile);
       if (result && result.sent) {
         const patternMsg = result.patterns > 0 ? ` + ${result.patterns} patterns` : '';
-        console.log(`🐸 Learning: Session metrics recorded${patternMsg}`);
+        console.log(`🦉 Learning: Session metrics recorded${patternMsg}`);
         sent = true;
       }
     }
@@ -252,13 +252,13 @@ async function main() {
     // Send agent metrics
     const agentCount = await sendAgentMetrics();
     if (agentCount > 0) {
-      console.log(`🐸 Learning: ${agentCount} agent metrics recorded`);
+      console.log(`🦉 Learning: ${agentCount} agent metrics recorded`);
       sent = true;
     }
 
     process.exit(0);
   } catch (error) {
-    console.error(`🐸 Session metrics error: ${error.message}`);
+    console.error(`🦉 Session metrics error: ${error.message}`);
     process.exit(0);
   }
 }

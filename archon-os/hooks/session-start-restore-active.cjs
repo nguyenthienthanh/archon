@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog — SessionStart: Restore Active Plan
+ * Archon OS — SessionStart: Restore Active Plan
  *
  * Fires: SessionStart (startup, resume, clear, compact)
  * Purpose: On every new session, re-announce the active plan focus so the
@@ -35,13 +35,13 @@ function composeBanner(active) {
   const a = (active && active.active) || {};
   const banner = [];
   if (a.feature) {
-    banner.push(`🐸 Active plan: ${a.feature}`);
+    banner.push(`🦉 Active plan: ${a.feature}`);
     if (a.story) banner.push(`Story: ${a.story}`);
     if (a.task) banner.push(`Task: ${a.task}`);
   } else if (a.initiative) {
-    banner.push(`🐸 Active plan: ${a.initiative}`);
+    banner.push(`🦉 Active plan: ${a.initiative}`);
   } else if (a.mission) {
-    banner.push(`🐸 Active mission: ${a.mission}`);
+    banner.push(`🦉 Active mission: ${a.mission}`);
   }
   return banner;
 }

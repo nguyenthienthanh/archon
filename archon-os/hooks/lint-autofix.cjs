@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog - Lint Auto-Fix Hook
+ * Archon OS - Lint Auto-Fix Hook
  *
  * Fires: PostToolUse (after Write|Edit)
  * Purpose: Automatically run linters/formatters after file changes

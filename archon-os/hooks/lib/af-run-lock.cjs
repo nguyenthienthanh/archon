@@ -1,5 +1,5 @@
 /**
- * Aura Frog - Single-Flight Run Lock
+ * Archon OS - Single-Flight Run Lock
  *
  * A tiny advisory lock for hooks that launch expensive child processes
  * (linters, test runners). Without it, N concurrent Write/Edit tool calls each

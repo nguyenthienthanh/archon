@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Aura Frog Pre-flight: tool input shape sanity
+# Archon OS Pre-flight: tool input shape sanity
 # Sniff CLAUDE_TOOL_NAME + CLAUDE_TOOL_ARGS env vars; warn on common shape errors.
 #
 # Exit codes: 0 pass / 1 warn / 2 fail

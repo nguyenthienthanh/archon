@@ -1,5 +1,5 @@
 /**
- * Aura Frog - Shared Configuration Utilities
+ * Archon OS - Shared Configuration Utilities
  *
  * Contains config loading, path resolution, project detection,
  * and common utilities used by session hooks.

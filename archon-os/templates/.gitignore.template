@@ -1,11 +1,11 @@
 # ================================================
-# Aura Frog (Claude Code Project Management)
+# Archon OS (Claude Code Project Management)
 # ================================================
 # Add these entries to your project's .gitignore
-# to properly handle Aura Frog-generated files
+# to properly handle Archon OS-generated files
 # ================================================
 
-# Aura Frog Project Data
+# Archon OS Project Data
 .claude/logs/**/*           # Workflow execution logs
 !.claude/logs/.gitkeep      # Keep folder structure
 !.claude/logs/**/.gitkeep   # Keep subfolder structure

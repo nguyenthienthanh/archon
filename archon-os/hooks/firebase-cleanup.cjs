@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog - Firebase Debug Log Cleanup Hook
+ * Archon OS - Firebase Debug Log Cleanup Hook
  *
  * Fires: SessionStart
  * Purpose: Prevent firebase-debug.log creation when Firebase is not configured

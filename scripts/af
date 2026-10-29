@@ -1,5 +1,5 @@
 #!/bin/bash
-# af — Aura Frog CLI wrapper
+# af — Archon OS CLI wrapper
 # Zero dependencies, pure bash
 # Install: af setup cli
 
@@ -13,11 +13,11 @@ find_plugin_dir() {
 
   # 2. Local repo (developers)
   local script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-  local local_repo="$(dirname "$script_dir")/aura-frog"
+  local local_repo="$(dirname "$script_dir")/archon-os"
   [ -d "$local_repo" ] && echo "$local_repo" && return
 
   # 3. Current directory
-  [ -d "aura-frog" ] && echo "aura-frog" && return
+  [ -d "archon-os" ] && echo "archon-os" && return
 
   echo ""
 }
@@ -32,14 +32,14 @@ fi
 handle_setup() {
   case "${1:-}" in
     cli)
-      echo "🐸 Install af CLI globally"
+      echo "🦉 Install af CLI globally"
       echo "=========================="
       echo ""
       # Find the af script location
       local af_path="${BASH_SOURCE[0]}"
       if [ ! -f "$af_path" ]; then
         # Try marketplace location
-        af_path="$HOME/.claude/plugins/marketplaces/aurafrog/scripts/af"
+        af_path="$HOME/.claude/plugins/marketplaces/archon/scripts/af"
       fi
 
       if [ ! -f "$af_path" ]; then
@@ -69,12 +69,12 @@ handle_setup() {
         echo "  sudo ln -sf \"$af_path\" /usr/local/bin/af"
         echo ""
         echo "  # Option 2: Add to PATH"
-        echo "  echo 'export PATH=\"\$HOME/.claude/plugins/marketplaces/aurafrog/scripts:\$PATH\"' >> ~/.zshrc"
+        echo "  echo 'export PATH=\"\$HOME/.claude/plugins/marketplaces/archon/scripts:\$PATH\"' >> ~/.zshrc"
       fi
       ;;
 
     remote)
-      echo "🐸 Remote Control Setup"
+      echo "🦉 Remote Control Setup"
       echo "======================="
       echo ""
       echo "Remote Control lets you drive Claude Code from your phone or browser."
@@ -94,7 +94,7 @@ handle_setup() {
       ;;
 
     channels)
-      echo "🐸 Channels Setup (Research Preview)"
+      echo "🦉 Channels Setup (Research Preview)"
       echo "====================================="
       echo ""
       echo "Channels push external events INTO your Claude Code session."
@@ -125,10 +125,10 @@ handle_setup() {
       ;;
 
     slack)
-      echo "🐸 Slack MCP Setup"
+      echo "🦉 Slack MCP Setup"
       echo "==================="
       echo ""
-      echo "Aura Frog bundles a Slack MCP server for notifications."
+      echo "Archon OS bundles a Slack MCP server for notifications."
       echo ""
       echo "1. Create Slack App: https://api.slack.com/apps"
       echo "   - Add scopes: chat:write, channels:history, channels:read, users:read"
@@ -144,12 +144,12 @@ handle_setup() {
       echo "4. Test:"
       echo "   Ask Claude to post a message to a Slack channel."
       echo ""
-      echo "Aura Frog auto-invokes Slack MCP for Phase 9 notifications"
+      echo "Archon OS auto-invokes Slack MCP for Phase 9 notifications"
       echo "and workflow completion alerts."
       ;;
 
     schedule)
-      echo "🐸 Scheduled Tasks Setup"
+      echo "🦉 Scheduled Tasks Setup"
       echo "========================="
       echo ""
       echo "── Session-scoped (dies when you exit) ──"
@@ -173,7 +173,7 @@ handle_setup() {
       ;;
 
     *)
-      echo "🐸 Aura Frog Setup"
+      echo "🦉 Archon OS Setup"
       echo ""
       echo "Usage: af setup <topic>"
       echo ""
@@ -194,7 +194,7 @@ case "${1:-help}" in
     ;;
 
   install)
-    echo "🐸 Installing Aura Frog..."
+    echo "🦉 Installing Archon OS..."
     echo ""
     echo "Run in Claude Code:"
     echo "  /plugin marketplace add $REPO"
@@ -205,7 +205,7 @@ case "${1:-help}" in
     ;;
 
   update)
-    echo "🐸 Checking for updates..."
+    echo "🦉 Checking for updates..."
     latest=$(curl -s "https://api.github.com/repos/$REPO/releases/latest" 2>/dev/null | grep tag_name | cut -d'"' -f4)
     if [ -n "$latest" ]; then
       echo "Current: v$VERSION"
@@ -215,7 +215,7 @@ case "${1:-help}" in
       else
         echo ""
         echo "Update in Claude Code:"
-        echo "  /plugin marketplace update aurafrog"
+        echo "  /plugin marketplace update archon"
       fi
     else
       echo "Could not check latest version (no network?)"
@@ -223,11 +223,11 @@ case "${1:-help}" in
     ;;
 
   version|-v|--version)
-    echo "Aura Frog v$VERSION"
+    echo "Archon OS v$VERSION"
     ;;
 
   doctor)
-    echo "🐸 Aura Frog Health Check"
+    echo "🦉 Archon OS Health Check"
     echo "========================="
     if [ -z "$PLUGIN_DIR" ]; then
       echo "❌ Plugin not found"
@@ -298,7 +298,7 @@ case "${1:-help}" in
 
   envrc)
     # Trust-file management for .envrc auto-sourcing.
-    # Aura Frog hooks call envrc-guarded-source.sh which only sources
+    # Archon OS hooks call envrc-guarded-source.sh which only sources
     # .envrc files whose sha256 matches an entry in ~/.config/aura-frog/envrc-trust.json.
     trust_dir="${HOME}/.config/aura-frog"
     trust_file="${trust_dir}/envrc-trust.json"
@@ -367,7 +367,7 @@ json.dump(data, open(tf, 'w'), indent=2)
         echo "✅ Revoked: $envrc_path"
         ;;
       status)
-        echo "🐸 .envrc trust status"
+        echo "🦉 .envrc trust status"
         echo "===================="
         echo "Current dir: $(pwd)"
         if [ ! -f "$envrc_path" ]; then
@@ -425,7 +425,7 @@ json.dump(data, open(tf, 'w'), indent=2)
     ;;
 
   help|-h|--help|*)
-    echo "🐸 Aura Frog CLI v$VERSION"
+    echo "🦉 Archon OS CLI v$VERSION"
     echo ""
     echo "Usage: af <command>"
     echo ""

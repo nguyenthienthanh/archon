@@ -30,7 +30,7 @@ signals[5]{strength,trigger,occurrences_required}:
   Strong,"User says 'add a rule that…' or 'make this a skill'",1
   Medium,"Same correction repeats across recent turns",3
   Medium,"Same multi-step procedure invoked manually",3
-  Weak,"README/CONTRIBUTING references a workflow Aura Frog lacks",2 (combined with another weak)
+  Weak,"README/CONTRIBUTING references a workflow Archon OS lacks",2 (combined with another weak)
 ```
 
 Single weak signals NEVER fire. Counting window: last 10 turns OR current session boundary, whichever is shorter.

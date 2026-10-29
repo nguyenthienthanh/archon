@@ -1,12 +1,12 @@
 ---
-title: Aura Frog — Consolidated Roadmap & Research
+title: Archon OS — Consolidated Roadmap & Research
 last_aligned_with: v4.0.0-alpha.2
 status: current
 audience: contributor
 generated: 2026-07-09
 ---
 
-# Aura Frog — Consolidated Roadmap & Research
+# Archon OS — Consolidated Roadmap & Research
 
 > **Single source of truth for pending work + research.** This document consolidates:
 > the 2026-07-03 three-agent codebase audit, in-session research (codebase-memory-mcp,

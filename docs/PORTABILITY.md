@@ -4,13 +4,13 @@ status: current
 audience: active-user
 ---
 
-# Portability — Aura Frog Across AI Coding Tools
+# Portability — Archon OS Across AI Coding Tools
 
 ## Why Portability Matters
 
 The AI coding-tool landscape is moving fast. Teams often use Claude Code, Cursor, Codex, Windsurf, and others — sometimes concurrently. The rules, skills, and agent conventions you invest in should **outlast any single tool's lifecycle**. If a better tool ships next year, your workflow discipline shouldn't start from zero.
 
-Aura Frog is designed as an **instruction layer**, not a Claude Code addon. The bulk of the plugin is markdown conventions that any modern AI coding tool can consume. Only the thin hook layer is tool-specific — and swapping it is an engineering exercise, not a rewrite.
+Archon OS is designed as an **instruction layer**, not a Claude Code addon. The bulk of the plugin is markdown conventions that any modern AI coding tool can consume. Only the thin hook layer is tool-specific — and swapping it is an engineering exercise, not a rewrite.
 
 ---
 
@@ -31,7 +31,7 @@ Aura Frog is designed as an **instruction layer**, not a Claude Code addon. The 
 
 ## Adapter Architecture
 
-Aura Frog's hook layer is deliberately thin — 28 handler scripts, ~1,000 lines of CommonJS, each responding to a well-defined event (PreToolUse, PostToolUse, SessionStart, etc.). Porting to another tool boils down to **mapping event names and I/O conventions**.
+Archon OS's hook layer is deliberately thin — 28 handler scripts, ~1,000 lines of CommonJS, each responding to a well-defined event (PreToolUse, PostToolUse, SessionStart, etc.). Porting to another tool boils down to **mapping event names and I/O conventions**.
 
 ```mermaid
 flowchart LR
@@ -65,7 +65,7 @@ flowchart LR
 
 ### Event Mapping Table
 
-| Aura Frog hook | Claude Code event | Cursor equivalent | Codex equivalent |
+| Archon OS hook | Claude Code event | Cursor equivalent | Codex equivalent |
 |----------------|-------------------|-------------------|------------------|
 | `pre-tool-use` | `PreToolUse` | `before_tool` | `tool_guard` |
 | `post-tool-use` | `PostToolUse` | `after_tool` | `tool_hook` |
@@ -112,11 +112,11 @@ The porter automates steps 1–5 of the manual guide below. See `archon-os/scrip
 
 ## Porting Guide for Contributors
 
-If you want to adapt Aura Frog for your tool (or extend the porter to a new target):
+If you want to adapt Archon OS for your tool (or extend the porter to a new target):
 
 1. **Copy the universal layer as-is:** `archon-os/rules/`, `archon-os/skills/`, `archon-os/agents/`, `archon-os/commands/` — or run the porter above
 2. **Rewrite `archon-os/hooks/`** in your tool's extension language (CommonJS, Python, Lua, etc.)
-3. **Map event names** per the table above — each Aura Frog hook script maps to one or more of your tool's events
+3. **Map event names** per the table above — each Archon OS hook script maps to one or more of your tool's events
 4. **Adjust paths:** Claude Code convention `.claude/logs/runs/` becomes `.cursor/runs/` or whatever your tool uses
 5. **Translate `.mcp.json`** to your tool's MCP config format (most accept the same JSON schema)
 6. **Run behavioral evaluation** via `cc-plugin-eval` (port the runner; the test scenarios are portable)
@@ -148,7 +148,7 @@ No. The 95% applies to the content (rules, skills, agent definitions, commands, 
 Portability costs you nothing. The design works great as a Claude Code–native plugin. Portability is future-proofing.
 
 **Q: Is there a runtime adapter, or do I have to maintain forks?**
-Planned: a single adapter repo per target tool (`aura-frog-codex`, `aura-frog-cursor`) that pulls the universal layer as a submodule or published package. See the roadmap for timelines.
+Planned: a single adapter repo per target tool (`archon-os-codex`, `archon-os-cursor`) that pulls the universal layer as a submodule or published package. See the roadmap for timelines.
 
 **Q: Can I contribute a Windsurf or Cline adapter?**
 Yes — we welcome it. Follow the Porting Guide above and open a PR. The reference implementation will be the Codex adapter when it ships (target Q2 2026).

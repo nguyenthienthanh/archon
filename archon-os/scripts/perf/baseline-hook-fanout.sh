@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-# Aura Frog — Hook Fan-out Performance Baseline
+# Archon OS — Hook Fan-out Performance Baseline
 #
 # TASK-00025 | STORY-0009 | v3.8.0-alpha.2
 #
@@ -89,7 +89,7 @@ else
     TIME_FLAG="-v"
 fi
 
-echo "=== Aura Frog Hook Fan-out Baseline ===" >&2
+echo "=== Archon OS Hook Fan-out Baseline ===" >&2
 echo "Platform : $PLATFORM" >&2
 echo "Hooks dir: $HOOKS_DIR" >&2
 echo "Output   : $OUTPUT_PATH" >&2

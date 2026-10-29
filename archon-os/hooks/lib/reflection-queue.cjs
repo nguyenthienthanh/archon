@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Aura Frog — durable async reflection queue (KG-2.3)
+ * Archon OS — durable async reflection queue (KG-2.3)
  *
  * OPT-IN, crash-safe, on-disk queue for post-session reflections. A reflection
  * payload is appended as one JSONL line; a processor drains the queue by running

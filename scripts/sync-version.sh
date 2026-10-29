@@ -1,5 +1,5 @@
 #!/bin/bash
-# Aura Frog Version Sync Script
+# Archon OS Version Sync Script
 # Purpose: Synchronize version numbers across all configuration files
 #
 # SINGLE SOURCE OF TRUTH: archon-os/.claude-plugin/plugin.json

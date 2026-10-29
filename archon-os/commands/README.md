@@ -1,4 +1,4 @@
-# Aura Frog Commands
+# Archon OS Commands
 
 **Total:** 24 command files (5 bundled + 1 standalone + 12 hierarchical-planning slash commands + 1 project-extension + 1 session-reset + 1 pre-flight + 3 self-healing/MCP-security/dashboard)
 

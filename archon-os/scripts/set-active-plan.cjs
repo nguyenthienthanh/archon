@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog - Set Active Plan Command
+ * Archon OS - Set Active Plan Command
  *
  * Usage (from Claude):
  *   node hooks/set-active-plan.cjs <plan-path>

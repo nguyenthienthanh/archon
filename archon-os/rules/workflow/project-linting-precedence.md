@@ -11,7 +11,7 @@
 
 ## Core Rule
 
-**Project's ESLint/Prettier config MERGES with Aura Frog rules.** Conflicts: project wins. No conflict: Aura Frog applies.
+**Project's ESLint/Prettier config MERGES with Archon OS rules.** Conflicts: project wins. No conflict: Archon OS applies.
 
 ---
 
@@ -20,8 +20,8 @@
 ```toon
 merge_strategy[3]{layer,behavior,example}:
   1,Project config overrides,"Semicolons: project says no → no semicolons"
-  2,Aura Frog fills gaps,"Error handling: project silent → use Aura Frog"
-  3,Combined result,"Follow project style + Aura Frog best practices"
+  2,Archon OS fills gaps,"Error handling: project silent → use Archon OS"
+  3,Combined result,"Follow project style + Archon OS best practices"
 ```
 
 ---
@@ -40,26 +40,26 @@ config_files[4]{tool,files}:
 
 ## Merge Examples
 
-| Topic | Project Config | Aura Frog Rule | Result |
+| Topic | Project Config | Archon OS Rule | Result |
 |-------|---------------|----------------|--------|
 | Semicolons | `semi: false` | Use semicolons | No semicolons (project) |
-| Error handling | (silent) | Typed errors | Typed errors (Aura Frog) |
+| Error handling | (silent) | Typed errors | Typed errors (Archon OS) |
 | Import order | Custom order | Standard order | Custom order (project) |
-| TDD | (silent) | RED-GREEN-REFACTOR | TDD applies (Aura Frog) |
+| TDD | (silent) | RED-GREEN-REFACTOR | TDD applies (Archon OS) |
 
 ---
 
 ## Before Writing Code
 
 1. Check for config: `ls -la .eslintrc* eslint.config.* .prettierrc* tsconfig.json 2>/dev/null`
-2. Parse and merge: project rules override conflicts, Aura Frog fills gaps
+2. Parse and merge: project rules override conflicts, Archon OS fills gaps
 3. Apply merged ruleset
 
 ---
 
 ## No Project Config
 
-When no linting config exists: Aura Frog rules apply fully. Follow `code-quality.md`, `naming-conventions.md`.
+When no linting config exists: Archon OS rules apply fully. Follow `code-quality.md`, `naming-conventions.md`.
 
 ---
 

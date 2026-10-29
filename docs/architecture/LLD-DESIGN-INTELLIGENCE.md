@@ -8,7 +8,7 @@ audience: contributor
 
 **Status:** Draft for review — no code written
 **Date:** 2026-07-16
-**Scope:** Aura Frog plugin (skills / agents / hooks / MCP config)
+**Scope:** Archon OS plugin (skills / agents / hooks / MCP config)
 **Goal:** Agents thông minh hơn về design — có vision (screenshot critique loop), design-system làm source of truth, và tích hợp Google Stitch MCP thay cho quy trình copy-paste thủ công.
 
 ---
@@ -26,7 +26,7 @@ audience: contributor
 | A5 | Skill đó chỉ đạo **vision self-critique qua screenshot trong lúc build** khi môi trường hỗ trợ — official endorsement của screenshot feedback loop. | như trên |
 | A6 | Agent SDK core architecture: **gather context → take action → verify work → repeat**; với UI work, "visual feedback (screenshots or renders) can be helpful". | [anthropic.com/engineering/building-agents-with-the-claude-agent-sdk](https://www.anthropic.com/engineering/building-agents-with-the-claude-agent-sdk) |
 | A7 | Anthropic xếp **rules-based feedback (lint, defined output rules) là tín hiệu verify mạnh nhất**; LLM-as-judge "generally not a very robust method". → gate deterministic trước, vision critique sau. | như trên |
-| A8 | Đường chính thức cho browser vision loop: **Playwright MCP** (`npx @playwright/mcp@latest`) — đã có sẵn trong Aura Frog `.mcp.json`. | [code.claude.com/docs/en/agent-sdk/overview](https://code.claude.com/docs/en/agent-sdk/overview) |
+| A8 | Đường chính thức cho browser vision loop: **Playwright MCP** (`npx @playwright/mcp@latest`) — đã có sẵn trong Archon OS `.mcp.json`. | [code.claude.com/docs/en/agent-sdk/overview](https://code.claude.com/docs/en/agent-sdk/overview) |
 | A9 | Canonical vision-loop prompt pattern (computer-use docs): "After each step, take a screenshot and carefully evaluate if you have achieved the right outcome… Only when you confirm a step was executed correctly should you move on." Tool `computer_20251124` có action `zoom` xem vùng màn hình full-resolution. | [platform.claude.com — computer-use-tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool) |
 | A10 | **web-artifacts-builder** skill: scaffold multi-file React + Tailwind + shadcn/ui rồi bundle bằng Parcel thành 1 HTML — pattern cho "build thật, không inline blob". | claude.com blog (A1) |
 

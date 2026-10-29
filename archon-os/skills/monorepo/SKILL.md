@@ -99,7 +99,7 @@ pnpm --filter='...[HEAD^1]' test
 
 ---
 
-## Integration with Aura Frog Workflow
+## Integration with Archon OS Workflow
 
 - **Phase 1 design** — identify all packages touched in the plan
 - **Phase 2 tests** — scope to affected packages only

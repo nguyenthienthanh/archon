@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# Aura Frog Integration Test Script
+# Archon OS Integration Test Script
 # Tests connections to Jira, Confluence, Slack, and Figma
 
 set -e
 
-echo "🧪 Aura Frog Integration Tests"
+echo "🧪 Archon OS Integration Tests"
 echo "=========================="
 echo ""
 
@@ -63,7 +63,7 @@ if [ -z "$SLACK_WEBHOOK_URL" ]; then
 else
   RESPONSE=$(curl -s -X POST "$SLACK_WEBHOOK_URL" \
     -H "Content-Type: application/json" \
-    -d '{"text":"Aura Frog integration test ✅"}')
+    -d '{"text":"Archon OS integration test ✅"}')
   
   if [ "$RESPONSE" = "ok" ]; then
     echo -e "${GREEN}✅ PASSED${NC}"
@@ -158,7 +158,7 @@ else
   else
     echo -e "${GREEN}✅ All configured integrations working!${NC}"
     echo ""
-    echo "You can now use Aura Frog with:"
+    echo "You can now use Archon OS with:"
     echo "  - workflow:start PROJ-1234"
     echo "  - bugfix:start PROJ-1234"
     echo "  - document feature 'Feature Name'"

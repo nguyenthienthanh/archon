@@ -4,10 +4,10 @@ status: current
 audience: contributor
 ---
 
-# Aura Frog Workflow Testing Guide
+# Archon OS Workflow Testing Guide
 
 **Last Updated:** 2026-05-14 (v3.7 syntax refresh)
-**Purpose:** How to test the command-based Aura Frog workflow system
+**Purpose:** How to test the command-based Archon OS workflow system
 
 ---
 
@@ -326,7 +326,7 @@ approve
 
 ## 📊 SUCCESS CRITERIA
 
-Your Aura Frog is working if:
+Your Archon OS is working if:
 
 ✅ Commands are recognized  
 ✅ Phases execute in order  
@@ -341,7 +341,7 @@ Your Aura Frog is working if:
 ## 🎉 NEXT STEPS AFTER TESTING
 
 If tests pass:
-1. ✅ Aura Frog is operational!
+1. ✅ Archon OS is operational!
 2. Use for real refactoring tasks
 3. Iterate and improve based on usage
 

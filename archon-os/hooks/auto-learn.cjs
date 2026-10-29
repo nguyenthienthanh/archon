@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog - Auto-Learn Hook
+ * Archon OS - Auto-Learn Hook
  *
  * Fires: UserPromptSubmit
  * Purpose: Automatically detect corrections/feedback in user messages and record them

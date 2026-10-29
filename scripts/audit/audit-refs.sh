@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# audit-refs.sh — reference-integrity gate for the Aura Frog plugin.
+# audit-refs.sh — reference-integrity gate for the Archon OS plugin.
 #
 # Runs the zero-orphan + zero-dead-link + user-invocable checks that used to
 # live inline in .claude/CLAUDE.md. Run BEFORE any commit that touches

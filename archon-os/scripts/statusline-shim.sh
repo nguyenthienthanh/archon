@@ -1,9 +1,9 @@
 #!/bin/bash
-# Aura Frog Status Line shim — THIN PASS-THROUGH (v3.8.0-alpha.4+).
+# Archon OS Status Line shim — THIN PASS-THROUGH (v3.8.0-alpha.4+).
 #
 # The plugin's statusline.sh now owns the FULL multi-line status line:
 #   ➜  {dir}  git:({branch}) {✓|✗N} {↑a} {↓b}   🕐 HH:MM
-#   🐸 AF v{version} │ {mode} {step} │ {agent}
+#   🦉 AF v{version} │ {mode} {step} │ {agent}
 #   {model} │ {ctx}% ctx
 #   💰 … (opt-in: AF_STATUSLINE_COST=1)
 #
@@ -22,5 +22,5 @@ if [ -x "$PLUGIN_STATUSLINE" ]; then
 elif [ -f "$PLUGIN_STATUSLINE" ]; then
     exec bash "$PLUGIN_STATUSLINE"
 else
-    echo "🐸 AF (plugin missing)"
+    echo "🦉 AF (plugin missing)"
 fi

@@ -12,14 +12,14 @@ Format (v3.8.0-alpha.4+): **multi-line**, owned end-to-end by `scripts/statuslin
 
 ```
 ➜  aura-frog  git:(main) ✗3 ↑1              🕐 14:32
-🐸 AF v3.8.0-alpha.6 │ deep P3 │ architect
+🦉 AF v3.8.0-alpha.6 │ deep P3 │ architect
 Opus 4.8 │ 12% ctx
 ⏳ 5h 37% ↻14:40 │ 7d 4% ↻Wed 22:00
 💰 $1.23 │ +342/-87 │ ⏱ 32m 5s │ cc 2.1.16      ← opt-in (AF_STATUSLINE_COST=1)
 ```
 
 - **Line 1** — `{dir}  git:({branch}) {✓ clean | ✗N changed} {↑ahead} {↓behind}` + `🕐 HH:MM`. Git calls guarded (non-git cwd skips them) and degrade silently.
-- **Line 2** — `🐸 AF v{version} │ {mode} {step} │ {agent}`.
+- **Line 2** — `🦉 AF v{version} │ {mode} {step} │ {agent}`.
   - **mode** — from `run-state.json#flow` (bugfix / deep / standard / quick / refactor / test / project / security / review / deploy / quality). `idle` when no active run.
   - **step** — `P{N}` for 5-phase Deep runs (`current_phase`), `S{N}` for bugfix's 4-step TDD (`current_step`). Omitted for quick/idle.
   - **agent** — `run-state.json#active_agent`, updated by run-orchestrator at every dispatch.

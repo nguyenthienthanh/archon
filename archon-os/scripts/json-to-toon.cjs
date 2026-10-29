@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog — JSON → TOON deterministic converter
+ * Archon OS — JSON → TOON deterministic converter
  *
  * Project required attributes from a JSON payload, then encode as TOON
  * (Token-Optimized Object Notation). Runs locally as a script — no AI

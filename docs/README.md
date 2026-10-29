@@ -4,7 +4,7 @@ status: current
 audience: active-user
 ---
 
-# Aura Frog Documentation
+# Archon OS Documentation
 
 Central index for all human-readable documentation. AI-consumed docs live in `archon-os/`.
 

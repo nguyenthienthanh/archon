@@ -1,6 +1,6 @@
 # Project Contexts
 
-**Purpose:** Store project-specific configurations, conventions, and examples separate from generic Aura Frog core.
+**Purpose:** Store project-specific configurations, conventions, and examples separate from generic Archon OS core.
 
 ---
 
@@ -45,7 +45,7 @@ project-contexts/
      context_path: "project-contexts/my-project"
    ```
 
-4. **Aura Frog will auto-load your context!**
+4. **Archon OS will auto-load your context!**
 
 ---
 
@@ -86,10 +86,10 @@ project-contexts/
 ## 🎯 Benefits
 
 ### Separation of Concerns
-- ✅ Aura Frog core stays generic and reusable
+- ✅ Archon OS core stays generic and reusable
 - ✅ Project specifics in one place
 - ✅ Easy to switch between projects
-- ✅ Share Aura Frog across teams
+- ✅ Share Archon OS across teams
 
 ### Multi-Project Support
 - ✅ Work on multiple projects
@@ -169,20 +169,20 @@ project-contexts/my-api/
 
 ---
 
-## 🔧 How Aura Frog Uses Context
+## 🔧 How Archon OS Uses Context
 
 ### Auto-Detection
 
-When Aura Frog starts, it:
+When Archon OS starts, it:
 1. Reads `ccpm-config.yaml` for `context_path`
 2. Loads project context files
-3. Merges with generic Aura Frog settings
+3. Merges with generic Archon OS settings
 4. Uses project-specific conventions
 
 ### Context Priority
 
 ```
-Project Context > Aura Frog Config > Aura Frog Defaults
+Project Context > Archon OS Config > Archon OS Defaults
 ```
 
 ### Usage in Workflows
@@ -274,10 +274,10 @@ export CCPM_PROJECT_CONTEXT="project-contexts/another-project"
 
 ### Don'ts ❌
 - ❌ Store secrets in context files
-- ❌ Mix generic and specific in core Aura Frog
+- ❌ Mix generic and specific in core Archon OS
 - ❌ Forget to update conventions
 - ❌ Create context without examples
-- ❌ Duplicate Aura Frog core features
+- ❌ Duplicate Archon OS core features
 
 ---
 
@@ -295,7 +295,7 @@ export CCPM_PROJECT_CONTEXT="project-contexts/another-project"
 
 **Check:**
 1. conventions.md format is correct
-2. Restart Aura Frog to reload context
+2. Restart Archon OS to reload context
 3. Clear workflow state cache
 4. Check for typos in convention names
 
@@ -313,7 +313,7 @@ export CCPM_PROJECT_CONTEXT="project-contexts/another-project"
 
 - Main README: `../../README.md`
 - Getting Started: `docs/getting-started/GET_STARTED.md` (repo root)
-- Aura Frog Configuration: `ccpm-config.example.yaml`
+- Archon OS Configuration: `ccpm-config.example.yaml`
 - Template Files: `.claude/project-contexts/template/`
 
 ---

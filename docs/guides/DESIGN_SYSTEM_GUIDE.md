@@ -408,7 +408,7 @@ Which should I use as the primary?
 
 ---
 
-**Maintained by:** Aura Frog Team
+**Maintained by:** Archon OS Team
 
 ## See Also
 

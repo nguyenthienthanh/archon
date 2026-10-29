@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog — Plan Escalation Check (UserPromptSubmit)
+ * Archon OS — Plan Escalation Check (UserPromptSubmit)
  *
  * Enforces the project-scope escalation heuristic from
  * rules/workflow/run-plan-bridge.md so it no longer depends ONLY on the model
@@ -151,7 +151,7 @@ function planActive(cwd) {
 function emitHint(weight, signals) {
   // Claude reads stderr; this hint is metadata, not user-facing output.
   process.stderr.write(
-    `\n🐸 plan-escalation: task scores ${weight} (≥${ESCALATION_THRESHOLD}) on the escalation rubric` +
+    `\n🦉 plan-escalation: task scores ${weight} (≥${ESCALATION_THRESHOLD}) on the escalation rubric` +
     ` — signals: ${signals.join(', ')}. No active plan tree.\n` +
     `   Per rules/workflow/run-plan-bridge.md, offer the user before implementing:\n` +
     `     plan    — bootstrap /archon-os:plan first\n` +
