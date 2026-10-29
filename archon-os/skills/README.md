@@ -1,4 +1,4 @@
-# Aura Frog Skills
+# Archon OS Skills
 
 **Total Skills:** 42 (9 auto-invoking + 33 reference)
 **Format:** [TOON](https://github.com/toon-format/toon) (Token-Optimized)
@@ -165,5 +165,5 @@ If a skill needs slash exposure for the user → wrap it in a thin `commands/<na
 
 ---
 
-> **Externalized:** Godot (aura-frog-godot-addon), SEO/GEO (aura-frog-seo-addon)
+> **Externalized:** Godot (archon-os-godot-addon), SEO/GEO (archon-os-seo-addon)
 > **MCP:** JIRA, Figma, Slack, Firebase handled via bundled MCP servers (`.mcp.json`)

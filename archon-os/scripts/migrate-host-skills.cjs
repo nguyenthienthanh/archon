@@ -5,7 +5,7 @@
  *
  * Claude Code only discovers `.claude/skills/<name>/SKILL.md` with `description` frontmatter.
  * Flat `.claude/skills/<name>.md` files (and SKILL.md without frontmatter) are silently ignored,
- * so they never appear in the skill listing — with or without Aura Frog.
+ * so they never appear in the skill listing — with or without Archon OS.
  *
  * Usage:
  *   node migrate-host-skills.cjs [projectDir|~] [--apply]

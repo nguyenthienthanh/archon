@@ -1,4 +1,4 @@
-# Aura Frog Agents
+# Archon OS Agents
 
 **15 specialized agents**, auto-selected by `agent-detector` skill.
 

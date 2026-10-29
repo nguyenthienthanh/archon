@@ -1,6 +1,6 @@
 ---
 name: self-improve
-description: "Full learning loop for the Aura Frog plugin: analyze collected learning data from Supabase to identify success patterns, failure patterns, optimization opportunities, and agent performance trends, then apply learned improvements — update rules, adjust agent routing, modify workflow configurations, and generate knowledge base entries."
+description: "Full learning loop for the Archon OS plugin: analyze collected learning data from Supabase to identify success patterns, failure patterns, optimization opportunities, and agent performance trends, then apply learned improvements — update rules, adjust agent routing, modify workflow configurations, and generate knowledge base entries."
 autoInvoke: false
 priority: 30
 triggers:

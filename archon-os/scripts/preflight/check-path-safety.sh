@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Aura Frog Pre-flight: path safety
+# Archon OS Pre-flight: path safety
 # Reject path traversals (../../../etc/passwd) and absolute paths outside the repo
 # (except known-safe dirs: /tmp, /var/tmp, the user's home).
 #

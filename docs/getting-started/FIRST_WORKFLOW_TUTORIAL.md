@@ -6,13 +6,13 @@ audience: first-time
 
 # Your First Workflow — Interactive Tutorial
 
-A step-by-step walkthrough of a complete Aura Frog workflow. Follow along in your own project.
+A step-by-step walkthrough of a complete Archon OS workflow. Follow along in your own project.
 
 ---
 
 ## Before You Start
 
-- Aura Frog installed (`/plugin list` shows aura-frog)
+- Archon OS installed (`/plugin list` shows aura-frog)
 - A project with at least one source file
 - Recommended: run `project:init` first
 

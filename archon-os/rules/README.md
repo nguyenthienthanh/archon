@@ -1,4 +1,4 @@
-# Aura Frog Quality Rules
+# Archon OS Quality Rules
 
 **Total Rules:** 72 (22 core + 20 agent + 30 workflow)
 **Format:** [TOON](https://github.com/toon-format/toon) (Token-Optimized)
@@ -153,15 +153,15 @@ priorities[3]{level,meaning,enforcement}:
 ```
 Project linting ─┬─► MERGE ─► Combined Ruleset
 Project rules   ─┤
-Aura Frog rules ─┤
+Archon OS rules ─┤
 Claude defaults ─┘
 
 Conflicts: Higher priority wins
 No conflict: All rules apply together
 ```
 
-**Example:** Project has `semi: false`, Aura Frog has TDD rule
-→ Result: No semicolons (project) + TDD (Aura Frog)
+**Example:** Project has `semi: false`, Archon OS has TDD rule
+→ Result: No semicolons (project) + TDD (Archon OS)
 
 See: `workflow/project-linting-precedence.md`
 

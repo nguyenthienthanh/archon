@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog — Pre-flight Validation
+ * Archon OS — Pre-flight Validation
  *
  * Fires: PreToolUse (Bash | Edit | Write | Read)
  * Purpose: Run Tier 1 bash linters before tool execution. Block tool call on

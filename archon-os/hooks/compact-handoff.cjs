@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog - Compact Handoff Hook
+ * Archon OS - Compact Handoff Hook
  *
  * Fires:
  *   - PreCompact (--pre-compact)  → always save a handoff (trigger: manual|auto)
@@ -602,7 +602,7 @@ function findHandoff(query, p = getPaths()) {
 /** Pure: short index of named handoffs for a NEW session (no content leak). */
 function generateHandoffIndex(handoffs = []) {
   if (!handoffs.length) return '';
-  const lines = ['# 🐸 Aura Frog — saved handoffs in this project', ''];
+  const lines = ['# 🦉 Archon OS — saved handoffs in this project', ''];
   for (const h of handoffs) {
     const what = (h.run && h.run.task) || h.note || '';
     lines.push(`- **${h.name}**${h.title && slugify(h.title) !== h.name ? ` (${h.title})` : ''} · saved ${h.saved_at.slice(0, 16).replace('T', ' ')}` +
@@ -615,7 +615,7 @@ function generateHandoffIndex(handoffs = []) {
 /** Pure: render the resume context injected after compaction. */
 function generateResumeContext(handoff = {}) {
   const heading = handoff.title || handoff.name;
-  const lines = [`# 🔄 Aura Frog — resume${heading ? `: ${heading}` : ''}`, ''];
+  const lines = [`# 🔄 Archon OS — resume${heading ? `: ${heading}` : ''}`, ''];
   if (handoff.name) lines.push(`Handoff \`${handoff.name}\` · saved ${handoff.saved_at || '?'} · resume with \`/run resume ${handoff.name}\``, '');
 
   if (handoff.note) {

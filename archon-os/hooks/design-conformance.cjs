@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog — Design Conformance (PostToolUse)
+ * Archon OS — Design Conformance (PostToolUse)
  *
  * Fires: PostToolUse with matcher "Write|Edit"
  * Purpose: Deterministic tier-1 design gate. Greps a written/edited UI file for

@@ -90,7 +90,7 @@ fi
 # Update version in header
 PLUGIN_VERSION=$(grep -m1 'Version:' "$PLUGIN_DIR/CLAUDE.md" | sed 's/.*v//' | tr -d ' ')
 if [ -n "$PLUGIN_VERSION" ]; then
-    sed -i.tmp "s/Aura Frog Version:.*/Aura Frog Version:** $PLUGIN_VERSION/" "$PROJECT_CLAUDE"
+    sed -i.tmp "s/Archon OS Version:.*/Archon OS Version:** $PLUGIN_VERSION/" "$PROJECT_CLAUDE"
     rm -f "${PROJECT_CLAUDE}.tmp"
 fi
 

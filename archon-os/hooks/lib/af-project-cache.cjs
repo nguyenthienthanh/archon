@@ -1,5 +1,5 @@
 /**
- * Aura Frog - Project Detection Cache
+ * Archon OS - Project Detection Cache
  *
  * Caches project detection results (tech stack, file patterns, test infra)
  * to avoid re-scanning the codebase on every task.

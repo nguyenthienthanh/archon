@@ -1,5 +1,5 @@
 #!/bin/bash
-# Aura Frog Status Line (v3.8.0-alpha.4+)
+# Archon OS Status Line (v3.8.0-alpha.4+)
 # Replaces the conversation banner — always visible, 0 tokens.
 # Owns the FULL multi-line status line (dir/git prefix + AF context + cost) so
 # plugin upgrades carry the layout. The ~/.claude/statusline-command.sh shim is
@@ -16,19 +16,19 @@
 #
 # Format (multi-line):
 #   ➜  {dir}  git:({branch}) {✓|✗N} {↑a} {↓b}              🕐 HH:MM
-#   🐸 AF v{version} │ {mode} {step} │ {agent}
+#   🦉 AF v{version} │ {mode} {step} │ {agent}
 #   {model} │ {ctx}% ctx
 #   ⏳ 5h {pct}% ↻{reset} │ 7d {pct}% ↻{reset}             (rate-limit budget)
 #   💰 ${cost} │ +{added}/-{removed} │ ⏱ {duration} │ cc {version}     (opt-in)
 #
-# The AF content is the v3.7.3+ single line `🐸 AF v… │ {mode} {step} │ {agent}
+# The AF content is the v3.7.3+ single line `🦉 AF v… │ {mode} {step} │ {agent}
 # │ {model} │ {ctx}% ctx`, split on ` │ ` across two lines (avoids single-line
 # truncation on narrow terminals). The exact substring is preserved internally
 # in $AF_LINE before the split.
 #
 # Examples:
 #   ➜  archon-os  git:(main) ✗3 ↑1              🕐 14:32
-#   🐸 AF v3.8.0-alpha.4 │ deep P3 │ architect
+#   🦉 AF v3.8.0-alpha.4 │ deep P3 │ architect
 #   Opus 4.8 │ 12% ctx
 #
 # Usage line (rate-limit budget) shows rate_limits.{five_hour,seven_day}: % spent
@@ -105,7 +105,7 @@ fi
 [ -z "$CTX_PCT" ] && CTX_PCT="0"
 CTX_INT=${CTX_PCT%.*}
 
-# ----- Aura Frog version -----------------------------------------------------
+# ----- Archon OS version -----------------------------------------------------
 
 AF_VERSION="?"
 for pjson in \
@@ -253,7 +253,7 @@ render_active() {
         dur=""
     fi
 
-    echo "🐸 AF v${AF_VERSION} │ ▶ ${phase} │ ${step_model}${dur} │ session: ${MODEL} │ ${CTX_INT}% ctx"
+    echo "🦉 AF v${AF_VERSION} │ ▶ ${phase} │ ${step_model}${dur} │ session: ${MODEL} │ ${CTX_INT}% ctx"
     return 0
 }
 
@@ -300,7 +300,7 @@ AF_LINE=$(render_active 2>/dev/null)
 if [ -z "$AF_LINE" ]; then
     MODE_STEP="$AF_MODE"
     [ -n "$AF_STEP" ] && MODE_STEP="$AF_MODE $AF_STEP"
-    AF_LINE="🐸 AF v${AF_VERSION} │ ${MODE_STEP} │ ${AF_AGENT} │ ${MODEL} │ ${CTX_INT}% ctx"
+    AF_LINE="🦉 AF v${AF_VERSION} │ ${MODE_STEP} │ ${AF_AGENT} │ ${MODEL} │ ${CTX_INT}% ctx"
 fi
 printf '%s\n' "$AF_LINE" | awk -F ' │ ' '{
   l1=""; l2="";

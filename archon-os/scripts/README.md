@@ -1,4 +1,4 @@
-# Aura Frog Scripts
+# Archon OS Scripts
 
 **Purpose:** Utility scripts for integrations, workflows, and automation
 

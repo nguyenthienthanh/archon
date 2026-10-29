@@ -27,7 +27,7 @@ Built-in Claude Code agents (`general-purpose`, `Explore`, `Plan`, `statusline-s
 
 ## Why derive instead of hardcode
 
-A plugin's name lives in exactly one place: `<plugin>/.claude-plugin/plugin.json`. If a fork renames it (`my-fork`, `aura-frog-internal`, etc.), every hardcoded `archon-os:architect` reference breaks. By looking up the prefix at runtime, the same skills/rules ship across forks unchanged.
+A plugin's name lives in exactly one place: `<plugin>/.claude-plugin/plugin.json`. If a fork renames it (`my-fork`, `archon-os-internal`, etc.), every hardcoded `archon-os:architect` reference breaks. By looking up the prefix at runtime, the same skills/rules ship across forks unchanged.
 
 Skills, rules, and dispatch tables reference agents by **bare ID** (`architect`, `tester`, `feature-architect`). The orchestrator that actually invokes the Agent tool is the only place the prefix gets applied — and it gets the prefix dynamically.
 
@@ -101,7 +101,7 @@ builtin_agents[4]{id,role}:
 1. **Check if X is a plugin agent ID** (any from the table above) — apply the runtime prefix
 2. **Check spelling** — agent IDs are kebab-case (`feature-architect`, not `feature_architect` or `featureArchitect`)
 3. **Verify the agent file exists** — `ls archon-os/agents/<id>.md`
-4. **Verify plugin is loaded** — `/plugin` in Claude Code shows installed plugins; if Aura Frog isn't there, lookup will fail regardless
+4. **Verify plugin is loaded** — `/plugin` in Claude Code shows installed plugins; if Archon OS isn't there, lookup will fail regardless
 5. **Verify the prefix lookup succeeded** — `bash scripts/get-plugin-prefix.sh` should return non-empty
 
 ---

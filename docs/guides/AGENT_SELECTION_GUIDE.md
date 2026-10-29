@@ -7,13 +7,13 @@ audience: active-user
 # Agent Selection Guide
 
 **Format:** [TOON](https://github.com/toon-format/toon) (Token-Optimized)
-**Purpose:** Complete guide to intelligent agent selection in Aura Frog
+**Purpose:** Complete guide to intelligent agent selection in Archon OS
 
 ---
 
 ## 🎯 Overview
 
-Aura Frog v1.10.0 includes an advanced **Smart Agent Detector** that automatically selects the most appropriate agents for any task based on natural language understanding, project context, and conversation history.
+Archon OS v1.10.0 includes an advanced **Smart Agent Detector** that automatically selects the most appropriate agents for any task based on natural language understanding, project context, and conversation history.
 
 ---
 

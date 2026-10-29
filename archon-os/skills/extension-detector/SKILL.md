@@ -19,7 +19,7 @@ user-invocable: false
 
 ## Core principle
 
-The Aura Frog plugin ships a fixed set of skills, rules, and commands. Project-specific patterns belong **in the project**, not in the plugin. This skill watches for the moment a user's project would benefit from its own extensions and proposes them — but **never creates them autonomously**.
+The Archon OS plugin ships a fixed set of skills, rules, and commands. Project-specific patterns belong **in the project**, not in the plugin. This skill watches for the moment a user's project would benefit from its own extensions and proposes them — but **never creates them autonomously**.
 
 **Hard rule:** anything this skill creates lands in the user's project under `.claude/`, never in `archon-os/`.
 
@@ -30,7 +30,7 @@ The Aura Frog plugin ships a fixed set of skills, rules, and commands. Project-s
 | **Strong** | User explicitly says "we should have a skill/rule/command for X", "add a rule that…", "make this a skill" | Surface immediately |
 | **Medium** | User repeats the same correction 3+ times across recent turns ("don't do X" / "always do Y") | Surface as candidate rule |
 | **Medium** | Same multi-step procedure invoked manually 3+ times in this project | Surface as candidate skill |
-| **Weak** | Project README/CONTRIBUTING references a workflow Aura Frog doesn't have a command for | Surface as candidate command |
+| **Weak** | Project README/CONTRIBUTING references a workflow Archon OS doesn't have a command for | Surface as candidate command |
 
 Weak signals require 2+ in combination before surfacing.
 

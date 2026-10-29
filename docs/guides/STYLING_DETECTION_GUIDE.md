@@ -120,7 +120,7 @@ grep -r "\.module\.css" src/ --include="*.tsx" --include="*.jsx" | head -5
 
 ```markdown
 **─────────────────────────────────────────────────────────**
-🤖 **Agent:** mobile | 📋 **System:** Aura Frog v1.10.0 | 🎯 **Phase:** 2 (Design)
+🤖 **Agent:** mobile | 📋 **System:** Archon OS v1.10.0 | 🎯 **Phase:** 2 (Design)
 **─────────────────────────────────────────────────────────**
 
 🎨 **Styling Approach Selection**
@@ -434,7 +434,7 @@ else {
 **Scenario 1: Config specifies Emotion**
 ```markdown
 **─────────────────────────────────────────────────────────**
-🤖 **Agent:** mobile | 📋 **System:** Aura Frog v1.10.0 | 🎯 **Phase:** 2 (Design)
+🤖 **Agent:** mobile | 📋 **System:** Archon OS v1.10.0 | 🎯 **Phase:** 2 (Design)
 **─────────────────────────────────────────────────────────**
 
 ✅ Detected styling approach: **Emotion** (from project config)
@@ -451,7 +451,7 @@ const Container = styled.View`...`;
 **Scenario 2: Detected NativeWind from code**
 ```markdown
 **─────────────────────────────────────────────────────────**
-🤖 **Agent:** mobile | 📋 **System:** Aura Frog v1.10.0 | 🎯 **Phase:** 2 (Design)
+🤖 **Agent:** mobile | 📋 **System:** Archon OS v1.10.0 | 🎯 **Phase:** 2 (Design)
 **─────────────────────────────────────────────────────────**
 
 ✅ Detected styling approach: **NativeWind** (from existing code)
@@ -470,7 +470,7 @@ I'll use NativeWind for all new components:
 **Scenario 3: No clear approach, asking user**
 ```markdown
 **─────────────────────────────────────────────────────────**
-🤖 **Agent:** mobile | 📋 **System:** Aura Frog v1.10.0 | 🎯 **Phase:** 2 (Design)
+🤖 **Agent:** mobile | 📋 **System:** Archon OS v1.10.0 | 🎯 **Phase:** 2 (Design)
 **─────────────────────────────────────────────────────────**
 
 ⚠️ No styling approach specified in project config.

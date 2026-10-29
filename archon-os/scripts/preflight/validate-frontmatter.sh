@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Aura Frog Pre-flight: YAML frontmatter validation
+# Archon OS Pre-flight: YAML frontmatter validation
 # Verifies plan/skill/agent/rule/command markdown files have required frontmatter.
 #
 # Exit codes: 0 pass / 1 warn / 2 fail

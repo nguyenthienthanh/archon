@@ -42,4 +42,4 @@
 
 ---
 
-Generated with [Aura Frog](https://github.com/nguyenthienthanh/archon) for Claude Code
+Generated with [Archon OS](https://github.com/nguyenthienthanh/archon) for Claude Code

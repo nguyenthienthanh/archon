@@ -9,7 +9,7 @@ estimated_reading_time: 8 minutes
 
 <img alt="The Archon OS owl watching a plan tree" src="../../assets/brand/mascot.svg" width="480">
 
-# Get Started with Aura Frog
+# Get Started with Archon OS
 
 ### From install to your first TDD workflow in under 10 minutes
 
@@ -21,7 +21,7 @@ estimated_reading_time: 8 minutes
 > **Brand new?** Start with [Prerequisites](#prerequisites).
 > **Want a guided tour?** [FIRST_WORKFLOW_TUTORIAL.md](FIRST_WORKFLOW_TUTORIAL.md) is hands-on (15 min).
 
-**What is Aura Frog?** [Claude Code](https://docs.anthropic.com/en/docs/claude-code) is Anthropic's agentic coding tool. Aura Frog turns it into a planning-first LLM OS: 15 agents, 5-phase TDD workflows, hierarchical planning (T0–T4) that survives session resets, forensic reasoning traces, semantic conflict detection, and per-agent MCP security. Full breakdown: [README § The 8 Pillars](../../README.md#-the-8-pillars-of-the-planning-first-llm-os).
+**What is Archon OS?** [Claude Code](https://docs.anthropic.com/en/docs/claude-code) is Anthropic's agentic coding tool. Archon OS turns it into a planning-first LLM OS: 15 agents, 5-phase TDD workflows, hierarchical planning (T0–T4) that survives session resets, forensic reasoning traces, semantic conflict detection, and per-agent MCP security. Full breakdown: [README § The 8 Pillars](../../README.md#-the-8-pillars-of-the-planning-first-llm-os).
 
 ---
 
@@ -29,11 +29,11 @@ estimated_reading_time: 8 minutes
 
 1. **Claude Code installed.** Follow [Anthropic's installation guide](https://docs.anthropic.com/en/docs/claude-code) if you haven't.
 2. **A terminal with Claude Code running.** Just type `claude` in any project directory.
-3. **Git working tree** for the project you want to use Aura Frog on (Aura Frog works against any local repo).
+3. **Git working tree** for the project you want to use Archon OS on (Archon OS works against any local repo).
 
 ---
 
-## Install Aura Frog
+## Install Archon OS
 
 In the Claude Code chat, run two commands:
 
@@ -42,7 +42,7 @@ In the Claude Code chat, run two commands:
 /plugin install archon-os@archon
 ```
 
-That's it. Aura Frog is now installed globally and available in every Claude Code session.
+That's it. Archon OS is now installed globally and available in every Claude Code session.
 
 **Verify** the install:
 
@@ -50,7 +50,7 @@ That's it. Aura Frog is now installed globally and available in every Claude Cod
 /help
 ```
 
-You should see a category called *Aura Frog* listing commands like `/run`, `/af`, `/archon-os:plan`, `/check`, `/project`.
+You should see a category called *Archon OS* listing commands like `/run`, `/af`, `/archon-os:plan`, `/check`, `/project`.
 
 **Initialize for this project (optional, recommended once):**
 
@@ -58,7 +58,7 @@ You should see a category called *Aura Frog* listing commands like `/run`, `/af`
 /project init
 ```
 
-Detects your tech stack, configures integrations (JIRA / Confluence / Slack), and seeds a project-specific config. Skip and Aura Frog will use sensible defaults.
+Detects your tech stack, configures integrations (JIRA / Confluence / Slack), and seeds a project-specific config. Skip and Archon OS will use sensible defaults.
 
 > **Need supplementary install paths?** CLI symlink, manual install, or environment-variable setup → see [INSTALLATION.md](../operations/INSTALLATION.md).
 
@@ -66,7 +66,7 @@ Detects your tech stack, configures integrations (JIRA / Confluence / Slack), an
 
 ## Your first workflow
 
-Aura Frog uses **one entry point**: `/run`. Type it with a task description and Aura Frog auto-detects intent (bugfix / feature / refactor / test / review / deploy / security / quality) and picks the right flow.
+Archon OS uses **one entry point**: `/run`. Type it with a task description and Archon OS auto-detects intent (bugfix / feature / refactor / test / review / deploy / security / quality) and picks the right flow.
 
 ### Tiny task — direct edit
 
@@ -74,7 +74,7 @@ Aura Frog uses **one entry point**: `/run`. Type it with a task description and 
 /run fix typo in README
 ```
 
-Aura Frog classifies this as **Quick** complexity, makes the edit inline, and reports back. No phases, no gates.
+Archon OS classifies this as **Quick** complexity, makes the edit inline, and reports back. No phases, no gates.
 
 ### Feature task — full 5-phase TDD
 
@@ -82,7 +82,7 @@ Aura Frog classifies this as **Quick** complexity, makes the edit inline, and re
 /run add a login endpoint with email + password
 ```
 
-Aura Frog classifies this as **Deep** complexity and runs the 5-phase workflow:
+Archon OS classifies this as **Deep** complexity and runs the 5-phase workflow:
 
 ```
 Phase 1: Understand + Design   → [APPROVAL GATE]
@@ -110,7 +110,7 @@ Bugfix runs use a lighter 4-step flow (`S1` investigate → `S2` test RED → `S
 /run project: ship the billing redesign across web + mobile + admin
 ```
 
-Aura Frog escalates to **hierarchical planning** (`/archon-os:plan`): bootstraps `MISSION → INIT → FEAT → STORY → TASK` under `.claude/plans/`, then resumes execution against the active task. See [HIERARCHICAL_PLANNING.md](../architecture/HIERARCHICAL_PLANNING.md).
+Archon OS escalates to **hierarchical planning** (`/archon-os:plan`): bootstraps `MISSION → INIT → FEAT → STORY → TASK` under `.claude/plans/`, then resumes execution against the active task. See [HIERARCHICAL_PLANNING.md](../architecture/HIERARCHICAL_PLANNING.md).
 
 ---
 
@@ -138,11 +138,11 @@ Pick one based on what you want to learn:
 Top 5 install-time questions — fuller fixes in [TROUBLESHOOTING.md](../operations/TROUBLESHOOTING.md).
 
 1. **`/plugin marketplace add` reports an error.** Make sure your Claude Code is recent enough to support marketplace plugins (Anthropic ships this in current builds). If not, use the [manual install path](../operations/INSTALLATION.md#manual-install).
-2. **`/help` doesn't show Aura Frog commands.** Re-run `/plugin install archon-os@archon`; check that `~/.claude/plugins/marketplaces/archon/archon-os/` exists.
+2. **`/help` doesn't show Archon OS commands.** Re-run `/plugin install archon-os@archon`; check that `~/.claude/plugins/marketplaces/archon/archon-os/` exists.
 3. **First `/run` doesn't auto-detect a flow.** Type a more concrete verb-noun task description (e.g. `/run add password reset to the login form`). Force flow with prefixes: `/run task: …` / `/run project: …`. Disable escalation per-session with `AF_ESCALATION_DISABLED=true`.
 4. **An approval gate seems stuck.** Type bare `status` to see what's pending, or bare `rollback` to revert to the last checkpoint. Full action list above.
 5. **MCP server didn't fire.** Some MCPs need env vars (`FIGMA_API_TOKEN`, `SLACK_BOT_TOKEN`, `firebase login`). They silently no-op if unset — see [MCP_GUIDE.md](../operations/MCP_GUIDE.md) for per-MCP setup.
 
 ---
 
-**You're ready.** Type `/run <your task>` and Aura Frog takes it from there.
+**You're ready.** Type `/run <your task>` and Archon OS takes it from there.

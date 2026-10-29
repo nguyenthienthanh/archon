@@ -64,8 +64,8 @@ describe('turn-index module exists and is loadable', () => {
 describe('AC3 — transcript discovery (the root cause of recent_prompts: [])', () => {
   it('derives the project slug the way Claude Code does', () => {
     const { projectSlug } = require(TURN_INDEX);
-    expect(projectSlug('/Users/nguyenthanh/Projects/Personal/aura-frog'))
-      .toBe('-Users-nguyenthanh-Projects-Personal-aura-frog');
+    expect(projectSlug('/Users/nguyenthanh/Projects/Personal/archon-os'))
+      .toBe('-Users-nguyenthanh-Projects-Personal-archon-os');
   });
 
   it('finds the newest transcript for a cwd when the hook input carries none', () => {

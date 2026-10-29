@@ -12,7 +12,7 @@ audience: active-user
 
 ## Overview
 
-The Team-Workflow Bridge connects Aura Frog's 5-phase workflow with Claude Agent Teams. When conditions are met (Agent Teams enabled + Deep complexity), phase transitions automatically:
+The Team-Workflow Bridge connects Archon OS's 5-phase workflow with Claude Agent Teams. When conditions are met (Agent Teams enabled + Deep complexity), phase transitions automatically:
 
 1. **Create teams** with per-phase log directories
 2. **Record team activity** in JSONL format

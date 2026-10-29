@@ -1,6 +1,6 @@
 # Statusline (cost/usage)
 
-Aura Frog ships an optional custom Claude Code statusline that renders a
+Archon OS ships an optional custom Claude Code statusline that renders a
 three-line status: who/where you are, how much of your rate-limit budgets and
 context window are spent, and what the session and billing cycle cost so far.
 
@@ -11,7 +11,7 @@ It is version-controlled in the plugin under `scripts/` and installed into
 
 | Line | Name | Contents |
 | --- | --- | --- |
-| **L1** | identity | `🐸 model` · shortened cwd · git branch (`*` when the tree is dirty) |
+| **L1** | identity | `🦉 model` · shortened cwd · git branch (`*` when the tree is dirty) |
 | **L2** | budgets | `5h` limit (bar + % + reset clock) · `7d` limit (% + reset) · `ctx` context % + tokens |
 | **L3** | money | `session ≈$` · `🔥 ≈$/hr` burn rate · `cycle¹ ≈$ →proj ≈$` · `≈API-equiv·<plan>` |
 

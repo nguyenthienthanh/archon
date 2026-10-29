@@ -4,7 +4,7 @@ status: current
 audience: active-user
 ---
 
-# 🔒 Security and Trust - Aura Frog Plugin
+# 🔒 Security and Trust - Archon OS Plugin
 
 **Protecting yourself when installing Claude Code plugins**
 
@@ -21,7 +21,7 @@ Claude Code plugins use a **decentralized, trust-based model** similar to:
 
 ---
 
-## 🎯 Official Aura Frog Plugin
+## 🎯 Official Archon OS Plugin
 
 **Trusted Source:**
 ```bash
@@ -37,7 +37,7 @@ Claude Code plugins use a **decentralized, trust-based model** similar to:
 
 ## ⚠️ Malicious Forks Warning
 
-**Anyone can fork Aura Frog and create a malicious version!**
+**Anyone can fork Archon OS and create a malicious version!**
 
 ### How Attackers Work
 
@@ -92,9 +92,9 @@ Claude Code plugins use a **decentralized, trust-based model** similar to:
 
 ---
 
-## 🔍 What Aura Frog Has Access To
+## 🔍 What Archon OS Has Access To
 
-When you install Aura Frog, it can access:
+When you install Archon OS, it can access:
 
 ### ✅ Safe - Normal Plugin Permissions
 - Read/write files in your project
@@ -102,13 +102,13 @@ When you install Aura Frog, it can access:
 - Read environment variables from `.envrc`
 - Make API calls to configured services (JIRA, Figma, Slack, Confluence)
 
-### ⚠️ Sensitive Data Aura Frog Handles
+### ⚠️ Sensitive Data Archon OS Handles
 - **JIRA API tokens** - stored in `.envrc`
 - **Figma access tokens** - stored in `.envrc`
 - **Slack bot tokens** - stored in `.envrc`
 - **Confluence credentials** - stored in `.envrc`
 
-### 🛡️ How Official Aura Frog Protects You
+### 🛡️ How Official Archon OS Protects You
 - **No external calls** - Only to APIs you explicitly configure
 - **Local storage only** - Credentials stay in `.envrc` (git-ignored)
 - **Open source** - All code is reviewable
@@ -154,7 +154,7 @@ When you install Aura Frog, it can access:
 
 1. **Only add trusted marketplaces:**
    ```bash
-   # ✅ Official Aura Frog
+   # ✅ Official Archon OS
    /plugin marketplace add nguyenthienthanh/archon
    ```
 
@@ -203,7 +203,7 @@ When you install Aura Frog, it can access:
 
 ---
 
-## 🔐 How to Verify Official Aura Frog
+## 🔐 How to Verify Official Archon OS
 
 **Official installation command:**
 ```bash
@@ -216,7 +216,7 @@ When you install Aura Frog, it can access:
 - [ ] GitHub URL is exactly: `nguyenthienthanh/archon`
 - [ ] Repository owner is: **nguyenthienthanh**
 - [ ] Plugin name is: **aura-frog**
-- [ ] Marketplace name is: **aurafrog**
+- [ ] Marketplace name is: **archon**
 - [ ] Author email is: nguyenthienthanh.kiyoshi@gmail.com
 - [ ] Repository has this README.md with security notice
 
@@ -230,7 +230,7 @@ When you install Aura Frog, it can access:
 
 **Please report privately:**
 - Email: nguyenthienthanh.kiyoshi@gmail.com
-- Subject: "Aura Frog Security Issue"
+- Subject: "Archon OS Security Issue"
 
 **Do NOT disclose publicly until patched!**
 
@@ -242,9 +242,9 @@ We'll:
 
 ---
 
-## 🆚 Aura Frog vs Malicious Forks
+## 🆚 Archon OS vs Malicious Forks
 
-| Feature | Official Aura Frog | Malicious Fork |
+| Feature | Official Archon OS | Malicious Fork |
 |---------|---------------|----------------|
 | **GitHub Owner** | nguyenthienthanh ✅ | random-user ⚠️ |
 | **Repository** | aura-frog ✅ | ccpm-hacked ⚠️ |
@@ -264,7 +264,7 @@ We'll:
 - Verify the repository owner before installing
 - Review code before adding marketplace
 
-**Official Aura Frog:**
+**Official Archon OS:**
 - Repository: `nguyenthienthanh/archon`
 - Owner: Nguyen Thien Thanh (nguyenthienthanh)
 - Email: nguyenthienthanh.kiyoshi@gmail.com

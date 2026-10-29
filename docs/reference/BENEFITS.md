@@ -4,9 +4,9 @@ status: reference
 audience: contributor
 ---
 
-# Aura Frog Benefits — Why Use This Plugin
+# Archon OS Benefits — Why Use This Plugin
 
-**Purpose:** Explain every capability Aura Frog adds on top of base Claude Code — what it is, how it's applied, why you need it, and concrete use cases.
+**Purpose:** Explain every capability Archon OS adds on top of base Claude Code — what it is, how it's applied, why you need it, and concrete use cases.
 
 **Format per section:** What · How applied · Why you need it · Use cases.
 
@@ -438,7 +438,7 @@ audience: contributor
 
 ### 8.2. Externalized Addons (Godot, SEO)
 
-**What:** Specialized modules live in separate plugins (`aura-frog-godot-addon`, `aura-frog-seo-addon`) — opt-in, not bundled.
+**What:** Specialized modules live in separate plugins (`archon-os-godot-addon`, `archon-os-seo-addon`) — opt-in, not bundled.
 
 **How applied:** Install the addon if you need it; the core plugin stays lean.
 
@@ -482,7 +482,7 @@ Details: [`docs/PORTABILITY.md`](../PORTABILITY.md).
 
 ---
 
-## Summary — When to Use Aura Frog
+## Summary — When to Use Archon OS
 
 ✅ **Yes, install if you:**
 - Build production code (vs. prototypes)
@@ -497,7 +497,7 @@ Details: [`docs/PORTABILITY.md`](../PORTABILITY.md).
 - Only do throwaway scripts / single-file edits
 - Don't want any workflow overhead
 - Have strict Haiku-only budgets (some features use Sonnet)
-- Prefer minimalist plugins (Aura Frog is substantial — 15 agents, 60 skills, 72 rules)
+- Prefer minimalist plugins (Archon OS is substantial — 15 agents, 60 skills, 72 rules)
 
 🎯 **Best fit:** Teams shipping production features where quality + security + cost control all matter.
 

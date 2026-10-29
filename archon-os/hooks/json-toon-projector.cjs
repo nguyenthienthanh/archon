@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog — Generic JSON → TOON Projector
+ * Archon OS — Generic JSON → TOON Projector
  *
  * Fires: PostToolUse (Read | mcp__.*) async
  * Purpose: When a tool call yields JSON destined for context, run a

@@ -11,7 +11,7 @@
 
 ## Core Concept
 
-Aura Frog separates **plugin files** (global, shared system instructions) from **project files** (local, per-project customization).
+Archon OS separates **plugin files** (global, shared system instructions) from **project files** (local, per-project customization).
 
 **Why:** Claude Code auto-loads `.claude/CLAUDE.md` but NOT plugin files. Project CLAUDE.md acts as a lightweight loader that instructs Claude to read the plugin.
 
@@ -40,7 +40,7 @@ PROJECT (.claude/)          →  reads  →  PLUGIN (archon-os/)     →  fallba
 
 ```markdown
 # Project: my-app
-## Load Aura Frog
+## Load Archon OS
 Read and follow: ~/.claude/plugins/marketplaces/archon/archon-os/CLAUDE.md
 ## Project Context
 Load from: .claude/project-contexts/my-app/

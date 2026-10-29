@@ -16,7 +16,7 @@ Quick fixes for common issues. For each problem: what happened, why, and how to 
 
 **Recovery:**
 1. Start new Claude Code session
-2. Aura Frog auto-detects saved state via `compact-handoff.cjs`
+2. Archon OS auto-detects saved state via `compact-handoff.cjs`
 3. If auto-resume doesn't trigger: `/run resume`
 4. If no saved state: check `.claude/logs/workflows/` for latest workflow directory
 

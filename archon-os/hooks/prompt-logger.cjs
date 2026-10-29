@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog - Prompt Logger Hook
+ * Archon OS - Prompt Logger Hook
  *
  * Fires: UserPromptSubmit (async)
  * Purpose: Log user prompts with metadata for usage analysis

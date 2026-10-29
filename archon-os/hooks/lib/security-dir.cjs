@@ -1,6 +1,6 @@
 'use strict';
 /**
- * Aura Frog — Security Dir Resolver (mirror of lib/plans-dir.cjs)
+ * Archon OS — Security Dir Resolver (mirror of lib/plans-dir.cjs)
  *
  * Single source of truth for "where does the MCP audit log live?" Before this,
  * `path.join(findProjectRoot(), '.aura', 'security', ...)` was written out by

@@ -261,7 +261,7 @@ function main() {
   // (hookSpecificOutput.additionalContext) to the subagent — stderr on exit 0
   // reaches the transcript, not the model.
   if (context.length > 0) {
-    const header = isTeammate ? '--- Aura Frog Team Context ---' : '--- Aura Frog Context ---';
+    const header = isTeammate ? '--- Archon OS Team Context ---' : '--- Archon OS Context ---';
     const text = [header, ...context, '-------------------------------'].join('\n');
     process.stdout.write(JSON.stringify({
       hookSpecificOutput: { hookEventName: 'SubagentStart', additionalContext: text }

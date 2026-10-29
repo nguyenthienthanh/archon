@@ -2,7 +2,7 @@
  * host-extensions.cjs — discover the host's own rules / skills / agents.
  *
  * Claude Code loads ~/.claude/{rules,skills,agents} and <project>/.claude/{rules,skills,agents}
- * itself, but Aura Frog's routing (agent-detector, run-orchestrator, plugin subagents) only
+ * itself, but Archon OS's routing (agent-detector, run-orchestrator, plugin subagents) only
  * knew its own components — so host skills were bypassed and plugin subagents never saw them.
  * This builds a compact index that session-start and subagent-init inject, and flags skill
  * files Claude Code will NOT register (flat `skills/foo.md`, or SKILL.md without `name`/`description`).

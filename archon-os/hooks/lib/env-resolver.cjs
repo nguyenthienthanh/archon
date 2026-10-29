@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Aura Frog / Archon — Universal Environment Resolver
+ * Archon OS / Archon — Universal Environment Resolver
  *
  * Implements Passive Cascading Resolution (12-Factor compliant):
  * 1. Checks active process.env (already set by shell, direnv, Docker, 1Password CLI, etc.)

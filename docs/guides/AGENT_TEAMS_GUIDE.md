@@ -6,7 +6,7 @@ audience: active-user
 
 # Agent Teams Guide
 
-**Purpose:** Enable and use Claude Agent Teams with Aura Frog
+**Purpose:** Enable and use Claude Agent Teams with Archon OS
 
 ---
 

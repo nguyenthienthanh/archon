@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Aura Frog — plugin prefix lookup
+# Archon OS — plugin prefix lookup
 #
 # Single source of truth for the plugin's namespace prefix used by the Agent
 # tool's `subagent_type` parameter. Reads the `name` field from

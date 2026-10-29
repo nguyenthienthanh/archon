@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog — Feature Done → Archive Trigger
+ * Archon OS — Feature Done → Archive Trigger
  *
  * Fires: PostToolUse (Edit | Write)
  * Purpose: When a T2 (Feature) plan node transitions to status: done, emit a

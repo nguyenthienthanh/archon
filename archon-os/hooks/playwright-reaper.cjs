@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog — Orphan Reaper (playwright + chrome-devtools + jest-worker)
+ * Archon OS — Orphan Reaper (playwright + chrome-devtools + jest-worker)
  *
  * Fires: SessionStart
  * Purpose: Kill ORPHANED heavyweight processes left behind by ungraceful exits.

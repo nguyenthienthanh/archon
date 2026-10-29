@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Aura Frog Pre-flight: Bash command allowlist / blocklist
+# Archon OS Pre-flight: Bash command allowlist / blocklist
 # Blocks unconditionally destructive commands. Warns on potentially-destructive
 # patterns. Pass anything else.
 #

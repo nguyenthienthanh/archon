@@ -1,5 +1,5 @@
 #!/bin/bash
-# Aura Frog plugin — statusline installer / updater.
+# Archon OS plugin — statusline installer / updater.
 #
 # Copies the plugin's canonical statusline scripts into ~/.claude/ and wires
 # settings.json to run them. Idempotent and fail-safe: every settings.json edit
@@ -18,7 +18,7 @@ SCRIPTS=(statusline-render.py statusline-usage-refresh.sh statusline-cost.sh)
 
 usage() {
   cat <<'EOF'
-Aura Frog statusline installer
+Archon OS statusline installer
 
 Usage:
   statusline-install.sh install [--billing-day N] [--plan LABEL] [--style cost|af]
@@ -121,7 +121,7 @@ with open(path, "w") as f:
     f.write("\n")
 PY
 
-  echo "Aura Frog statusline installed (style=$style)."
+  echo "Archon OS statusline installed (style=$style)."
   echo "  Scripts copied to $CLAUDE_DIR/:"
   for f in "${SCRIPTS[@]}"; do echo "    - $f"; done
   echo "  statusLine.command -> $sl_cmd"
@@ -136,7 +136,7 @@ PY
 
 cmd_update() {
   copy_scripts
-  echo "Aura Frog statusline scripts refreshed in $CLAUDE_DIR/ (settings.json untouched):"
+  echo "Archon OS statusline scripts refreshed in $CLAUDE_DIR/ (settings.json untouched):"
   for f in "${SCRIPTS[@]}"; do
     if [ -f "$CLAUDE_DIR/$f" ]; then
       local mt
@@ -147,7 +147,7 @@ cmd_update() {
 }
 
 cmd_status() {
-  echo "Aura Frog statusline status"
+  echo "Archon OS statusline status"
   echo
 
   if [ -f "$SETTINGS" ]; then

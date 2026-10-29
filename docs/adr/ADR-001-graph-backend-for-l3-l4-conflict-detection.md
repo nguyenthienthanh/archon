@@ -10,7 +10,7 @@ audience: contributor
 
 ## Context
 
-Aura Frog ships L1 (file overlap) + L2 (function/region overlap) conflict detection today (`pre-dispatch-conflict-check.cjs`, deterministic bash/JS). L3 (semantic) and L4 (architectural) are deferred and were pencilled in as **LLM calls**. The `codebase-memory` MCP (opt-in, FEAT-011/STORY-0026) exposes `detect_changes` (impact analysis: what breaks if a node is modified/deleted) and `trace_path` (call-graph traversal). This ADR evaluates a **graph backend** vs the **LLM design** for L3/L4.
+Archon OS ships L1 (file overlap) + L2 (function/region overlap) conflict detection today (`pre-dispatch-conflict-check.cjs`, deterministic bash/JS). L3 (semantic) and L4 (architectural) are deferred and were pencilled in as **LLM calls**. The `codebase-memory` MCP (opt-in, FEAT-011/STORY-0026) exposes `detect_changes` (impact analysis: what breaks if a node is modified/deleted) and `trace_path` (call-graph traversal). This ADR evaluates a **graph backend** vs the **LLM design** for L3/L4.
 
 ## Options compared
 

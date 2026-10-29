@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog — Task Model Clearer (PostToolUse)
+ * Archon OS — Task Model Clearer (PostToolUse)
  *
  * Fires: PostToolUse with matcher "Task"
  * Purpose: Pop the most-recent entry from the model stack written by

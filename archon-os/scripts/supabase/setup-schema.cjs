@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog - Supabase Schema Setup
+ * Archon OS - Supabase Schema Setup
  *
  * Automatically creates the learning system database schema via Supabase API.
  *
@@ -233,7 +233,7 @@ async function executeStatementsDirectly(supabaseUrl, secretKey, statements) {
  * Main setup function
  */
 async function main() {
-  log('\n🐸 Aura Frog - Supabase Schema Setup\n', 'cyan');
+  log('\n🦉 Archon OS - Supabase Schema Setup\n', 'cyan');
 
   // Check environment variables
   const supabaseUrl = process.env.SUPABASE_URL;

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog - Workflow Edit Learn Hook
+ * Archon OS - Workflow Edit Learn Hook
  *
  * Fires: SessionStart (see hooks.json — scans for user edits since last session)
  * Purpose: Detect when users have directly edited workflow MD files and extract learnings

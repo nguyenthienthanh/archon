@@ -4,7 +4,7 @@ status: current
 audience: active-user
 ---
 
-# Aura Frog Installation — Supplementary Paths
+# Archon OS Installation — Supplementary Paths
 
 The fast path is in [GET_STARTED.md](../getting-started/GET_STARTED.md). This doc covers the situations where the fast path is not enough: CLI symlink, manual install (no marketplace), environment-variable setup, and how to wire up integrations.
 
@@ -12,16 +12,16 @@ The fast path is in [GET_STARTED.md](../getting-started/GET_STARTED.md). This do
 
 ## CLI symlink — `af` outside Claude Code
 
-Aura Frog ships an `af` helper for health checks, setup wizards, and performance reports that you run from a regular terminal (not inside Claude Code).
+Archon OS ships an `af` helper for health checks, setup wizards, and performance reports that you run from a regular terminal (not inside Claude Code).
 
 Install one of two ways:
 
 ```bash
 # With sudo — system-wide symlink
-sudo ln -sf "$HOME/.claude/plugins/marketplaces/aurafrog/scripts/af" /usr/local/bin/af
+sudo ln -sf "$HOME/.claude/plugins/marketplaces/archon/scripts/af" /usr/local/bin/af
 
 # Without sudo — add to PATH
-echo 'export PATH="$HOME/.claude/plugins/marketplaces/aurafrog/scripts:$PATH"' >> ~/.zshrc
+echo 'export PATH="$HOME/.claude/plugins/marketplaces/archon/scripts:$PATH"' >> ~/.zshrc
 source ~/.zshrc
 ```
 
@@ -43,7 +43,7 @@ af measure          # Performance report
 If your Claude Code build doesn't yet support `/plugin marketplace add`, or you want to track a fork:
 
 ```bash
-mkdir -p ~/.claude/plugins/marketplaces/aurafrog
+mkdir -p ~/.claude/plugins/marketplaces/archon
 git clone https://github.com/nguyenthienthanh/archon.git \
   ~/.claude/plugins/marketplaces/archon/archon-os
 
@@ -51,7 +51,7 @@ cd ~/.claude/plugins/marketplaces/archon/archon-os
 cp settings.example.json settings.local.json   # REQUIRED
 ```
 
-Restart Claude Code to register the plugin. `/help` should now show Aura Frog commands.
+Restart Claude Code to register the plugin. `/help` should now show Archon OS commands.
 
 **Uninstall** (either install path): `/plugin uninstall archon-os@archon`.
 
@@ -59,7 +59,7 @@ Restart Claude Code to register the plugin. `/help` should now show Aura Frog co
 
 ## Environment variables — `.envrc`
 
-Aura Frog reads `.envrc` at session start. Create it in the project root (and add it to `.gitignore` — never commit it):
+Archon OS reads `.envrc` at session start. Create it in the project root (and add it to `.gitignore` — never commit it):
 
 ```bash
 # JIRA Integration (auto-fetches tickets like PROJ-123 when mentioned in prompts)
@@ -79,7 +79,7 @@ export FIGMA_API_TOKEN="your-figma-token"
 
 # Slack (Phase 5 completion notifications)
 export SLACK_BOT_TOKEN="xoxb-..."
-export SLACK_CHANNEL="#aura-frog-bot"
+export SLACK_CHANNEL="#archon-os-bot"
 
 # Supabase (for cross-machine learning sync — local fallback works without this)
 export SUPABASE_URL="https://your-project.supabase.co"
@@ -89,16 +89,16 @@ export AF_LEARNING_ENABLED="true"
 
 After editing `.envrc`, reload with `/project env` — or just start a new session and the auto-loader will pick it up.
 
-**Security:** Aura Frog gates `.envrc` access through a trust prompt the first time it loads (per project). See [SECURITY_AND_TRUST.md](SECURITY_AND_TRUST.md) for the trust model and how to bypass with `af envrc allow` for CI.
+**Security:** Archon OS gates `.envrc` access through a trust prompt the first time it loads (per project). See [SECURITY_AND_TRUST.md](SECURITY_AND_TRUST.md) for the trust model and how to bypass with `af envrc allow` for CI.
 
 ---
 
 ## `.gitignore` hygiene
 
-Recommended additions for any project using Aura Frog:
+Recommended additions for any project using Archon OS:
 
 ```gitignore
-# Aura Frog — local state, never commit
+# Archon OS — local state, never commit
 .claude/
 .envrc
 firebase-debug.log
@@ -125,5 +125,5 @@ Full triage list in [TROUBLESHOOTING.md](TROUBLESHOOTING.md). Install-specific F
 | `/plugin marketplace add` errors | Older Claude Code build | Update Claude Code or use [manual install](#manual-install-no-marketplace) |
 | Plugin installed but `/help` shows nothing new | Marketplace not refreshed | Restart Claude Code; re-run `/plugin install archon-os@archon` |
 | `.envrc` not picked up | Not in project root, or trust gate denied | `cd` to project root; run `af envrc allow` |
-| Hooks fail with permission errors | `~/.claude/plugins/` perms drift | `chmod -R u+r ~/.claude/plugins/marketplaces/aurafrog/` |
+| Hooks fail with permission errors | `~/.claude/plugins/` perms drift | `chmod -R u+r ~/.claude/plugins/marketplaces/archon/` |
 | MCP server silently no-ops | Missing env var | Check the MCP's required env in `.mcp.json` |

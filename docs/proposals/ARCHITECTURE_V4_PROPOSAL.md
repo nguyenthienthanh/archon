@@ -4,7 +4,7 @@ status: current
 audience: contributor
 ---
 
-# Architecture v4 Proposal — Aura Frog
+# Architecture v4 Proposal — Archon OS
 
 **Status:** DRAFT — awaiting maintainer approval. No code in this document has been applied.
 **Basis:** 33 adversarially-verified audit findings (2026-08-11 full-repo audit, 42-agent workflow) + platform research with sources. Every claim below cites either a repo file or a URL.
@@ -14,7 +14,7 @@ audience: contributor
 
 ## 1. Current architecture (as measured, not as documented)
 
-Aura Frog layers a "planning-first LLM OS" over Claude Code:
+Archon OS layers a "planning-first LLM OS" over Claude Code:
 
 - **Prose control plane** — CLAUDE.md kernel doc, 25 command files, 60 skill dirs, 73 rule files, 25 agent files. Enforced by description-matching and instruction text.
 - **Deterministic plane** — ~51 CJS hook scripts registered via `hooks/hooks.json`, now mostly funneled through `dispatch.cjs` (one node process per chain).
@@ -72,7 +72,7 @@ The platform contract ([docs: hooks](https://code.claude.com/docs/en/hooks)): ma
 - Delete `ccpm-config.yaml` (+ example) — nothing reads it.
 - Delete the five `disabled: true` entries from `.mcp.json` — Claude Code ignores the field and starts them anyway (measured GBs of resident wrappers). Users who want them re-add locally.
 - Stop committing `stats.json` from CI; generate on demand or publish as a CI artifact. Halves bot noise in history.
-- Fold `commands/*.md` into skills over time — the platform has merged commands into skills and recommends the skill form ([plugins-reference](https://code.claude.com/docs/en/plugins-reference)). Verify any hook matching bundled MCP tools uses the scoped `mcp__plugin_aura-frog_<server>__<tool>` name (unscoped names silently never fire).
+- Fold `commands/*.md` into skills over time — the platform has merged commands into skills and recommends the skill form ([plugins-reference](https://code.claude.com/docs/en/plugins-reference)). Verify any hook matching bundled MCP tools uses the scoped `mcp__plugin_archon-os_<server>__<tool>` name (unscoped names silently never fire).
 
 ## 4. Migration path
 

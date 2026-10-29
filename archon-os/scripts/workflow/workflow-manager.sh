@@ -286,7 +286,7 @@ get_mcp_response() {
 # Show usage
 show_usage() {
     cat <<EOF
-Workflow Manager - Manage multiple Aura Frog workflows
+Workflow Manager - Manage multiple Archon OS workflows
 
 USAGE:
     bash $0 <command> [arguments]

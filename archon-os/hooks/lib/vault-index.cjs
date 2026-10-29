@@ -1,6 +1,6 @@
 'use strict';
 /**
- * Aura Frog — Plan Vault Index
+ * Archon OS — Plan Vault Index
  *
  * Maintains `<plansDir>/graph-index.json`: one adjacency record per plan node,
  * so the common questions about the tree — who is my parent, what are my

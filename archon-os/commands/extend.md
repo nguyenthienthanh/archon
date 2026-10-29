@@ -17,7 +17,7 @@
 
 ## Protocol — `propose <kind> <description>`
 
-1. **Verify project context.** Refuse if the project has neither a root `CLAUDE.md` nor `.claude/CLAUDE.md` ("not an Aura Frog project; run `/project init` first").
+1. **Verify project context.** Refuse if the project has neither a root `CLAUDE.md` nor `.claude/CLAUDE.md` ("not an Archon OS project; run `/project init` first").
 2. **Read project context** — the project's `CLAUDE.md` (root or `.claude/CLAUDE.md`), `README.md`, recent prompts/turns, file tree. Ground the proposal in actual usage.
 3. **Draft a skeleton** with the right frontmatter for the kind:
    - `skill` → name, description, when_to_use, autoInvoke (default false), user-invocable: false, allowed-tools, effort
@@ -62,7 +62,7 @@
 
 ## Hard guardrails
 
-- **Plugin pollution forbidden.** Any path starting with `archon-os/` is rejected immediately. Aura Frog ships a fixed surface; project-specific knowledge belongs in the project.
+- **Plugin pollution forbidden.** Any path starting with `archon-os/` is rejected immediately. Archon OS ships a fixed surface; project-specific knowledge belongs in the project.
 - **Naming collision check.** Project skills must not share a description-trigger with a plugin auto-invoke skill (would cause duplicate fires).
 - **No silent overwrites.** Existing project files require `--force` to overwrite, which warns on confirmation.
 - **Frontmatter validation.** Project skills must include `user-invocable: false` per the Commands-vs-Skills architecture rule.

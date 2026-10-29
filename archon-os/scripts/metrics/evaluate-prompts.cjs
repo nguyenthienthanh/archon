@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog - Prompt Usage Evaluator
+ * Archon OS - Prompt Usage Evaluator
  *
  * Analyzes prompt logs to evaluate how the user uses Claude Code
  * and generates actionable suggestions for improvement.

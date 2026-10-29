@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Aura Frog — Task Model Tracker (PreToolUse)
+ * Archon OS — Task Model Tracker (PreToolUse)
  *
  * Fires: PreToolUse with matcher "Task"
  * Purpose: When the model dispatches a subagent via the Task tool, push the

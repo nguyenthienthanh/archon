@@ -1,6 +1,6 @@
 'use strict';
 /**
- * Aura Frog — Bounded JSONL Tail Reader
+ * Archon OS — Bounded JSONL Tail Reader
  *
  * Append-only stores (.claude/plans/history.jsonl, conflicts.jsonl) grow without
  * bound, yet every Stop-registered reader only cares about the newest events

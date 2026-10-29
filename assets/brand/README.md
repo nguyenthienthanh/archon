@@ -24,9 +24,9 @@ that watches. The plugin's dispatch model now has a literal **observer** role
 (`rules/workflow/three-role-dispatch.md`), so the mark is the watcher rather
 than a decoration.
 
-It replaces the Aura Frog frog, retired with the name at v4.0.0. The frog was a
+It replaces the Archon OS frog, retired with the name at v4.0.0. The frog was a
 good mark; it just stopped pointing at anything once the product was no longer
-called Aura Frog.
+called Archon OS.
 
 ## Rules
 
