@@ -1,6 +1,6 @@
 {
   "version": "4.0.0",
-  "generated": "2026-10-29T09:48:32Z",
+  "generated": "2026-10-29T09:50:11Z",
   "components": {
     "agents": 15,
     "skills": { "total": 43, "autoInvoke": 10 },
