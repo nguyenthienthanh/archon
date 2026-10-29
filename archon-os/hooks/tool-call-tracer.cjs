@@ -13,12 +13,12 @@
  *   - For Read: also emits a `file_read` event with path + sha256 (cheap, exact)
  *
  * Disable:
- *   AF_TRACE_DISABLED=true — no trace events emitted; .claude/plans/traces/ stays empty.
+ *   ARCHON_TRACE_DISABLED=true — no trace events emitted; .claude/plans/traces/ stays empty.
  *
  * Exit codes:
  *   0 — success (always; this is a recorder)
  *
- * @version 1.1.0 (AF_TRACE_DISABLED wired)
+ * @version 1.1.0 (ARCHON_TRACE_DISABLED wired)
  */
 
 'use strict';
@@ -171,7 +171,7 @@ function append(traceFile, evt) {
 }
 
 function main() {
-  if (process.env.AF_TRACE_DISABLED === 'true') return;
+  if (process.env.ARCHON_TRACE_DISABLED === 'true') return;
   if (!fs.existsSync(ACTIVE_FILE)) return;
 
   let active;

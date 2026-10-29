@@ -74,7 +74,7 @@ Auto-create git worktree when starting a workflow. All changes on isolated branc
 
 ### When to Use
 
-- **Auto:** `/run` when `AF_WORKTREE=true`
+- **Auto:** `/run` when `ARCHON_WORKTREE=true`
 - **Manual:** User says "use a worktree"
 - **Skip:** Quick fixes, config changes, single-file edits
 
@@ -92,8 +92,8 @@ worktree_lifecycle[5]{event,action}:
 ### Configuration
 
 ```bash
-export AF_WORKTREE=true
-export AF_WORKTREE_DIR=".worktrees"  # default
+export ARCHON_WORKTREE=true
+export ARCHON_WORKTREE_DIR=".worktrees"  # default
 ```
 
 Add `.worktrees/` to `.gitignore`.

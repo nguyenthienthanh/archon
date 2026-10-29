@@ -11,7 +11,7 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const { execSync } = require('child_process');
-const { TIMEOUT_DEFAULT_MS, MAX_BUFFER_DEFAULT, warnExecLimit } = require('./af-exec.cjs');
+const { TIMEOUT_DEFAULT_MS, MAX_BUFFER_DEFAULT, warnExecLimit } = require('./exec.cjs');
 
 // Config paths
 const LOCAL_CONFIG_PATH = '.claude/.af.json';
@@ -399,25 +399,41 @@ function extractSlugFromBranch(branch, pattern) {
 /**
  * Get session temp file path
  */
+const SESSION_STATE_PREFIX = 'archon-session-';
+const LEGACY_SESSION_STATE_PREFIX = 'af-session-';
+
+/**
+ * Canonical temp path for a session's state file.
+ *
+ * v4 renamed the prefix af-session- -> archon-session-. A session that was live
+ * when the plugin upgraded is still keyed by the same ppid, so resolving only to
+ * the new name would drop its phase and approval state mid-run. Reads therefore
+ * fall back to the legacy file while that is the one on disk; writes always use
+ * the canonical name unless the legacy file is the live one.
+ */
 function getSessionTempPath(sessionId) {
-  return path.join(os.tmpdir(), `af-session-${sessionId}.json`);
+  const canonical = path.join(os.tmpdir(), `${SESSION_STATE_PREFIX}${sessionId}.json`);
+  if (fs.existsSync(canonical)) return canonical;
+  const legacy = path.join(os.tmpdir(), `${LEGACY_SESSION_STATE_PREFIX}${sessionId}.json`);
+  if (fs.existsSync(legacy)) return legacy;
+  return canonical;
 }
 
 /**
  * Canonical per-session key shared by ALL hooks — writers AND readers. Every
  * hook process reliably shares process.ppid within a session (same parent
- * Claude Code process), which is what every reader keys by; AF_SESSION_ID lets
+ * Claude Code process), which is what every reader keys by; ARCHON_SESSION_ID lets
  * a wrapper/test pin it. A stdin session_id (UUID) must NOT be preferred here —
  * most reader hooks never receive it, so keying the writer by it desyncs it
  * from every reader and the state file is effectively never found.
  */
 function resolveSessionId() {
-  return process.env.AF_SESSION_ID || process.ppid?.toString() || null;
+  return process.env.ARCHON_SESSION_ID || process.ppid?.toString() || null;
 }
 
 /**
  * How long a session state file stays trustworthy. The key is process.ppid,
- * which the OS recycles: a stale af-session-<ppid>.json left in the temp dir by
+ * which the OS recycles: a stale archon-session-<ppid>.json left in the temp dir by
  * a session that ended days ago will be read as live state by whatever new
  * Claude Code process lands on that pid. Anything this old is a collision, not
  * a session — no real session runs for a day without a single state write, and
@@ -612,6 +628,8 @@ module.exports = {
   // Session state
   SESSION_STATE_MAX_AGE_MS,
   getSessionTempPath,
+  SESSION_STATE_PREFIX,
+  LEGACY_SESSION_STATE_PREFIX,
   resolveSessionId,
   readSessionState,
   writeSessionState,

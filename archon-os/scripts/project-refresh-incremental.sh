@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+
+# Bridges legacy AF_* / AURA_FROG_* variables onto their ARCHON_* names (v4 rebrand).
+. "$(dirname "${BASH_SOURCE[0]}")/lib/env-compat.sh"
+
 # project-refresh-incremental.sh - Incremental project context refresh
 #
 # Only regenerates context files when relevant source files have changed.
@@ -16,7 +20,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # Walk up from PWD looking for .claude/ or .git/ marker (matches
 # hooks/lib/hook-runtime.cjs#findProjectRoot semantics).
 find_project_root() {
-    if [ -n "${AF_PROJECT_ROOT:-}" ]; then echo "$AF_PROJECT_ROOT"; return; fi
+    if [ -n "${ARCHON_PROJECT_ROOT:-}" ]; then echo "$ARCHON_PROJECT_ROOT"; return; fi
     local d="${1:-$PWD}"
     while [ "$d" != "/" ] && [ -n "$d" ]; do
         if [ -d "$d/.claude" ] || [ -d "$d/.git" ]; then echo "$d"; return; fi

@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# Bridges legacy AF_* / AURA_FROG_* variables onto their ARCHON_* names (v4 rebrand).
+. "$(dirname "${BASH_SOURCE[0]}")/lib/env-compat.sh"
+
 # envrc-guarded-source.sh
 #
 # Source-only helper (NEVER execute directly — must be `. "<this>"` or
@@ -28,14 +32,14 @@
 # temp copy rather than at $PWD/.envrc. $PWD is untouched, so relative paths and
 # `$(pwd)` behave as before.
 #
-# Trust file: ~/.config/aura-frog/envrc-trust.json
+# Trust file: ~/.config/archon/envrc-trust.json (legacy ~/.config/aura-frog/ still read)
 # Schema:     { "/abs/path/to/.envrc": { "sha256": "<hex>", "approved_at": "<iso>" } }
 # Approve:    af envrc allow     (computes hash + writes entry)
 # Revoke:     af envrc revoke
 # Status:     af envrc status
 #
 # Disable the gate (auto-source as before — NOT RECOMMENDED):
-#   export AF_ENVRC_UNSAFE_AUTO_SOURCE=true
+#   export ARCHON_ENVRC_UNSAFE_AUTO_SOURCE=true
 #   Setting this now announces itself once per session on stderr. A disabled
 #   security gate that says nothing is indistinguishable from one that is
 #   working, which is how it stays disabled for months.
@@ -46,14 +50,14 @@
 
 # Print the octal permission bits of a file, GNU or BSD stat. Empty when neither
 # form works, which the caller treats as "cannot tell" rather than "fine".
-_af_envrc_mode() {
+_archon_envrc_mode() {
   stat -c '%a' "$1" 2>/dev/null || stat -f '%Lp' "$1" 2>/dev/null
 }
 
 # 0 = safe to consider, 1 = group/world-writable, 2 = could not determine.
-_af_envrc_perms_ok() {
+_archon_envrc_perms_ok() {
   local mode
-  mode=$(_af_envrc_mode "$1")
+  mode=$(_archon_envrc_mode "$1")
   [ -z "$mode" ] && return 2
   # Keep the low three octal digits (stat may print 644, 0644 or 100644).
   # sed rather than bash substring expansion: this file gets sourced by whatever
@@ -69,9 +73,9 @@ _af_envrc_perms_ok() {
 # Copy $1 to a fresh mode-600 temp file and print its path. Non-zero on failure.
 # `cat` rather than `cp`: cp -p would carry the source's mode across, and plain
 # cp on some platforms still adjusts the destination mode.
-_af_envrc_snapshot() {
+_archon_envrc_snapshot() {
   local src="$1" tmp
-  tmp=$(mktemp "${TMPDIR:-/tmp}/af-envrc.XXXXXX" 2>/dev/null) || return 1
+  tmp=$(mktemp "${TMPDIR:-/tmp}/archon-envrc.XXXXXX" 2>/dev/null) || return 1
   chmod 600 "$tmp" 2>/dev/null || { rm -f "$tmp"; return 1; }
   if ! cat "$src" >"$tmp" 2>/dev/null; then
     rm -f "$tmp"
@@ -82,7 +86,7 @@ _af_envrc_snapshot() {
 
 # sha256 of a file via GNU sha256sum or BSD shasum. Empty when neither exists,
 # which is fail-closed at the call site (no hash tool → do not source).
-_af_envrc_hash() {
+_archon_envrc_hash() {
   if command -v sha256sum >/dev/null 2>&1; then
     sha256sum "$1" 2>/dev/null | awk '{print $1}'
   elif command -v shasum >/dev/null 2>&1; then
@@ -91,7 +95,7 @@ _af_envrc_hash() {
 }
 
 # Expected hash for $2 (the .envrc path) out of trust file $1.
-_af_envrc_expected_hash() {
+_archon_envrc_expected_hash() {
   local trust_file="$1" envrc_path="$2" canon_path="$3"
   if command -v jq >/dev/null 2>&1; then
     if [ -n "$canon_path" ] && [ "$canon_path" != "$envrc_path" ]; then
@@ -131,48 +135,55 @@ af_envrc_guarded_source() {
   [ ! -f "$envrc_path" ] && return 0
 
   # Opt-out for users who explicitly want the old behavior — loudly.
-  if [ "${AF_ENVRC_UNSAFE_AUTO_SOURCE:-}" = "true" ]; then
-    _af_envrc_warn_unsafe_once
+  if [ "${ARCHON_ENVRC_UNSAFE_AUTO_SOURCE:-}" = "true" ]; then
+    _archon_envrc_warn_unsafe_once
     set -a; . "$envrc_path" 2>/dev/null; set +a
     return 0
   fi
 
-  _af_envrc_perms_ok "$envrc_path"
+  _archon_envrc_perms_ok "$envrc_path"
   case "$?" in
     1)
-      _af_envrc_warn_once \
-        "[af] .envrc is group/world-writable — auto-source skipped. Fix with: chmod go-w .envrc"
+      _archon_envrc_warn_once \
+        "[archon] .envrc is group/world-writable — auto-source skipped. Fix with: chmod go-w .envrc"
       return 0
       ;;
     2)
       # No usable stat. The hash gate below still stands, so degrade rather than
       # lock the user out — but say so, once, instead of silently dropping a check.
-      _af_envrc_warn_once \
-        "[af] cannot read .envrc permissions (no usable stat) — writability check skipped"
+      _archon_envrc_warn_once \
+        "[archon] cannot read .envrc permissions (no usable stat) — writability check skipped"
       ;;
   esac
 
-  local trust_file="${HOME}/.config/aura-frog/envrc-trust.json"
+  # v4 moved the trust file from ~/.config/aura-frog/ to ~/.config/archon/. Falling
+  # back to the old path matters: every entry in it is an .envrc the user approved
+  # by hand, and resolving only to the new path would silently revoke the lot and
+  # stop sourcing environments that have been working for them.
+  local trust_file="${HOME}/.config/archon/envrc-trust.json"
+  if [ ! -f "$trust_file" ] && [ -f "${HOME}/.config/aura-frog/envrc-trust.json" ]; then
+    trust_file="${HOME}/.config/aura-frog/envrc-trust.json"
+  fi
   if [ ! -f "$trust_file" ]; then
-    _af_envrc_warn_once
+    _archon_envrc_warn_once
     return 0
   fi
 
   # Single read: hash and source the same private copy, never the live path.
   local snapshot
-  snapshot=$(_af_envrc_snapshot "$envrc_path") || {
-    _af_envrc_warn_once "[af] could not stage .envrc for verification — auto-source skipped"
+  snapshot=$(_archon_envrc_snapshot "$envrc_path") || {
+    _archon_envrc_warn_once "[archon] could not stage .envrc for verification — auto-source skipped"
     return 0
   }
 
   local current_hash expected_hash
-  current_hash=$(_af_envrc_hash "$snapshot")
+  current_hash=$(_archon_envrc_hash "$snapshot")
   if [ -n "$current_hash" ]; then
-    expected_hash=$(_af_envrc_expected_hash "$trust_file" "$envrc_path" "$canon_path")
+    expected_hash=$(_archon_envrc_expected_hash "$trust_file" "$envrc_path" "$canon_path")
     if [ -n "$expected_hash" ] && [ "$current_hash" = "$expected_hash" ]; then
       set -a; . "$snapshot" 2>/dev/null; set +a
     else
-      _af_envrc_warn_once
+      _archon_envrc_warn_once
     fi
   fi
   # No hash tool (current_hash empty) → fail closed, nothing sourced.
@@ -180,20 +191,20 @@ af_envrc_guarded_source() {
   rm -f "$snapshot"
 }
 
-_af_envrc_warn_once() {
+_archon_envrc_warn_once() {
   # One stderr line per shell — prevents log spam on rapid-fire hooks.
-  if [ -z "${AF_ENVRC_WARN_SHOWN:-}" ]; then
-    echo "${1:-[af] .envrc found but not trusted — auto-source skipped. To approve: af envrc allow}" >&2
-    export AF_ENVRC_WARN_SHOWN=1
+  if [ -z "${ARCHON_ENVRC_WARN_SHOWN:-}" ]; then
+    echo "${1:-[archon] .envrc found but not trusted — auto-source skipped. To approve: af envrc allow}" >&2
+    export ARCHON_ENVRC_WARN_SHOWN=1
   fi
 }
 
-_af_envrc_warn_unsafe_once() {
+_archon_envrc_warn_unsafe_once() {
   # Tracked separately from the trust warning: this one must not be suppressed
   # by an earlier "not trusted" hint, and vice versa.
-  if [ -z "${AF_ENVRC_UNSAFE_WARN_SHOWN:-}" ]; then
-    echo "[af] SECURITY: envrc trust gate DISABLED via AF_ENVRC_UNSAFE_AUTO_SOURCE — $PWD/.envrc is being executed unverified" >&2
-    export AF_ENVRC_UNSAFE_WARN_SHOWN=1
+  if [ -z "${ARCHON_ENVRC_UNSAFE_WARN_SHOWN:-}" ]; then
+    echo "[archon] SECURITY: envrc trust gate DISABLED via ARCHON_ENVRC_UNSAFE_AUTO_SOURCE — $PWD/.envrc is being executed unverified" >&2
+    export ARCHON_ENVRC_UNSAFE_WARN_SHOWN=1
   fi
 }
 

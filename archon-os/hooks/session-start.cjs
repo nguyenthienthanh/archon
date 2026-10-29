@@ -6,31 +6,31 @@
  * Purpose: Load config, detect project info, inject env vars, output context
  *
  * Injected Environment Variables:
- *   AF_SESSION_ID        - Current session identifier
- *   AF_PROJECT_TYPE      - monorepo | library | single-repo
- *   AF_PACKAGE_MANAGER   - npm | pnpm | yarn | bun | composer | poetry | go | cargo
- *   AF_FRAMEWORK         - nextjs | react | vue | laravel | django | etc.
- *   AF_ACTIVE_PLAN       - Explicitly active plan path (directive)
- *   AF_SUGGESTED_PLAN    - Branch-matched plan path (hint only)
- *   AF_REPORTS_PATH      - Where to save reports
- *   AF_PLANS_PATH        - Plans directory
- *   AF_WORKFLOWS_PATH    - Workflows directory
- *   AF_GIT_BRANCH        - Current git branch
- *   AF_GIT_URL           - Git remote URL
- *   AF_NODE_VERSION      - Node.js version
- *   AF_PYTHON_VERSION    - Python version (if available)
- *   AF_PHP_VERSION       - PHP version (if available)
- *   AF_GO_VERSION        - Go version (if available)
- *   AF_GODOT_VERSION     - Godot version (if available, detected from project.godot)
- *   AF_OS_PLATFORM       - darwin | linux | win32
- *   AF_USER              - Current username
- *   AF_TIMEZONE          - System timezone
- *   AF_PLAN_NAMING       - Plan naming format
- *   AF_PLAN_DATE_FORMAT  - Date format for plans
- *   AF_PROJECT_ROOT      - Absolute path to project root
- *   AF_MEMORY_LOADED     - Whether memory was loaded (true/false)
- *   AF_MEMORY_COUNT      - Number of memory items loaded
- *   AF_MEMORY_ERROR      - Error message if memory loading failed
+ *   ARCHON_SESSION_ID        - Current session identifier
+ *   ARCHON_PROJECT_TYPE      - monorepo | library | single-repo
+ *   ARCHON_PACKAGE_MANAGER   - npm | pnpm | yarn | bun | composer | poetry | go | cargo
+ *   ARCHON_FRAMEWORK         - nextjs | react | vue | laravel | django | etc.
+ *   ARCHON_ACTIVE_PLAN       - Explicitly active plan path (directive)
+ *   ARCHON_SUGGESTED_PLAN    - Branch-matched plan path (hint only)
+ *   ARCHON_REPORTS_PATH      - Where to save reports
+ *   ARCHON_PLANS_PATH        - Plans directory
+ *   ARCHON_WORKFLOWS_PATH    - Workflows directory
+ *   ARCHON_GIT_BRANCH        - Current git branch
+ *   ARCHON_GIT_URL           - Git remote URL
+ *   ARCHON_NODE_VERSION      - Node.js version
+ *   ARCHON_PYTHON_VERSION    - Python version (if available)
+ *   ARCHON_PHP_VERSION       - PHP version (if available)
+ *   ARCHON_GO_VERSION        - Go version (if available)
+ *   ARCHON_GODOT_VERSION     - Godot version (if available, detected from project.godot)
+ *   ARCHON_OS_PLATFORM       - darwin | linux | win32
+ *   ARCHON_USER              - Current username
+ *   ARCHON_TIMEZONE          - System timezone
+ *   ARCHON_PLAN_NAMING       - Plan naming format
+ *   ARCHON_PLAN_DATE_FORMAT  - Date format for plans
+ *   ARCHON_PROJECT_ROOT      - Absolute path to project root
+ *   ARCHON_MEMORY_LOADED     - Whether memory was loaded (true/false)
+ *   ARCHON_MEMORY_COUNT      - Number of memory items loaded
+ *   ARCHON_MEMORY_ERROR      - Error message if memory loading failed
  *
  * Exit Codes:
  *   0 - Success (non-blocking, allows continuation)
@@ -60,9 +60,9 @@ const {
   resolveSessionId,
   writeSessionState,
   writeEnv
-} = require('./lib/af-config-utils.cjs');
+} = require('./lib/config-utils.cjs');
 
-const { loadMemory } = require('./lib/af-memory-loader.cjs');
+const { loadMemory } = require('./lib/memory-loader.cjs');
 
 // Session cache config
 
@@ -97,10 +97,10 @@ function cacheStaleReason(cache, { now, ttl, envrcMtime, currentBranch }) {
   }
 
   // Git branch switched since cache → stale (the fast path would otherwise
-  // replay the old AF_GIT_BRANCH for up to the TTL). Safe-by-construction: it
+  // replay the old ARCHON_GIT_BRANCH for up to the TTL). Safe-by-construction: it
   // can only invalidate (→ full re-detection), never produce a wrong value; an
   // undetectable branch ('') falls through to the TTL-only behaviour.
-  const cachedBranch = cache.envVars && cache.envVars.AF_GIT_BRANCH;
+  const cachedBranch = cache.envVars && cache.envVars.ARCHON_GIT_BRANCH;
   if (cachedBranch !== undefined && currentBranch && currentBranch !== cachedBranch) {
     return 'branch_switched';
   }
@@ -146,10 +146,10 @@ function saveSessionCache(data) {
  * Emit a one-line banner when the persisted project-context cache is stale
  * (FEAT-008 / STORY-0013). Best-effort + non-blocking: any failure is swallowed
  * so it can never break session start. Disable with
- * AF_CONTEXT_STALE_BANNER_DISABLED=true.
+ * ARCHON_CONTEXT_STALE_BANNER_DISABLED=true.
  */
 function emitContextStalenessBanner() {
-  if (process.env.AF_CONTEXT_STALE_BANNER_DISABLED === 'true') return;
+  if (process.env.ARCHON_CONTEXT_STALE_BANNER_DISABLED === 'true') return;
   try {
     // Prefer the durable snapshot (FEAT-008 / STORY-0014): if a fresh snapshot
     // exists, the session can reuse it instead of re-scanning the codebase.
@@ -167,13 +167,13 @@ function emitContextStalenessBanner() {
       }
     } catch { /* snapshot module optional — fall through to detection-cache check */ }
 
-    const cache = require('./lib/af-project-cache.cjs');
+    const cache = require('./lib/project-cache.cjs');
     const detectionPath = cache.getDetectionPath();
     if (!fs.existsSync(detectionPath)) return; // nothing persisted yet — nothing to flag
     const raw = JSON.parse(fs.readFileSync(detectionPath, 'utf-8'));
     const s = cache.getCacheStaleness(raw, '.');
     if (s.stale && s.reason) {
-      console.log(`🦉 Project context cache is stale (${s.reason}) — will rebuild on next scan. Run /project refresh to force now.`);
+      console.log(`Project context cache is stale (${s.reason}) — will rebuild on next scan. Run /project refresh to force now.`);
     }
   } catch { /* non-blocking */ }
 }
@@ -182,8 +182,8 @@ function emitContextStalenessBanner() {
  * Warn when the instruction files Claude Code loads at startup (CLAUDE.md chain +
  * unscoped .claude/rules + ~/.claude) approach its 150k-char limit. Fires below the
  * limit so the fix (`paths:` frontmatter, move logs to docs/) lands before every
- * session pays for it. Threshold: AF_CONTEXT_BUDGET_WARN (default 100000);
- * disable with AF_CONTEXT_BUDGET_DISABLED=true. Never breaks session start.
+ * session pays for it. Threshold: ARCHON_CONTEXT_BUDGET_WARN (default 100000);
+ * disable with ARCHON_CONTEXT_BUDGET_DISABLED=true. Never breaks session start.
  */
 function emitContextBudgetWarning() {
   try {
@@ -195,7 +195,7 @@ function emitContextBudgetWarning() {
 /**
  * Index the host's own rules/skills/agents (~/.claude + <project>/.claude) so plugin
  * routing prefers them, and flag skill files Claude Code will never register.
- * Disable with AF_HOST_EXTENSIONS_DISABLED=true. Never breaks session start.
+ * Disable with ARCHON_HOST_EXTENSIONS_DISABLED=true. Never breaks session start.
  */
 function emitHostExtensions() {
   try {
@@ -255,19 +255,19 @@ async function main() {
 
     const envFile = process.env.CLAUDE_ENV_FILE;
     const source = data.source || 'unknown';
-    // Canonical key shared with every reader hook (ppid / AF_SESSION_ID) — NOT
+    // Canonical key shared with every reader hook (ppid / ARCHON_SESSION_ID) — NOT
     // data.session_id, which readers never see and which desynced this writer.
     const sessionId = resolveSessionId();
 
     // One-shot legacy migration: .aura/plans → .claude/plans (v3.7.3+).
-    // Fires when only the legacy dir exists and AF_PLANS_DIR is unset.
+    // Fires when only the legacy dir exists and ARCHON_PLANS_DIR is unset.
     // Runs BEFORE any other hook reads plan state so downstream consumers
     // always see the canonical path. Loud notice; safe no-op otherwise.
     try {
       const { migrateLegacyPlansDir } = require('./lib/plans-dir.cjs');
       const migration = migrateLegacyPlansDir();
       if (migration.migrated) {
-        console.log(`🦉 Migrated legacy .aura/plans → .claude/plans (v3.7.3 schema). Source: ${migration.from}`);
+        console.log(`Migrated legacy .aura/plans → .claude/plans (v3.7.3 schema). Source: ${migration.from}`);
       } else if (migration.error) {
         console.log(`⚠️  Legacy .aura/plans migration failed: ${migration.error}. Run manually: mv .aura/plans .claude/plans`);
       }
@@ -280,7 +280,7 @@ async function main() {
       for (const [key, value] of Object.entries(cached.envVars || {})) {
         if (value) writeEnv(envFile, key, value);
       }
-      console.log(`🦉 Session ${source} (cached). ${cached.contextSummary || ''}`);
+      console.log(`Session ${source} (cached). ${cached.contextSummary || ''}`);
       // Emit plugin prefix banner on cached fast-path too
       try {
         const pluginJsonPath = path.join(__dirname, '..', '.claude-plugin', 'plugin.json');
@@ -352,54 +352,54 @@ async function main() {
     // Write environment variables
     if (envFile) {
       // Session & project info
-      writeEnv(envFile, 'AF_SESSION_ID', sessionId || '');
-      writeEnv(envFile, 'AF_PROJECT_TYPE', detections.type || '');
-      writeEnv(envFile, 'AF_PACKAGE_MANAGER', detections.pm || '');
-      writeEnv(envFile, 'AF_FRAMEWORK', detections.framework || '');
-      writeEnv(envFile, 'AF_PROJECT_ROOT', staticEnv.projectRoot);
+      writeEnv(envFile, 'ARCHON_SESSION_ID', sessionId || '');
+      writeEnv(envFile, 'ARCHON_PROJECT_TYPE', detections.type || '');
+      writeEnv(envFile, 'ARCHON_PACKAGE_MANAGER', detections.pm || '');
+      writeEnv(envFile, 'ARCHON_FRAMEWORK', detections.framework || '');
+      writeEnv(envFile, 'ARCHON_PROJECT_ROOT', staticEnv.projectRoot);
 
       // Plan resolution
-      writeEnv(envFile, 'AF_ACTIVE_PLAN', resolved.resolvedBy === 'session' ? resolved.path : '');
-      writeEnv(envFile, 'AF_SUGGESTED_PLAN', resolved.resolvedBy === 'branch' ? resolved.path : '');
-      writeEnv(envFile, 'AF_REPORTS_PATH', reportsPath);
+      writeEnv(envFile, 'ARCHON_ACTIVE_PLAN', resolved.resolvedBy === 'session' ? resolved.path : '');
+      writeEnv(envFile, 'ARCHON_SUGGESTED_PLAN', resolved.resolvedBy === 'branch' ? resolved.path : '');
+      writeEnv(envFile, 'ARCHON_REPORTS_PATH', reportsPath);
 
       // Paths
-      writeEnv(envFile, 'AF_PLANS_PATH', config.paths?.plans || 'plans');
-      writeEnv(envFile, 'AF_WORKFLOWS_PATH', config.paths?.workflows || '.claude/logs/runs');
+      writeEnv(envFile, 'ARCHON_PLANS_PATH', config.paths?.plans || 'plans');
+      writeEnv(envFile, 'ARCHON_WORKFLOWS_PATH', config.paths?.workflows || '.claude/logs/runs');
 
       // Plan config
-      writeEnv(envFile, 'AF_PLAN_NAMING', config.plan?.namingFormat || '{date}-{slug}');
-      writeEnv(envFile, 'AF_PLAN_DATE_FORMAT', config.plan?.dateFormat || 'YYMMDD');
+      writeEnv(envFile, 'ARCHON_PLAN_NAMING', config.plan?.namingFormat || '{date}-{slug}');
+      writeEnv(envFile, 'ARCHON_PLAN_DATE_FORMAT', config.plan?.dateFormat || 'YYMMDD');
       if (config.plan?.issuePrefix) {
-        writeEnv(envFile, 'AF_PLAN_ISSUE_PREFIX', config.plan.issuePrefix);
+        writeEnv(envFile, 'ARCHON_PLAN_ISSUE_PREFIX', config.plan.issuePrefix);
       }
 
       // Git info
-      writeEnv(envFile, 'AF_GIT_BRANCH', staticEnv.gitBranch || '');
-      writeEnv(envFile, 'AF_GIT_URL', staticEnv.gitUrl || '');
+      writeEnv(envFile, 'ARCHON_GIT_BRANCH', staticEnv.gitBranch || '');
+      writeEnv(envFile, 'ARCHON_GIT_URL', staticEnv.gitUrl || '');
 
       // Runtime versions
-      writeEnv(envFile, 'AF_NODE_VERSION', staticEnv.nodeVersion || '');
-      if (staticEnv.pythonVersion) writeEnv(envFile, 'AF_PYTHON_VERSION', staticEnv.pythonVersion);
-      if (staticEnv.phpVersion) writeEnv(envFile, 'AF_PHP_VERSION', staticEnv.phpVersion);
-      if (staticEnv.goVersion) writeEnv(envFile, 'AF_GO_VERSION', staticEnv.goVersion);
-      if (staticEnv.godotVersion) writeEnv(envFile, 'AF_GODOT_VERSION', staticEnv.godotVersion);
+      writeEnv(envFile, 'ARCHON_NODE_VERSION', staticEnv.nodeVersion || '');
+      if (staticEnv.pythonVersion) writeEnv(envFile, 'ARCHON_PYTHON_VERSION', staticEnv.pythonVersion);
+      if (staticEnv.phpVersion) writeEnv(envFile, 'ARCHON_PHP_VERSION', staticEnv.phpVersion);
+      if (staticEnv.goVersion) writeEnv(envFile, 'ARCHON_GO_VERSION', staticEnv.goVersion);
+      if (staticEnv.godotVersion) writeEnv(envFile, 'ARCHON_GODOT_VERSION', staticEnv.godotVersion);
 
       // System info
-      writeEnv(envFile, 'AF_OS_PLATFORM', staticEnv.osPlatform);
-      writeEnv(envFile, 'AF_USER', staticEnv.user);
-      writeEnv(envFile, 'AF_TIMEZONE', staticEnv.timezone);
+      writeEnv(envFile, 'ARCHON_OS_PLATFORM', staticEnv.osPlatform);
+      writeEnv(envFile, 'ARCHON_USER', staticEnv.user);
+      writeEnv(envFile, 'ARCHON_TIMEZONE', staticEnv.timezone);
 
       // Locale config
       if (config.locale?.responseLanguage) {
-        writeEnv(envFile, 'AF_RESPONSE_LANGUAGE', config.locale.responseLanguage);
+        writeEnv(envFile, 'ARCHON_RESPONSE_LANGUAGE', config.locale.responseLanguage);
       }
 
       // Memory status
-      writeEnv(envFile, 'AF_MEMORY_LOADED', memoryResult.loaded ? 'true' : 'false');
-      writeEnv(envFile, 'AF_MEMORY_COUNT', memoryResult.count.toString());
+      writeEnv(envFile, 'ARCHON_MEMORY_LOADED', memoryResult.loaded ? 'true' : 'false');
+      writeEnv(envFile, 'ARCHON_MEMORY_COUNT', memoryResult.count.toString());
       if (memoryResult.error) {
-        writeEnv(envFile, 'AF_MEMORY_ERROR', memoryResult.error);
+        writeEnv(envFile, 'ARCHON_MEMORY_ERROR', memoryResult.error);
       }
     }
 
@@ -408,30 +408,30 @@ async function main() {
 
     // Save session cache for fast path on next startup
     const envVars = {
-      AF_SESSION_ID: sessionId || '',
-      AF_PROJECT_TYPE: detections.type || '',
-      AF_PACKAGE_MANAGER: detections.pm || '',
-      AF_FRAMEWORK: detections.framework || '',
-      AF_PROJECT_ROOT: staticEnv.projectRoot,
-      AF_ACTIVE_PLAN: resolved.resolvedBy === 'session' ? resolved.path : '',
-      AF_SUGGESTED_PLAN: resolved.resolvedBy === 'branch' ? resolved.path : '',
-      AF_REPORTS_PATH: reportsPath,
-      AF_PLANS_PATH: config.paths?.plans || 'plans',
-      AF_WORKFLOWS_PATH: config.paths?.workflows || '.claude/logs/runs',
-      AF_GIT_BRANCH: staticEnv.gitBranch || '',
-      AF_GIT_URL: staticEnv.gitUrl || '',
-      AF_NODE_VERSION: staticEnv.nodeVersion || '',
-      AF_OS_PLATFORM: staticEnv.osPlatform,
-      AF_USER: staticEnv.user,
-      AF_TIMEZONE: staticEnv.timezone,
-      AF_MEMORY_LOADED: memoryResult.loaded ? 'true' : 'false',
-      AF_MEMORY_COUNT: memoryResult.count.toString()
+      ARCHON_SESSION_ID: sessionId || '',
+      ARCHON_PROJECT_TYPE: detections.type || '',
+      ARCHON_PACKAGE_MANAGER: detections.pm || '',
+      ARCHON_FRAMEWORK: detections.framework || '',
+      ARCHON_PROJECT_ROOT: staticEnv.projectRoot,
+      ARCHON_ACTIVE_PLAN: resolved.resolvedBy === 'session' ? resolved.path : '',
+      ARCHON_SUGGESTED_PLAN: resolved.resolvedBy === 'branch' ? resolved.path : '',
+      ARCHON_REPORTS_PATH: reportsPath,
+      ARCHON_PLANS_PATH: config.paths?.plans || 'plans',
+      ARCHON_WORKFLOWS_PATH: config.paths?.workflows || '.claude/logs/runs',
+      ARCHON_GIT_BRANCH: staticEnv.gitBranch || '',
+      ARCHON_GIT_URL: staticEnv.gitUrl || '',
+      ARCHON_NODE_VERSION: staticEnv.nodeVersion || '',
+      ARCHON_OS_PLATFORM: staticEnv.osPlatform,
+      ARCHON_USER: staticEnv.user,
+      ARCHON_TIMEZONE: staticEnv.timezone,
+      ARCHON_MEMORY_LOADED: memoryResult.loaded ? 'true' : 'false',
+      ARCHON_MEMORY_COUNT: memoryResult.count.toString()
     };
-    if (staticEnv.pythonVersion) envVars.AF_PYTHON_VERSION = staticEnv.pythonVersion;
-    if (staticEnv.phpVersion) envVars.AF_PHP_VERSION = staticEnv.phpVersion;
-    if (staticEnv.goVersion) envVars.AF_GO_VERSION = staticEnv.goVersion;
-    if (staticEnv.godotVersion) envVars.AF_GODOT_VERSION = staticEnv.godotVersion;
-    if (config.locale?.responseLanguage) envVars.AF_RESPONSE_LANGUAGE = config.locale.responseLanguage;
+    if (staticEnv.pythonVersion) envVars.ARCHON_PYTHON_VERSION = staticEnv.pythonVersion;
+    if (staticEnv.phpVersion) envVars.ARCHON_PHP_VERSION = staticEnv.phpVersion;
+    if (staticEnv.goVersion) envVars.ARCHON_GO_VERSION = staticEnv.goVersion;
+    if (staticEnv.godotVersion) envVars.ARCHON_GODOT_VERSION = staticEnv.godotVersion;
+    if (config.locale?.responseLanguage) envVars.ARCHON_RESPONSE_LANGUAGE = config.locale.responseLanguage;
 
     saveSessionCache({
       envVars,
@@ -441,9 +441,9 @@ async function main() {
     });
 
     if (contextSummary) {
-      console.log(`🦉 Session ${source}. ${contextSummary}`);
+      console.log(`Session ${source}. ${contextSummary}`);
     } else {
-      console.log(`🦉 Session ${source}.`);
+      console.log(`Session ${source}.`);
     }
 
     // Emit plugin prefix banner — single source of truth for Agent tool dispatch.
@@ -484,7 +484,7 @@ async function main() {
     }
 
     // Detect stale ~/.claude/statusline-command.sh shim (pre-v3.7.3 layout).
-    // Older installs hard-coded `│ P{phase} │` with AF_PHASE="-", which renders
+    // Older installs hard-coded `│ P{phase} │` with ARCHON_PHASE="-", which renders
     // a literal `P-` when no run is active. The plugin now ships the corrected
     // shim at archon-os/scripts/statusline-shim.sh. We don't auto-write to the
     // user's home dir — print a one-time copyable command instead.
@@ -495,8 +495,8 @@ async function main() {
         const staleHintFile = path.join(findProjectRoot(), '.claude', 'cache', 'statusline-stale-shim-hint-shown');
         if (fs.existsSync(userShim) && !fs.existsSync(staleHintFile)) {
           const shimContent = fs.readFileSync(userShim, 'utf-8');
-          // Stale markers: hard-coded `│ P%s │` printf, or AF_PHASE="-" default.
-          const isStale = /\|\s*P%s\s*\|/.test(shimContent) || /AF_PHASE\s*=\s*"-"/.test(shimContent);
+          // Stale markers: hard-coded `│ P%s │` printf, or ARCHON_PHASE="-" default.
+          const isStale = /\|\s*P%s\s*\|/.test(shimContent) || /ARCHON_PHASE\s*=\s*"-"/.test(shimContent);
           if (isStale) {
             const pluginShim = path.join(home, '.claude', 'plugins', 'marketplaces', 'archon', 'archon-os', 'scripts', 'statusline-shim.sh');
             console.log('⚠️  Detected stale ~/.claude/statusline-command.sh (renders `P-` instead of mode/step/agent).');
@@ -521,12 +521,12 @@ async function main() {
     }
 
     // Retention sweep — prune audit/trace JSONL entries older than
-    // AF_AUDIT_RETENTION_DAYS (default 30). Async (fire and forget).
+    // ARCHON_AUDIT_RETENTION_DAYS (default 30). Async (fire and forget).
     try { sweepRetention(); } catch { /* non-blocking */ }
 
     process.exit(0);
   } catch (error) {
-    console.error(`🦉 SessionStart hook error: ${error.message}`);
+    console.error(`SessionStart hook error: ${error.message}`);
     process.exit(0); // Non-blocking
   }
 }
@@ -538,11 +538,11 @@ async function main() {
  * `ts` field (ISO-8601) and dropping entries older than the retention window.
  * Drops the entire file if every line is expired.
  *
- * Disable: AF_AUDIT_RETENTION_DAYS=0 keeps everything.
- * Tune:    AF_AUDIT_RETENTION_DAYS=N (default 30).
+ * Disable: ARCHON_AUDIT_RETENTION_DAYS=0 keeps everything.
+ * Tune:    ARCHON_AUDIT_RETENTION_DAYS=N (default 30).
  */
 function sweepRetention() {
-  const retentionDays = parseInt(process.env.AF_AUDIT_RETENTION_DAYS || '30', 10);
+  const retentionDays = parseInt(process.env.ARCHON_AUDIT_RETENTION_DAYS || '30', 10);
   if (!retentionDays || retentionDays <= 0) return;
   const cutoff = Date.now() - retentionDays * 24 * 60 * 60 * 1000;
 
@@ -575,7 +575,7 @@ function sweepRetention() {
   // workflow that landed there kept everything under it forever — including the
   // teams/phase-*/team-log.jsonl and per-agent logs, which are unrotated appends
   // with no sweep of their own. Pruning the run directory covers them wherever
-  // the workflow lives, which a per-file target could not: AF_TEAM_LOG_DIR only
+  // the workflow lives, which a per-file target could not: ARCHON_TEAM_LOG_DIR only
   // exists inside a live team session, so at SessionStart there is nothing to read.
   const logsRoot = path.join(findProjectRoot(), '.claude', 'logs');
   pruneStaleRunDirs(path.join(logsRoot, 'runs'), cutoff);
@@ -585,7 +585,8 @@ function sweepRetention() {
 }
 
 /**
- * Delete abandoned af-session-<id>.json files from the OS temp dir.
+ * Delete abandoned session-state files from the OS temp dir, under both the
+ * canonical archon-session- prefix and the pre-v4 af-session- one.
  *
  * Nothing ever removed these. That is a correctness problem before it is a
  * housekeeping one: the id is process.ppid, which the OS recycles, so a file
@@ -593,7 +594,7 @@ function sweepRetention() {
  * Claude Code process happens to land on that pid — restoring another session's
  * active plan, phase and agent into an unrelated one.
  *
- * Uses its own 24h window rather than AF_AUDIT_RETENTION_DAYS: this is not
+ * Uses its own 24h window rather than ARCHON_AUDIT_RETENTION_DAYS: this is not
  * retention of an audit trail the user may want to keep, it is scratch state
  * that stops being true the moment its session ends. readSessionState applies
  * the same cutoff, so a stale file is inert even before the sweep reaches it.
@@ -602,15 +603,19 @@ function sweepRetention() {
  * unlink belong to someone else — skip them; that is not our failure to report.
  */
 function sweepStaleSessionState(now = Date.now(), dir = os.tmpdir()) {
-  const { SESSION_STATE_MAX_AGE_MS } = require('./lib/af-config-utils.cjs');
+  const { SESSION_STATE_MAX_AGE_MS, SESSION_STATE_PREFIX, LEGACY_SESSION_STATE_PREFIX } =
+    require('./lib/config-utils.cjs');
   const cutoff = now - SESSION_STATE_MAX_AGE_MS;
   let removed = 0;
   let entries;
   try { entries = fs.readdirSync(dir); } catch { return 0; }
   for (const name of entries) {
-    // Covers af-session-<id>.json and the .<rand> sidecars writeSessionState
-    // renames from — a crash between write and rename leaves those behind too.
-    if (!name.startsWith('af-session-')) continue;
+    // Covers <prefix><id>.json and the .<rand> sidecars writeSessionState renames
+    // from — a crash between write and rename leaves those behind too. Both
+    // prefixes are swept: the legacy one still gets written by an older plugin
+    // sharing this temp dir, and nothing else would ever collect it.
+    if (!name.startsWith(SESSION_STATE_PREFIX) &&
+        !name.startsWith(LEGACY_SESSION_STATE_PREFIX)) continue;
     const full = path.join(dir, name);
     try {
       if (fs.statSync(full).mtimeMs > cutoff) continue;

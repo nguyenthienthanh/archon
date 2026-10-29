@@ -8,11 +8,11 @@
  *          statusline can show the model that is *actually* executing the
  *          step — not just the session model from Claude Code's stdin.
  *
- * State file: .aura-frog/runtime/model-stack.jsonl
+ * State file: .archon/runtime/model-stack.jsonl (legacy .aura-frog/ still read)
  *   - JSONL stack: push = append line; pop = remove last line
  *   - Top of stack = `tail -n 1`
  *   - Removed by `task-clear-model.cjs` on PostToolUse(Task)
- *   - Override path with $AF_MODEL_STACK_FILE (used by tests)
+ *   - Override path with $ARCHON_MODEL_STACK_FILE (used by tests)
  *
  * Fail-open contract: this hook always exits 0. A broken hook must never
  * block a Task dispatch — model tracking is observability, not critical
@@ -30,6 +30,7 @@
 const fs = require('fs');
 const path = require('path');
 const { readStdinSafely, parseStdinJson, installWatchdog } = require('./lib/safe-stdin.cjs');
+const { runtimePath } = require('./lib/runtime-dir.cjs');
 
 const BUILTIN_AGENTS = new Set(['Explore', 'general-purpose', 'Plan', 'statusline-setup']);
 
@@ -191,7 +192,7 @@ function pushStackEntry(stackFile, entry) {
  */
 function processPreToolUse(input, opts) {
   const projectRoot = opts.projectRoot || process.cwd();
-  const stackFile = opts.stackFile || path.join(projectRoot, '.aura-frog', 'runtime', 'model-stack.jsonl');
+  const stackFile = opts.stackFile || runtimePath(projectRoot, 'runtime', 'model-stack.jsonl');
 
   if (!input || typeof input !== 'object') return { action: 'skip' };
   if (input.tool_name !== 'Task') return { action: 'skip' };

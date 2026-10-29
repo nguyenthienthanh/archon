@@ -26,7 +26,7 @@ Referenced in plugin.json:
 
 > **v3.7.0 additions:** alpha.1: `pre-execute-load-plan-context.cjs`, `session-start-restore-active.cjs`. alpha.2: `post-execute-update-node.cjs`, `tdd-red-failure-tracker.cjs`, `tool-call-tracer.cjs`. alpha.3: `jira-auto-fetch.cjs`. alpha.4: `feature-done-trigger-archive.cjs`, `session-reset-trigger.cjs`, `json-toon-projector.cjs`. beta.1: `pre-flight-validate.cjs`. beta.2: `pre-dispatch-conflict-check.cjs`, `post-execute-conflict-rescan.cjs`, `pending-confirm-timeout.cjs`. **rc.1: `mcp-call-gate.cjs`** — PreToolUse on `mcp__.*` enforces per-agent allowlist + rate limits, writes sanitized audit to `<security-dir>/mcp-audit.jsonl` (resolved by `hooks/lib/security-dir.cjs`).
 >
-> **v3.7.4 follow-up:** `task-track-model.cjs` (PreToolUse `Task`) + `task-clear-model.cjs` (PostToolUse `Task`) maintain `.aura-frog/runtime/model-stack.jsonl` so the statusline can show the per-step subagent model. Fail-open observability — see [docs/statusline-model-tracking.md](../docs/statusline-model-tracking.md).
+> **v3.7.4 follow-up:** `task-track-model.cjs` (PreToolUse `Task`) + `task-clear-model.cjs` (PostToolUse `Task`) maintain `.archon/runtime/model-stack.jsonl` so the statusline can show the per-step subagent model. Fail-open observability — see [docs/statusline-model-tracking.md](../docs/statusline-model-tracking.md).
 
 ### 0. SessionStart - Environment Injection (NEW in 1.4.0)
 **When:** Once per session (startup, resume, clear, compact)
@@ -41,33 +41,33 @@ Referenced in plugin.json:
 **Injected Environment Variables:**
 ```toon
 env_vars[16]{var,description}:
-  AF_SESSION_ID,Current session identifier
-  AF_PROJECT_TYPE,monorepo | library | single-repo
-  AF_PACKAGE_MANAGER,npm | pnpm | yarn | bun | composer | etc.
-  AF_FRAMEWORK,nextjs | react | vue | laravel | django | etc.
-  AF_ACTIVE_PLAN,Explicitly active plan path
-  AF_SUGGESTED_PLAN,Branch-matched plan path (hint only)
-  AF_REPORTS_PATH,Where to save reports
-  AF_PLANS_PATH,Plans directory
-  AF_GIT_BRANCH,Current git branch
-  AF_NODE_VERSION,Node.js version
-  AF_PYTHON_VERSION,Python version (if available)
-  AF_PHP_VERSION,PHP version (if available)
-  AF_GO_VERSION,Go version (if available)
-  AF_OS_PLATFORM,darwin | linux | win32
-  AF_USER,Current username
-  AF_TIMEZONE,System timezone
+  ARCHON_SESSION_ID,Current session identifier
+  ARCHON_PROJECT_TYPE,monorepo | library | single-repo
+  ARCHON_PACKAGE_MANAGER,npm | pnpm | yarn | bun | composer | etc.
+  ARCHON_FRAMEWORK,nextjs | react | vue | laravel | django | etc.
+  ARCHON_ACTIVE_PLAN,Explicitly active plan path
+  ARCHON_SUGGESTED_PLAN,Branch-matched plan path (hint only)
+  ARCHON_REPORTS_PATH,Where to save reports
+  ARCHON_PLANS_PATH,Plans directory
+  ARCHON_GIT_BRANCH,Current git branch
+  ARCHON_NODE_VERSION,Node.js version
+  ARCHON_PYTHON_VERSION,Python version (if available)
+  ARCHON_PHP_VERSION,PHP version (if available)
+  ARCHON_GO_VERSION,Go version (if available)
+  ARCHON_OS_PLATFORM,darwin | linux | win32
+  ARCHON_USER,Current username
+  ARCHON_TIMEZONE,System timezone
 ```
 
 **Configuration:** `.claude/.af.json` (local) or `~/.claude/.af.json` (global)
 
 **Example Output:**
 ```
-🦉 Session startup. Type: single-repo | PM: pnpm | Framework: nextjs | Suggested: 241223-user-auth
+Session startup. Type: single-repo | PM: pnpm | Framework: nextjs | Suggested: 241223-user-auth
 ```
 
 **Script:** `hooks/session-start.cjs`
-**Config Utils:** `hooks/lib/af-config-utils.cjs`
+**Config Utils:** `hooks/lib/config-utils.cjs`
 
 ---
 
@@ -122,12 +122,12 @@ env_vars[16]{var,description}:
 **When:** Every SessionStart. Ignores `clear`.
 
 **Actions:**
-- ✅ Export `AF_CLAUDE_SESSION_ID` + `AF_TRANSCRIPT_PATH` to `CLAUDE_ENV_FILE` (used by the manual `--save`)
+- ✅ Export `ARCHON_CLAUDE_SESSION_ID` + `ARCHON_TRANSCRIPT_PATH` to `CLAUDE_ENV_FILE` (used by the manual `--save`)
 - ✅ Same session (`session_id` match; `compact` ≤6h, `resume`/`startup` ≤30min, manual handoffs no limit): read `.claude/handoffs/<name>.json` and emit `hookSpecificOutput.additionalContext` — handoff note, active run (`logs/runs/<id>/run-state.json`), the project's plan (plan tree anchor + plan docs), last 3 user prompts, uncommitted files, and how to continue
 - ✅ Delete auto snapshots after injecting; manual handoffs stay
 - ✅ New session: inject only an index of named handoffs (`/run resume <name>`), never another session's content
 
-No "type continue" step: after an auto-compact Claude continues the turn with the injected context. Disable with `AF_COMPACT_HANDOFF_DISABLED=true`.
+No "type continue" step: after an auto-compact Claude continues the turn with the injected context. Disable with `ARCHON_COMPACT_HANDOFF_DISABLED=true`.
 
 **Example injected context:**
 ```
@@ -187,7 +187,7 @@ ios/Pods
 **What is checked:** in Bash, only segments (split on `&&` / `||` / `;` / `|`) whose first word is
 `cd`, `ls`, `cat`, `head`, `tail`, `find` or `grep`. So `cd repo && rm -f .git/index.lock` is allowed.
 
-**Disable:** Set `AF_SCOUT_BLOCK=false` in environment
+**Disable:** Set `ARCHON_SCOUT_BLOCK=false` in environment
 
 ---
 
@@ -345,15 +345,15 @@ User edits: src/components/Button.tsx
 Hook: 🔧 Auto-fixed: eslint, prettier
 ```
 
-**Disable:** Set `AF_LINT_AUTOFIX=false` in environment
+**Disable:** Set `ARCHON_LINT_AUTOFIX=false` in environment
 
 **Environment handed to the linter:** the fixer is the working repo's own
 `node_modules/.bin` / `vendor/bin` binary — third-party code, run automatically
 on every Write and Edit. It is spawned with a minimised environment
-(`hooks/lib/af-child-env.cjs`): credential-shaped variables (`*SECRET*`,
+(`hooks/lib/child-env.cjs`): credential-shaped variables (`*SECRET*`,
 `*TOKEN*`, `*KEY*`, `*PASSWORD*`, `*CREDENTIAL*`, `PAT`) are stripped, while
 `PATH`, `HOME`, locale, `NODE_*` and the plugin's `AF_*` / `CLAUDE_*` wiring are
-kept. Set `AF_CHILD_ENV_UNFILTERED=true` to pass the environment through
+kept. Set `ARCHON_CHILD_ENV_UNFILTERED=true` to pass the environment through
 untouched, for a toolchain that genuinely needs a credential-named variable.
 
 **Script:** `hooks/lint-autofix.cjs`
@@ -547,7 +547,7 @@ Hook: 🔀 Scope drift detected: This looks like a new feature outside the curre
   the user the `plan` / `deep` / `details` choice before implementing
 - ✅ Skip when a plan tree is already active, on slash commands, on override
   prefixes (`task:` / `project:` / `must do:` / `just do:` / `exactly:`), or
-  when `AF_RUN_PLAN_BRIDGE_DISABLED` / `AF_ESCALATION_DISABLED` is set
+  when `ARCHON_RUN_PLAN_BRIDGE_DISABLED` / `ARCHON_ESCALATION_DISABLED` is set
 
 **Why:** The escalation heuristic used to live only in run-orchestrator Step 0
 (model-read markdown). This hook enforces it deterministically so project-scope
@@ -556,7 +556,7 @@ work surfaces the planning choice even when `/run` isn't typed.
 **Example:**
 ```
 User: "rewrite the whole auth system and migrate from Auth0 to Cognito, rollout v2.0"
-Hook: 🦉 plan-escalation: task scores 4 (≥3) on the escalation rubric —
+Hook: plan-escalation: task scores 4 (≥3) on the escalation rubric —
       signals: shipping_scope, scope_verbs. No active plan tree.
 ```
 
@@ -598,7 +598,7 @@ Hook: 🧠 Learning: Pattern detected! "code_style:minimal_comments" (3 occurren
 - `.claude/cache/learned-patterns.md` - Human-readable patterns file
 
 **Script:** `hooks/auto-learn.cjs` (v2.0.0)
-**Requires:** `AF_LEARNING_ENABLED=true`, `SUPABASE_URL`, `SUPABASE_SECRET_KEY`
+**Requires:** `ARCHON_LEARNING_ENABLED=true`, `SUPABASE_URL`, `SUPABASE_SECRET_KEY`
 
 ---
 
@@ -621,7 +621,7 @@ User: "Implement JWT authentication for the API"
 
 **Storage:** `.claude/metrics/prompts/{date}.jsonl`
 **Retention:** 30 days (auto-cleaned)
-**Disable:** Set `AF_PROMPT_LOGGING=false` in environment
+**Disable:** Set `ARCHON_PROMPT_LOGGING=false` in environment
 
 **Script:** `hooks/prompt-logger.cjs`
 
@@ -683,7 +683,7 @@ User: "Implement JWT authentication for the API"
 ### 11. Stop / PreCompact - Compact Handoff Save (rewritten in 3.8.0)
 **When:**
 - **PreCompact** (`--pre-compact`, trigger `manual` or `auto`) → always saves
-- **Stop** → saves when context usage ≥ `AF_HANDOFF_THRESHOLD` (default 70). Usage comes from `.claude/cache/context-usage.json`, written by `scripts/statusline.sh` (hooks never receive `used_percentage`). Without statusline data it saves only while a run is open.
+- **Stop** → saves when context usage ≥ `ARCHON_HANDOFF_THRESHOLD` (default 70). Usage comes from `.claude/cache/context-usage.json`, written by `scripts/statusline.sh` (hooks never receive `used_percentage`). Without statusline data it saves only while a run is open.
 
 **Saves** `.claude/handoffs/<name>.{json,md}`, one per session. `<name>` is the slug of the session title (`/rename` → ai title → `session-<id8>`); a same-title clash with another session gets `-<id8>`. Content: newest open run from `.claude/logs/runs/*/run-state.json` (legacy `workflow-state.json` fallback, code projects only), the project's plan (`plans/active.json` resolved from the project root + plan docs such as `ROADMAP.md`, `*_PLAN.md`, `docs/*plan*`), last 3 user prompts from `transcript_path`, `git diff --name-only HEAD`, context usage. Non-code projects (no `.git`, no manifest) never get run/plan logs. Pruned after 14 days. Silent, non-blocking.
 
@@ -725,12 +725,12 @@ Pre-compact: Workflow state saved for compact handoff
 - ✅ Feed the self-improve skill's Analyze loop
 
 **Script:** `hooks/feedback-capture.cjs`
-**Requires:** `AF_LEARNING_ENABLED=true`, `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`
+**Requires:** `ARCHON_LEARNING_ENABLED=true`, `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`
 
 ---
 
 ### 14. Learning System Library (Updated in 1.16.0)
-**Location:** `hooks/lib/af-learning.cjs`
+**Location:** `hooks/lib/learning.cjs`
 
 **Provides:**
 - ✅ **Dual-mode storage** - Supabase OR local files
@@ -773,7 +773,7 @@ additively into `learning-dispatch.cjs`: when the gate is ON, each PostToolUse
 dispatch appends a reflection payload; when OFF (the default) the enqueue call
 is a silent no-op and **nothing** changes.
 
-**Env gate:** `AF_REFLECTION_QUEUE` — default **OFF**. Unset / `""` / `0` /
+**Env gate:** `ARCHON_REFLECTION_QUEUE` — default **OFF**. Unset / `""` / `0` /
 `false` / `off` / `no` ⇒ every export is a no-op and no file is written (zero
 behaviour change). Any other value turns it on.
 

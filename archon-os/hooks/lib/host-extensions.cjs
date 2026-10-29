@@ -7,9 +7,13 @@
  * This builds a compact index that session-start and subagent-init inject, and flags skill
  * files Claude Code will NOT register (flat `skills/foo.md`, or SKILL.md without `name`/`description`).
  *
- * Disable: AF_HOST_EXTENSIONS_DISABLED=true
+ * Disable: ARCHON_HOST_EXTENSIONS_DISABLED=true
  */
 'use strict';
+
+// Mirrors legacy AF_* / AURA_FROG_* variables onto their ARCHON_* names. This file
+// reads process.env without going through safe-stdin, so it bridges for itself.
+require('./env-compat.cjs');
 
 const fs = require('fs');
 const os = require('os');
@@ -112,7 +116,7 @@ const names = (arr) => (arr.length > MAX_NAMES ? `${arr.slice(0, MAX_NAMES).join
  * Skill tool and only see CLAUDE.md, not the session's skill listing).
  */
 function formatIndex(found, { projectDir = process.cwd(), forSubagent = false } = {}) {
-  if (process.env.AF_HOST_EXTENSIONS_DISABLED === 'true') return null;
+  if (process.env.ARCHON_HOST_EXTENSIONS_DISABLED === 'true') return null;
   const { user, project } = found;
   if (isEmpty(user) && isEmpty(project)) return null;
 

@@ -1,5 +1,5 @@
 /**
- * FEAT-007 / STORY-0011 — af-learning saveLocalFile atomic write.
+ * FEAT-007 / STORY-0011 — learning saveLocalFile atomic write.
  * A plain writeFileSync could leave a half-written invalid-JSON file (crash or
  * concurrent write); loadLocalFile then parse-fails and returns [], silently
  * wiping learning history. mktemp + rename makes the swap atomic.
@@ -8,9 +8,9 @@
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
-const { saveLocalFile, loadLocalFile } = require('../af-learning.cjs');
+const { saveLocalFile, loadLocalFile } = require('../learning.cjs');
 
-describe('af-learning saveLocalFile', () => {
+describe('learning saveLocalFile', () => {
   it('round-trips valid JSON and leaves no .tmp file', () => {
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'afl-'));
     const f = path.join(dir, 'patterns.json');

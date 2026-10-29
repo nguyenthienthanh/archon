@@ -38,7 +38,7 @@ const { readStdinSafely, parseStdinJson, installWatchdog } = require('./lib/safe
  * `(input) => Promise|void` that self-filters by tool.
  */
 function reflectionQueueEnabled() {
-  const v = String(process.env.AF_REFLECTION_QUEUE || '').trim().toLowerCase();
+  const v = String(process.env.ARCHON_REFLECTION_QUEUE || '').trim().toLowerCase();
   return v === '1' || v === 'true' || v === 'on' || v === 'yes';
 }
 
@@ -48,7 +48,7 @@ function defaultRunners() {
     { name: 'smart-learn', run: (input) => require('./smart-learn.cjs').run(input) },
   ];
   // KG-2.3: opt-in only. Off by default, so the default runner set is unchanged;
-  // appended (never inserted) when AF_REFLECTION_QUEUE is enabled.
+  // appended (never inserted) when ARCHON_REFLECTION_QUEUE is enabled.
   if (reflectionQueueEnabled()) {
     runners.push({ name: 'reflection-queue', run: (input) => enqueueReflection(input) });
   }
@@ -56,7 +56,7 @@ function defaultRunners() {
 }
 
 /**
- * Additive KG-2.3 hook: when AF_REFLECTION_QUEUE is ON, append a reflection
+ * Additive KG-2.3 hook: when ARCHON_REFLECTION_QUEUE is ON, append a reflection
  * payload to the durable on-disk queue. When the gate is OFF (default), the
  * enqueue() call is a silent no-op and NOTHING changes — existing dispatch
  * behaviour is untouched either way. Fail-closed: reflection-queue never throws,

@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# Bridges legacy AF_* / AURA_FROG_* variables onto their ARCHON_* names (v4 rebrand).
+. "$(dirname "${BASH_SOURCE[0]}")/../lib/env-compat.sh"
+
 #
 # Archon OS - Submit Manual Feedback
 # Usage: ./scripts/learn/submit-feedback.sh [type] [message] [severity]
@@ -23,15 +27,15 @@ check_env() {
     echo "Set these in your .envrc:"
     echo "  export SUPABASE_URL=\"https://your-project.supabase.co\""
     echo "  export SUPABASE_SECRET_KEY=\"your-secret-key\""
-    echo "  export AF_LEARNING_ENABLED=\"true\""
+    echo "  export ARCHON_LEARNING_ENABLED=\"true\""
     echo ""
     echo "Then run: source .envrc"
     exit 1
   fi
 
-  if [ "$AF_LEARNING_ENABLED" != "true" ]; then
-    echo -e "${YELLOW}Warning: AF_LEARNING_ENABLED is not 'true'${NC}"
-    echo "Set: export AF_LEARNING_ENABLED=\"true\""
+  if [ "$ARCHON_LEARNING_ENABLED" != "true" ]; then
+    echo -e "${YELLOW}Warning: ARCHON_LEARNING_ENABLED is not 'true'${NC}"
+    echo "Set: export ARCHON_LEARNING_ENABLED=\"true\""
   fi
 }
 

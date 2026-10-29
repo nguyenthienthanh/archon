@@ -33,7 +33,7 @@ Token ≥75% → suggest handoff. User says handoff/save → execute. User says 
 
 ## Handoff Flow (user says `handoff`)
 
-1. Run `node "${CLAUDE_PLUGIN_ROOT}/hooks/compact-handoff.cjs" --save --note "<done · next steps · decisions · blockers>"`. The session id comes from `AF_CLAUDE_SESSION_ID` (exported at SessionStart). The note is the part only you know — make it specific.
+1. Run `node "${CLAUDE_PLUGIN_ROOT}/hooks/compact-handoff.cjs" --save --note "<done · next steps · decisions · blockers>"`. The session id comes from `ARCHON_CLAUDE_SESSION_ID` (exported at SessionStart). The note is the part only you know — make it specific.
 2. **Follow the project's plan.** The handoff records the plan tree anchor (`.claude/plans/active.json`, from the project root) and the project's own plan docs (`ROADMAP.md`, `*_PLAN.md`, `docs/*plan*`…). If one of those is the living plan, update it there — don't fork a second plan into the handoff.
 3. **Code project** with an open `/run`: also keep `run-state.json` current (`current_phase`, `next_action`).
    **Non-code project** (no `.git`, no manifest): do **not** create `.claude/logs/runs/` or plan logs — the handoff file is the only state.
@@ -49,10 +49,10 @@ Token ≥75% → suggest handoff. User says handoff/save → execute. User says 
 `hooks/compact-handoff.cjs` saves the same per-session file automatically:
 
 - **PreCompact** (manual + auto) → always saves.
-- **Stop** → saves when context ≥ `AF_HANDOFF_THRESHOLD` (default 70%, read from the statusline's `.claude/cache/context-usage.json`); without statusline data, saves only while a run is open.
+- **Stop** → saves when context ≥ `ARCHON_HANDOFF_THRESHOLD` (default 70%, read from the statusline's `.claude/cache/context-usage.json`); without statusline data, saves only while a run is open.
 - **SessionStart** `compact`/`resume` of the **same session** → injects its handoff (auto snapshots are then deleted; manual ones stay). A **new** session only gets a list of named handoffs — never another session's context. `clear` → nothing.
 
-Handoffs older than 14 days are pruned. Disable: `AF_COMPACT_HANDOFF_DISABLED=true`.
+Handoffs older than 14 days are pruned. Disable: `ARCHON_COMPACT_HANDOFF_DISABLED=true`.
 
 ## TOON State Format (~160 tokens vs JSON ~600)
 

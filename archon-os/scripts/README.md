@@ -156,7 +156,7 @@ Just mention the ticket in your prompt (e.g. *"please look at PROJ-123"*) and th
 export SUPABASE_URL="https://your-project.supabase.co"
 export SUPABASE_PUBLISHABLE_KEY="your-publishable-key"
 export SUPABASE_SECRET_KEY="your-secret-key"
-export AF_LEARNING_ENABLED="true"
+export ARCHON_LEARNING_ENABLED="true"
 ```
 
 ### Submit Feedback
@@ -244,7 +244,7 @@ export JIRA_API_TOKEN="your-api-token"
 export SUPABASE_URL="https://your-project.supabase.co"
 export SUPABASE_PUBLISHABLE_KEY="your-publishable-key"
 export SUPABASE_SECRET_KEY="your-secret-key"
-export AF_LEARNING_ENABLED="true"
+export ARCHON_LEARNING_ENABLED="true"
 
 # Optional integrations (for optional MCP servers)
 export FIGMA_API_TOKEN="your-figma-token"

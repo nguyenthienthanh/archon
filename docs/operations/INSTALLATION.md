@@ -18,7 +18,7 @@ Install one of two ways:
 
 ```bash
 # With sudo — system-wide symlink
-sudo ln -sf "$HOME/.claude/plugins/marketplaces/archon/scripts/af" /usr/local/bin/af
+sudo ln -sf "$HOME/.claude/plugins/marketplaces/archon/scripts/archon" /usr/local/bin/af
 
 # Without sudo — add to PATH
 echo 'export PATH="$HOME/.claude/plugins/marketplaces/archon/scripts:$PATH"' >> ~/.zshrc
@@ -34,7 +34,7 @@ af setup channels   # Telegram/Discord channel wiring
 af measure          # Performance report
 ```
 
-`af` is optional — every plugin feature is also reachable from inside Claude Code via `/af`, `/check`, `/project`, `/run`.
+`af` is optional — every plugin feature is also reachable from inside Claude Code via `/archon`, `/check`, `/project`, `/run`.
 
 ---
 
@@ -79,12 +79,12 @@ export FIGMA_API_TOKEN="your-figma-token"
 
 # Slack (Phase 5 completion notifications)
 export SLACK_BOT_TOKEN="xoxb-..."
-export SLACK_CHANNEL="#archon-os-bot"
+export SLACK_CHANNEL="#archon-bot"
 
 # Supabase (for cross-machine learning sync — local fallback works without this)
 export SUPABASE_URL="https://your-project.supabase.co"
 export SUPABASE_SECRET_KEY="eyJ..."
-export AF_LEARNING_ENABLED="true"
+export ARCHON_LEARNING_ENABLED="true"
 ```
 
 After editing `.envrc`, reload with `/project env` — or just start a new session and the auto-loader will pick it up.

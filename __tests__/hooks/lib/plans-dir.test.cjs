@@ -5,7 +5,7 @@
 // `.aura/plans/` folder around (resolution prefers `.claude/plans/`).
 //
 // Resolution order:
-//   1. process.env.AF_PLANS_DIR (explicit override, absolute or relative)
+//   1. process.env.ARCHON_PLANS_DIR (explicit override, absolute or relative)
 //   2. `<cwd>/.claude/plans` (default — matches v3.7.3 contract)
 //   3. `<cwd>/.aura/plans` (legacy fallback, only when it exists and
 //      `.claude/plans` does NOT)
@@ -19,7 +19,7 @@ const LIB = path.join(__dirname, '..', '..', '..', 'archon-os', 'hooks', 'lib', 
 
 describe('resolvePlansDir() — resolution order', () => {
     let tmpDir;
-    const origEnv = process.env.AF_PLANS_DIR;
+    const origEnv = process.env.ARCHON_PLANS_DIR;
     let resolvePlansDir;
 
     beforeAll(() => {
@@ -29,13 +29,13 @@ describe('resolvePlansDir() — resolution order', () => {
 
     beforeEach(() => {
         tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'plans-dir-test-'));
-        delete process.env.AF_PLANS_DIR;
+        delete process.env.ARCHON_PLANS_DIR;
     });
 
     afterEach(() => {
         fs.rmSync(tmpDir, { recursive: true, force: true });
-        if (origEnv === undefined) delete process.env.AF_PLANS_DIR;
-        else process.env.AF_PLANS_DIR = origEnv;
+        if (origEnv === undefined) delete process.env.ARCHON_PLANS_DIR;
+        else process.env.ARCHON_PLANS_DIR = origEnv;
     });
 
     test('default (neither dir exists) → <cwd>/.claude/plans', () => {
@@ -62,15 +62,15 @@ describe('resolvePlansDir() — resolution order', () => {
         expect(got).toBe(path.join(tmpDir, '.claude', 'plans'));
     });
 
-    test('AF_PLANS_DIR env wins over both defaults', () => {
-        process.env.AF_PLANS_DIR = path.join(tmpDir, 'custom-plans');
+    test('ARCHON_PLANS_DIR env wins over both defaults', () => {
+        process.env.ARCHON_PLANS_DIR = path.join(tmpDir, 'custom-plans');
         fs.mkdirSync(path.join(tmpDir, '.claude', 'plans'), { recursive: true });
         const got = resolvePlansDir(tmpDir);
         expect(got).toBe(path.join(tmpDir, 'custom-plans'));
     });
 
-    test('AF_PLANS_DIR resolves relative paths', () => {
-        process.env.AF_PLANS_DIR = '.aura/plans';
+    test('ARCHON_PLANS_DIR resolves relative paths', () => {
+        process.env.ARCHON_PLANS_DIR = '.aura/plans';
         const got = resolvePlansDir(tmpDir);
         // path.resolve is relative to process.cwd(), not the cwd arg, by design.
         expect(path.isAbsolute(got)).toBe(true);
@@ -95,7 +95,7 @@ describe('migrateLegacyPlansDir() — one-shot .aura/plans → .claude/plans', (
 
     beforeEach(() => {
         tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'plans-migrate-test-'));
-        delete process.env.AF_PLANS_DIR;
+        delete process.env.ARCHON_PLANS_DIR;
     });
 
     afterEach(() => {
@@ -125,8 +125,8 @@ describe('migrateLegacyPlansDir() — one-shot .aura/plans → .claude/plans', (
         expect(fs.existsSync(path.join(tmpDir, '.aura', 'plans'))).toBe(true);
     });
 
-    test('no-op when AF_PLANS_DIR is set (user opted into custom location)', () => {
-        process.env.AF_PLANS_DIR = path.join(tmpDir, 'custom');
+    test('no-op when ARCHON_PLANS_DIR is set (user opted into custom location)', () => {
+        process.env.ARCHON_PLANS_DIR = path.join(tmpDir, 'custom');
         fs.mkdirSync(path.join(tmpDir, '.aura', 'plans'), { recursive: true });
 
         const result = migrateLegacyPlansDir(tmpDir);
@@ -134,7 +134,7 @@ describe('migrateLegacyPlansDir() — one-shot .aura/plans → .claude/plans', (
         expect(result.migrated).toBe(false);
         expect(fs.existsSync(path.join(tmpDir, '.aura', 'plans'))).toBe(true);
 
-        delete process.env.AF_PLANS_DIR;
+        delete process.env.ARCHON_PLANS_DIR;
     });
 
     test('no-op when legacy does not exist', () => {

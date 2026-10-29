@@ -1,13 +1,13 @@
 'use strict';
 /**
- * Tests for the REAL archon-os/hooks/lib/af-learning.cjs module.
+ * Tests for the REAL archon-os/hooks/lib/learning.cjs module.
  *
  * History: this suite previously asserted against functions copy-pasted into
  * the test file ("Replicate pure functions from source"), so it passed no
  * matter what the real module did. It now require()s the actual module and
  * drives its local-storage behavior through a temp project root
- * (AF_PROJECT_ROOT is honored by hook-runtime's findProjectRoot, which
- * af-learning uses to compute LEARNING_DIR at require time).
+ * (ARCHON_PROJECT_ROOT is honored by hook-runtime's findProjectRoot, which
+ * learning uses to compute LEARNING_DIR at require time).
  */
 
 const fs = require('node:fs');
@@ -16,10 +16,10 @@ const path = require('node:path');
 
 // Point the module at a temp project root BEFORE requiring it —
 // LEARNING_DIR is computed at require time via findProjectRoot().
-const TMP_ROOT = fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()), 'af-learning-test-'));
-process.env.AF_PROJECT_ROOT = TMP_ROOT;
+const TMP_ROOT = fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()), 'learning-test-'));
+process.env.ARCHON_PROJECT_ROOT = TMP_ROOT;
 
-const learning = require('../../../archon-os/hooks/lib/af-learning.cjs');
+const learning = require('../../../archon-os/hooks/lib/learning.cjs');
 
 const LEARNING_DIR = path.join(TMP_ROOT, '.claude', 'learning');
 const WORKFLOW_EVENTS_FILE = path.join(LEARNING_DIR, 'workflow-events.json');
@@ -30,15 +30,15 @@ function writeLearningFile(file, data) {
   fs.writeFileSync(file, JSON.stringify(data));
 }
 
-describe('af-learning (real module)', () => {
+describe('learning (real module)', () => {
   const originalEnv = { ...process.env };
 
   beforeEach(() => {
     delete process.env.SUPABASE_URL;
     delete process.env.SUPABASE_SECRET_KEY;
-    delete process.env.AF_LEARNING_DISABLED;
-    delete process.env.AF_FEEDBACK_COLLECTION;
-    delete process.env.AF_METRICS_COLLECTION;
+    delete process.env.ARCHON_LEARNING_DISABLED;
+    delete process.env.ARCHON_FEEDBACK_COLLECTION;
+    delete process.env.ARCHON_METRICS_COLLECTION;
     fs.rmSync(LEARNING_DIR, { recursive: true, force: true });
   });
 
@@ -77,13 +77,13 @@ describe('af-learning (real module)', () => {
       expect(learning.isLearningEnabled()).toBe(true);
     });
 
-    it('returns false when AF_LEARNING_DISABLED=true', () => {
-      process.env.AF_LEARNING_DISABLED = 'true';
+    it('returns false when ARCHON_LEARNING_DISABLED=true', () => {
+      process.env.ARCHON_LEARNING_DISABLED = 'true';
       expect(learning.isLearningEnabled()).toBe(false);
     });
 
-    it('returns true when AF_LEARNING_DISABLED is something else', () => {
-      process.env.AF_LEARNING_DISABLED = 'false';
+    it('returns true when ARCHON_LEARNING_DISABLED is something else', () => {
+      process.env.ARCHON_LEARNING_DISABLED = 'false';
       expect(learning.isLearningEnabled()).toBe(true);
     });
   });
@@ -106,12 +106,12 @@ describe('af-learning (real module)', () => {
     });
 
     it('returns false when learning is disabled', () => {
-      process.env.AF_LEARNING_DISABLED = 'true';
+      process.env.ARCHON_LEARNING_DISABLED = 'true';
       expect(learning.isFeedbackEnabled()).toBe(false);
     });
 
-    it('returns false when AF_FEEDBACK_COLLECTION=false', () => {
-      process.env.AF_FEEDBACK_COLLECTION = 'false';
+    it('returns false when ARCHON_FEEDBACK_COLLECTION=false', () => {
+      process.env.ARCHON_FEEDBACK_COLLECTION = 'false';
       expect(learning.isFeedbackEnabled()).toBe(false);
     });
   });
@@ -122,12 +122,12 @@ describe('af-learning (real module)', () => {
     });
 
     it('returns false when learning disabled', () => {
-      process.env.AF_LEARNING_DISABLED = 'true';
+      process.env.ARCHON_LEARNING_DISABLED = 'true';
       expect(learning.isMetricsEnabled()).toBe(false);
     });
 
-    it('returns false when AF_METRICS_COLLECTION=false', () => {
-      process.env.AF_METRICS_COLLECTION = 'false';
+    it('returns false when ARCHON_METRICS_COLLECTION=false', () => {
+      process.env.ARCHON_METRICS_COLLECTION = 'false';
       expect(learning.isMetricsEnabled()).toBe(false);
     });
   });

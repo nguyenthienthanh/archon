@@ -21,12 +21,12 @@ let savedEnv;
 
 beforeEach(() => {
   root = fs.mkdtempSync(path.join(os.tmpdir(), 'af-secdir-'));
-  savedEnv = process.env.AF_SECURITY_DIR;
-  delete process.env.AF_SECURITY_DIR;
+  savedEnv = process.env.ARCHON_SECURITY_DIR;
+  delete process.env.ARCHON_SECURITY_DIR;
 });
 afterEach(() => {
-  if (savedEnv === undefined) delete process.env.AF_SECURITY_DIR;
-  else process.env.AF_SECURITY_DIR = savedEnv;
+  if (savedEnv === undefined) delete process.env.ARCHON_SECURITY_DIR;
+  else process.env.ARCHON_SECURITY_DIR = savedEnv;
   fs.rmSync(root, { recursive: true, force: true });
 });
 
@@ -40,9 +40,9 @@ describe('resolveSecurityDir', () => {
     expect(resolveSecurityDir(root)).toBe(path.join(root, '.claude', 'security'));
   });
 
-  it('honours AF_SECURITY_DIR over both, resolved to an absolute path', () => {
+  it('honours ARCHON_SECURITY_DIR over both, resolved to an absolute path', () => {
     fs.mkdirSync(path.join(root, '.claude', 'security'), { recursive: true });
-    process.env.AF_SECURITY_DIR = path.join(root, 'elsewhere');
+    process.env.ARCHON_SECURITY_DIR = path.join(root, 'elsewhere');
     expect(resolveSecurityDir(root)).toBe(path.join(root, 'elsewhere'));
   });
 
@@ -83,9 +83,9 @@ describe('migrateLegacySecurityDir', () => {
     expect(migrateLegacySecurityDir(root).migrated).toBe(false);
   });
 
-  it('does not move anything when the user pinned AF_SECURITY_DIR', () => {
+  it('does not move anything when the user pinned ARCHON_SECURITY_DIR', () => {
     fs.mkdirSync(path.join(root, '.aura', 'security'), { recursive: true });
-    process.env.AF_SECURITY_DIR = path.join(root, 'elsewhere');
+    process.env.ARCHON_SECURITY_DIR = path.join(root, 'elsewhere');
     expect(migrateLegacySecurityDir(root).migrated).toBe(false);
     expect(fs.existsSync(path.join(root, '.aura', 'security'))).toBe(true);
   });
@@ -111,9 +111,9 @@ describe('the shell mirror agrees with the JS resolver', () => {
     expect(resolveSecurityDir(root)).toBe(path.join(root, '.claude', 'security'));
   });
 
-  it('both honour AF_SECURITY_DIR', () => {
-    expect(shellSecurityDir(root, { AF_SECURITY_DIR: '/custom/sec' })).toBe('/custom/sec');
-    process.env.AF_SECURITY_DIR = '/custom/sec';
+  it('both honour ARCHON_SECURITY_DIR', () => {
+    expect(shellSecurityDir(root, { ARCHON_SECURITY_DIR: '/custom/sec' })).toBe('/custom/sec');
+    process.env.ARCHON_SECURITY_DIR = '/custom/sec';
     expect(resolveSecurityDir(root)).toBe('/custom/sec');
   });
 });

@@ -20,7 +20,7 @@ const {
   recordWorkflowMetrics,
   recordAgentPerformance,
   recordPattern
-} = require('./lib/af-learning.cjs');
+} = require('./lib/learning.cjs');
 
 /**
  * Find active workflow state file
@@ -151,8 +151,8 @@ async function sendWorkflowMetrics(workflowId, stateFile) {
     const metrics = {
       workflowId,
       projectName: state.projectName || process.env.PROJECT_NAME,
-      projectType: state.projectType || process.env.AF_PROJECT_TYPE,
-      framework: state.framework || process.env.AF_FRAMEWORK,
+      projectType: state.projectType || process.env.ARCHON_PROJECT_TYPE,
+      framework: state.framework || process.env.ARCHON_FRAMEWORK,
       workflowType: state.workflowType || 'full',
       totalPhases: state.totalPhases || 9,
       completedPhases: state.currentPhase || 0,
@@ -190,7 +190,7 @@ async function sendWorkflowMetrics(workflowId, stateFile) {
  */
 async function sendAgentMetrics() {
   // Try to read from Archon OS session state
-  const { readSessionState, writeSessionState } = require('./lib/af-config-utils.cjs');
+  const { readSessionState, writeSessionState } = require('./lib/config-utils.cjs');
   const sessionId = process.ppid?.toString();
 
   const state = readSessionState(sessionId);
@@ -244,7 +244,7 @@ async function main() {
       const result = await sendWorkflowMetrics(workflow.workflowId, workflow.stateFile);
       if (result && result.sent) {
         const patternMsg = result.patterns > 0 ? ` + ${result.patterns} patterns` : '';
-        console.log(`🦉 Learning: Session metrics recorded${patternMsg}`);
+        console.log(`Learning: Session metrics recorded${patternMsg}`);
         sent = true;
       }
     }
@@ -252,13 +252,13 @@ async function main() {
     // Send agent metrics
     const agentCount = await sendAgentMetrics();
     if (agentCount > 0) {
-      console.log(`🦉 Learning: ${agentCount} agent metrics recorded`);
+      console.log(`Learning: ${agentCount} agent metrics recorded`);
       sent = true;
     }
 
     process.exit(0);
   } catch (error) {
-    console.error(`🦉 Session metrics error: ${error.message}`);
+    console.error(`Session metrics error: ${error.message}`);
     process.exit(0);
   }
 }

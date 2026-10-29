@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+
+# Bridges legacy AF_* / AURA_FROG_* variables onto their ARCHON_* names (v4 rebrand).
+. "$(dirname "${BASH_SOURCE[0]}")/../lib/env-compat.sh"
+
 # Shared helpers for plan-tree backing scripts (sourced, not executed).
 # All functions are pure-bash + standard POSIX utilities (awk, sed, find, grep, mv).
 
@@ -6,7 +10,7 @@
 # plans_dir [explicit_path]
 #   Resolve the plans dir. Resolution order (v3.7.3+):
 #     1. Explicit positional arg (caller passed it)
-#     2. $AF_PLANS_DIR env var
+#     2. $ARCHON_PLANS_DIR env var
 #     3. Default ".claude/plans"
 #   An explicit path may be the plans dir itself OR a project root containing
 #   .claude/plans (or legacy .aura/plans); both resolve correctly.
@@ -32,8 +36,8 @@ plans_dir() {
         echo "$1"
         return 0
     fi
-    if [ -n "${AF_PLANS_DIR:-}" ]; then
-        echo "${AF_PLANS_DIR}"
+    if [ -n "${ARCHON_PLANS_DIR:-}" ]; then
+        echo "${ARCHON_PLANS_DIR}"
         return 0
     fi
     if [ -d ".claude/plans" ]; then
@@ -55,7 +59,7 @@ plans_dir() {
 #   hooks/lib/security-dir.cjs — the two MUST agree, since mcp-call-gate.cjs
 #   writes the log and dashboard.sh reads it.
 #     1. Explicit positional arg (caller passed it)
-#     2. $AF_SECURITY_DIR env var
+#     2. $ARCHON_SECURITY_DIR env var
 #     3. ".claude/security" if it exists
 #     4. ".aura/security" — the current default, and where every install has it
 #   Flipping (3) to be the default for fresh projects relocates a security audit
@@ -67,8 +71,8 @@ security_dir() {
         echo "$1"
         return 0
     fi
-    if [ -n "${AF_SECURITY_DIR:-}" ]; then
-        echo "${AF_SECURITY_DIR}"
+    if [ -n "${ARCHON_SECURITY_DIR:-}" ]; then
+        echo "${ARCHON_SECURITY_DIR}"
         return 0
     fi
     if [ -d ".claude/security" ]; then
@@ -195,12 +199,12 @@ get_list() {
 #
 #   Best-effort throughout. A mutation must never fail because a cache could
 #   not be updated, and a stale index is caught by the readers' staleness check.
-#   Disable: AF_GRAPH_INDEX_DISABLED=true
+#   Disable: ARCHON_GRAPH_INDEX_DISABLED=true
 # ---------------------------------------------------------------------------
 _AF_VAULT_INDEX_CJS="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../hooks/lib" 2>/dev/null && pwd)/vault-index.cjs"
 
 graph_index_update() {
-    [ "${AF_GRAPH_INDEX_DISABLED:-}" = "true" ] && return 0
+    [ "${ARCHON_GRAPH_INDEX_DISABLED:-}" = "true" ] && return 0
     local file="$1"
     [ -n "$file" ] && [ -f "$file" ] || return 0
     case "$file" in *.md) ;; *) return 0 ;; esac
@@ -227,7 +231,7 @@ graph_index_update() {
 # ---------------------------------------------------------------------------
 graph_index_rebuild() {
     local plans="$1"
-    [ "${AF_GRAPH_INDEX_DISABLED:-}" = "true" ] && return 1
+    [ "${ARCHON_GRAPH_INDEX_DISABLED:-}" = "true" ] && return 1
     [ -f "$_AF_VAULT_INDEX_CJS" ] || return 1
     command -v node >/dev/null 2>&1 || return 1
     node "$_AF_VAULT_INDEX_CJS" --plans-dir "$plans" --rebuild >/dev/null 2>&1
@@ -241,7 +245,7 @@ graph_index_rebuild() {
 # ---------------------------------------------------------------------------
 graph_index_ready() {
     local plans="$1"; local story="$2"
-    [ "${AF_GRAPH_INDEX_DISABLED:-}" = "true" ] && return 1
+    [ "${ARCHON_GRAPH_INDEX_DISABLED:-}" = "true" ] && return 1
     [ -f "${plans}/graph-index.json" ] || return 1
     [ -f "$_AF_VAULT_INDEX_CJS" ] || return 1
     command -v node >/dev/null 2>&1 || return 1
@@ -259,7 +263,7 @@ graph_index_ready() {
 # ---------------------------------------------------------------------------
 graph_index_render() {
     local plans="$1"
-    [ "${AF_GRAPH_INDEX_DISABLED:-}" = "true" ] && return 1
+    [ "${ARCHON_GRAPH_INDEX_DISABLED:-}" = "true" ] && return 1
     [ -f "${plans}/graph-index.json" ] || return 1
     [ -f "$_AF_VAULT_INDEX_CJS" ] || return 1
     command -v node >/dev/null 2>&1 || return 1
@@ -504,13 +508,13 @@ _json_escape() {
 #   and mint DUPLICATE counter IDs (the P0-4 bug). flock removes that class of
 #   race outright; the mkdir fallback merely narrows it (liveness gating).
 #
-#   Tunables: AF_LOCK_TIMEOUT_SEC (default 10) — the max spin budget.
-#             AF_LOCK_STALE_SEC   (default max(timeout,60)) — age after which a
+#   Tunables: ARCHON_LOCK_TIMEOUT_SEC (default 10) — the max spin budget.
+#             ARCHON_LOCK_STALE_SEC   (default max(timeout,60)) — age after which a
 #             lock with NO live holder recorded is force-broken.
 #
 #   Stale-break is liveness-gated, NOT age-only. A holder writes its PID into
 #   the lock dir; a waiter breaks the lock only when that PID is dead (crash) or,
-#   for the tiny mkdir→pid-write window with no PID yet, after AF_LOCK_STALE_SEC.
+#   for the tiny mkdir→pid-write window with no PID yet, after ARCHON_LOCK_STALE_SEC.
 #   Age-only breaking (the previous behaviour) let a waiter steal the lock from a
 #   live-but-CPU-starved holder under heavy parallel load, admitting two writers
 #   into the critical section and minting DUPLICATE counter IDs — the P0-4 bug
@@ -521,7 +525,7 @@ _json_escape() {
 # ---------------------------------------------------------------------------
 with_lock() {
     local lock="$1"; shift
-    local timeout="${AF_LOCK_TIMEOUT_SEC:-10}"
+    local timeout="${ARCHON_LOCK_TIMEOUT_SEC:-10}"
 
     # Backend 1: flock(1). Guard the fd open with a subshell probe first — a
     # failed `exec` redirection is fatal to a non-interactive shell.
@@ -555,13 +559,13 @@ with_lock() {
 #   mkdir-based spinlock fallback for hosts without flock(1) (e.g. stock macOS).
 #   Stale-break is liveness-gated: the holder records its PID in the lock dir and
 #   a waiter breaks the lock only once that PID is dead, or — for the sub-ms
-#   mkdir→pid-write window where no PID exists yet — after AF_LOCK_STALE_SEC
+#   mkdir→pid-write window where no PID exists yet — after ARCHON_LOCK_STALE_SEC
 #   (default max(timeout,60)). Never age-breaks a lock whose holder is alive.
 # ---------------------------------------------------------------------------
 _with_lock_mkdir() {
     local lock="$1"; shift
-    local timeout="${AF_LOCK_TIMEOUT_SEC:-10}"
-    local stale="${AF_LOCK_STALE_SEC:-$(( timeout > 60 ? timeout : 60 ))}"
+    local timeout="${ARCHON_LOCK_TIMEOUT_SEC:-10}"
+    local stale="${ARCHON_LOCK_STALE_SEC:-$(( timeout > 60 ? timeout : 60 ))}"
     local waited=0
     local max_spins=$(( timeout * 20 ))   # 20 spins/sec at 0.05s each
     while ! mkdir "$lock" 2>/dev/null; do

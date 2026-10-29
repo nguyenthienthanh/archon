@@ -233,7 +233,7 @@ async function executeStatementsDirectly(supabaseUrl, secretKey, statements) {
  * Main setup function
  */
 async function main() {
-  log('\n🦉 Archon OS - Supabase Schema Setup\n', 'cyan');
+  log('\nArchon OS - Supabase Schema Setup\n', 'cyan');
 
   // Check environment variables
   const supabaseUrl = process.env.SUPABASE_URL;

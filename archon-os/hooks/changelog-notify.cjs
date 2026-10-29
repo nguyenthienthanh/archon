@@ -77,7 +77,7 @@ function main() {
   }
 
   const lines = [
-    `🦉 Archon OS updated to v${current}!`,
+    `Archon OS updated to v${current}!`,
     '',
     ...highlights.map(h => `  • ${h}`),
     '',

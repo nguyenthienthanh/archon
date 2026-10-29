@@ -17,7 +17,7 @@ const path = require('path');
 const fs = require('fs');
 
 // Load the learning library
-const learning = require('./af-learning.cjs');
+const learning = require('./learning.cjs');
 
 async function main() {
   const args = process.argv.slice(2);

@@ -21,13 +21,13 @@
 const fs = require('fs');
 const { readStdinSafely } = require('./lib/safe-stdin.cjs');
 const path = require('path');
-const { recordFeedback, recordAgentPerformance, isFeedbackEnabled } = require('./lib/af-learning.cjs');
+const { recordFeedback, recordAgentPerformance, isFeedbackEnabled } = require('./lib/learning.cjs');
 
 // Track recent AI operations for correction detection.
 // Project-scoped (conversation happens within a project; corrections are per-project).
 
 const { findProjectRoot } = require('./lib/hook-runtime.cjs');
-const STATE_FILE = path.join(findProjectRoot(), '.claude', 'cache', 'aura-frog-recent-ops.json');
+const STATE_FILE = path.join(findProjectRoot(), '.claude', 'cache', 'archon-recent-ops.json');
 
 /**
  * Load recent operations state
@@ -135,7 +135,7 @@ async function run(data) {
         tool,
         filePath,
         content: input?.content || input?.new_string,
-        workflowId: process.env.AF_WORKFLOW_ID
+        workflowId: process.env.ARCHON_WORKFLOW_ID
       });
     } else {
       // This might be a user correction
@@ -146,7 +146,7 @@ async function run(data) {
         await recordFeedback({
           type: 'correction',
           sessionId,
-          workflowId: process.env.AF_WORKFLOW_ID,
+          workflowId: process.env.ARCHON_WORKFLOW_ID,
           original: correction.aiOperation.content?.substring(0, 1000),
           corrected: (input?.content || input?.new_string)?.substring(0, 1000),
           metadata: {
@@ -157,12 +157,12 @@ async function run(data) {
           }
         });
 
-        console.log('🦉 Learning: Recorded correction feedback');
+        console.log('Learning: Recorded correction feedback');
       }
     }
   } catch (error) {
     // Non-blocking - don't fail the tool use
-    console.error(`🦉 Feedback hook error: ${error.message}`);
+    console.error(`Feedback hook error: ${error.message}`);
   }
 }
 

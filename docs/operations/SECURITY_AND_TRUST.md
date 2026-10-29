@@ -215,7 +215,7 @@ When you install Archon OS, it can access:
 
 - [ ] GitHub URL is exactly: `nguyenthienthanh/archon`
 - [ ] Repository owner is: **nguyenthienthanh**
-- [ ] Plugin name is: **aura-frog**
+- [ ] Plugin name is: **archon-os**
 - [ ] Marketplace name is: **archon**
 - [ ] Author email is: nguyenthienthanh.kiyoshi@gmail.com
 - [ ] Repository has this README.md with security notice
@@ -247,7 +247,7 @@ We'll:
 | Feature | Official Archon OS | Malicious Fork |
 |---------|---------------|----------------|
 | **GitHub Owner** | nguyenthienthanh ✅ | random-user ⚠️ |
-| **Repository** | aura-frog ✅ | ccpm-hacked ⚠️ |
+| **Repository** | archon ✅ | ccpm-hacked ⚠️ |
 | **Network Calls** | Only configured APIs ✅ | Unknown servers ⚠️ |
 | **Credential Storage** | Local `.envrc` only ✅ | Uploads to attacker ⚠️ |
 | **Code Review** | Transparent, documented ✅ | Obfuscated ⚠️ |

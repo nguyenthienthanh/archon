@@ -15,7 +15,7 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-const { readSessionState } = require('./lib/af-config-utils.cjs');
+const { readSessionState } = require('./lib/config-utils.cjs');
 
 function getWorkflowState() {
   try {
@@ -81,7 +81,7 @@ function createCheckpoint(phase) {
     console.log(JSON.stringify(result));
   } catch (e) {
     // Checkpoint failed — non-blocking, don't stop the workflow
-    if (process.env.AF_DEBUG === 'true') {
+    if (process.env.ARCHON_DEBUG === 'true') {
       console.error(`[af-debug] Checkpoint failed: ${e.message}`);
     }
   }
@@ -114,7 +114,7 @@ function writeCache(data) {
 
 function main() {
   // Only checkpoint if enabled
-  if (process.env.AF_CHECKPOINT === 'false') {
+  if (process.env.ARCHON_CHECKPOINT === 'false') {
     process.exit(0);
     return;
   }

@@ -17,7 +17,7 @@ const {
   readSessionState,
   writeSessionState,
   isAgentTeamsEnabled
-} = require('./lib/af-config-utils.cjs');
+} = require('./lib/config-utils.cjs');
 
 // Default state (used when no session exists)
 const DEFAULT_STATE = {
@@ -52,8 +52,8 @@ function saveSessionState(state) {
 // Detect current workflow phase from environment or files
 function detectPhase() {
   // Check env var first
-  if (process.env.AF_CURRENT_PHASE) {
-    return process.env.AF_CURRENT_PHASE;
+  if (process.env.ARCHON_CURRENT_PHASE) {
+    return process.env.ARCHON_CURRENT_PHASE;
   }
 
   // Check for phase markers in CWD

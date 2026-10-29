@@ -19,6 +19,9 @@
  */
 'use strict';
 
+// Mirrors legacy AF_* / AURA_FROG_* variables onto their ARCHON_* names.
+require('../hooks/lib/env-compat.cjs');
+
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -106,7 +109,7 @@ function measure(projectDir = process.cwd(), { home = os.homedir() } = {}) {
 }
 
 function warnThreshold() {
-  const n = parseInt(process.env.AF_CONTEXT_BUDGET_WARN || '', 10);
+  const n = parseInt(process.env.ARCHON_CONTEXT_BUDGET_WARN || '', 10);
   return Number.isFinite(n) && n > 0 ? n : DEFAULT_WARN;
 }
 
@@ -114,7 +117,7 @@ const k = (n) => `${(n / 1000).toFixed(1)}k`;
 
 /** One-paragraph warning for session-start, or null when under budget. */
 function budgetWarning(projectDir, opts) {
-  if (process.env.AF_CONTEXT_BUDGET_DISABLED === 'true') return null;
+  if (process.env.ARCHON_CONTEXT_BUDGET_DISABLED === 'true') return null;
   const { total, files } = measure(projectDir, opts);
   if (total < warnThreshold()) return null;
   const rel = (p) => (p.startsWith(projectDir) ? path.relative(projectDir, p) : p.replace(os.homedir(), '~'));

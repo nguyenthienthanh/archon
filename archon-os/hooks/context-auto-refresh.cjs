@@ -1,5 +1,9 @@
 #!/usr/bin/env node
 'use strict';
+
+// Mirrors legacy AF_* / AURA_FROG_* variables onto their ARCHON_* names. This file
+// reads process.env without going through safe-stdin, so it bridges for itself.
+require('./lib/env-compat.cjs');
 /**
  * context-auto-refresh.cjs — Self-healing project-context snapshot refresher.
  * FEAT-008 / STORY-0015.
@@ -10,7 +14,7 @@
  * re-scanning the codebase. Debounced so it never thrashes on rapid events.
  *
  * Best-effort + non-blocking: any failure is swallowed; the hook always exits 0.
- * Disable with AF_CONTEXT_AUTO_REFRESH_DISABLED=true.
+ * Disable with ARCHON_CONTEXT_AUTO_REFRESH_DISABLED=true.
  *
  * Decision logic (shouldRefresh) is a pure function for testability; the
  * side-effecting regeneration is delegated to context-snapshot.cjs.
@@ -61,7 +65,7 @@ function markerPathFor(projectRoot) {
 /** Hook entry — best-effort, always exits 0. */
 function main() {
   try {
-    const disabled = process.env.AF_CONTEXT_AUTO_REFRESH_DISABLED === 'true';
+    const disabled = process.env.ARCHON_CONTEXT_AUTO_REFRESH_DISABLED === 'true';
     const projectRoot = '.';
     const snap = require('../scripts/context-snapshot.cjs');
 

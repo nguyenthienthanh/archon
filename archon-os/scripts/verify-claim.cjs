@@ -25,8 +25,8 @@
  *   0  nothing adverse  |  1  adverse verdict (blocked)  |  2  usage error, or
  *   in --hook mode, blocked (PostToolUse exit 2 returns stderr to the model).
  *
- * Disable the hook: AF_CLAIM_GATE=false
- * Tune: AF_VERIFIER_K, AF_VERIFIER_THRESHOLD, AF_VERIFIER_LOOP_CAP
+ * Disable the hook: ARCHON_CLAIM_GATE=false
+ * Tune: ARCHON_VERIFIER_K, ARCHON_VERIFIER_THRESHOLD, ARCHON_VERIFIER_LOOP_CAP
  */
 
 const path = require('path');
@@ -46,7 +46,7 @@ const USAGE = `Usage:
   verify-claim.cjs --aggregate [--json] < samples.json
   verify-claim.cjs --retry [--json]     < retry.json
 
-Env: AF_CLAIM_GATE=false (disable hook), AF_VERIFIER_K, AF_VERIFIER_THRESHOLD, AF_VERIFIER_LOOP_CAP`;
+Env: ARCHON_CLAIM_GATE=false (disable hook), ARCHON_VERIFIER_K, ARCHON_VERIFIER_THRESHOLD, ARCHON_VERIFIER_LOOP_CAP`;
 
 function readJsonStdin() {
   try {
@@ -71,7 +71,7 @@ function toolResponseText(response) {
 }
 
 function runHookMode() {
-  if (process.env.AF_CLAIM_GATE === 'false') return 0;
+  if (process.env.ARCHON_CLAIM_GATE === 'false') return 0;
 
   const data = readJsonStdin();
   if (!data) return 0;

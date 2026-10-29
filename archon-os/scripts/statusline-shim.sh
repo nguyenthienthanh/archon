@@ -1,11 +1,15 @@
 #!/bin/bash
+
+# Bridges legacy AF_* / AURA_FROG_* variables onto their ARCHON_* names (v4 rebrand).
+. "$(dirname "${BASH_SOURCE[0]}")/lib/env-compat.sh"
+
 # Archon OS Status Line shim — THIN PASS-THROUGH (v3.8.0-alpha.4+).
 #
 # The plugin's statusline.sh now owns the FULL multi-line status line:
 #   ➜  {dir}  git:({branch}) {✓|✗N} {↑a} {↓b}   🕐 HH:MM
-#   🦉 AF v{version} │ {mode} {step} │ {agent}
+#   archon v{version} │ {mode} {step} │ {agent}
 #   {model} │ {ctx}% ctx
-#   💰 … (opt-in: AF_STATUSLINE_COST=1)
+#   💰 … (opt-in: ARCHON_STATUSLINE_COST=1)
 #
 # Previously this shim added the dir/git prefix and delegated only the AF
 # segment. That logic moved INTO the plugin so upgrades carry it — keeping it
@@ -22,5 +26,5 @@ if [ -x "$PLUGIN_STATUSLINE" ]; then
 elif [ -f "$PLUGIN_STATUSLINE" ]; then
     exec bash "$PLUGIN_STATUSLINE"
 else
-    echo "🦉 AF (plugin missing)"
+    echo "Archon (plugin missing)"
 fi

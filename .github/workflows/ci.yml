@@ -84,6 +84,13 @@ jobs:
         # Spec: FEAT-006 STORY-0007 (v3.7.4).
         run: bash archon-os/scripts/ci/validate-doc-maturity.sh
 
+      - name: Validate plugin README is in sync with the root README
+        # archon-os/README.md is generated from README.md. Both were hand-written
+        # until v4, and they drifted four minor versions apart — the plugin
+        # payload shipped a v3.7.4 README while the root said v4. This gate makes
+        # the drift impossible rather than noticing it later.
+        run: bash scripts/gen-plugin-readme.sh --check
+
   test:
     runs-on: ubuntu-latest
     # Fail fast instead of burning 6h of runner time: before this bound, the

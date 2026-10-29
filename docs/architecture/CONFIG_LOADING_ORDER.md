@@ -42,7 +42,7 @@ Archon OS uses multiple configuration files with a clear priority system. Unders
 export CCPM_PROJECT="my-project"
 export CCPM_PROJECT_CONTEXT="project-contexts/my-project"
 export JIRA_URL="https://company.atlassian.net"
-export AURA_FROG_DEFAULT_COVERAGE="85"
+export ARCHON_DEFAULT_COVERAGE="85"
 ```
 
 **Scope:** Session-specific, not committed to git
@@ -288,7 +288,7 @@ workflow:
 
 **Environment Variable:**
 ```bash
-export AURA_FROG_DEFAULT_COVERAGE="90"
+export ARCHON_DEFAULT_COVERAGE="90"
 ```
 
 **Final Value:** `90` (from environment variable)
@@ -423,7 +423,7 @@ team:
 ```bash
 export CCPM_PROJECT="my-project"
 export JIRA_API_TOKEN="secret"
-export AURA_FROG_DEFAULT_COVERAGE="90"
+export ARCHON_DEFAULT_COVERAGE="90"
 ```
 
 ---

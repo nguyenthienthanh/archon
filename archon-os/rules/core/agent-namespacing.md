@@ -13,7 +13,7 @@
 
 **Plugin agents are namespaced by the plugin's own `name` field.** When invoking via the Agent tool, the `subagent_type` is `<plugin-name>:<agent-id>`.
 
-The prefix is **derived, not hardcoded**. Read it from `<plugin>/.claude-plugin/plugin.json` (`name` field) at runtime — not the literal string "aura-frog" embedded in skills/rules.
+The prefix is **derived, not hardcoded**. Read it from `<plugin>/.claude-plugin/plugin.json` (`name` field) at runtime — not the literal string "archon-os" embedded in skills/rules.
 
 ```
 ✓ subagent_type: ${PLUGIN_PREFIX}:architect       (resolved at dispatch)
@@ -54,7 +54,7 @@ prefix=$(jq -r '.name' "${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json")
 
 `hooks/session-start.cjs` emits the prefix in its banner at session start. Look for a line like:
 ```
-🏛 Archon OS v4.0.0-alpha.1 │ plugin-prefix: archon-os
+Archon OS v4.0.0-alpha.1 │ plugin-prefix: archon-os
 ```
 The banner is the cheapest path — read once at session start, no per-call lookup.
 

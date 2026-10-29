@@ -36,7 +36,7 @@ describe('link-run.sh — RUN_ID regex safety (STORY-0023)', () => {
   it('a metachar run id does NOT replace a similarly-named row', () => {
     const { root, plans, runs, featFile } = setup();
     const r = spawnSync('bash', [LINK_RUN, 'link', 'a.b-260101', 'FEAT-T', '--status', 'in_progress'],
-      { encoding: 'utf8', env: { ...process.env, AF_PLANS_DIR: plans, RUNS_DIR: runs } });
+      { encoding: 'utf8', env: { ...process.env, ARCHON_PLANS_DIR: plans, RUNS_DIR: runs } });
     const md = fs.readFileSync(featFile, 'utf8');
     const leftover = fs.readdirSync(path.dirname(featFile)).filter(f => f.includes('.tmp.'));
     fs.rmSync(root, { recursive: true, force: true });

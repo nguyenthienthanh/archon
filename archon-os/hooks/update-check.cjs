@@ -158,7 +158,7 @@ async function main() {
     const isMajor = latestMajor > currentMajor;
 
     const lines = [
-      `🦉 Archon OS update available: ${currentVersion} → ${latestTag}`,
+      `Archon OS update available: ${currentVersion} → ${latestTag}`,
     ];
     if (isMajor) {
       lines.push(`⚠️  Major version — may include breaking changes`);

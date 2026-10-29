@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# Bridges legacy AF_* / AURA_FROG_* variables onto their ARCHON_* names (v4 rebrand).
+. "$(dirname "${BASH_SOURCE[0]}")/lib/env-compat.sh"
+
 # Archon OS Status Line (v3.8.0-alpha.4+)
 # Replaces the conversation banner — always visible, 0 tokens.
 # Owns the FULL multi-line status line (dir/git prefix + AF context + cost) so
@@ -16,26 +20,26 @@
 #
 # Format (multi-line):
 #   ➜  {dir}  git:({branch}) {✓|✗N} {↑a} {↓b}              🕐 HH:MM
-#   🦉 AF v{version} │ {mode} {step} │ {agent}
+#   archon v{version} │ {mode} {step} │ {agent}
 #   {model} │ {ctx}% ctx
 #   ⏳ 5h {pct}% ↻{reset} │ 7d {pct}% ↻{reset}             (rate-limit budget)
 #   💰 ${cost} │ +{added}/-{removed} │ ⏱ {duration} │ cc {version}     (opt-in)
 #
-# The AF content is the v3.7.3+ single line `🦉 AF v… │ {mode} {step} │ {agent}
+# the Archon content is the v3.7.3+ single line `archon v… │ {mode} {step} │ {agent}
 # │ {model} │ {ctx}% ctx`, split on ` │ ` across two lines (avoids single-line
 # truncation on narrow terminals). The exact substring is preserved internally
-# in $AF_LINE before the split.
+# in $ARCHON_LINE before the split.
 #
 # Examples:
 #   ➜  archon-os  git:(main) ✗3 ↑1              🕐 14:32
-#   🦉 AF v3.8.0-alpha.4 │ deep P3 │ architect
+#   archon v3.8.0-alpha.4 │ deep P3 │ architect
 #   Opus 4.8 │ 12% ctx
 #
 # Usage line (rate-limit budget) shows rate_limits.{five_hour,seven_day}: % spent
 # (red ≥90 / yellow ≥70 / green) + reset time (↻). Subscribers only, after the
-# session's first API response — degrades silently otherwise. Disable: AF_STATUSLINE_USAGE=0.
+# session's first API response — degrades silently otherwise. Disable: ARCHON_STATUSLINE_USAGE=0.
 #
-# Session-metrics line is OPT-IN: set AF_STATUSLINE_COST=1 AND the cost data
+# Session-metrics line is OPT-IN: set ARCHON_STATUSLINE_COST=1 AND the cost data
 # must be present. Cost was removed from the always-on line in v3.7.4 ("visual
 # noise without per-call breakdown"); this re-adds it behind a flag.
 #
@@ -72,7 +76,7 @@ file_num() {
 # Claude Code passes the project cwd via the JSON `cwd` field. Prefer that.
 # Fallback: walk up from $PWD looking for .claude/ or .git/ marker.
 find_project_root() {
-    if [ -n "$AF_PROJECT_ROOT" ]; then echo "$AF_PROJECT_ROOT"; return; fi
+    if [ -n "$ARCHON_PROJECT_ROOT" ]; then echo "$ARCHON_PROJECT_ROOT"; return; fi
     local start="${1:-$PWD}"
     local d="$start"
     while [ "$d" != "/" ] && [ -n "$d" ]; do
@@ -107,21 +111,21 @@ CTX_INT=${CTX_PCT%.*}
 
 # ----- Archon OS version -----------------------------------------------------
 
-AF_VERSION="?"
+ARCHON_VERSION="?"
 for pjson in \
     "$HOME/.claude/plugins/marketplaces/archon/archon-os/.claude-plugin/plugin.json" \
     "archon-os/.claude-plugin/plugin.json"; do
     if [ -f "$pjson" ]; then
         v=$(file_str "$pjson" "version")
-        [ -n "$v" ] && AF_VERSION="$v" && break
+        [ -n "$v" ] && ARCHON_VERSION="$v" && break
     fi
 done
 
 # ----- Run state (mode + step + agent) --------------------------------------
 
-AF_MODE="idle"
-AF_STEP=""
-AF_AGENT="ready"
+ARCHON_MODE="idle"
+ARCHON_STEP=""
+ARCHON_AGENT="ready"
 
 # Prefer the most recently-modified run-state.json with status=in_progress.
 # Fall back to session-start cache.
@@ -146,52 +150,52 @@ if [ -d "$RUNS_DIR" ]; then
 
         # Mode: prefer flow (specific), fall back to complexity (general).
         case "$flow" in
-            feature-standard)            AF_MODE="standard" ;;
-            feature-deep)                AF_MODE="deep" ;;
-            bugfix)                      AF_MODE="bugfix" ;;
-            refactor)                    AF_MODE="refactor" ;;
-            test)                        AF_MODE="test" ;;
-            security|review|deploy|quality) AF_MODE="$flow" ;;
-            direct)                      AF_MODE="quick" ;;
+            feature-standard)            ARCHON_MODE="standard" ;;
+            feature-deep)                ARCHON_MODE="deep" ;;
+            bugfix)                      ARCHON_MODE="bugfix" ;;
+            refactor)                    ARCHON_MODE="refactor" ;;
+            test)                        ARCHON_MODE="test" ;;
+            security|review|deploy|quality) ARCHON_MODE="$flow" ;;
+            direct)                      ARCHON_MODE="quick" ;;
             *)
                 case "$complexity" in
-                    Quick)    AF_MODE="quick" ;;
-                    Standard) AF_MODE="standard" ;;
-                    Deep)     AF_MODE="deep" ;;
-                    Project)  AF_MODE="project" ;;
-                    *)        AF_MODE="run" ;;
+                    Quick)    ARCHON_MODE="quick" ;;
+                    Standard) ARCHON_MODE="standard" ;;
+                    Deep)     ARCHON_MODE="deep" ;;
+                    Project)  ARCHON_MODE="project" ;;
+                    *)        ARCHON_MODE="run" ;;
                 esac
                 ;;
         esac
 
         # Step: P1-P5 for phase-based flows, S1-S4 for step-based bugfix.
         if [ -n "$phase" ] && [ "$phase" != "0" ]; then
-            AF_STEP="P${phase%.*}"
+            ARCHON_STEP="P${phase%.*}"
         elif [ -n "$step_name" ]; then
             case "$step_name" in
-                investigate)   AF_STEP="S1" ;;
-                test-red|red)  AF_STEP="S2" ;;
-                fix-green|green) AF_STEP="S3" ;;
-                verify)        AF_STEP="S4" ;;
-                *)             AF_STEP="${step_name:0:8}" ;;
+                investigate)   ARCHON_STEP="S1" ;;
+                test-red|red)  ARCHON_STEP="S2" ;;
+                fix-green|green) ARCHON_STEP="S3" ;;
+                verify)        ARCHON_STEP="S4" ;;
+                *)             ARCHON_STEP="${step_name:0:8}" ;;
             esac
         fi
 
         # Agent: prefer active_agent, fall back to last entry in agents[].
         if [ -n "$active_agent" ]; then
-            AF_AGENT="$active_agent"
+            ARCHON_AGENT="$active_agent"
         else
             last_agent=$(grep -oE '"agents"[[:space:]]*:[[:space:]]*\[[^]]*\]' "$LATEST_RUN" 2>/dev/null \
                 | grep -oE '"[a-z-]+"' | tail -1 | tr -d '"')
-            [ -n "$last_agent" ] && AF_AGENT="$last_agent"
+            [ -n "$last_agent" ] && ARCHON_AGENT="$last_agent"
         fi
     fi
 fi
 
 # Legacy fallback: session-start cache (pre-v3.7.4 surface).
-if [ "$AF_AGENT" = "ready" ] && [ -f "$PROJECT_ROOT/.claude/cache/session-start-cache.json" ]; then
+if [ "$ARCHON_AGENT" = "ready" ] && [ -f "$PROJECT_ROOT/.claude/cache/session-start-cache.json" ]; then
     cache_agent=$(file_str "$PROJECT_ROOT/.claude/cache/session-start-cache.json" "agent")
-    [ -n "$cache_agent" ] && AF_AGENT="$cache_agent"
+    [ -n "$cache_agent" ] && ARCHON_AGENT="$cache_agent"
 fi
 
 # ----- Per-step model stack (v3.7.4 follow-up) ------------------------------
@@ -203,7 +207,12 @@ fi
 #
 # Disable: rename or chmod -x the hooks at archon-os/hooks/task-{track,clear}-model.cjs.
 
-STACK_FILE=".aura-frog/runtime/model-stack.jsonl"
+# v4 renamed the runtime dir .aura-frog/ -> .archon/. A project that was mid-run
+# when the plugin upgraded still has its pushed stack under the old name, so read
+# whichever one actually holds state (hooks/lib/runtime-dir.cjs does the same).
+STACK_FILE=".archon/runtime/model-stack.jsonl"
+[ -s "$STACK_FILE" ] || [ ! -s ".aura-frog/runtime/model-stack.jsonl" ] || \
+    STACK_FILE=".aura-frog/runtime/model-stack.jsonl"
 
 # Format an elapsed-seconds count as Ns / MmSs / HhMMm per spec.
 fmt_duration() {
@@ -253,7 +262,7 @@ render_active() {
         dur=""
     fi
 
-    echo "🦉 AF v${AF_VERSION} │ ▶ ${phase} │ ${step_model}${dur} │ session: ${MODEL} │ ${CTX_INT}% ctx"
+    echo "archon v${ARCHON_VERSION} │ ▶ ${phase} │ ${step_model}${dur} │ session: ${MODEL} │ ${CTX_INT}% ctx"
     return 0
 }
 
@@ -295,14 +304,14 @@ printf "\033[1;32m➜\033[0m  \033[0;36m%s\033[0m\033[1;34m%s\033[0m\033[0;33m%s
 
 # --- Lines 2-3: AF context, built as the single v3.7.3+ line then split on ` │ `
 # (first 3 fields → line 2 = version/mode-step/agent; rest → line 3 = model/ctx).
-# Keeping the full line in $AF_LINE preserves the exact substring contract.
-AF_LINE=$(render_active 2>/dev/null)
-if [ -z "$AF_LINE" ]; then
-    MODE_STEP="$AF_MODE"
-    [ -n "$AF_STEP" ] && MODE_STEP="$AF_MODE $AF_STEP"
-    AF_LINE="🦉 AF v${AF_VERSION} │ ${MODE_STEP} │ ${AF_AGENT} │ ${MODEL} │ ${CTX_INT}% ctx"
+# Keeping the full line in $ARCHON_LINE preserves the exact substring contract.
+ARCHON_LINE=$(render_active 2>/dev/null)
+if [ -z "$ARCHON_LINE" ]; then
+    MODE_STEP="$ARCHON_MODE"
+    [ -n "$ARCHON_STEP" ] && MODE_STEP="$ARCHON_MODE $ARCHON_STEP"
+    ARCHON_LINE="archon v${ARCHON_VERSION} │ ${MODE_STEP} │ ${ARCHON_AGENT} │ ${MODEL} │ ${CTX_INT}% ctx"
 fi
-printf '%s\n' "$AF_LINE" | awk -F ' │ ' '{
+printf '%s\n' "$ARCHON_LINE" | awk -F ' │ ' '{
   l1=""; l2="";
   for (i = 1; i <= NF; i++) {
     if (i <= 3) { l1 = l1 (i > 1 ? " │ " : "") $i }
@@ -315,8 +324,8 @@ printf '%s\n' "$AF_LINE" | awk -F ' │ ' '{
 # --- Usage line: rate-limit budget spent + reset times -----------------------
 # rate_limits.{five_hour,seven_day}.{used_percentage(0-100),resets_at(epoch s)}.
 # Present only for Claude.ai subscribers after the first API response of the
-# session → degrades silently when absent. Disable with AF_STATUSLINE_USAGE=0.
-if [ "${AF_STATUSLINE_USAGE:-1}" = "1" ]; then
+# session → degrades silently when absent. Disable with ARCHON_STATUSLINE_USAGE=0.
+if [ "${ARCHON_STATUSLINE_USAGE:-1}" = "1" ]; then
     # Read a nested rate_limits field — jq if present, else grep the one-lined JSON.
     rl_field() {  # $1=five_hour|seven_day  $2=used_percentage|resets_at
         if command -v jq >/dev/null 2>&1; then
@@ -356,8 +365,8 @@ fi
 
 # --- Line 4: session metrics — OPT-IN. Cost was pulled from the always-on line
 # in v3.7.4 ("visual noise without per-call breakdown"); re-add behind a flag.
-# Only renders when AF_STATUSLINE_COST=1 AND at least one field is present.
-if [ "$AF_STATUSLINE_COST" = "1" ]; then
+# Only renders when ARCHON_STATUSLINE_COST=1 AND at least one field is present.
+if [ "$ARCHON_STATUSLINE_COST" = "1" ]; then
     cc_ver=$(parse_str "version")
     cost=$(parse_num "total_cost_usd")
     added=$(parse_num "total_lines_added")

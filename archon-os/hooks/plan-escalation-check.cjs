@@ -10,7 +10,7 @@
  * choice before diving into implementation.
  *
  * Fires only when ALL of:
- *   • neither AF_RUN_PLAN_BRIDGE_DISABLED nor AF_ESCALATION_DISABLED is set
+ *   • neither ARCHON_RUN_PLAN_BRIDGE_DISABLED nor ARCHON_ESCALATION_DISABLED is set
  *   • no active plan tree (.claude/plans/active.json absent) — escalation is
  *     the "no_plan" state; anchoring/idle states are handled elsewhere
  *   • prompt is not a slash command and carries no override/force prefix
@@ -151,7 +151,7 @@ function planActive(cwd) {
 function emitHint(weight, signals) {
   // Claude reads stderr; this hint is metadata, not user-facing output.
   process.stderr.write(
-    `\n🦉 plan-escalation: task scores ${weight} (≥${ESCALATION_THRESHOLD}) on the escalation rubric` +
+    `\nplan-escalation: task scores ${weight} (≥${ESCALATION_THRESHOLD}) on the escalation rubric` +
     ` — signals: ${signals.join(', ')}. No active plan tree.\n` +
     `   Per rules/workflow/run-plan-bridge.md, offer the user before implementing:\n` +
     `     plan    — bootstrap /archon-os:plan first\n` +
@@ -166,7 +166,7 @@ function main(opts = {}) {
   const env = opts.env || process.env;
   const cwd = opts.cwd || process.cwd();
 
-  if (env.AF_RUN_PLAN_BRIDGE_DISABLED === 'true' || env.AF_ESCALATION_DISABLED === 'true') {
+  if (env.ARCHON_RUN_PLAN_BRIDGE_DISABLED === 'true' || env.ARCHON_ESCALATION_DISABLED === 'true') {
     return 0;
   }
 

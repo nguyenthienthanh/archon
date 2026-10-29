@@ -218,17 +218,17 @@ describe('cache contract', () => {
         expect(drained.map.files['src/hub.js']).toEqual(map.files['src/hub.js']);
     });
 
-    it('is disabled by AF_CODE_MAP_DISABLED', () => {
+    it('is disabled by ARCHON_CODE_MAP_DISABLED', () => {
         seed();
-        const prev = process.env.AF_CODE_MAP_DISABLED;
-        process.env.AF_CODE_MAP_DISABLED = 'true';
+        const prev = process.env.ARCHON_CODE_MAP_DISABLED;
+        process.env.ARCHON_CODE_MAP_DISABLED = 'true';
         try {
             expect(codeMap.isDisabled()).toBe(true);
             expect(codeMap.rebuildMap(root)).toBeNull();
             expect(fs.existsSync(codeMap.mapPath(root))).toBe(false);
         } finally {
-            if (prev === undefined) delete process.env.AF_CODE_MAP_DISABLED;
-            else process.env.AF_CODE_MAP_DISABLED = prev;
+            if (prev === undefined) delete process.env.ARCHON_CODE_MAP_DISABLED;
+            else process.env.ARCHON_CODE_MAP_DISABLED = prev;
         }
     });
 });
@@ -316,20 +316,20 @@ describe('buildDigest', () => {
         expect(full.tiers.length).toBeGreaterThan(tiny.tiers.length);
     });
 
-    it('takes its budget from AF_CODE_MAP_BUDGET, clamped to the cap', () => {
+    it('takes its budget from ARCHON_CODE_MAP_BUDGET, clamped to the cap', () => {
         seed();
         const map = codeMap.buildMap(root);
-        const prev = process.env.AF_CODE_MAP_BUDGET;
+        const prev = process.env.ARCHON_CODE_MAP_BUDGET;
         try {
-            process.env.AF_CODE_MAP_BUDGET = '700';
+            process.env.ARCHON_CODE_MAP_BUDGET = '700';
             expect(codeMap.buildDigest(root, map).budget).toBe(700);
-            process.env.AF_CODE_MAP_BUDGET = '999999';
+            process.env.ARCHON_CODE_MAP_BUDGET = '999999';
             expect(codeMap.buildDigest(root, map).budget).toBe(codeMap.HOOK_CHAR_CAP);
-            process.env.AF_CODE_MAP_BUDGET = 'nonsense';
+            process.env.ARCHON_CODE_MAP_BUDGET = 'nonsense';
             expect(codeMap.buildDigest(root, map).budget).toBe(codeMap.DEFAULT_DIGEST_BUDGET);
         } finally {
-            if (prev === undefined) delete process.env.AF_CODE_MAP_BUDGET;
-            else process.env.AF_CODE_MAP_BUDGET = prev;
+            if (prev === undefined) delete process.env.ARCHON_CODE_MAP_BUDGET;
+            else process.env.ARCHON_CODE_MAP_BUDGET = prev;
         }
     });
 
@@ -369,7 +369,7 @@ const runHook = (args, opts = {}) => spawnSync(
         encoding: 'utf8',
         input: opts.input || '{}',
         cwd: opts.cwd || root,
-        env: { ...process.env, AF_PROJECT_ROOT: opts.projectRoot || root, ...(opts.env || {}) },
+        env: { ...process.env, ARCHON_PROJECT_ROOT: opts.projectRoot || root, ...(opts.env || {}) },
     },
 );
 
@@ -416,13 +416,13 @@ describe('code-map-digest hook', () => {
 
     it('exits 0 and emits nothing when disabled', () => {
         seed();
-        const res = runHook(['--session-start'], { env: { AF_CODE_MAP_DISABLED: 'true' } });
+        const res = runHook(['--session-start'], { env: { ARCHON_CODE_MAP_DISABLED: 'true' } });
         expect(res.status).toBe(0);
         expect(res.stdout.trim()).toBe('');
-        const post = runHook(['--post-tool-use'], { env: { AF_CODE_MAP_DISABLED: 'true' } });
+        const post = runHook(['--post-tool-use'], { env: { ARCHON_CODE_MAP_DISABLED: 'true' } });
         expect(post.status).toBe(0);
         // A human asking for a lookup gets told, rather than silently nothing.
-        const cli = runHook(['--digest'], { env: { AF_CODE_MAP_DISABLED: 'true' } });
+        const cli = runHook(['--digest'], { env: { ARCHON_CODE_MAP_DISABLED: 'true' } });
         expect(cli.status).toBe(3);
         expect(cli.stdout.trim()).toBe('');
     });
@@ -545,30 +545,30 @@ describe('module surface', () => {
 
     it('cli reports disabled with exit 3 and no output', () => {
         seed();
-        const prev = process.env.AF_CODE_MAP_DISABLED;
-        process.env.AF_CODE_MAP_DISABLED = 'true';
+        const prev = process.env.ARCHON_CODE_MAP_DISABLED;
+        process.env.ARCHON_CODE_MAP_DISABLED = 'true';
         try {
             expect(codeMap.cli(['--digest'], root)).toEqual({ code: 3, out: '' });
         } finally {
-            if (prev === undefined) delete process.env.AF_CODE_MAP_DISABLED;
-            else process.env.AF_CODE_MAP_DISABLED = prev;
+            if (prev === undefined) delete process.env.ARCHON_CODE_MAP_DISABLED;
+            else process.env.ARCHON_CODE_MAP_DISABLED = prev;
         }
     });
 
-    it('envBudget parses and clamps AF_CODE_MAP_BUDGET', () => {
-        const prev = process.env.AF_CODE_MAP_BUDGET;
+    it('envBudget parses and clamps ARCHON_CODE_MAP_BUDGET', () => {
+        const prev = process.env.ARCHON_CODE_MAP_BUDGET;
         try {
-            delete process.env.AF_CODE_MAP_BUDGET;
+            delete process.env.ARCHON_CODE_MAP_BUDGET;
             expect(codeMap.envBudget()).toBeNull();
-            process.env.AF_CODE_MAP_BUDGET = '0';
+            process.env.ARCHON_CODE_MAP_BUDGET = '0';
             expect(codeMap.envBudget()).toBeNull();
-            process.env.AF_CODE_MAP_BUDGET = '2000';
+            process.env.ARCHON_CODE_MAP_BUDGET = '2000';
             expect(codeMap.envBudget()).toBe(2000);
-            process.env.AF_CODE_MAP_BUDGET = '50000';
+            process.env.ARCHON_CODE_MAP_BUDGET = '50000';
             expect(codeMap.envBudget()).toBe(codeMap.HOOK_CHAR_CAP);
         } finally {
-            if (prev === undefined) delete process.env.AF_CODE_MAP_BUDGET;
-            else process.env.AF_CODE_MAP_BUDGET = prev;
+            if (prev === undefined) delete process.env.ARCHON_CODE_MAP_BUDGET;
+            else process.env.ARCHON_CODE_MAP_BUDGET = prev;
         }
     });
 

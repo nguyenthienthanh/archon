@@ -62,7 +62,7 @@ mid-structure, because a half-written list reads as a complete one.
 ```toon
 budget[3]{limit,value}:
   SessionStart hook output cap,"10,000 chars — anything past it is dropped entirely"
-  Digest budget,"3,500 chars (AF_CODE_MAP_BUDGET overrides via --budget)"
+  Digest budget,"3,500 chars (ARCHON_CODE_MAP_BUDGET overrides via --budget)"
   Measured on this repo,"1,611 chars at 282 files / 56,720 LOC — 6.2x headroom under the cap"
 ```
 
@@ -80,7 +80,7 @@ contract[6]{aspect,behaviour}:
   Incremental,"(path, mtime, size) cache: an unmoved file is copied, not re-read. PostToolUse appends the edited path to code-map.dirty; the next reader drains it. Never a full rescan on edit."
   Self-healing,"Readers reject it when a recorded file is missing, its (mtime,size) moved, or a source file exists the map has not heard of — and rebuild. The third check is the one that matters: without it a new file is invisible."
   Authority,"The FILESYSTEM decides what exists. --rdeps stats every importer, ignores the ones that are gone, and prints `STALE: ... no longer on disk` rather than a confident wrong answer."
-  Disable,AF_CODE_MAP_DISABLED=true
+  Disable,ARCHON_CODE_MAP_DISABLED=true
 ```
 
 ## What it admits it cannot do

@@ -33,7 +33,7 @@ describe('host-extensions', () => {
 
   afterEach(() => {
     fs.rmSync(tmp, { recursive: true, force: true });
-    delete process.env.AF_HOST_EXTENSIONS_DISABLED;
+    delete process.env.ARCHON_HOST_EXTENSIONS_DISABLED;
   });
 
   test('discovers user and project rules, skills and agents', () => {
@@ -82,7 +82,7 @@ describe('host-extensions', () => {
     const empty = path.join(tmp, 'empty');
     fs.mkdirSync(empty);
     expect(host.formatIndex(host.discover(empty, { home: empty }), { projectDir: empty })).toBeNull();
-    process.env.AF_HOST_EXTENSIONS_DISABLED = 'true';
+    process.env.ARCHON_HOST_EXTENSIONS_DISABLED = 'true';
     expect(host.formatIndex(host.discover(proj, { home }), { projectDir: proj })).toBeNull();
   });
 });

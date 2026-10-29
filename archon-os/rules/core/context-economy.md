@@ -122,19 +122,19 @@ offload[5]{scenario,threshold,action}:
   Build output,>100 lines,"Save full + show errors only"
 ```
 
-Temp root: `/tmp/aura-frog/` (`responses/`, `summaries/`, `session/`). Patterns:
+Temp root: `/tmp/archon/` (`responses/`, `summaries/`, `session/`). Patterns:
 
 ```bash
 # Large command output — save full, load only the verdict lines
-npm test > /tmp/aura-frog/responses/test-$(date +%s).txt 2>&1
-grep -E "(PASS|FAIL|Tests:|Suites:)" /tmp/aura-frog/responses/test-*.txt | tail -10
+npm test > /tmp/archon/responses/test-$(date +%s).txt 2>&1
+grep -E "(PASS|FAIL|Tests:|Suites:)" /tmp/archon/responses/test-*.txt | tail -10
 
 # Large API/MCP JSON — save full, load only queried fields
-curl url > /tmp/aura-frog/responses/api-$(date +%s).json
-jq '{total: .data | length, first_3: .data[:3] | map(.name)}' /tmp/aura-frog/responses/api-*.json
+curl url > /tmp/archon/responses/api-$(date +%s).json
+jq '{total: .data | length, first_3: .data[:3] | map(.name)}' /tmp/archon/responses/api-*.json
 ```
 
-Savings are typically 87-96% (a 500-line test log ~2K → ~100 tokens). **Cleanup:** `find /tmp/aura-frog -mtime +1 -delete`. This is the tool-result counterpart to "Locate before Read": save the haystack to disk, pull only the needle into context.
+Savings are typically 87-96% (a 500-line test log ~2K → ~100 tokens). **Cleanup:** `find /tmp/archon -mtime +1 -delete`. This is the tool-result counterpart to "Locate before Read": save the haystack to disk, pull only the needle into context.
 
 ---
 

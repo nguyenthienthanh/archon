@@ -21,7 +21,7 @@ const path = require('path');
 const {
   readSessionState,
   isAgentTeamsEnabled
-} = require('./lib/af-config-utils.cjs');
+} = require('./lib/config-utils.cjs');
 
 // Phase deliverable requirements
 const PHASE_DELIVERABLES = {
@@ -83,7 +83,7 @@ function main() {
   const taskData = parseTaskInput();
   const sessionId = process.ppid?.toString();
   const state = readSessionState(sessionId);
-  const currentPhase = state?.phase || process.env.AF_CURRENT_PHASE;
+  const currentPhase = state?.phase || process.env.ARCHON_CURRENT_PHASE;
 
   // Validation 1: TDD phases must reference test results.
   if (checkTddViolation(currentPhase, taskData)) {
@@ -102,7 +102,7 @@ function main() {
   }
 
   // Record completion in team log if available
-  if (process.env.AF_TEAM_LOG_DIR) {
+  if (process.env.ARCHON_TEAM_LOG_DIR) {
     try {
       const teamLogWriter = require('./lib/team-log-writer.cjs');
       const taskId = taskData.taskId || taskData.id || 'unknown';

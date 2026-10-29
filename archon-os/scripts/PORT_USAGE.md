@@ -111,7 +111,7 @@ Every run writes a manifest to the output directory:
 ```json
 {
   "target": "codex",
-  "sourcePluginName": "aura-frog",
+  "sourcePluginName": "archon-os",
   "sourceVersion": "3.8.0-alpha.2",
   "generatedAt": "2026-06-03T10:00:00.000Z",
   "counts": {

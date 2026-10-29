@@ -3,8 +3,8 @@
  * Session State Management Library
  *
  * Shared utilities for session state across hooks.
- * Uses af-config-utils.cjs for core read/write operations.
- * State file: /tmp/af-session-{ppid}.json
+ * Uses config-utils.cjs for core read/write operations.
+ * State file: /tmp/archon-session-{ppid}.json
  *
  * @version 1.1.0
  */
@@ -14,7 +14,7 @@ const {
   getSessionTempPath,
   readSessionState,
   writeSessionState
-} = require('./af-config-utils.cjs');
+} = require('./config-utils.cjs');
 
 // Get session file path (for compatibility)
 function getSessionFile() {

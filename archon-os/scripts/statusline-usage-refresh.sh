@@ -1,21 +1,25 @@
 #!/bin/bash
+
+# Bridges legacy AF_* / AURA_FROG_* variables onto their ARCHON_* names (v4 rebrand).
+. "$(dirname "${BASH_SOURCE[0]}")/lib/env-compat.sh"
+
 # Background refresher for the billing-cycle usage cost shown in the statusline.
 # Runs ccusage OFFLINE (cached LiteLLM pricing, no network, no API key) over the
 # current billing window [anchor day .. today] and caches .totals.totalCost.
 #
 # Detached + lock-guarded so the statusline render never blocks on it.
-#   Billing anchor day : AF_BILLING_DAY (default 1)
-#   Refresh interval   : AF_USAGE_TTL seconds (default 900)
-#   Disable            : AF_STATUSLINE_USAGE_DISABLED=1
+#   Billing anchor day : ARCHON_BILLING_DAY (default 1)
+#   Refresh interval   : ARCHON_USAGE_TTL seconds (default 900)
+#   Disable            : ARCHON_STATUSLINE_USAGE_DISABLED=1
 set -u
 
-[ "${AF_STATUSLINE_USAGE_DISABLED:-0}" = "1" ] && exit 0
+[ "${ARCHON_STATUSLINE_USAGE_DISABLED:-0}" = "1" ] && exit 0
 
 CACHE_DIR="$HOME/.claude/cache"
 CACHE="$CACHE_DIR/usage-cycle.json"
 LOCK="$CACHE_DIR/usage-cycle.lock"
-BILLING_DAY="${AF_BILLING_DAY:-1}"
-TTL="${AF_USAGE_TTL:-900}"
+BILLING_DAY="${ARCHON_BILLING_DAY:-1}"
+TTL="${ARCHON_USAGE_TTL:-900}"
 mkdir -p "$CACHE_DIR" 2>/dev/null
 
 # Billing-cycle start (YYYYMMDD): this month's anchor if today >= anchor, else last month's.

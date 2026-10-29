@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+
+# Bridges legacy AF_* / AURA_FROG_* variables onto their ARCHON_* names (v4 rebrand).
+. "$(dirname "${BASH_SOURCE[0]}")/lib/env-compat.sh"
+
 # Archon OS — CLI Dashboard
 #
 # Terse one-screen view of plan tree, active task, conflicts, freezes,
@@ -28,7 +32,7 @@ done
 # Resolve project root (walk up from PWD looking for .claude/ or .git/ marker).
 # Matches hooks/lib/hook-runtime.cjs#findProjectRoot.
 find_project_root() {
-    if [ -n "$AF_PROJECT_ROOT" ]; then echo "$AF_PROJECT_ROOT"; return; fi
+    if [ -n "$ARCHON_PROJECT_ROOT" ]; then echo "$ARCHON_PROJECT_ROOT"; return; fi
     local d="${1:-$PWD}"
     while [ "$d" != "/" ] && [ -n "$d" ]; do
         if [ -d "$d/.claude" ] || [ -d "$d/.git" ]; then echo "$d"; return; fi
@@ -42,8 +46,8 @@ MEMORY_DIR="${PROJECT_ROOT}/.claude/memory"
 # Resolution order matches hooks/lib/security-dir.cjs and _lib.sh#security_dir —
 # this script only READS mcp-audit.jsonl, so it has to land wherever
 # mcp-call-gate.cjs decided to write it.
-if [ -n "${AF_SECURITY_DIR:-}" ]; then
-  SECURITY_DIR="${AF_SECURITY_DIR}"
+if [ -n "${ARCHON_SECURITY_DIR:-}" ]; then
+  SECURITY_DIR="${ARCHON_SECURITY_DIR}"
 elif [ -d "${PROJECT_ROOT}/.claude/security" ]; then
   SECURITY_DIR="${PROJECT_ROOT}/.claude/security"
 else
@@ -153,7 +157,7 @@ section_preflight() {
 # ---------- main render ----------
 
 render_static() {
-  echo "🦉 Archon OS — Dashboard"
+  echo "Archon OS — Dashboard"
   echo "─────────────────────────────────────────────────────────────"
   if [ -n "$SECTION" ]; then
     "section_${SECTION}"

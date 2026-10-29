@@ -1,5 +1,5 @@
 ---
-last_aligned_with: v3.7.3
+last_aligned_with: v4.0.0-alpha.3
 status: current
 audience: active-user
 ---
@@ -137,9 +137,9 @@ claude    # Restart
 
 ### Learning not working
 ```
-/af learn status
+/archon learn status
 ```
-If disabled: check `.envrc` for `AF_LEARNING_DISABLED=true`.
+If disabled: check `.envrc` for `ARCHON_LEARNING_DISABLED=true`.
 
 ### Supabase connection failed
 Check `.envrc` has `SUPABASE_URL` and `SUPABASE_SECRET_KEY`.
@@ -162,3 +162,140 @@ project:init
 
 ---
 
+---
+
+## FAQ
+
+Moved here from the README in v4.0.0 so the README could stay a landing page. Each answer
+names the check to run before the fix, because the same symptom usually has two causes.
+
+<details>
+<summary><strong>Q: Workflow state isn't saving. `/run status` shows nothing.</strong></summary>
+
+**Likely cause:** Path drift between hooks and skills (fixed in v3.7+).
+
+**Check:**
+```bash
+ls -la .claude/logs/runs/         # Should exist after first /run
+ls -la .claude/logs/workflows/    # Legacy path — may have old state
+```
+
+**Fix:**
+- Upgrade to v3.7+ (`/plugin update archon-os`)
+- Or manually move: `mv .claude/logs/workflows/* .claude/logs/runs/`
+
+Verify with `/archon status` — should show 0 orphan paths.
+</details>
+
+<details>
+<summary><strong>Q: Wrong agent picked for my task.</strong></summary>
+
+**Likely cause:** Missing project context or ambiguous task description.
+
+**Check:**
+- Did you run `/project init` yet? Scanner uses those files for Layer 3 (project context).
+- Is your task description short/vague? `agent-detector` defaults to repo type when signals are weak.
+
+**Fix:**
+- Run `/project init` if you haven't
+- Rephrase task with domain-specific keywords: `"Add email template styling"` (frontend) vs `"Update email feature"` (ambiguous)
+- Override manually: `/run @frontend implement X` forces the frontend agent
+
+Full scoring logic: `skills/agent-detector/task-based-agent-selection.md`.
+</details>
+
+<details>
+<summary><strong>Q: Token budget blown past 200K. What happened?</strong></summary>
+
+**Likely cause:** Phase 3 (Build GREEN) hit an iteration loop on a complex refactor.
+
+**Check:**
+```bash
+/run budget      # Shows per-phase consumption
+/run metrics     # Shows if rejection count is high
+```
+
+**Fix:**
+- `/run handoff` to save state → resume in fresh session
+- For next time: use `/run predict <task>` first — flags Deep tasks likely to exceed budget
+- Consider splitting: `/run part 1: <narrow scope>` → merge → `/run part 2`
+</details>
+
+<details>
+<summary><strong>Q: Hooks not firing (no SessionStart banner, no lint-autofix).</strong></summary>
+
+**Likely cause:** `.claude/settings.json` missing hook config, or plugin not activated in this project.
+
+**Check:**
+```bash
+cat .claude/settings.json   # Should reference plugin hooks
+/archon status                  # Should show "Hooks: 28 registered"
+```
+
+**Fix:**
+```bash
+/archon setup integrations      # Re-installs hook config
+```
+
+If still nothing, check plugin.json path:
+```bash
+ls ~/.claude/plugins/marketplaces/archon/archon-os/hooks/hooks.json
+```
+</details>
+
+<details>
+<summary><strong>Q: Opus session costs surprised me. Can I lock everything to Sonnet?</strong></summary>
+
+**Yes — two ways:**
+
+**Option 1 — Session override (temporary):**
+```bash
+# Start Claude Code with model flag
+claude --model sonnet
+```
+
+**Option 2 — Env var (permanent, overrides ALL frontmatter):**
+```bash
+export CLAUDE_CODE_SUBAGENT_MODEL=sonnet
+```
+
+This overrides every agent/skill `model:` declaration. See [Per-Agent Model Override](#per-agent-model-override--how-it-works-and-why) for resolution order.
+
+**Cost tip:** `scanner` and `agent-detector` stay on haiku regardless — you don't need to touch them.
+</details>
+
+<details>
+<summary><strong>Q: Can I run multiple /run workflows in parallel?</strong></summary>
+
+**Yes — use git worktrees:**
+```bash
+/run worktree: <task>    # Automatically creates isolated worktree + runs there
+```
+
+Each worktree has its own state in `.claude/logs/runs/<id>/`. See [Git skill](../../archon-os/skills/git/SKILL.md) (worktree isolation section).
+
+For full multi-agent parallel work, enable Agent Teams:
+```bash
+export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
+```
+
+See [Agent Teams Guide](../guides/AGENT_TEAMS_GUIDE.md).
+</details>
+
+<details>
+<summary><strong>Q: How do I disable a hook that's slowing me down?</strong></summary>
+
+Each hook has a disable env var:
+
+```bash
+ARCHON_LINT_AUTOFIX=false        # Skip post-edit linter
+ARCHON_PROMPT_LOGGING=false      # Skip prompt metadata logging
+ARCHON_LEARNING_ENABLED=false    # Skip all learning hooks
+```
+
+Or disable at the source by editing `archon-os/hooks/hooks.json` (comment out the matcher).
+
+Full hook list: [hooks/README.md](../../archon-os/hooks/README.md).
+</details>
+
+More issues: [TROUBLESHOOTING.md](TROUBLESHOOTING.md).

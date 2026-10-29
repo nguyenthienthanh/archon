@@ -4,7 +4,7 @@
  *
  * Fires only when:
  *   1. .claude/plans/active.json exists (project has a plan tree)
- *   2. AF_BARE_WORD_ROUTER_DISABLED env var is NOT set
+ *   2. ARCHON_BARE_WORD_ROUTER_DISABLED env var is NOT set
  *
  * Heuristic: route when ALL of
  *   • first token of prompt matches a verb in the plan vocabulary
@@ -100,7 +100,7 @@ function emitHint(verb, prompt) {
   // Claude reads stderr; this hint is metadata, not user-facing output.
   const target = `/archon-os:plan ${prompt}`;
   process.stderr.write(
-    `\n🦉 plan-router: bare-word verb '${verb}' detected; treat as: ${target}\n`
+    `\nplan-router: bare-word verb '${verb}' detected; treat as: ${target}\n`
   );
 }
 
@@ -110,7 +110,7 @@ function main(opts = {}) {
   const env = opts.env || process.env;
   const cwd = opts.cwd || process.cwd();
 
-  if (env.AF_BARE_WORD_ROUTER_DISABLED === 'true') {
+  if (env.ARCHON_BARE_WORD_ROUTER_DISABLED === 'true') {
     return 0;
   }
 

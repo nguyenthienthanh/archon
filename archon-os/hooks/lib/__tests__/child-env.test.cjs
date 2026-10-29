@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * af-child-env — what a spawned third-party tool is allowed to see.
+ * child-env — what a spawned third-party tool is allowed to see.
  *
  * The two failure modes are opposite and both matter: leaking a credential to a
  * repo's own linter binary, and stripping PATH so that binary cannot run at all.
@@ -10,7 +10,7 @@
 
 const {
   isSecretName, filterChildEnv, droppedKeys,
-} = require('../af-child-env.cjs');
+} = require('../child-env.cjs');
 
 describe('isSecretName — drops', () => {
   it.each([
@@ -53,8 +53,8 @@ describe('isSecretName — keeps', () => {
     'ESLINT_USE_FLAT_CONFIG',
     'CLAUDE_PLUGIN_ROOT',
     'CLAUDE_PROJECT_DIR',
-    'AF_PROJECT_ROOT',
-    'AF_LEARNING_ENABLED',
+    'ARCHON_PROJECT_ROOT',
+    'ARCHON_LEARNING_ENABLED',
     'CI',
   ])('%s', (name) => expect(isSecretName(name)).toBe(false));
 
@@ -80,7 +80,7 @@ describe('filterChildEnv', () => {
     NODE_ENV: 'test',
     SUPABASE_SECRET_KEY: 'sk-live-do-not-leak',
     JIRA_API_TOKEN: 'jira-tok',
-    AF_PROJECT_ROOT: '/repo',
+    ARCHON_PROJECT_ROOT: '/repo',
   };
 
   it('keeps what a tool needs and drops what it does not', () => {
@@ -88,7 +88,7 @@ describe('filterChildEnv', () => {
     expect(env.PATH).toBe('/usr/bin');
     expect(env.HOME).toBe('/home/dev');
     expect(env.NODE_ENV).toBe('test');
-    expect(env.AF_PROJECT_ROOT).toBe('/repo');
+    expect(env.ARCHON_PROJECT_ROOT).toBe('/repo');
     expect(env).not.toHaveProperty('SUPABASE_SECRET_KEY');
     expect(env).not.toHaveProperty('JIRA_API_TOKEN');
   });
@@ -112,13 +112,13 @@ describe('filterChildEnv', () => {
     expect(filterChildEnv({ PATH: '/usr/bin', NOPE: undefined })).not.toHaveProperty('NOPE');
   });
 
-  it('passes everything through when AF_CHILD_ENV_UNFILTERED=true', () => {
-    const env = filterChildEnv({ ...source, AF_CHILD_ENV_UNFILTERED: 'true' });
+  it('passes everything through when ARCHON_CHILD_ENV_UNFILTERED=true', () => {
+    const env = filterChildEnv({ ...source, ARCHON_CHILD_ENV_UNFILTERED: 'true' });
     expect(env.SUPABASE_SECRET_KEY).toBe('sk-live-do-not-leak');
   });
 
   it('is not disabled by any other value of the escape hatch', () => {
-    const env = filterChildEnv({ ...source, AF_CHILD_ENV_UNFILTERED: '1' });
+    const env = filterChildEnv({ ...source, ARCHON_CHILD_ENV_UNFILTERED: '1' });
     expect(env).not.toHaveProperty('SUPABASE_SECRET_KEY');
   });
 });
