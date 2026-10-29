@@ -44,8 +44,29 @@
 const fs = require('fs');
 const path = require('path');
 const { findProjectRoot } = require('./lib/hook-runtime.cjs');
+const turnIndex = require('./lib/turn-index.cjs');
 
 const DEFAULT_THRESHOLD = 70;
+/**
+ * Total characters of user prompts a handoff may carry.
+ *
+ * A stated budget, not a per-prompt clip. The old code cut every prompt at 300
+ * characters, which is shorter than most real requests in this repo — the
+ * handoff kept the opening clause of each ask and dropped the part that said
+ * what to do. Spending one budget across the kept prompts means a single long
+ * request survives whole instead of three stubs surviving equally badly.
+ */
+const PROMPT_BUDGET_CHARS = 4000;
+/** No single prompt may eat the whole budget and starve the others. */
+const PROMPT_MAX_CHARS = 2000;
+/**
+ * Turns a handoff carries. The measured real session had 73, and 73 rendered
+ * lines is ~8.8k characters against the 10,000-character hook injection cap —
+ * 1.1x headroom. Capping the handoff copy well below that leaves room for the
+ * rest of the resume context; the full index still regenerates from the
+ * transcript on demand.
+ */
+const TURN_INDEX_HANDOFF_LIMIT = 40;
 const USAGE_MAX_AGE_MS = 10 * 60 * 1000;
 // A Stop-save at 70% can precede the actual auto-compact by many turns.
 const COMPACT_MAX_AGE_MS = 6 * 60 * 60 * 1000;
@@ -70,6 +91,7 @@ function getPaths(root = findProjectRoot()) {
     handoffsDir: path.join(root, '.claude', 'handoffs'),
     workflowState: path.join(cache, 'workflow-state.json'),
     contextUsage: path.join(cache, 'context-usage.json'),
+    turnIndexFile: path.join(cache, 'turn-index.tsv'),
   };
 }
 
@@ -225,16 +247,76 @@ function getLegacyWorkflowState(p = getPaths()) {
   return null;
 }
 
-function getSessionContext() {
-  return {
-    project_name: process.env.PROJECT_NAME || process.env.AF_PROJECT_NAME,
-    project_type: process.env.AF_PROJECT_TYPE,
-    framework: process.env.AF_FRAMEWORK,
-    git_branch: process.env.AF_GIT_BRANCH,
-    active_plan: process.env.AF_ACTIVE_PLAN,
-    current_agent: process.env.AF_CURRENT_AGENT,
-    complexity: process.env.AF_COMPLEXITY,
+/**
+ * The transcript for this handoff: what the hook was handed, else what the
+ * environment names, else the newest transcript Claude Code wrote for this
+ * project.
+ *
+ * Discovery is the part that matters. A hook invoked without stdin — a manual
+ * `--save`, a CLI run — gets no `transcript_path`, and the old code treated
+ * that as "there is no transcript". The handoff on disk proved it:
+ * `recent_prompts: []`, `session_id: null`, `title: null`. The transcript was
+ * there the whole time; nothing looked for it.
+ */
+function resolveTranscript(input = {}, { cwd, home, env = process.env } = {}) {
+  if (input && input.transcript_path) return input.transcript_path;
+  if (env && env.AF_TRANSCRIPT_PATH) return env.AF_TRANSCRIPT_PATH;
+  const opts = {};
+  if (cwd) opts.cwd = cwd;
+  if (home) opts.home = home;
+  return turnIndex.discoverTranscript(opts);
+}
+
+/** Pure: the current git branch for a directory, or null. */
+function gitBranch(root) {
+  try {
+    const { execSync } = require('child_process');
+    const { TIMEOUT_DEFAULT_MS, MAX_BUFFER_DEFAULT } = require('./lib/af-exec.cjs');
+    const out = execSync('git rev-parse --abbrev-ref HEAD 2>/dev/null', {
+      cwd: root,
+      encoding: 'utf-8',
+      timeout: TIMEOUT_DEFAULT_MS,
+      killSignal: 'SIGKILL',
+      maxBuffer: MAX_BUFFER_DEFAULT,
+    }).trim();
+    return out || null;
+  } catch {
+    return null;
+  }
+}
+
+/** Pure-ish: the project's own name, from its manifest, else its directory. */
+function projectName(root) {
+  for (const manifest of ['package.json', 'deno.json']) {
+    const data = readJson(path.join(root, manifest));
+    if (data && data.name) return data.name;
+  }
+  return path.basename(root) || null;
+}
+
+/**
+ * What this session is working on.
+ *
+ * Every field used to come from an env var, every env var was usually unset,
+ * and `JSON.stringify` drops `undefined` — so the handoff recorded
+ * `context: {}` and a cold session learned nothing. Env vars are still honoured
+ * first (a caller that sets them means them), but each one now falls back to
+ * the thing on disk that actually answers the question.
+ */
+function getSessionContext({ root = findProjectRoot(), env = process.env } = {}) {
+  const plan = readActivePlan(root);
+  const ctx = {
+    project_name: env.PROJECT_NAME || env.AF_PROJECT_NAME || projectName(root),
+    project_type: env.AF_PROJECT_TYPE || (isCodeProject(root) ? 'code' : 'non-code'),
+    framework: env.AF_FRAMEWORK,
+    git_branch: env.AF_GIT_BRANCH || gitBranch(root),
+    active_plan: env.AF_ACTIVE_PLAN
+      || (plan ? plan.task || plan.story || plan.feature || plan.initiative || plan.mission : null),
+    current_agent: env.AF_CURRENT_AGENT,
+    complexity: env.AF_COMPLEXITY,
   };
+  for (const k of Object.keys(ctx)) if (ctx[k] == null || ctx[k] === '') delete ctx[k];
+  return ctx;
 }
 
 /** used_percentage from the statusline cache, or null when absent/stale. */
@@ -253,6 +335,32 @@ function readContextUsage(p = getPaths(), nowMs = Date.now()) {
 function shouldSaveOnStop({ usage, threshold = DEFAULT_THRESHOLD, hasOpenWork }) {
   if (typeof usage === 'number') return usage >= threshold;
   return Boolean(hasOpenWork);
+}
+
+/** Pure: clip with an explicit ellipsis, so a reader can see it was clipped. */
+function clip(text, max) {
+  const t = String(text || '');
+  return t.length > max ? `${t.slice(0, max)}…` : t;
+}
+
+/**
+ * Pure: fit prompts into one character budget, newest first.
+ *
+ * Newest prompts are the ones a resume acts on, so they get the budget first;
+ * an older prompt that no longer fits is dropped whole rather than reduced to a
+ * fragment that reads like a complete request.
+ */
+function allocatePromptBudget(prompts, budget = PROMPT_BUDGET_CHARS) {
+  const kept = [];
+  let left = budget;
+  for (let i = prompts.length - 1; i >= 0; i -= 1) {
+    const p = prompts[i];
+    if (p.length <= left) { kept.unshift(p); left -= p.length; continue; }
+    // Room for a meaningful head of this one, but nothing older.
+    if (left >= 200) kept.unshift(clip(p, left));
+    break;
+  }
+  return kept;
 }
 
 /** Real user prompts in a chunk of transcript JSONL (skips tool results + injected tags). */
@@ -276,7 +384,7 @@ function parseUserPrompts(text) {
       content = cmd && args && args[1].trim() ? `${cmd[1].trim()} ${args[1].trim()}` : '';
     }
     if (!content) continue;
-    prompts.push(content.length > 300 ? `${content.slice(0, 300)}…` : content);
+    prompts.push(clip(content, PROMPT_MAX_CHARS));
   }
   return prompts;
 }
@@ -300,7 +408,7 @@ function recentUserPrompts(transcriptPath, n = 3, windows = [512 * 1024, 4 * 102
       prompts = parseUserPrompts(buf.toString('utf-8'));
       if (prompts.length >= n || len === size) break;
     }
-    return prompts.slice(-n);
+    return allocatePromptBudget(prompts.slice(-n));
   } catch {
     return [];
   } finally {
@@ -334,7 +442,7 @@ function buildHandoff({ p = getPaths(), input = {}, reason = 'compact', kind = '
   const plan = readActivePlan(p.root);
   const context = getSessionContext();
   const sessionId = input.session_id || process.env.AF_CLAUDE_SESSION_ID || null;
-  const transcript = input.transcript_path || process.env.AF_TRANSCRIPT_PATH || null;
+  const transcript = resolveTranscript(input, { cwd: p.root });
   const title = sessionTitle(transcript);
   const name = resolveHandoffName(p, sessionId, title);
   return {
@@ -355,6 +463,12 @@ function buildHandoff({ p = getPaths(), input = {}, reason = 'compact', kind = '
     note,
     modified_files: codeProject ? modifiedFiles(p.root) : [],
     recent_prompts: recentUserPrompts(transcript),
+    // Pointers, not copies: each line carries the turn's uuid so the resuming
+    // session can read that exact turn in the transcript instead of trusting a
+    // summary of it. The index is derived — see hooks/lib/turn-index.cjs.
+    turn_index: transcript
+      ? turnIndex.buildTurnIndex(transcript, { limit: TURN_INDEX_HANDOFF_LIMIT }).map(turnIndex.renderLine)
+      : [],
     resume_hint: `/run resume ${name}`,
   };
 }
@@ -427,6 +541,56 @@ function loadHandoff({ source = 'unknown', sessionId = null, nowMs = Date.now(),
 }
 
 /** Find a handoff by name, slug of a title, or session id. */
+/**
+ * Rebuild the on-disk turn index from the transcript. Returns the turns.
+ *
+ * Called on Stop and before a compaction. A full rebuild every time, not an
+ * append: the index is derived, so it must be able to shrink, and a rebuild is
+ * the only version of this that cannot drift from the transcript.
+ */
+function refreshTurnIndex(p = getPaths(), transcript = null) {
+  const file = transcript || resolveTranscript({}, { cwd: p.root });
+  if (!file) return [];
+  const turns = turnIndex.buildTurnIndex(file);
+  turnIndex.writeTurnIndex(p.turnIndexFile, turns);
+  return turns;
+}
+
+/**
+ * Append the turn index to a SessionStart payload, within the hook's
+ * 10,000-character output cap.
+ *
+ * SessionStart is also the post-compaction injection point: Claude Code fires it
+ * with `source: "compact"` once compaction finishes, and this hook is already
+ * registered there. A second hook on PostCompact would be a second gate for the
+ * same job — and PostCompact has no documented `additionalContext` channel, only
+ * stderr, which `post-compact.cjs` already owns for state-corruption warnings.
+ *
+ * Self-healing: a missing or empty index file is rebuilt from the transcript
+ * rather than reported, because the index is a cache and the transcript is the
+ * source.
+ */
+function appendTurnIndex(additionalContext, p = getPaths(), input = {}) {
+  const base = additionalContext || '';
+  // The handoff already embedded its own index — do not print it twice.
+  if (base.includes('Turn index (oldest')) return base;
+  let turns = turnIndex.readTurnIndex(p.turnIndexFile);
+  if (!turns.length) {
+    // Rebuild only from a transcript THIS session named. Discovery would pick
+    // the project's newest transcript, which on a fresh session is a different
+    // session's — and its prompts are not ours to inject.
+    const own = (input && input.transcript_path) || process.env.AF_TRANSCRIPT_PATH || null;
+    turns = own ? refreshTurnIndex(p, own) : [];
+  }
+  if (!turns.length) return additionalContext;
+
+  const margin = 200;
+  const room = turnIndex.TURN_INDEX_MAX_CHARS - base.length - margin;
+  if (room < 400) return additionalContext;
+  const block = turnIndex.formatTurnIndex(turns, { maxChars: room });
+  return base ? `${base}\n\n${block}` : block;
+}
+
 function findHandoff(query, p = getPaths()) {
   if (!query) return null;
   const all = listHandoffs(p);
@@ -504,6 +668,14 @@ function generateResumeContext(handoff = {}) {
     lines.push('## Last user requests (oldest → newest)');
     handoff.recent_prompts.forEach((q) => lines.push(`- ${q.replace(/\n+/g, ' ')}`));
     lines.push('');
+  }
+
+  if (handoff.turn_index && handoff.turn_index.length) {
+    lines.push('## Turn index (oldest → newest) — what this session already did');
+    lines.push('Each line ends in the turn\'s uuid; grep it in the session transcript to read that turn in full.');
+    lines.push('```');
+    handoff.turn_index.forEach((l) => lines.push(l));
+    lines.push('```', '');
   }
 
   if (handoff.modified_files && handoff.modified_files.length) {
@@ -600,6 +772,13 @@ function main() {
         .slice(0, 5);
       additionalContext = generateHandoffIndex(recent) || null;
     }
+    // Inject the turn index only when this session is continuing its own work:
+    // a resumed handoff of ours, or the SessionStart that follows a compaction.
+    // The other branch is a LIST of other sessions' handoffs — attaching our
+    // transcript's turns there would leak one session's prompts into another,
+    // and `source: clear` means the user asked for a clean slate.
+    const ownContinuation = Boolean(handoff) || input.source === 'compact';
+    if (ownContinuation) additionalContext = appendTurnIndex(additionalContext, p, input);
     if (!additionalContext) return;
     process.stdout.write(JSON.stringify({
       hookSpecificOutput: { hookEventName: 'SessionStart', additionalContext },
@@ -608,12 +787,17 @@ function main() {
   }
 
   if (mode === '--pre-compact') {
+    refreshTurnIndex(getPaths(), resolveTranscript(input));
     saveHandoff({ input, reason: `compact-${input.trigger || 'unknown'}` });
     return;
   }
 
   // Stop: pre-emptive save before auto-compact.
   const p = getPaths();
+  // The index refreshes on every Stop, not only when a handoff is saved: it is
+  // what makes the turns before this one reachable, and the turn that needed it
+  // is always one that already happened.
+  refreshTurnIndex(p, resolveTranscript(input, { cwd: p.root }));
   const usage = readContextUsage(p);
   const threshold = Number(process.env.AF_HANDOFF_THRESHOLD) || DEFAULT_THRESHOLD;
   if (shouldSaveOnStop({ usage, threshold, hasOpenWork: Boolean(findActiveRun(p)) })) {
@@ -634,6 +818,16 @@ module.exports = {
   readContextUsage,
   shouldSaveOnStop,
   recentUserPrompts,
+  allocatePromptBudget,
+  resolveTranscript,
+  refreshTurnIndex,
+  appendTurnIndex,
+  getSessionContext,
+  gitBranch,
+  projectName,
+  PROMPT_BUDGET_CHARS,
+  PROMPT_MAX_CHARS,
+  TURN_INDEX_HANDOFF_LIMIT,
   buildHandoff,
   saveHandoff,
   loadHandoff,
