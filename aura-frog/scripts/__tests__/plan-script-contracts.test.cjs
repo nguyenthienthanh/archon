@@ -170,3 +170,77 @@ describe('INVARIANT 7 detects depends_on cycles above tier 4 (FEAT-D/4)', () => 
     expect(`${r.stdout}${r.stderr}`).not.toMatch(/INVARIANT 7/);
   });
 });
+
+// ---------------------------------------------------------------------------
+// 5. Checkpoint snapshots are history, not nodes (FEAT-D/5)
+//
+// Node scans exclude `archive/` but not `checkpoints/`, and a checkpoint that
+// snapshots a node's body carries that node's `id:` frontmatter. So a node with
+// two checkpoints produced three files all claiming the same id, with three
+// different `status` and `revision` values.
+//
+// The read symptom is a duplicate id map. The write symptom is worse:
+// resolve-node returned TWO rows and still exited 0 — in violation of its own
+// documented contract, where multi-match is exit 1 — and the first row was the
+// checkpoint. A mutating script that resolves a node and writes to the resolved
+// path would write into a historical snapshot and leave the live node
+// untouched, with nothing reporting that the mutation went nowhere.
+// ---------------------------------------------------------------------------
+const RESOLVE = path.join(PLANS, 'resolve-node.sh');
+
+describe('checkpoint snapshots are excluded from node scans (FEAT-D/5)', () => {
+  function treeWithCheckpoints(n) {
+    const dir = tmp('ckpt-');
+    mission(dir, '[FEAT-X]');
+    const fdir = path.join(dir, 'features', 'FEAT-X_a');
+    node(path.join(fdir, 'feature.md'), {
+      id: 'FEAT-X', tier: 2, parent: 'MISSION', status: 'done',
+      intent: '"x"', children: '[]',
+    });
+    for (let i = 0; i < n; i++) {
+      // A body snapshot, exactly as the mutating scripts write one.
+      node(path.join(fdir, 'checkpoints', `2026-01-0${i + 1}T00-00-00Z.before.md`), {
+        id: 'FEAT-X', tier: 2, parent: 'MISSION', status: 'active',
+        intent: '"x"', children: '[]', revision: i + 1,
+      });
+    }
+    return dir;
+  }
+
+  it('resolve-node returns exactly one row, the live node', () => {
+    const dir = treeWithCheckpoints(2);
+    const r = sh(RESOLVE, ['FEAT-X', dir]);
+    const rows = r.stdout.trim().split('\n').filter(Boolean);
+    expect(rows).toHaveLength(1);
+    expect(rows[0]).toContain(`${path.sep}feature.md`);
+    expect(rows[0]).not.toContain('checkpoints');
+    expect(r.status).toBe(0);
+  });
+
+  it('the validator counts only real nodes', () => {
+    const dir = treeWithCheckpoints(3);
+    const r = sh(VALIDATE, [dir]);
+    // mission + feature = 2. INDEX.md is absent in these fixtures.
+    expect(r.stdout).toMatch(/Validating 2 plan nodes/);
+    expect(r.status).toBe(0);
+  });
+
+  it('a checkpoint of a once-frozen node cannot fail a live invariant', () => {
+    // INVARIANT 8 requires `freeze_reason` on a frozen node. A snapshot taken
+    // while the node was frozen would be judged against today's tree.
+    const dir = tmp('ckpt-frozen-');
+    mission(dir, '[FEAT-X]');
+    const fdir = path.join(dir, 'features', 'FEAT-X_a');
+    node(path.join(fdir, 'feature.md'), {
+      id: 'FEAT-X', tier: 2, parent: 'MISSION', status: 'done',
+      intent: '"x"', children: '[]',
+    });
+    node(path.join(fdir, 'checkpoints', '2026-01-01T00-00-00Z.before.md'), {
+      id: 'FEAT-X', tier: 2, parent: 'MISSION', status: 'frozen',
+      intent: '"x"', children: '[]',
+    });
+    const r = sh(VALIDATE, [dir]);
+    expect(`${r.stdout}${r.stderr}`).not.toMatch(/INVARIANT 8/);
+    expect(r.status).toBe(0);
+  });
+});

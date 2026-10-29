@@ -66,7 +66,20 @@ get_list() {
 
 # Collect all node files
 # Array (not a whitespace-split string) so node paths containing spaces survive.
-mapfile -t ALL_NODES < <(find "${PLANS_DIR}" -name '*.md' -not -path '*/archive/*' 2>/dev/null)
+# Which files are nodes is defined in ONE place conceptually, and
+# hooks/lib/vault-index.cjs#listNodeFiles already had it right: skip archive/
+# AND checkpoints/, and skip README.md / INDEX.md. This scan did not, which
+# made every checkpoint a phantom node.
+#
+# A checkpoint snapshots a node's body, so it carries that node's `id:`. A node
+# with two checkpoints therefore produced three files claiming one id, with
+# three different `status` and `revision` values, and `file_for_id` returned
+# whichever `find` yielded first. resolve-node.sh returned the SNAPSHOT before
+# the live node, so a mutating caller that resolved then wrote would have
+# written into history and left the real node untouched — silently.
+mapfile -t ALL_NODES < <(find "${PLANS_DIR}" -name '*.md' \
+    -not -path '*/archive/*' -not -path '*/checkpoints/*' \
+    -not -name 'README.md' -not -name 'INDEX.md' 2>/dev/null)
 NODE_COUNT=${#ALL_NODES[@]}
 
 if [ "${NODE_COUNT}" -eq 0 ]; then
