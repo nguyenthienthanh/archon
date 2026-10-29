@@ -11,8 +11,8 @@
 
 A plugin for **[Claude Code](https://docs.anthropic.com/en/docs/claude-code)** that treats it as an Operating System. **15 specialized agents**, **hierarchical planning** (Mission → Initiative → Feature → Story → Task), **forensic reasoning traces**, **conflict detection between parallel work**, **self-healing safety gates**, **per-agent MCP security**, smart flow selection, and multi-agent orchestration.
 
-[![npm](https://img.shields.io/npm/v/aura-frog/alpha?label=npm%40alpha)](https://www.npmjs.com/package/aura-frog)
-[![Version](https://img.shields.io/github/v/release/nguyenthienthanh/aura-frog?include_prereleases&label=release)](docs/reference/CHANGELOG.md)
+[![npm](https://img.shields.io/npm/v/archon-os/alpha?label=npm%40alpha)](https://www.npmjs.com/package/archon-os)
+[![Version](https://img.shields.io/github/v/release/nguyenthienthanh/archon?include_prereleases&label=release)](docs/reference/CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-Plugin-purple.svg)](https://docs.anthropic.com/en/docs/claude-code)
 [![Portable](https://img.shields.io/badge/portable-~87%25_markdown-brightgreen)](docs/PORTABILITY.md)
@@ -235,12 +235,12 @@ The Phase 4 reviewer **MUST** differ from the Phase 3 builder. Generator ≠ Eva
 | Pillar | Ships now (v3.7.0 + v3.7.2/v3.7.3 polish) | Queued for v3.8+ |
 |---|---|---|
 | 1 — Planning | T0-T4 tree at `.claude/plans/`, **uniform folder-per-node layout** (v3.7.3), **consolidated `/archon-os:plan <verb>`** (v3.7.2), 12 backing scripts, 5 agents, bare-word router, `link-run.sh` for run↔feature bidirectional linking | — |
-| 2 — Reasoning Trace | tracer hook (writes per-task `trace.jsonl` inside the task folder, v3.7.3), grounding-discipline, `/trace` queries | helper CLI scripts (deferred per [issue #6](https://github.com/nguyenthienthanh/aura-frog/issues/6)) |
+| 2 — Reasoning Trace | tracer hook (writes per-task `trace.jsonl` inside the task folder, v3.7.3), grounding-discipline, `/trace` queries | helper CLI scripts (deferred per [issue #6](https://github.com/nguyenthienthanh/archon/issues/6)) |
 | 3 — Session Reset | epic-summarizer, permanent-memory-loader (`.claude/memory/`), `/reset-session` | — |
 | 4 — Pre-flight | 7 Tier-1 bash linters, hook, bypass with 3-warn | Tier 2 OPA + 5 `.rego` policies |
 | 5 — Conflict Detection | L1 (file) + L2 (function) + freeze cascade + arbitration | L3 (semantic LLM) + L4 (architectural LLM) |
 | 6 — Self-Healing | manual `/heal diagnose`, ≥0.7 confidence, never auto-apply | auto-trigger hook on F2/F3 classification |
-| 7 — MCP Security | per-agent allowlist + audit + rate limits + sanitizer | SQLite WAL for audit ([issue #8](https://github.com/nguyenthienthanh/aura-frog/issues/8)) |
+| 7 — MCP Security | per-agent allowlist + audit + rate limits + sanitizer | SQLite WAL for audit ([issue #8](https://github.com/nguyenthienthanh/archon/issues/8)) |
 | 8 — Phase-Role | hard rule in `cross-review-workflow.md` + run-orchestrator | — |
 | Routing — `/run` | **3-option escalation** (`plan`/`deep`/`details`) on weight ≥ 3, **`task:` / `project:` override prefixes** (v3.7.2), **`feature: <ID>` prefix** + **`resume <FEATURE_ID>`** (v3.7.3) | — |
 
@@ -313,10 +313,10 @@ You: "approve"
 
 ```bash
 # 1. Add the marketplace
-/plugin marketplace add nguyenthienthanh/aura-frog
+/plugin marketplace add nguyenthienthanh/archon
 
 # 2. Install the plugin
-/plugin install aura-frog@aurafrog
+/plugin install archon-os@archon
 
 # 3. Verify
 /af status
@@ -336,9 +336,9 @@ Expected output:
 
 ### Also on npm
 
-[![npm](https://img.shields.io/npm/v/aura-frog/alpha?label=aura-frog%40alpha)](https://www.npmjs.com/package/aura-frog)
+[![npm](https://img.shields.io/npm/v/archon-os/alpha?label=archon-os%40alpha)](https://www.npmjs.com/package/archon-os)
 
-The plugin payload is published to npm as [`aura-frog`](https://www.npmjs.com/package/aura-frog).
+The plugin payload is published to npm as [`archon-os`](https://www.npmjs.com/package/archon-os).
 **The marketplace above is still the way to install it** — npm is there for two other reasons.
 
 **Reference it from your own marketplace.** `npm` is a supported plugin source type, so a
@@ -346,10 +346,10 @@ team marketplace can pull the payload from the registry instead of cloning this 
 
 ```json
 {
-  "name": "aura-frog",
+  "name": "archon-os",
   "source": {
     "source": "npm",
-    "package": "aura-frog",
+    "package": "archon-os",
     "version": "3.8.0-alpha.10"
   }
 }
@@ -359,11 +359,11 @@ team marketplace can pull the payload from the registry instead of cloning this 
 OpenCode, or for auditing what ships before you install anything:
 
 ```bash
-npm pack aura-frog@alpha && tar -xzf aura-frog-*.tgz
+npm pack archon-os@alpha && tar -xzf archon-os-*.tgz
 ```
 
-> Published under the **`alpha`** dist-tag while 3.8.0 stabilises. Use `aura-frog@alpha`
-> rather than a bare `aura-frog` so you keep getting alpha builds once a stable release
+> Published under the **`alpha`** dist-tag while 3.8.0 stabilises. Use `archon-os@alpha`
+> rather than a bare `archon-os` so you keep getting alpha builds once a stable release
 > takes over the `latest` tag.
 
 ### Initialize Your Project (Recommended — one time)
@@ -459,7 +459,7 @@ Details: `rules/core/execution-rules.md`, `skills/agent-detector/SKILL.md`, `ski
 |-----------|:-----:|----------------|
 | **Agents** | 15 | Right expert auto-selected per task (build + review + planning + safety roles) |
 | **Skills** | 45 | 10 auto-invoke on context, 33 on-demand (incl. `design-vision-loop`) |
-| **Commands** | 24 | Core: `/run`, `/check`, `/design`, `/project`, `/af`, `/help` + `/aura-frog:*` hierarchical-planning suite (14 user-facing + 10 legacy `/aura-frog:plan-<verb>` alias stubs) |
+| **Commands** | 24 | Core: `/run`, `/check`, `/design`, `/project`, `/af`, `/help` + `/archon-os:*` hierarchical-planning suite (14 user-facing + 10 legacy `/archon-os:plan-<verb>` alias stubs) |
 | **Rules** | 73 | 3-tier loading (22 core + 20 agent + 30 workflow) — only what's needed |
 | **Hooks** | 53 | Conditional — skip processing for non-code files (v3.7.2 adds `bare-word-router.cjs`) |
 | **Backing scripts** | 12 | Hierarchical-planning operations (v3.7.2): `new-plan`, `validate-plan-tree`, `render-plan-tree` + 9 new (`expand`, `next`, `freeze`, `thaw`, `archive`, `conflicts`, `replan`, `promote`, `undo`) + `resolve-node` + `_lib` |
@@ -518,7 +518,7 @@ ls -la .claude/logs/workflows/    # Legacy path — may have old state
 ```
 
 **Fix:**
-- Upgrade to v3.7+ (`/plugin update aura-frog`)
+- Upgrade to v3.7+ (`/plugin update archon-os`)
 - Or manually move: `mv .claude/logs/workflows/* .claude/logs/runs/`
 
 Verify with `/af status` — should show 0 orphan paths.
@@ -682,10 +682,10 @@ What works well, what doesn't, what's tracked. We name it so you can plan around
 
 | Item | Severity | Issue | Effort |
 |---|---|---|---|
-| 5 deferred env-var-dependent hooks still rely on undocumented `CLAUDE_TOOL_NAME` / `CLAUDE_FILE_PATHS` instead of the documented stdin-JSON contract. Only `mcp-call-gate` got the stdin fallback in v3.7.1. | medium | [#7](https://github.com/nguyenthienthanh/aura-frog/issues/7) | ~1d |
-| ~~`hooks/lib/hook-runtime.cjs` doesn't exist yet — every hook re-implements stdin parsing + audit appending + atomic writes.~~ **✅ Fixed — this was stale.** The file is 699 lines and **39 hooks require it.** | — | [#6](https://github.com/nguyenthienthanh/aura-frog/issues/6) | done |
-| ~~Append-only text logs would benefit from SQLite WAL but break "zero runtime dependencies."~~ **Closed as decided, not fixed.** `node:sqlite` needs no dependency but is **Stability 1.1/1.2 (release candidate) on every Node line**, and on Node 26.10 `require('node:sqlite').Database` is `undefined` — only `DatabaseSync` exists, so the documented API is not the shipped one. Append-only text stays. The mission constraint also relaxed from "zero runtime" to **zero NATIVE dependencies** (2026-10-29). | — | [#8](https://github.com/nguyenthienthanh/aura-frog/issues/8) | decided |
-| Hook performance budget not enforced. ~19 hooks fire on every Write/Edit; estimated 100-300ms p95 but unmeasured. | medium | [#9](https://github.com/nguyenthienthanh/aura-frog/issues/9) | ~1d for budget + benchmark |
+| 5 deferred env-var-dependent hooks still rely on undocumented `CLAUDE_TOOL_NAME` / `CLAUDE_FILE_PATHS` instead of the documented stdin-JSON contract. Only `mcp-call-gate` got the stdin fallback in v3.7.1. | medium | [#7](https://github.com/nguyenthienthanh/archon/issues/7) | ~1d |
+| ~~`hooks/lib/hook-runtime.cjs` doesn't exist yet — every hook re-implements stdin parsing + audit appending + atomic writes.~~ **✅ Fixed — this was stale.** The file is 699 lines and **39 hooks require it.** | — | [#6](https://github.com/nguyenthienthanh/archon/issues/6) | done |
+| ~~Append-only text logs would benefit from SQLite WAL but break "zero runtime dependencies."~~ **Closed as decided, not fixed.** `node:sqlite` needs no dependency but is **Stability 1.1/1.2 (release candidate) on every Node line**, and on Node 26.10 `require('node:sqlite').Database` is `undefined` — only `DatabaseSync` exists, so the documented API is not the shipped one. Append-only text stays. The mission constraint also relaxed from "zero runtime" to **zero NATIVE dependencies** (2026-10-29). | — | [#8](https://github.com/nguyenthienthanh/archon/issues/8) | decided |
+| Hook performance budget not enforced. ~19 hooks fire on every Write/Edit; estimated 100-300ms p95 but unmeasured. | medium | [#9](https://github.com/nguyenthienthanh/archon/issues/9) | ~1d for budget + benchmark |
 | ~~Node 20/22 test matrix hangs on Ubuntu CI runners; temporarily reduced to Node 18 only.~~ **✅ Fixed — this was stale.** `.github/workflows/ci.yml` runs the full `['18','20','22']` matrix. | — | — | done |
 | Pillar 4 Tier 2 OPA Rego policies, Pillar 5 L3+L4 LLM conflict detection, Pillar 6 auto-trigger on F2/F3 — all in the v3.7.0 roadmap, queued for v3.8+. | feature | — | varies |
 | `cc-plugin-eval` upstream npm peer-dep conflict (`madge` vs `typescript ^6`) breaks the behavioral-eval CI workflow. Not a regression in this plugin; tracked as upstream. | external | — | wait for cc-plugin-eval fix |
@@ -770,7 +770,7 @@ MIT — See [LICENSE](LICENSE)
 
 ### Your AI writes code. Aura Frog runs the OS.
 
-**[Install Now](#-install)** · **[Tutorial](docs/getting-started/FIRST_WORKFLOW_TUTORIAL.md)** · **[Report Issue](https://github.com/nguyenthienthanh/aura-frog/issues)**
+**[Install Now](#-install)** · **[Tutorial](docs/getting-started/FIRST_WORKFLOW_TUTORIAL.md)** · **[Report Issue](https://github.com/nguyenthienthanh/archon/issues)**
 
 *Built by [@nguyenthienthanh](https://github.com/nguyenthienthanh) · [Changelog](docs/reference/CHANGELOG.md)*
 
