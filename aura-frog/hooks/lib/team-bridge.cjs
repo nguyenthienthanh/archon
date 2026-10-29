@@ -255,13 +255,13 @@ function getTeammatesForPhase(phase) {
   if (!config) return [];
 
   const teammates = [
-    { name: config.lead, agentType: `aura-frog:${config.lead}`, role: 'lead' }
+    { name: config.lead, agentType: `archon-os:${config.lead}`, role: 'lead' }
   ];
 
   for (const member of config.members) {
     teammates.push({
       name: member,
-      agentType: `aura-frog:${member}`,
+      agentType: `archon-os:${member}`,
       role: 'member'
     });
   }

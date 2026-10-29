@@ -5,7 +5,7 @@
 # Rule: Pre-flight Policies
 
 **Priority:** Critical
-**Applies To:** PreToolUse on Bash | Edit | Write | Read; `/aura-frog:preflight` command; preflight-validator skill
+**Applies To:** PreToolUse on Bash | Edit | Write | Read; `/archon-os:preflight` command; preflight-validator skill
 
 ---
 
@@ -22,7 +22,7 @@ The pre-flight tier is the deterministic safety net that catches catastrophic mi
 ```toon
 triggers[3]{when,scope,note}:
   PreToolUse hook,"Bash | Edit | Write | Read",auto via hooks/pre-flight-validate.cjs
-  /aura-frog:preflight check,"current tool context OR --file/--command target",manual
+  /archon-os:preflight check,"current tool context OR --file/--command target",manual
   CI / commit hook,"per-file batch via run-all.sh --files",contributor workflow
 ```
 
@@ -52,7 +52,7 @@ codes[3]{exit,severity,downstream_action}:
 
 ---
 
-## Hard-block patterns (exit 2 — non-bypassable without explicit `/aura-frog:preflight bypass`)
+## Hard-block patterns (exit 2 — non-bypassable without explicit `/archon-os:preflight bypass`)
 
 | Class | Examples |
 |---|---|
@@ -64,7 +64,7 @@ codes[3]{exit,severity,downstream_action}:
 | Path traversal | `../../etc/...` patterns |
 | Credential leak | AWS key (`AKIA*`), GitHub PAT (`ghp_*`), OpenAI/Anthropic keys, JWTs, `-----BEGIN PRIVATE KEY-----` |
 
-These cannot be silently bypassed by environment changes — `/aura-frog:preflight bypass <reason>` is the only escape hatch, and each bypass is logged + counted.
+These cannot be silently bypassed by environment changes — `/archon-os:preflight bypass <reason>` is the only escape hatch, and each bypass is logged + counted.
 
 ## Warn patterns (exit 1 — informational, not blocking)
 
@@ -82,7 +82,7 @@ These cannot be silently bypassed by environment changes — `/aura-frog:preflig
 
 Per spec §20.5: bypass is **per-call only**, never session-scoped (decision Q7).
 
-1. User runs `/aura-frog:preflight bypass <reason>` (reason ≥10 chars; refuse vague "let me try")
+1. User runs `/archon-os:preflight bypass <reason>` (reason ≥10 chars; refuse vague "let me try")
 2. Command writes `.claude/logs/.preflight-bypass` with reason + timestamp
 3. Next PreToolUse fire: hook reads the flag, **consumes** (deletes) it, increments session counter, allows the tool call
 4. After 3 consumed bypasses in one session: hook prints warning banner — checks may need updating, OR you're in a bad state
@@ -91,7 +91,7 @@ The bypass file is single-use by design — you cannot leave pre-flight off.
 
 ## Disable mechanisms (escalation order)
 
-1. **Per-call**: `/aura-frog:preflight bypass` (preferred for one-off needs)
+1. **Per-call**: `/archon-os:preflight bypass` (preferred for one-off needs)
 2. **Per-session**: `export AF_PREFLIGHT_DISABLED=true` (revertes on new session; emits a session-start warning)
 3. **Permanent**: `.envrc` setting (strongly discouraged — disables the secret-leak net)
 
@@ -122,7 +122,7 @@ The hook always tries to import `scripts/preflight/run-all.sh`. If absent, it si
 - **Spec:** §20 (pre-flight), §20.4 (OPA optional), §20.5 (bypass)
 - **Hook:** `hooks/pre-flight-validate.cjs` — primary auto-trigger
 - **Skill:** `preflight-validator` — programmatic wrapper
-- **Command:** `/aura-frog:preflight` — user-facing entry
+- **Command:** `/archon-os:preflight` — user-facing entry
 - **Scripts:** `aura-frog/scripts/preflight/*.sh` — Tier 1 implementation
 - **Sibling rule:** `rules/core/context-economy.md` — tool calls should be minimal anyway; pre-flight catches the rest
 - **Future:** `policies/*.rego` (Tier 2, rc.1)

@@ -50,17 +50,17 @@ report "$count2" "bare region-code usage (PH/MY)"
 section "D2 undefined agent references"
 defined=$(find agents -maxdepth 1 -name '*.md' ! -name 'README.md' -exec basename {} .md \; | sort)
 commands_list=$(find commands -maxdepth 1 -name '*.md' ! -name 'README.md' -exec basename {} .md \; | sort)
-# Referenced ids: aura-frog:<id> NOT preceded by '/' (slash form is a command, not an agent)
-referenced=$(grep -rhoE '(^|[^/a-z-])aura-frog:[a-z][a-z-]*[a-z]' \
+# Referenced ids: archon-os:<id> NOT preceded by '/' (slash form is a command, not an agent)
+referenced=$(grep -rhoE '(^|[^/a-z-])archon-os:[a-z][a-z-]*[a-z]' \
     "${include[@]}" commands hooks rules skills agents scripts 2>/dev/null \
-  | grep -oE 'aura-frog:[a-z][a-z-]*[a-z]' | sed 's/aura-frog://' | sort -u || true)
+  | grep -oE 'archon-os:[a-z][a-z-]*[a-z]' | sed 's/archon-os://' | sort -u || true)
 undef=0
 for id in $referenced; do
   echo "$commands_list" | grep -qx "$id" && continue # command name, not an agent
   case "$id" in reference|foo) continue ;; esac      # namespace prefix / doc-comment example
   if ! echo "$defined" | grep -qx "$id"; then
     echo "✗ referenced but not defined in agents/: $id"
-    grep -rlE "aura-frog:$id\b" "${include[@]}" commands hooks rules skills agents scripts 2>/dev/null | sed 's/^/    /' | head -5
+    grep -rlE "archon-os:$id\b" "${include[@]}" commands hooks rules skills agents scripts 2>/dev/null | sed 's/^/    /' | head -5
     undef=$((undef + 1))
   fi
 done

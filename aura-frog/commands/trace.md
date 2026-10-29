@@ -1,4 +1,4 @@
-# /aura-frog:trace
+# /archon-os:trace
 
 **Render the reasoning trace for a task** — file_reads, output_claims, tool_calls, decisions. Surfaces hallucinations (claims with `grounded: false`).
 
@@ -7,12 +7,12 @@
 ## Usage
 
 ```
-/aura-frog:trace <TASK_ID>                          # full trace, table format
-/aura-frog:trace <TASK_ID> --filter file_read       # one event type only
-/aura-frog:trace <TASK_ID> --hallucinations         # only output_claim events with grounded:false
-/aura-frog:trace <TASK_ID> --tail 50                # last N events
-/aura-frog:trace <TASK_ID> --since 2026-04-29T12:00:00Z
-/aura-frog:trace --active                            # use the active.task from .claude/plans/active.json
+/archon-os:trace <TASK_ID>                          # full trace, table format
+/archon-os:trace <TASK_ID> --filter file_read       # one event type only
+/archon-os:trace <TASK_ID> --hallucinations         # only output_claim events with grounded:false
+/archon-os:trace <TASK_ID> --tail 50                # last N events
+/archon-os:trace <TASK_ID> --since 2026-04-29T12:00:00Z
+/archon-os:trace --active                            # use the active.task from .claude/plans/active.json
 ```
 
 ## Protocol
@@ -27,7 +27,7 @@
 3. **Parse** each line as JSON. Filter by `--filter` and `--since` flags.
 4. **Render table** (columns: ts, event_id, type, summary). For long payloads (>80 chars), truncate with `…`.
 5. **Halluciation summary**: count of `output_claim` with `grounded:false`. If > 0 in non-`--hallucinations` mode, print: `⚠️  N potential hallucinations — re-run with --hallucinations to see them`.
-6. **Storage warning**: if trace file > 10 MB or > 1000 events → suggest `/aura-frog:plan-archive` (Milestone C).
+6. **Storage warning**: if trace file > 10 MB or > 1000 events → suggest `/archon-os:plan-archive` (Milestone C).
 
 ## Output format
 
@@ -66,4 +66,4 @@ Prints only `output_claim` events where `grounded == false`. For each, shows:
 - **Rule:** `rules/core/grounding-discipline.md` — defines what counts as "grounded"
 - **Hook:** `hooks/tool-call-tracer.cjs` — owns `resolveTracePaths()`/`nextEventId()`; appends tool_call/tool_result/file_read events
 - **Hook:** `hooks/tdd-red-failure-tracker.cjs` — appends P2_RED `decision` events to the same file via that resolver
-- **Companion command:** `/aura-frog:plan-status` — high-level plan view
+- **Companion command:** `/archon-os:plan-status` — high-level plan view

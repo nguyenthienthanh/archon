@@ -60,7 +60,7 @@ if [ -n "$CONFLICT_ID" ] && [ "$FORCE" != "1" ]; then
         LATEST=$(grep -F "\"conflict_id\":\"${CONFLICT_ID}\"" "$CONFLICTS_LOG" | tail -1)
         RESOLUTION=$(echo "$LATEST" | grep -oE '"resolution":[[:space:]]*"[^"]+"' | sed 's/.*"\([^"]*\)"$/\1/' || true)
         if [ -z "$RESOLUTION" ] || [ "$RESOLUTION" = "null" ]; then
-            echo "blocker ${CONFLICT_ID} still open — resolve via /aura-frog:plan-conflicts resolve ${CONFLICT_ID}, or pass --force" >&2
+            echo "blocker ${CONFLICT_ID} still open — resolve via /archon-os:plan-conflicts resolve ${CONFLICT_ID}, or pass --force" >&2
             exit 3
         fi
     fi
@@ -125,7 +125,7 @@ if [ "$PARTIAL" = "0" ]; then
 fi
 
 if ! require_no_regression "$PLANS_DIR" "$VIOLATIONS_BEFORE"; then
-    echo "checkpoints under ${PLANS_DIR}/checkpoints/ — restore via /aura-frog:plan undo" >&2
+    echo "checkpoints under ${PLANS_DIR}/checkpoints/ — restore via /archon-os:plan undo" >&2
     exit 4
 fi
 

@@ -22,7 +22,7 @@ This rule defines a new memory tier that fits between `trust: file` (verified on
 ```toon
 trust_tiers[4]{tier,source,verification}:
   user,"User's direct message","Always trusted — they are the principal"
-  plan,"Plan node user approved via /aura-frog:plan or interview","Trusted on read; re-verify only if revision changed"
+  plan,"Plan node user approved via /archon-os:plan or interview","Trusted on read; re-verify only if revision changed"
   file,"Project file contents read by Claude","Re-verify on every Read — cache stale within seconds"
   output,"T4 task execution output","UNTRUSTED until acceptance check passes"
 ```

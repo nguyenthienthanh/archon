@@ -1,4 +1,4 @@
-# /aura-frog:dashboard
+# /archon-os:dashboard
 
 **CLI status display** — terse one-screen view of plan tree, active task, conflicts, freezes, token budget, recent decisions.
 
@@ -7,10 +7,10 @@
 ## Usage
 
 ```
-/aura-frog:dashboard                    # static one-shot snapshot (default)
-/aura-frog:dashboard --live             # live refresh every 5s (until Ctrl-C)
-/aura-frog:dashboard --json             # machine-readable JSON for automation
-/aura-frog:dashboard --section <name>   # only one section: plan|active|conflicts|memory|mcp|preflight
+/archon-os:dashboard                    # static one-shot snapshot (default)
+/archon-os:dashboard --live             # live refresh every 5s (until Ctrl-C)
+/archon-os:dashboard --json             # machine-readable JSON for automation
+/archon-os:dashboard --section <name>   # only one section: plan|active|conflicts|memory|mcp|preflight
 ```
 
 ## Sections
@@ -76,7 +76,7 @@ Run only the named section. Useful for status-line integration or scripted check
 
 | Missing input | Behavior |
 |---|---|
-| No `.claude/plans/` | Render banner + "Plans not initialized — run /aura-frog:plan" |
+| No `.claude/plans/` | Render banner + "Plans not initialized — run /archon-os:plan" |
 | No `.claude/memory/` | Memory section: "Memory not initialized" |
 | No audit log | MCP section: "Audit logging not started" |
 | run-state.json missing | Active section: "No active run" |

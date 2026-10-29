@@ -1,16 +1,16 @@
-# /aura-frog:plan-undo
+# /archon-os:plan-undo
 
-**Restore the latest checkpoint** (LIFO). Alias for `/aura-frog:plan undo [<id>]` (v3.7.2+).
+**Restore the latest checkpoint** (LIFO). Alias for `/archon-os:plan undo [<id>]` (v3.7.2+).
 
 ---
 
 ## Usage
 
 ```
-/aura-frog:plan-undo                 # active node (deepest non-null in active path)
-/aura-frog:plan-undo <NODE_ID>
-/aura-frog:plan-undo --dry-run       # preview
-/aura-frog:plan-undo --list          # list available checkpoints for the node
+/archon-os:plan-undo                 # active node (deepest non-null in active path)
+/archon-os:plan-undo <NODE_ID>
+/archon-os:plan-undo --dry-run       # preview
+/archon-os:plan-undo --list          # list available checkpoints for the node
 ```
 
 ## Delegation

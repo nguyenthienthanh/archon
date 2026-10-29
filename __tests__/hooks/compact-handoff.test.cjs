@@ -186,10 +186,10 @@ describe('compact-handoff', () => {
     it('recentUserPrompts keeps slash-command prompts that carry args', () => {
       const { recentUserPrompts } = require('../../aura-frog/hooks/compact-handoff.cjs');
       const file = writeTranscript([
-        { type: 'user', message: { content: '<command-message>aura-frog:run</command-message>\n<command-name>/aura-frog:run</command-name>\n<command-args>fix handoff naming</command-args>' } },
+        { type: 'user', message: { content: '<command-message>archon-os:run</command-message>\n<command-name>/archon-os:run</command-name>\n<command-args>fix handoff naming</command-args>' } },
         { type: 'user', message: { content: '<command-name>/clear</command-name>\n<command-args></command-args>' } },
       ]);
-      expect(recentUserPrompts(file)).toEqual(['/aura-frog:run fix handoff naming']);
+      expect(recentUserPrompts(file)).toEqual(['/archon-os:run fix handoff naming']);
     });
 
     const handoffsDir = () => path.join(root, '.claude', 'handoffs');

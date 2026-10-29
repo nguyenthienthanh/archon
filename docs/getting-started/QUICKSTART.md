@@ -6,7 +6,7 @@ audience: first-time
 
 # Aura Frog — 60-Second Quickstart
 
-> v3.7.x syntax. The current command surface is `/run` (universal entry point with intent detection) + `/aura-frog:*` (plan / heal / mcp / trace / dashboard) + `/af` (status / agents / learn). Older `workflow:*`-prefixed verbs from v3.6 are documented in `MIGRATION_TO_V3.7.md`.
+> v3.7.x syntax. The current command surface is `/run` (universal entry point with intent detection) + `/archon-os:*` (plan / heal / mcp / trace / dashboard) + `/af` (status / agents / learn). Older `workflow:*`-prefixed verbs from v3.6 are documented in `MIGRATION_TO_V3.7.md`.
 
 ## Install
 
@@ -32,7 +32,7 @@ audience: first-time
 #   handoff     → save state for next session
 ```
 
-For a project-scope task that touches 5+ features, `/run` will offer to escalate into the hierarchical planner (`/aura-frog:plan`). Once a plan is active, you can also type bare verbs (`next`, `expand FEAT-A`, `status`) without any prefix.
+For a project-scope task that touches 5+ features, `/run` will offer to escalate into the hierarchical planner (`/archon-os:plan`). Once a plan is active, you can also type bare verbs (`next`, `expand FEAT-A`, `status`) without any prefix.
 
 ## Update
 
@@ -54,7 +54,7 @@ For a project-scope task that touches 5+ features, `/run` will offer to escalate
 | Command | What it does |
 |---------|-------------|
 | `/run <task>` | Universal entry point — auto-detects intent (feature / bugfix / refactor / test / review / deploy) |
-| `/aura-frog:plan` | Hierarchical planning (T0 Mission → T1 Initiative → T2 Feature → T3 Story → T4 Task) |
+| `/archon-os:plan` | Hierarchical planning (T0 Mission → T1 Initiative → T2 Feature → T3 Story → T4 Task) |
 | `/check` | Quality scan — security / perf / complexity / debt / coverage / deps |
 | `/design` | Pre-code design — API / DB / docs |
 | `/project init` | Scan repo, detect stack, generate `.claude/project-contexts/` |
@@ -65,7 +65,7 @@ For a project-scope task that touches 5+ features, `/run` will offer to escalate
 
 - [GET_STARTED.md](GET_STARTED.md) — Full setup walkthrough with first workflow
 - [FIRST_WORKFLOW_TUTORIAL.md](FIRST_WORKFLOW_TUTORIAL.md) — Guided hands-on tutorial
-- [All Commands](../../aura-frog/commands/README.md) — 24 commands (core 6 + `/aura-frog:*` planning suite)
+- [All Commands](../../aura-frog/commands/README.md) — 24 commands (core 6 + `/archon-os:*` planning suite)
 - [MCP Guide](../operations/MCP_GUIDE.md) — 6 bundled MCP servers (all enabled) + opt-in snippets
 - [Agent Selection Guide](../guides/AGENT_SELECTION_GUIDE.md) — How agents are auto-picked per task
 

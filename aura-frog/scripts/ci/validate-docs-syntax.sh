@@ -103,7 +103,7 @@ if [ $ERRORS -gt 0 ]; then
   echo "changelog, migration), add its path to EXEMPT in this script."
   echo ""
   echo "Run \`bash scripts/audit/stale-cmd-check.sh\` for a broader audit"
-  echo "(includes namespaced /aura-frog:* commands and bare backticked /word)."
+  echo "(includes namespaced /archon-os:* commands and bare backticked /word)."
   exit 1
 fi
 

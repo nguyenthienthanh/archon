@@ -1,7 +1,7 @@
 ---
 name: plan-archivist
 description: "Compresses a completed plan-tree branch into .claude/plans/archive/{NODE_ID}.summary.md. Removes the original node files (preserved by checkpoint history). Reduces always-loaded surface area as features ship."
-when_to_use: "/aura-frog:plan-archive <NODE_ID> — invoked after a T2 (Feature) reaches status: done AND epic-summarizer has finished distilling"
+when_to_use: "/archon-os:plan-archive <NODE_ID> — invoked after a T2 (Feature) reaches status: done AND epic-summarizer has finished distilling"
 allowed-tools: Read, Write, Glob, Bash
 effort: medium
 user-invocable: false
@@ -90,13 +90,13 @@ trace_summary: { events: 287, hallucinations_flagged: 1, recovered: 1 }
 - Does NOT read or write `.claude/memory/` (that's epic-summarizer's lane)
 - Does NOT delete checkpoints — those follow checkpoint-discipline.md retention
 - Does NOT mutate node frontmatter on un-pruned nodes (only the `archived` status transition; revision++)
-- Does NOT decompress an archive — restoration is via `/aura-frog:plan-undo` against checkpoints
+- Does NOT decompress an archive — restoration is via `/archon-os:plan-undo` against checkpoints
 
 ## Tie-Ins
 
 - **Spec:** §9.4
 - **Companion agent:** `epic-summarizer` — runs first; archivist runs after
-- **Command:** `/aura-frog:plan-archive` — only consumer
+- **Command:** `/archon-os:plan-archive` — only consumer
 - **Hook:** `hooks/feature-done-trigger-archive.cjs` — invokes both summarizer + archivist on T2 done
 - **Rule:** `rules/workflow/plan-lifecycle.md` — defines `archived` as terminal state
 - **Rule:** `rules/workflow/checkpoint-discipline.md` — pruned nodes must have checkpoint history

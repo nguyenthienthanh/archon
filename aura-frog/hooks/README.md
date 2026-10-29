@@ -903,7 +903,7 @@ hooks[32]{event,name,purpose}:
   PostToolUse,Smart Learn,Auto-learn from successful operations
   UserPromptSubmit,Prompt Reminder,TDD/security/approval reminders
   UserPromptSubmit,Scope Drift Detection,Warn when conversation scope diverges
-  UserPromptSubmit,Plan Escalation Check,Nudge to /aura-frog:plan when scope weight ≥ 3 and no plan tree
+  UserPromptSubmit,Plan Escalation Check,Nudge to /archon-os:plan when scope weight ≥ 3 and no plan tree
   UserPromptSubmit,Auto-Learn,Auto-detect corrections in messages
   UserPromptSubmit,Prompt Logger,Log prompts with metadata for usage analysis
   SubagentStart,Context Injection,Auto-inject workflow context to subagents

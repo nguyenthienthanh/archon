@@ -28,7 +28,7 @@ const { readCommand, readExitCode } = require('./lib/tool-context.cjs');
 // One resolver, one counter, one on-disk layout. This hook used to hardcode the
 // pre-v3.7.3 traces/{ID}.jsonl path and count its own lines, so its decision
 // events landed in a different file from the tool_call/tool_result events the
-// tracer writes to {taskFolder}/trace.jsonl — and /aura-frog:trace only ever
+// tracer writes to {taskFolder}/trace.jsonl — and /archon-os:trace only ever
 // saw one of the two. Borrow the tracer's resolver and counter instead.
 const { resolveTracePaths, taskSlugOf, nextEventId } = require('./tool-call-tracer.cjs');
 

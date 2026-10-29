@@ -132,7 +132,7 @@ describe('pre-execute-load-plan-context — composeContextLines', () => {
       active: {},
       frozen: ['a', 'b'],
     });
-    expect(lines).toContain('Frozen: 2 node(s) — see /aura-frog:plan-conflicts');
+    expect(lines).toContain('Frozen: 2 node(s) — see /archon-os:plan-conflicts');
   });
 
   it('ignores an empty frozen array and the vestigial ready_queue field', () => {

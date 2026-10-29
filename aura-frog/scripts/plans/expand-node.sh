@@ -48,7 +48,7 @@ NODE_FILE=$(resolve_file "$PLANS_DIR" "$NODE_INPUT")
 TIER=$(get_field "$NODE_FILE" "tier")
 
 case "$TIER" in
-    0) echo "T0 (Mission) is bootstrap-only — use /aura-frog:plan" >&2; exit 3 ;;
+    0) echo "T0 (Mission) is bootstrap-only — use /archon-os:plan" >&2; exit 3 ;;
     1) CHILD_TIER=2; CHILD_KIND=FEAT; AGENT=feature-architect ;;
     2) CHILD_TIER=3; CHILD_KIND=STORY; AGENT=story-planner ;;
     3) CHILD_TIER=4; CHILD_KIND=TASK; AGENT=story-planner ;;

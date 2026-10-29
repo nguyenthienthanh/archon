@@ -13,7 +13,7 @@
 
 **An output claim is "grounded" only when ≥1 prior `file_read` event in the same task trace covers the file/function/symbol the claim names.**
 
-If no precedent exists, the claim is flagged `grounded: false` — i.e., a potential hallucination — and surfaces in `/aura-frog:trace --hallucinations`.
+If no precedent exists, the claim is flagged `grounded: false` — i.e., a potential hallucination — and surfaces in `/archon-os:trace --hallucinations`.
 
 This is the cheapest hallucination filter: a deterministic check on append-only trace events. No LLM call.
 
@@ -50,7 +50,7 @@ Claims that do NOT need grounding:
 
 The `reasoning-trace-recorder` skill emits `output_claim` events. The `tool-call-tracer` hook ensures `file_read` events precede them when applicable.
 
-The grounding check is **post-hoc**: claims are recorded with `grounded: false`, and `/aura-frog:trace --hallucinations` surfaces them.
+The grounding check is **post-hoc**: claims are recorded with `grounded: false`, and `/archon-os:trace --hallucinations` surfaces them.
 
 In Milestone E (rc.1), pre-flight will block actions that depend on ungrounded claims (e.g., editing a file that was never read first).
 
@@ -77,7 +77,7 @@ The grounding check itself is binary (grounded or not). Tools layered on top of 
 
 - **Skill:** `reasoning-trace-recorder` — produces the events this rule evaluates
 - **Hook:** `tool-call-tracer` — emits `file_read` events with sha256
-- **Command:** `/aura-frog:trace` — surfaces ungrounded claims
+- **Command:** `/archon-os:trace` — surfaces ungrounded claims
 - **Rule:** `rules/core/no-assumption.md` — same spirit; ask when uncertain
 - **Rule:** `rules/core/verification.md` — verify before claiming success
 - **Spec:** `docs/specs/AURA_FROG_V3.7.0_TECH_SPEC.md` §11.1

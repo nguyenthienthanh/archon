@@ -23,14 +23,14 @@ Before creating run-state.json, screen the task description for project-level sc
 ```
 Your task scores ≥3 on the escalation heuristic — multi-feature / multi-session scope.
 Options:
-  plan    — bootstrap /aura-frog:plan first (writes pending-plan-bootstrap.json)
+  plan    — bootstrap /archon-os:plan first (writes pending-plan-bootstrap.json)
   deep    — proceed with normal Deep flow (escalation_declined: true recorded)
   details — show breakdown of which signals fired, re-ask
 ```
 
 **Honour the answer:**
 
-- `plan` → write `.claude/cache/pending-plan-bootstrap.json` (schema below) and invoke `/aura-frog:plan`. Do NOT proceed to Step 0b until the plan returns.
+- `plan` → write `.claude/cache/pending-plan-bootstrap.json` (schema below) and invoke `/archon-os:plan`. Do NOT proceed to Step 0b until the plan returns.
 - `deep` (or legacy alias `proceed`) → set `escalation_declined: true` in the run-state when it's created. Continue.
 - `details` → render which signals fired with weights, then re-ask.
 
@@ -194,13 +194,13 @@ scaffold_map[5]{phase,files}:
    When env is unavailable in this environment (e.g. no `.envrc` access), continue the run by asking the user to paste the task description inline — do not invent a fallback fetch path.
 5. **Run ↔ Plan bridge** — apply `rules/workflow/run-plan-bridge.md`:
    - If `.claude/plans/active.json#active.task` is set → **auto-anchor** run-state to that T4; Sprint Contract seeds from the task's acceptance criteria; Phase 5 syncs status back to the plan tree.
-   - If `active.feature` is set but `active.task` is null → suggest `/aura-frog:plan-next` to claim a task first (user may reply `proceed` to run inline).
-   - If no plan exists and the task description triggers ≥3 escalation weight (multi-feature, multi-week, shipping/rollout/epic keywords) → suggest `/aura-frog:plan` to bootstrap T0-T2 first. Honor `proceed` to run inline.
+   - If `active.feature` is set but `active.task` is null → suggest `/archon-os:plan-next` to claim a task first (user may reply `proceed` to run inline).
+   - If no plan exists and the task description triggers ≥3 escalation weight (multi-feature, multi-week, shipping/rollout/epic keywords) → suggest `/archon-os:plan` to bootstrap T0-T2 first. Honor `proceed` to run inline.
    - Disable with `AF_RUN_PLAN_BRIDGE_DISABLED=true`. Force-mode prefixes (`must do:`, `just do:`, `exactly:`) skip the bridge.
 
    > ⚠️ **Anchoring does NOT skip phases.** The plan tree feeds Phase 1 (acceptance criteria → Sprint Contract; design notes → architecture inputs) — it does **not** replace Phase 1 or Phase 2. **All 5 phases run per task even when anchored.** A common failure mode is interpreting "the feature is already designed in the plan tree" as a license to skip straight to Phase 3 / Build GREEN. That is wrong. Phase 2 (Test RED) is mandatory — it converts the plan's acceptance criteria into executable failing tests before any code is written. Skipping Phase 2 because the plan exists is the bug we're trying to prevent. If you find yourself implementing without a failing test, stop and write the test first.
    >
-   > Iterating a whole feature: a single `/run` cycles through Phase 1 → 5 for **one task**. To complete a multi-task feature, repeat `/aura-frog:plan next` (or just type `next` while a plan is active) to claim the next ready task, then re-enter `/run` which auto-anchors. Each task gets its own full 5-phase cycle. This is the contract — not "one /run per feature".
+   > Iterating a whole feature: a single `/run` cycles through Phase 1 → 5 for **one task**. To complete a multi-task feature, repeat `/archon-os:plan next` (or just type `next` while a plan is active) to claim the next ready task, then re-enter `/run` which auto-anchors. Each task gets its own full 5-phase cycle. This is the contract — not "one /run per feature".
 6. Load project context
 7. Verify complexity — suggest lighter approach if simple
 8. **Socratic Onboarding & Discovery (Standard/Deep only)** — Before locking spec, interview user using the 3 mandatory Socratic Probes per `rules/workflow/requirement-challenger.md`:

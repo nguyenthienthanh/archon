@@ -105,7 +105,7 @@ function parseEffortFromFrontmatter(content) {
 }
 
 /**
- * Strip a plugin namespace prefix (e.g. `aura-frog:foo` → `foo`). Returns
+ * Strip a plugin namespace prefix (e.g. `archon-os:foo` → `foo`). Returns
  * null for empty / falsy input. The Agent tool accepts both prefixed and
  * bare ids; the bare form is what maps to the on-disk filename.
  */

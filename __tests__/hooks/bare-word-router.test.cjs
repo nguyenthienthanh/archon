@@ -1,5 +1,5 @@
 // Unit tests for bare-word-router.cjs — the UserPromptSubmit hook that
-// suggests routing single-verb prompts to /aura-frog:plan when a plan tree
+// suggests routing single-verb prompts to /archon-os:plan when a plan tree
 // is active.
 //
 // Coverage discipline: imports the hook module via require() so the global
@@ -70,8 +70,8 @@ describe('classify() pure function', () => {
     });
 
     describe('already-a-command bypass', () => {
-        test("'/aura-frog:plan next' does NOT match (starts with /)", () => {
-            expect(classify('/aura-frog:plan next')).toEqual({ match: false, reason: 'already_command' });
+        test("'/archon-os:plan next' does NOT match (starts with /)", () => {
+            expect(classify('/archon-os:plan next')).toEqual({ match: false, reason: 'already_command' });
         });
 
         test("'/run fix bug' does NOT match", () => {
@@ -165,7 +165,7 @@ describe('main() direct invocation (for coverage)', () => {
     test('emitHint produces routing hint format', () => {
         emitHint('expand', 'expand FEAT-A');
         expect(stderrBuf).toMatch(/'expand' detected/);
-        expect(stderrBuf).toMatch(/\/aura-frog:plan expand FEAT-A/);
+        expect(stderrBuf).toMatch(/\/archon-os:plan expand FEAT-A/);
     });
 });
 

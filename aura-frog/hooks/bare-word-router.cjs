@@ -12,7 +12,7 @@
  *   • prompt does not start with a slash (already a command), '/', or 'must do:' / 'just do:' / 'exactly:' override prefixes (those are handled elsewhere)
  *
  * On match, prints a routing hint to stderr (Claude reads stderr; user
- * typically doesn't): suggests interpreting the prompt as `/aura-frog:plan <input>`.
+ * typically doesn't): suggests interpreting the prompt as `/archon-os:plan <input>`.
  *
  * Verbs: bootstrap, expand, next, status, replan, promote, archive, undo,
  *        freeze, thaw, conflicts  (11 total — matches verb_table in
@@ -98,7 +98,7 @@ function classify(prompt) {
 
 function emitHint(verb, prompt) {
   // Claude reads stderr; this hint is metadata, not user-facing output.
-  const target = `/aura-frog:plan ${prompt}`;
+  const target = `/archon-os:plan ${prompt}`;
   process.stderr.write(
     `\n🐸 plan-router: bare-word verb '${verb}' detected; treat as: ${target}\n`
   );

@@ -60,11 +60,11 @@ if [ "$REBUILD" = "1" ]; then
     echo "rebuilt ${PLANS_DIR}/graph-index.json" >&2
 fi
 
-[ -f "${PLANS_DIR}/active.json" ] || { echo "no active.json — run /aura-frog:plan first" >&2; exit 5; }
+[ -f "${PLANS_DIR}/active.json" ] || { echo "no active.json — run /archon-os:plan first" >&2; exit 5; }
 
 ACTIVE_STORY=$(read_active_field "$PLANS_DIR" "story" 2>/dev/null || true)
 if [ -z "${ACTIVE_STORY:-}" ]; then
-    echo "no active story — set one with /aura-frog:plan-next on a feature first, or expand a feature into stories" >&2
+    echo "no active story — set one with /archon-os:plan-next on a feature first, or expand a feature into stories" >&2
     exit 2
 fi
 
@@ -73,7 +73,7 @@ STORY_FILE=$(resolve_file "$PLANS_DIR" "$ACTIVE_STORY") || {
 }
 STORY_DIR=$(dirname "$STORY_FILE")
 TASKS_DIR="${STORY_DIR}/tasks"
-[ -d "$TASKS_DIR" ] || { echo "story has no tasks/ — run /aura-frog:plan-expand ${ACTIVE_STORY}" >&2; exit 2; }
+[ -d "$TASKS_DIR" ] || { echo "story has no tasks/ — run /archon-os:plan-expand ${ACTIVE_STORY}" >&2; exit 2; }
 
 # Collect candidates: T4, status=planned, all depends_on in {done, active}.
 #

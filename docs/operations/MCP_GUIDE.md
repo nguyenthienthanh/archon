@@ -93,7 +93,7 @@ These are **not** in `.mcp.json` — they cost a session-start process (and in o
 }
 ```
 
-**Per-agent allowlist** — MCP Security Layer (Pillar 7) restricts which servers each agent can call. `architect` gets DB; `frontend` gets Figma + Playwright; `security` reads only. See `/aura-frog:mcp status` for the current allowlist, `/aura-frog:mcp audit` for the sanitized call log.
+**Per-agent allowlist** — MCP Security Layer (Pillar 7) restricts which servers each agent can call. `architect` gets DB; `frontend` gets Figma + Playwright; `security` reads only. See `/archon-os:mcp status` for the current allowlist, `/archon-os:mcp audit` for the sanitized call log.
 
 **No manual copying needed** - MCPs requiring tokens will silently skip if tokens aren't set.
 

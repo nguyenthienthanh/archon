@@ -1,7 +1,7 @@
 ---
 name: plan-orchestrator
-description: "Route hierarchical-planning intents to the correct backing script. Use when the user invokes /aura-frog:plan (with or without subcommand), mentions plan verbs (expand/next/replan/promote/archive/freeze/thaw/undo/status/conflicts), or types a plan-vocabulary bare word with .claude/plans/active.json present. Owns verb table, intent classifier, and 3-stage routing pipeline."
-when_to_use: "/aura-frog:plan, /aura-frog:plan-*, hierarchical planning verbs, bare-word routing while plan active, plan tree mutation, T0-T4 decomposition"
+description: "Route hierarchical-planning intents to the correct backing script. Use when the user invokes /archon-os:plan (with or without subcommand), mentions plan verbs (expand/next/replan/promote/archive/freeze/thaw/undo/status/conflicts), or types a plan-vocabulary bare word with .claude/plans/active.json present. Owns verb table, intent classifier, and 3-stage routing pipeline."
+when_to_use: "/archon-os:plan, /archon-os:plan-*, hierarchical planning verbs, bare-word routing while plan active, plan tree mutation, T0-T4 decomposition"
 allowed-tools: Read, Grep, Glob, Edit, Write, Bash
 effort: medium
 user-invocable: false
@@ -39,7 +39,7 @@ verbs[11]{verb,tier_in,tier_out,script,mutates_active_json}:
   conflicts,—,—,conflicts-scan.sh,false
 ```
 
-`bootstrap` is the unprefixed `/aura-frog:plan` (no verb) — T0/T1/T2 interview. Every other verb requires an explicit target node ID or option flags.
+`bootstrap` is the unprefixed `/archon-os:plan` (no verb) — T0/T1/T2 interview. Every other verb requires an explicit target node ID or option flags.
 
 ---
 
@@ -68,7 +68,7 @@ A user utterance like "let's expand FEAT-A into stories" matches `expand` via `e
 
 ## 3-stage routing pipeline
 
-When invoked (via `/aura-frog:plan <input>` or bare-word router), execute in order — stop at the first stage that produces a single match.
+When invoked (via `/archon-os:plan <input>` or bare-word router), execute in order — stop at the first stage that produces a single match.
 
 ### Stage 1 — Explicit verb prefix (deterministic)
 
@@ -82,7 +82,7 @@ Examples:
 
 If the first token matches a verb in verb_table → dispatch directly. Skip Stage 2/3.
 
-**Legacy command shape support:** If invoked via a `plan-<verb>.md` alias stub (e.g. `/aura-frog:plan-expand FEAT-A`), treat as Stage 1 with the verb implied — the stub file passes the verb explicitly.
+**Legacy command shape support:** If invoked via a `plan-<verb>.md` alias stub (e.g. `/archon-os:plan-expand FEAT-A`), treat as Stage 1 with the verb implied — the stub file passes the verb explicitly.
 
 ### Stage 2 — Intent classification (keyword match)
 
@@ -99,7 +99,7 @@ No explicit verb, no keyword match. Surface a structured prompt:
 ```
 Couldn't auto-route this. The plan vocabulary is: bootstrap, expand, next, status,
 replan, promote, archive, undo, freeze, thaw, conflicts. Closest matches: <top 2 by
-edit distance>. Reply with a verb or `/aura-frog:plan status` to see the tree.
+edit distance>. Reply with a verb or `/archon-os:plan status` to see the tree.
 ```
 
 Do not guess. Do not auto-dispatch in Stage 3.
@@ -199,7 +199,7 @@ These prefixes also bypass any confirmation prompts in the backing scripts (trea
 
 ## Disable mechanism
 
-- `AF_PLAN_ROUTING_DISABLED=true` → skill exits early, `/aura-frog:plan` falls back to direct script invocation per command file protocol.
+- `AF_PLAN_ROUTING_DISABLED=true` → skill exits early, `/archon-os:plan` falls back to direct script invocation per command file protocol.
 
 ---
 

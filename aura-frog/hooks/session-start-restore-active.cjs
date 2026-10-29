@@ -59,7 +59,7 @@ function main() {
   const banner = composeBanner(active);
   if (banner.length > 0) {
     process.stderr.write(`${banner.join(' · ')}\n`);
-    process.stderr.write('Run /aura-frog:plan-status for tree, /aura-frog:plan-next for next ready task.\n');
+    process.stderr.write('Run /archon-os:plan-status for tree, /archon-os:plan-next for next ready task.\n');
   }
 
   // Append session_start event to history.jsonl (audit trail).
