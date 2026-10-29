@@ -1,7 +1,7 @@
 ---
 name: conflict-detector
 description: "L1-L4 conflict detection between a proposed T4 task and pending-confirm sibling tasks. L1 (file overlap) + L2 (function/region overlap) ship in v3.7.0-beta.2 as deterministic bash. L3 (semantic LLM) + L4 (architectural LLM) are stubbed for v3.7.0-rc.1."
-when_to_use: "Before dispatching a T4 task that may overlap with siblings; on /aura-frog:plan-conflicts check; from pre-dispatch-conflict-check hook"
+when_to_use: "Before dispatching a T4 task that may overlap with siblings; on /archon-os:plan-conflicts check; from pre-dispatch-conflict-check hook"
 allowed-tools: Bash, Read, Glob, Grep
 effort: low
 user-invocable: false
@@ -115,7 +115,7 @@ If hard cap hit: log warning, **proceed assuming conflict** (fail-safe — bette
 - **Agent:** `conflict-arbiter` — sole consumer of conflict findings (decides resolution)
 - **Hook:** `hooks/pre-dispatch-conflict-check.cjs` — primary auto-trigger (PreToolUse)
 - **Hook:** `hooks/post-execute-conflict-rescan.cjs` — re-runs detection on frozen tasks after blocker `done`
-- **Command:** `/aura-frog:plan-conflicts` — manual list/show/resolve
+- **Command:** `/archon-os:plan-conflicts` — manual list/show/resolve
 - **Rule:** `rules/workflow/conflict-arbitration-policy.md` — arbiter decision table
 - **Rule:** `rules/workflow/plan-lifecycle.md` — frozen state semantics + cascade
 - **Future (rc.1):** L3/L4 LLM dispatchers + `conflict_cache.jsonl` LRU

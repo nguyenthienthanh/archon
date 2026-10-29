@@ -107,7 +107,7 @@ workflow[31]{rule,priority,phases}:
   chain-of-verification,critical,Phase 4 (mandatory for claims)
   plan-lifecycle,critical,Hierarchical planning — state-machine + phase-role binding
   replan-thresholds,high,Hierarchical planning — replan_budget + deviation_score
-  checkpoint-discipline,high,Hierarchical planning — pre-mutation snapshots + /aura-frog:plan-undo
+  checkpoint-discipline,high,Hierarchical planning — pre-mutation snapshots + /archon-os:plan-undo
   extension-policy,high,"Project-level skill/rule/command authoring — confirmation gate + .claude/-only writes"
   session-reset-policy,high,"Memory tier — Epic distillation triggers + 500/8000 token caps + what's preserved"
   preflight-policies,critical,"Pre-flight Tier 1 — when, what, exit-code semantics, bypass policy + 3-bypasses-warn"

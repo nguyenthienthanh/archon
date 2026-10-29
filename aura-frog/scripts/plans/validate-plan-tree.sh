@@ -47,19 +47,6 @@ report() {
 }
 
 # Helper — extract a frontmatter scalar field
-get_field() {
-    local file="$1"
-    local field="$2"
-    awk -v f="$field" '
-        /^---$/ { c++; next }
-        c == 1 && $1 == f":" {
-            sub(/^[^:]*: */, "")
-            sub(/^["'"'"']|["'"'"']$/, "")
-            print
-            exit
-        }
-    ' "$file" 2>/dev/null
-}
 
 # Helper — extract a frontmatter list field (e.g., children: [A, B, C])
 get_list() {
@@ -79,12 +66,33 @@ get_list() {
 
 # Collect all node files
 # Array (not a whitespace-split string) so node paths containing spaces survive.
-mapfile -t ALL_NODES < <(find "${PLANS_DIR}" -name '*.md' -not -path '*/archive/*' 2>/dev/null)
+# Which files are nodes is defined in ONE place conceptually, and
+# hooks/lib/vault-index.cjs#listNodeFiles already had it right: skip archive/
+# AND checkpoints/, and skip README.md / INDEX.md. This scan did not, which
+# made every checkpoint a phantom node.
+#
+# A checkpoint snapshots a node's body, so it carries that node's `id:`. A node
+# with two checkpoints therefore produced three files claiming one id, with
+# three different `status` and `revision` values, and `file_for_id` returned
+# whichever `find` yielded first. resolve-node.sh returned the SNAPSHOT before
+# the live node, so a mutating caller that resolved then wrote would have
+# written into history and left the real node untouched — silently.
+mapfile -t ALL_NODES < <(find "${PLANS_DIR}" -name '*.md' \
+    -not -path '*/archive/*' -not -path '*/checkpoints/*' \
+    -not -name 'README.md' -not -name 'INDEX.md' 2>/dev/null)
 NODE_COUNT=${#ALL_NODES[@]}
 
 if [ "${NODE_COUNT}" -eq 0 ]; then
-    echo "ℹ Empty plan tree — nothing to validate"
-    exit 0
+    # Never exit 0 here. Every plan mutation gates on this script, and a real
+    # plans dir always holds at least mission/mission.md (new-plan.sh creates
+    # it). Zero nodes therefore means the path is wrong, not that the tree is
+    # clean — and a gate that reports green on a wrong path silently disables
+    # all 8 invariants. Fail loud instead.
+    echo "✗ No plan nodes found under '${PLANS_DIR}' — refusing to report a valid tree." >&2
+    echo "  A plans dir always contains mission/mission.md. Check the path:" >&2
+    echo "    validate-plan-tree.sh [PLANS_DIR]   (the plans dir itself, NOT the project root)" >&2
+    echo "  Run new-plan.sh first if the tree has not been initialized." >&2
+    exit 1
 fi
 
 echo "Validating ${NODE_COUNT} plan nodes (8 invariants)..."
@@ -256,19 +264,26 @@ for f in "${ALL_NODES[@]}"; do
 done
 
 # ------------------------------------------------------------------
-# INVARIANT 7: T4 depends_on forms a DAG (no cycles) — full DFS.
+# INVARIANT 7: depends_on forms a DAG (no cycles) at EVERY tier — full DFS.
 # Collect every id→dep edge, then detect a cycle of ANY length (the old
 # check only caught self-loops and 2-cycles; A→B→C→A validated clean).
 #
-# EXEMPT for pattern nodes: only T4 (tier==4) contributes edges. Pattern nodes
-# carry no `tier` and no `depends_on` (a learned leaf has no dependencies), so
-# they add no edges and cannot appear in a cycle. The tier gate excludes them;
-# no node_type special-case is needed.
+# Tiers 1-4 all contribute edges. Scoping this to tier==4 was a defect: a
+# depends_on cycle between two T2 features is just as unschedulable as one
+# between tasks, and it validated clean.
+#
+# EXEMPT for pattern nodes: they carry no `tier` and no `depends_on` (a learned
+# leaf has no dependencies), so the numeric tier test excludes them and they
+# cannot appear in a cycle. No node_type special-case is needed.
 # ------------------------------------------------------------------
 EDGES=""
 for f in "${ALL_NODES[@]}"; do
     tier=$(get_field "$f" "tier")
-    [ "$tier" = "4" ] || continue
+    # Any tier contributes edges, not just T4. A depends_on cycle between two
+    # T2 features (or T3 stories) is just as unschedulable as one between
+    # tasks, and the old `= "4"` gate let it validate clean. Pattern nodes
+    # carry no `tier`, so the numeric test still excludes them.
+    case "$tier" in 1|2|3|4) ;; *) continue ;; esac
     id=$(get_field "$f" "id")
     deps=$(get_list "$f" "depends_on")
     [ -z "$deps" ] && continue
@@ -307,7 +322,7 @@ for n in list(adj):
         break
 ' 2>/dev/null || true)
     if [ -n "$CYCLE" ]; then
-        report 7 "T4 depends_on cycle detected: ${CYCLE}"
+        report 7 "depends_on cycle detected: ${CYCLE}"
     fi
 fi
 

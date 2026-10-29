@@ -1,7 +1,7 @@
-# /aura-frog:plan
+# /archon-os:plan
 
 **Hierarchical planning entry point — all 11 plan verbs in one command.**
-v3.7.2 consolidates `/aura-frog:plan-*` (10 commands) into a single dispatcher that routes via the `plan-orchestrator` skill. The legacy `plan-<verb>` aliases still work as thin stubs.
+v3.7.2 consolidates `/archon-os:plan-*` (10 commands) into a single dispatcher that routes via the `plan-orchestrator` skill. The legacy `plan-<verb>` aliases still work as thin stubs.
 
 **Category:** Planning
 **Scope:** Project-local (writes to `.claude/plans/`)
@@ -13,7 +13,7 @@ v3.7.2 consolidates `/aura-frog:plan-*` (10 commands) into a single dispatcher t
 ### 1. Bootstrap (no args)
 
 ```
-/aura-frog:plan
+/archon-os:plan
 ```
 
 Initialises `.claude/plans/` and interview-bootstraps T0 (Mission) → T1 (Initiative) → T2 (Feature).
@@ -21,7 +21,7 @@ Initialises `.claude/plans/` and interview-bootstraps T0 (Mission) → T1 (Initi
 ### 2. Verb dispatch
 
 ```
-/aura-frog:plan <verb> [target] [flags]
+/archon-os:plan <verb> [target] [flags]
 ```
 
 The 11 verbs and their backing scripts (see `skills/plan-orchestrator/SKILL.md` for the full verb table):
@@ -47,21 +47,21 @@ Each verb takes its own flags — see `aura-frog/commands/plan-<verb>.md` for fu
 ## Power-user shortcuts
 
 ```
-/aura-frog:plan next                                # bare verb, no target
-/aura-frog:plan expand FEAT-A                       # explicit ID
-/aura-frog:plan expand auth                         # title substring → resolve-node.sh
-/aura-frog:plan freeze --active "blocked on db"     # current active.task
-/aura-frog:plan undo                                # last mutation, any node
-/aura-frog:plan conflicts list --open               # subcommand chaining
+/archon-os:plan next                                # bare verb, no target
+/archon-os:plan expand FEAT-A                       # explicit ID
+/archon-os:plan expand auth                         # title substring → resolve-node.sh
+/archon-os:plan freeze --active "blocked on db"     # current active.task
+/archon-os:plan undo                                # last mutation, any node
+/archon-os:plan conflicts list --open               # subcommand chaining
 ```
 
 **Bare-word forms** (only when `.claude/plans/active.json` exists, via `hooks/bare-word-router.cjs`):
 
 ```
-next                # → /aura-frog:plan next
-expand FEAT-A       # → /aura-frog:plan expand FEAT-A
-status              # → /aura-frog:plan status
-freeze TASK-00042   # → /aura-frog:plan freeze TASK-00042
+next                # → /archon-os:plan next
+expand FEAT-A       # → /archon-os:plan expand FEAT-A
+status              # → /archon-os:plan status
+freeze TASK-00042   # → /archon-os:plan freeze TASK-00042
 ```
 
 Guards (Phase B): all of (1) plan-active, (2) verb is first token, (3) ≤5 words total.
@@ -70,7 +70,7 @@ Guards (Phase B): all of (1) plan-active, (2) verb is first token, (3) ≤5 word
 
 ## EXECUTION PROTOCOL — FOLLOW IN ORDER
 
-When the user invokes `/aura-frog:plan <args>`, Claude MUST:
+When the user invokes `/archon-os:plan <args>`, Claude MUST:
 
 ### Stage 1 — Explicit verb dispatch
 
@@ -110,7 +110,7 @@ If no first-arg verb match:
 7. **Update `active.json`** — point at the new active T2.
 8. **Append to `history.jsonl`** — `event: plan_init` with timestamp + nodes created.
 9. **Render** the plan tree: `bash aura-frog/scripts/plans/render-plan-tree.sh`.
-10. **Announce next:** "Plan initialized. Run `/aura-frog:plan expand FEAT-N` to decompose into Stories, or `/aura-frog:plan status` for the tree."
+10. **Announce next:** "Plan initialized. Run `/archon-os:plan expand FEAT-N` to decompose into Stories, or `/archon-os:plan status` for the tree."
 
 If any step fails, surface the error — do NOT silently fall through.
 

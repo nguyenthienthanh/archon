@@ -1,4 +1,4 @@
-# /aura-frog:preflight
+# /archon-os:preflight
 
 **Run pre-flight validation against the current tool context, manage policies, or bypass once.**
 
@@ -7,12 +7,12 @@
 ## Usage
 
 ```
-/aura-frog:preflight check                            # run run-all.sh against current/last tool context
-/aura-frog:preflight check --file path/to/file.md     # validate a specific file
-/aura-frog:preflight check --command "<bash cmd>"     # dry-run a command's safety check
-/aura-frog:preflight policies                         # list all 7 Tier 1 linters and what they check
-/aura-frog:preflight bypass <reason>                  # disable next tool call's pre-flight (single use)
-/aura-frog:preflight status                           # show bypass count this session + disabled state
+/archon-os:preflight check                            # run run-all.sh against current/last tool context
+/archon-os:preflight check --file path/to/file.md     # validate a specific file
+/archon-os:preflight check --command "<bash cmd>"     # dry-run a command's safety check
+/archon-os:preflight policies                         # list all 7 Tier 1 linters and what they check
+/archon-os:preflight bypass <reason>                  # disable next tool call's pre-flight (single use)
+/archon-os:preflight status                           # show bypass count this session + disabled state
 ```
 
 ## Protocol — `check`
@@ -59,7 +59,7 @@ Single-use override for the **next** tool call only. After consumption, normal p
 
 ## Disable mechanisms
 
-- **Per-call**: `/aura-frog:preflight bypass <reason>`
+- **Per-call**: `/archon-os:preflight bypass <reason>`
 - **Per-session**: `export AF_PREFLIGHT_DISABLED=true` (reverts on new session)
 - **Permanent**: add `AF_PREFLIGHT_DISABLED=true` to `.envrc` (NOT recommended; you lose secret-leak detection)
 
@@ -67,7 +67,7 @@ Single-use override for the **next** tool call only. After consumption, normal p
 
 | Failure | Behavior |
 |---|---|
-| `bash` not on PATH | Hook silently skips; surface in `/aura-frog:preflight status` |
+| `bash` not on PATH | Hook silently skips; surface in `/archon-os:preflight status` |
 | `run-all.sh` missing | Hook silently skips |
 | Linter timeout (>5s) | Treated as warn; tool call proceeds |
 | Bypass file write fails | Bypass not armed; hook still blocks |

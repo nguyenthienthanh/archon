@@ -50,7 +50,7 @@ That's it. Aura Frog is now installed globally and available in every Claude Cod
 /help
 ```
 
-You should see a category called *Aura Frog* listing commands like `/run`, `/af`, `/aura-frog:plan`, `/check`, `/project`.
+You should see a category called *Aura Frog* listing commands like `/run`, `/af`, `/archon-os:plan`, `/check`, `/project`.
 
 **Initialize for this project (optional, recommended once):**
 
@@ -110,7 +110,7 @@ Bugfix runs use a lighter 4-step flow (`S1` investigate → `S2` test RED → `S
 /run project: ship the billing redesign across web + mobile + admin
 ```
 
-Aura Frog escalates to **hierarchical planning** (`/aura-frog:plan`): bootstraps `MISSION → INIT → FEAT → STORY → TASK` under `.claude/plans/`, then resumes execution against the active task. See [HIERARCHICAL_PLANNING.md](../architecture/HIERARCHICAL_PLANNING.md).
+Aura Frog escalates to **hierarchical planning** (`/archon-os:plan`): bootstraps `MISSION → INIT → FEAT → STORY → TASK` under `.claude/plans/`, then resumes execution against the active task. See [HIERARCHICAL_PLANNING.md](../architecture/HIERARCHICAL_PLANNING.md).
 
 ---
 

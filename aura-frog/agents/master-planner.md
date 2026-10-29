@@ -27,7 +27,7 @@ Kernel-level controller for hierarchical planning. Owns the plan tree (`.claude/
 
 ## When activated
 
-- User invokes `/aura-frog:plan` or any `/aura-frog:plan:*` subcommand
+- User invokes `/archon-os:plan` or any `/archon-os:plan:*` subcommand
 - A T4 task completes and post-execute hook fires (status update)
 - A failure is classified F2-F5 (decision needed: retry/replan/escalate)
 - Conflict-arbiter requests adjudication (Milestone D+)
@@ -51,7 +51,7 @@ Kernel-level controller for hierarchical planning. Owns the plan tree (`.claude/
 
 In v3.7.0-alpha.1 (this milestone), master-planner is a **read-mostly skeleton** — it dispatches to other agents but does not yet make autonomous retry/replan decisions. Those land in Milestone B with the failure-classifier skill.
 
-For now: defer all retry/replan/escalation choices to the human user via prompted decisions surfaced through `/aura-frog:plan-status`.
+For now: defer all retry/replan/escalation choices to the human user via prompted decisions surfaced through `/archon-os:plan-status`.
 
 ## Tie-Ins
 

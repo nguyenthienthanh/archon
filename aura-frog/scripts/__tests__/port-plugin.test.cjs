@@ -26,7 +26,11 @@ const path = require('node:path');
 
 const porter = require('../port-plugin.cjs');
 
-/** Single source of truth for the plugin's own name. */
+// The plugin name has exactly one source of truth: plugin.json. Hardcoding the
+// literal here is what left this suite red through the v4 rebrand -- the name
+// moved and the expectation did not. Read it instead. Resolved against
+// __dirname rather than process.cwd(), so the suite does not depend on where
+// jest was invoked from.
 const PLUGIN_NAME = JSON.parse(fs.readFileSync(
   path.join(__dirname, '..', '..', '.claude-plugin', 'plugin.json'), 'utf8',
 )).name;
@@ -91,7 +95,7 @@ describe('collectUniversalLayer', () => {
     expect(sources.meta.version.length).toBeGreaterThan(0);
   });
 
-  test('meta.name equals the name in plugin.json', () => {
+  test('meta.name matches plugin.json#name', () => {
     expect(sources.meta.name).toBe(PLUGIN_NAME);
   });
 

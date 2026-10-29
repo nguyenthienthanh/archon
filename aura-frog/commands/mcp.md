@@ -1,4 +1,4 @@
-# /aura-frog:mcp
+# /archon-os:mcp
 
 **MCP security operations.** Status, audit, rate-limit reset, connectivity test.
 
@@ -7,11 +7,11 @@
 ## Usage
 
 ```
-/aura-frog:mcp status                  # which servers enabled, agent allowlists, current usage vs limits
-/aura-frog:mcp audit [--window 24h]    # show audit log (sanitized) — calls, blocks, rate-limit hits
-/aura-frog:mcp audit --blocked-only    # only blocked calls (forensics view)
-/aura-frog:mcp reset-limits [--mcp X]  # reset session counters (logged event); without --mcp resets all
-/aura-frog:mcp test <server>           # single-call connectivity test (e.g., context7 ping)
+/archon-os:mcp status                  # which servers enabled, agent allowlists, current usage vs limits
+/archon-os:mcp audit [--window 24h]    # show audit log (sanitized) — calls, blocks, rate-limit hits
+/archon-os:mcp audit --blocked-only    # only blocked calls (forensics view)
+/archon-os:mcp reset-limits [--mcp X]  # reset session counters (logged event); without --mcp resets all
+/archon-os:mcp test <server>           # single-call connectivity test (e.g., context7 ping)
 ```
 
 ## Protocol — `status`

@@ -100,7 +100,7 @@ set_field "$NODE_FILE" "last_replan_reason" "$REASON"
 [ -n "$AVOID" ] && set_field "$NODE_FILE" "replan_avoid" "$AVOID"
 
 if ! require_no_regression "$PLANS_DIR" "$VIOLATIONS_BEFORE"; then
-    echo "checkpoints saved — restore via /aura-frog:plan undo" >&2
+    echo "checkpoints saved — restore via /archon-os:plan undo" >&2
     exit 4
 fi
 

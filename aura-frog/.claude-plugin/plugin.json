@@ -1,7 +1,7 @@
 {
   "name": "archon-os",
   "version": "4.0.0-alpha.1",
-  "description": "Archon — Planning-first LLM OS for software engineering. Hierarchical planning (T0-T4) survives session reset · forensic reasoning traces · L1+L2 conflict detection · self-healing safety gates · Archon Memory Manager · durable project-context snapshots · cross-tool porter (Copilot/Codex/Cursor) · CLI dashboard. 15 agents, 5-phase TDD, 73 rules (3-tier), 45 skills, 24 commands, 54 hooks, 6 MCP servers. ~87% markdown. Backward-compatible with /run.",
+  "description": "Archon \u2014 Planning-first LLM OS for software engineering. Hierarchical planning (T0-T4) survives session reset \u00b7 forensic reasoning traces \u00b7 L1+L2 conflict detection \u00b7 self-healing safety gates \u00b7 durable project-context snapshots \u00b7 cross-tool porter (Copilot/Codex/Cursor) \u00b7 CLI dashboard. 15 agents, 5-phase TDD, 73 rules (3-tier), 45 skills, 24 commands, 53 hooks, 6 MCP servers. ~87% markdown. Backward-compatible with /run.",
   "author": {
     "name": "Nguyen Thien Thanh",
     "email": "nguyenthienthanh.kiyoshi@gmail.com",
@@ -26,14 +26,41 @@
     "flutter"
   ],
   "mcp_rate_limits": {
-    "context7": { "max_calls_per_minute": 30, "max_calls_per_session": 200 },
-    "postgres": { "max_calls_per_minute": 10, "max_calls_per_session": 100 },
-    "redis":    { "max_calls_per_minute": 20, "max_calls_per_session": 200 },
-    "playwright": { "max_calls_per_minute": 30, "max_calls_per_session": 200 },
-    "vitest":   { "max_calls_per_minute": 60, "max_calls_per_session": 500 },
-    "figma":    { "max_calls_per_minute": 20, "max_calls_per_session": 100 },
-    "firebase": { "max_calls_per_minute": 30, "max_calls_per_session": 200 },
-    "slack":    { "max_calls_per_minute": 20, "max_calls_per_session": 100 },
-    "default":  { "max_calls_per_minute": 30, "max_calls_per_session": 200 }
+    "context7": {
+      "max_calls_per_minute": 30,
+      "max_calls_per_session": 200
+    },
+    "postgres": {
+      "max_calls_per_minute": 10,
+      "max_calls_per_session": 100
+    },
+    "redis": {
+      "max_calls_per_minute": 20,
+      "max_calls_per_session": 200
+    },
+    "playwright": {
+      "max_calls_per_minute": 30,
+      "max_calls_per_session": 200
+    },
+    "vitest": {
+      "max_calls_per_minute": 60,
+      "max_calls_per_session": 500
+    },
+    "figma": {
+      "max_calls_per_minute": 20,
+      "max_calls_per_session": 100
+    },
+    "firebase": {
+      "max_calls_per_minute": 30,
+      "max_calls_per_session": 200
+    },
+    "slack": {
+      "max_calls_per_minute": 20,
+      "max_calls_per_session": 100
+    },
+    "default": {
+      "max_calls_per_minute": 30,
+      "max_calls_per_session": 200
+    }
   }
 }

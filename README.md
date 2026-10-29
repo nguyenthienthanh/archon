@@ -18,7 +18,7 @@ A plugin for **[Claude Code](https://docs.anthropic.com/en/docs/claude-code)** t
 [![Portable](https://img.shields.io/badge/portable-~87%25_markdown-brightgreen)](docs/PORTABILITY.md)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-**Two entry points, same natural-language pattern.** `/run <task>` for task execution (5-phase TDD with agents). `/aura-frog:plan <verb> [args]` for project planning (T0–T4 hierarchical tree). Both accept natural language, route through skills, and share state via the run↔feature bridge. You never lose decisions; every Claude tool call leaves a trace; conflicts are caught before silent overwrites.
+**Two entry points, same natural-language pattern.** `/run <task>` for task execution (5-phase TDD with agents). `/archon-os:plan <verb> [args]` for project planning (T0–T4 hierarchical tree). Both accept natural language, route through skills, and share state via the run↔feature bridge. You never lose decisions; every Claude tool call leaves a trace; conflicts are caught before silent overwrites.
 
 **[Install in 30 seconds](#-install)** · **[v3.7.4 highlights](#-whats-new-in-v374)** · **[Full benefits guide →](docs/reference/BENEFITS.md)**
 
@@ -36,7 +36,7 @@ v3.7.4 is a **documentation cleanup release** — no new features, no runtime be
 | **Stale-syntax sweep** | 122 stale references across 12 files cleaned. Pre-v3.7 `docs/guides/USAGE_GUIDE.md` archived to `docs/marketing/USAGE_GUIDE.pre-v3.7.md`. Pre-v3.0 `docs/architecture/overview.md` archived to `docs/marketing/overview.pre-v3.0.md`. `docs/reference/TESTING_GUIDE.md` syntax refresh (31 hits) + frontmatter. |
 | **README slim** | 1294L → 706L (45% reduction). 8 Pillars deep-dives collapsed to per-pillar paragraphs linking to BENEFITS.md Part 9. Command Reference compressed to a single 8-row table. Optional-install `<details>` blocks moved to INSTALLATION.md. |
 | **AI vs human boundary** | All 56 SKILL.md files + 71 rule files now carry an *AI-consumed reference* banner pointing readers at `docs/architecture/HIERARCHICAL_PLANNING.md` / `docs/getting-started/`. `docs/README.md` declares **docs/ as canonical** with an 8-entry source-of-truth table. |
-| **Broader audit tool** | New `scripts/audit/stale-cmd-check.sh` for contributors — 3-pass detection (verb syntax · `/aura-frog:*` namespaced · backticked bare `/word`). Knows about Claude Code built-ins (`/clear`, `/compact`, `/plugin`, …). Idempotent. |
+| **Broader audit tool** | New `scripts/audit/stale-cmd-check.sh` for contributors — 3-pass detection (verb syntax · `/archon-os:*` namespaced · backticked bare `/word`). Knows about Claude Code built-ins (`/clear`, `/compact`, `/plugin`, …). Idempotent. |
 
 **Zero runtime change.** No new agents, no new skills, no hook changes. The pre-v3.7 verb syntax has been gone since v3.7.0 — these are exclusively doc fixes. CI now prevents the same drift from recurring.
 
@@ -58,9 +58,9 @@ v3.7.4 is a **documentation cleanup release** — no new features, no runtime be
 
 | System | What changed | Why it matters |
 |---|---|---|
-| Plan consolidation | `/aura-frog:plan <verb> [args]` — one command, 11 verbs. Routes via `plan-orchestrator` skill. | 10 legacy `/aura-frog:plan-*` aliases preserved (soft-deprecated v3.7.2 → warning v4.0 → removed v5.0). |
+| Plan consolidation | `/archon-os:plan <verb> [args]` — one command, 11 verbs. Routes via `plan-orchestrator` skill. | 10 legacy `/archon-os:plan-*` aliases preserved (soft-deprecated v3.7.2 → warning v4.0 → removed v5.0). |
 | 9 backing scripts | `scripts/plans/{expand,next,freeze,thaw,archive,conflicts,replan,promote,undo}-node.sh`. | Implementation that matched the docs. |
-| Bare-word activation | Prompts ≤5 words starting with a plan verb route to `/aura-frog:plan`. | Opt-out: `AF_BARE_WORD_ROUTER_DISABLED=true`. |
+| Bare-word activation | Prompts ≤5 words starting with a plan verb route to `/archon-os:plan`. | Opt-out: `AF_BARE_WORD_ROUTER_DISABLED=true`. |
 | /run escalation | At weight ≥ 3 without a plan, 3-option prompt: `plan` / `deep` / `details`. | Opt-out: `AF_ESCALATION_DISABLED=true`. |
 
 </details>
@@ -70,11 +70,11 @@ v3.7.4 is a **documentation cleanup release** — no new features, no runtime be
 
 | System | Opt-in via | What it solves |
 |---|---|---|
-| Hierarchical planning | `/aura-frog:plan` | Plans persist across sessions; T0-T4 schema; forensic decision audit at `.claude/plans/history.jsonl` |
-| Reasoning trace + grounding | `/aura-frog:trace` | Every `output_claim` is grounded in a prior `file_read`; hallucinations flagged with `grounded: false` |
-| Conflict detection (L1+L2) | `/aura-frog:plan conflicts check` | File + function overlap between parallel work; freeze cascade; auto-thaw on compatible blocker |
-| Memory tier + session reset | `/aura-frog:reset-session` | T2 done distills into `permanent_memory.md`; clean session restart preserves wisdom |
-| Self-healing + MCP security | `/aura-frog:heal` + `/aura-frog:mcp` | F2/F3 patch proposals (NEVER auto-apply); per-agent allowlists + audit + rate limits |
+| Hierarchical planning | `/archon-os:plan` | Plans persist across sessions; T0-T4 schema; forensic decision audit at `.claude/plans/history.jsonl` |
+| Reasoning trace + grounding | `/archon-os:trace` | Every `output_claim` is grounded in a prior `file_read`; hallucinations flagged with `grounded: false` |
+| Conflict detection (L1+L2) | `/archon-os:plan conflicts check` | File + function overlap between parallel work; freeze cascade; auto-thaw on compatible blocker |
+| Memory tier + session reset | `/archon-os:reset-session` | T2 done distills into `permanent_memory.md`; clean session restart preserves wisdom |
+| Self-healing + MCP security | `/archon-os:heal` + `/archon-os:mcp` | F2/F3 patch proposals (NEVER auto-apply); per-agent allowlists + audit + rate limits |
 
 </details>
 
@@ -185,7 +185,7 @@ flowchart LR
 
 ### 1 · Hierarchical Planning  ✅
 
-A plan tree (Mission → Initiative → Feature → Story → Task) that persists to `.claude/plans/` and survives session resets, `/compact`, and machine restarts. v3.7.3 ships uniform `{ID}_{kebab-slug}/` folder-per-node layout, run↔feature bidirectional linking (`run-state.json` ↔ feature's `## Runs` table), and the consolidated `/aura-frog:plan <verb>` surface (`expand` · `next` · `replan` · `promote` · `archive` · `undo` · `freeze` · `thaw` · `conflicts` · `status`). Bare-word activation when a plan is active: type `next`, `expand FEAT-A`. The `/run` escalation heuristic (v3.7.2) prompts plan-mode for multi-feature tasks (weight ≥ 3) — overrides: `task:` / `project:` prefixes, `AF_ESCALATION_DISABLED=true`. Full depth + DAG examples in [BENEFITS.md Part 9 §1](docs/reference/BENEFITS.md#part-9--the-8-pillars-of-the-planning-first-llm-os-v370) and [HIERARCHICAL_PLANNING.md](docs/architecture/HIERARCHICAL_PLANNING.md).
+A plan tree (Mission → Initiative → Feature → Story → Task) that persists to `.claude/plans/` and survives session resets, `/compact`, and machine restarts. v3.7.3 ships uniform `{ID}_{kebab-slug}/` folder-per-node layout, run↔feature bidirectional linking (`run-state.json` ↔ feature's `## Runs` table), and the consolidated `/archon-os:plan <verb>` surface (`expand` · `next` · `replan` · `promote` · `archive` · `undo` · `freeze` · `thaw` · `conflicts` · `status`). Bare-word activation when a plan is active: type `next`, `expand FEAT-A`. The `/run` escalation heuristic (v3.7.2) prompts plan-mode for multi-feature tasks (weight ≥ 3) — overrides: `task:` / `project:` prefixes, `AF_ESCALATION_DISABLED=true`. Full depth + DAG examples in [BENEFITS.md Part 9 §1](docs/reference/BENEFITS.md#part-9--the-8-pillars-of-the-planning-first-llm-os-v370) and [HIERARCHICAL_PLANNING.md](docs/architecture/HIERARCHICAL_PLANNING.md).
 
 ### 2 · Reasoning Trace Audit  ✅
 
@@ -209,7 +209,7 @@ When `failure-classifier` flags a task as F2 (local-logic) or F3 (local-design),
 
 ### 7 · MCP Security Layer  ✅
 
-Per-agent allowlist for MCP calls + audit log + rate limits + input sanitization. The `mcp-call-gate` hook authorises every MCP invocation against the agent's declared scope; blocked + rate-limited calls land in `.aura/security/mcp-audit.jsonl`. Post-incident forensics via `/aura-frog:mcp audit`. Tokens never leave the process. Disable audit-only with `AF_MCP_AUDIT_DISABLED=true`. Full threat model in [BENEFITS.md Part 9 §7](docs/reference/BENEFITS.md#part-9--the-8-pillars-of-the-planning-first-llm-os-v370) and [SECURITY_AND_TRUST.md](docs/operations/SECURITY_AND_TRUST.md).
+Per-agent allowlist for MCP calls + audit log + rate limits + input sanitization. The `mcp-call-gate` hook authorises every MCP invocation against the agent's declared scope; blocked + rate-limited calls land in `.aura/security/mcp-audit.jsonl`. Post-incident forensics via `/archon-os:mcp audit`. Tokens never leave the process. Disable audit-only with `AF_MCP_AUDIT_DISABLED=true`. Full threat model in [BENEFITS.md Part 9 §7](docs/reference/BENEFITS.md#part-9--the-8-pillars-of-the-planning-first-llm-os-v370) and [SECURITY_AND_TRUST.md](docs/operations/SECURITY_AND_TRUST.md).
 
 ### 8 · Phase-Role Binding  ✅
 
@@ -220,7 +220,7 @@ The Phase 4 reviewer **MUST** differ from the Phase 3 builder. Generator ≠ Eva
 
 | Pillar | Ships now (v3.7.0 + v3.7.2/v3.7.3 polish) | Queued for v3.8+ |
 |---|---|---|
-| 1 — Planning | T0-T4 tree at `.claude/plans/`, **uniform folder-per-node layout** (v3.7.3), **consolidated `/aura-frog:plan <verb>`** (v3.7.2), 12 backing scripts, 5 agents, bare-word router, `link-run.sh` for run↔feature bidirectional linking | — |
+| 1 — Planning | T0-T4 tree at `.claude/plans/`, **uniform folder-per-node layout** (v3.7.3), **consolidated `/archon-os:plan <verb>`** (v3.7.2), 12 backing scripts, 5 agents, bare-word router, `link-run.sh` for run↔feature bidirectional linking | — |
 | 2 — Reasoning Trace | tracer hook (writes per-task `trace.jsonl` inside the task folder, v3.7.3), grounding-discipline, `/trace` queries | helper CLI scripts (deferred per [issue #6](https://github.com/nguyenthienthanh/aura-frog/issues/6)) |
 | 3 — Session Reset | epic-summarizer, permanent-memory-loader (`.claude/memory/`), `/reset-session` | — |
 | 4 — Pre-flight | 7 Tier-1 bash linters, hook, bypass with 3-warn | Tier 2 OPA + 5 `.rego` policies |
@@ -316,7 +316,7 @@ Expected output:
                        master-planner, feature-architect, story-planner, replanner, epic-summarizer, conflict-arbiter)
   Skills:   45 available (10 auto-invoke, 35 on-demand)
   Rules:    73 loaded (22 core + 20 agent + 31 workflow)
-  Hooks:    54 registered
+  Hooks:    53 registered
   MCP:      context7, playwright, vitest, firebase, figma, slack
 ```
 
@@ -447,7 +447,7 @@ Details: `rules/core/execution-rules.md`, `skills/agent-detector/SKILL.md`, `ski
 | **Skills** | 45 | 10 auto-invoke on context, 33 on-demand (incl. `design-vision-loop`) |
 | **Commands** | 24 | Core: `/run`, `/check`, `/design`, `/project`, `/af`, `/help` + `/aura-frog:*` hierarchical-planning suite (14 user-facing + 10 legacy `/aura-frog:plan-<verb>` alias stubs) |
 | **Rules** | 73 | 3-tier loading (22 core + 20 agent + 30 workflow) — only what's needed |
-| **Hooks** | 54 | Conditional — skip processing for non-code files (v3.7.2 adds `bare-word-router.cjs`) |
+| **Hooks** | 53 | Conditional — skip processing for non-code files (v3.7.2 adds `bare-word-router.cjs`) |
 | **Backing scripts** | 12 | Hierarchical-planning operations (v3.7.2): `new-plan`, `validate-plan-tree`, `render-plan-tree` + 9 new (`expand`, `next`, `freeze`, `thaw`, `archive`, `conflicts`, `replan`, `promote`, `undo`) + `resolve-node` + `_lib` |
 | **MCP Servers** | 6 | All enabled — every `.mcp.json` entry starts, so opt-in servers are unbundled ([snippets](docs/operations/MCP_GUIDE.md#optional-servers-not-bundled)) |
 | **Tests** | 317 | Coverage gate at 25% statements floor; +102 tests in v3.7.2 (38 plan scripts + 64 bare-word router) |
@@ -463,17 +463,17 @@ The top 8 commands cover every everyday workflow. Full reference + every subcomm
 | Command | What it does | Subcommands / flags |
 |---|---|---|
 | **`/run <task>`** | Universal entry. Auto-detects intent (feature / bugfix / refactor / test / review / deploy / quality / security) and picks the flow. | `task:` / `project:` / `feature: FEAT-X` / `fasttrack:` / `resume <id-or-feature>` / `status` / `handoff` / `rollback` / `progress` |
-| **`/aura-frog:plan <verb>`** | Hierarchical planning — 11 verbs in one command. Bare-word activation when a plan is active. | `expand` · `next` · `replan` · `promote` · `archive` · `undo` · `freeze` · `thaw` · `conflicts` · `status` · (no-arg interview) |
+| **`/archon-os:plan <verb>`** | Hierarchical planning — 11 verbs in one command. Bare-word activation when a plan is active. | `expand` · `next` · `replan` · `promote` · `archive` · `undo` · `freeze` · `thaw` · `conflicts` · `status` · (no-arg interview) |
 | **`/check`** | Health + quality checks across the working tree. | `security` · `perf` · `complexity` · `debt` · `coverage` · `deps` · (no-arg = all) |
 | **`/design`** | Design artifacts from a description. | `api` · `db` · `doc` (ADR / runbook) |
 | **`/project`** | Project context lifecycle. | `init` · `status` · `refresh` · `regen` · `env` · `sync` |
 | **`/af`** | Plugin management + learning system. | `status` · `agents` · `metrics` · `learn {status,analyze,apply,feedback}` · `setup` · `mcp` · `prompts` · `skill` |
-| **`/aura-frog:heal`** / **`:mcp`** / **`:dashboard`** / **`:trace`** / **`:preflight`** / **`:reset-session`** / **`:extend`** | Safety + ops + observability + project-level extension authoring. | See [commands/README.md](aura-frog/commands/README.md) |
+| **`/archon-os:heal`** / **`:mcp`** / **`:dashboard`** / **`:trace`** / **`:preflight`** / **`:reset-session`** / **`:extend`** | Safety + ops + observability + project-level extension authoring. | See [commands/README.md](aura-frog/commands/README.md) |
 | **`/help`** | Contextual help. | `/help <command>` · `/help agents` · `/help hooks` |
 
 **Context-aware bare verbs** when a `/run` is active: `approve` · `reject <reason>` · `modify <changes>` · `handoff` · `status` · `progress` · `rollback` · `stop`. No slash prefix needed.
 
-**Legacy `/aura-frog:plan-<verb>` alias forms** still work but are soft-deprecated (warning v4.0 → removed v5.0).
+**Legacy `/archon-os:plan-<verb>` alias forms** still work but are soft-deprecated (warning v4.0 → removed v5.0).
 
 ---
 
@@ -726,7 +726,7 @@ TOON = Compression       Approval Gates = Interrupts    Handoffs = IPC
 aura-frog/
 ├── agents/         15 processes (auto-dispatched per task)
 ├── skills/         43 skills (10 auto-invoke + 33 on-demand)
-├── commands/       24 commands (core /run /check /design /project /af /help + /aura-frog:* hierarchical-planning suite)
+├── commands/       24 commands (core /run /check /design /project /af /help + /archon-os:* hierarchical-planning suite)
 ├── rules/          72 rules (22 core + 20 agent + 30 workflow)
 ├── hooks/          50 lifecycle hooks (conditional execution)
 ├── scripts/        utility scripts (CI, plans, preflight, workflow, security, …)

@@ -5,7 +5,7 @@
 #   A. Pre-v3.7 verb syntax (workflow:start, agent:list, bugfix:quick, learn:*,
 #      project:reload-env, hooks/pre-phase.md, hooks/post-phase.md). Definitive
 #      removals — flag every occurrence.
-#   B. /aura-frog:<word> references — verify <word> exists at aura-frog/commands/<word>.md
+#   B. /archon-os:<word> references — verify <word> exists at aura-frog/commands/<word>.md
 #      (these are namespaced slash commands; unambiguous).
 #   C. Bare slash commands in markdown inline-code (backtick-quoted /<word>) —
 #      verify <word> exists. Restricting to backtick context avoids ~99% of path
@@ -111,7 +111,7 @@ for pattern_pair in "${BLOCKED_PATTERNS[@]}"; do
   done < <(grep -rnE "$pattern" docs/ 2>/dev/null || true)
 done
 
-# ---- Pass B: /aura-frog:<word> references ----
+# ---- Pass B: /archon-os:<word> references ----
 # Namespaced — unambiguous, always a command invocation.
 while IFS= read -r f; do
   is_exempt "$f" && continue
@@ -119,14 +119,14 @@ while IFS= read -r f; do
     [ -z "$lineno" ] && continue
     while read -r match; do
       [ -z "$match" ] && continue
-      cmd="${match#/aura-frog:}"
+      cmd="${match#/archon-os:}"
       cmd="${cmd%%[^a-z0-9-]*}"  # truncate at first non-alphanum-dash
       [ -z "$cmd" ] && continue
       if [ -z "${CANONICAL[$cmd]:-}" ]; then
-        emit "$f" "$lineno" "/aura-frog:$cmd" "command not in aura-frog/commands/"
+        emit "$f" "$lineno" "/archon-os:$cmd" "command not in aura-frog/commands/"
       fi
-    done < <(printf '%s\n' "$content" | grep -oE '/aura-frog:[a-z][a-z0-9-]*' || true)
-  done < <(grep -nE '/aura-frog:[a-z]' "$f" 2>/dev/null || true)
+    done < <(printf '%s\n' "$content" | grep -oE '/archon-os:[a-z][a-z0-9-]*' || true)
+  done < <(grep -nE '/archon-os:[a-z]' "$f" 2>/dev/null || true)
 done < <(find docs -name '*.md' -type f)
 
 # ---- Pass C: bare /<word> in markdown inline-code ----

@@ -1,6 +1,6 @@
 ---
 name: preflight-validator
-description: "On-demand wrapper over scripts/preflight/run-all.sh. Runs Tier 1 bash linters against a file, command, or arbitrary content. Returns 0 pass / 1 warn / 2 fail. Used by /aura-frog:preflight check and contributors authoring custom hooks."
+description: "On-demand wrapper over scripts/preflight/run-all.sh. Runs Tier 1 bash linters against a file, command, or arbitrary content. Returns 0 pass / 1 warn / 2 fail. Used by /archon-os:preflight check and contributors authoring custom hooks."
 when_to_use: "Before committing a markdown file, before piping risky shell content, when CI fails on pre-flight"
 allowed-tools: Bash
 effort: low
@@ -52,7 +52,7 @@ exit_codes[3]{code,meaning,downstream_action}:
 ## Invocation patterns
 
 - **Auto** — hook on PreToolUse fires this for every tool call
-- **Manual** — `/aura-frog:preflight check` runs run-all.sh against current tool context
+- **Manual** — `/archon-os:preflight check` runs run-all.sh against current tool context
 - **CI** — `bash aura-frog/scripts/preflight/run-all.sh --files <files>` for batch validation
 - **Contributor** — invoke individual scripts directly when authoring a new hook
 
@@ -68,6 +68,6 @@ exit_codes[3]{code,meaning,downstream_action}:
 - **Spec:** §9.7, §20 (pre-flight)
 - **Script:** `aura-frog/scripts/preflight/run-all.sh` — implementation
 - **Hook:** `hooks/pre-flight-validate.cjs` — primary auto-trigger
-- **Command:** `/aura-frog:preflight` — user-facing entry
+- **Command:** `/archon-os:preflight` — user-facing entry
 - **Rule:** `rules/workflow/preflight-policies.md` — when, what, bypass policy
 - **Future (rc.1):** `aura-frog/scripts/preflight/install-opa.sh` for Tier 2 OPA policies (optional)

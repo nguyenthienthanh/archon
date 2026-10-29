@@ -99,7 +99,7 @@ fi
 NEW_REV=$(bump_revision "$TARGET_FILE")
 
 if ! require_no_regression "$PLANS_DIR" "$VIOLATIONS_BEFORE"; then
-    echo "restore via /aura-frog:plan undo" >&2
+    echo "restore via /archon-os:plan undo" >&2
     exit 4
 fi
 

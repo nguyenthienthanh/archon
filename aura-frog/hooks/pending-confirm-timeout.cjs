@@ -84,7 +84,7 @@ function formatWarning(stale, { timeoutHours, maxShown }) {
   return (
     `[pending-confirm-timeout] ${sorted.length} T4 task(s) idle > ${timeoutHours}h:\n` +
     lines.join('\n') + '\n' +
-    '  Resolve via /aura-frog:plan-status, /aura-frog:plan-thaw, or /aura-frog:plan-replan.\n'
+    '  Resolve via /archon-os:plan-status, /archon-os:plan-thaw, or /archon-os:plan-replan.\n'
   );
 }
 

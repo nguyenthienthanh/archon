@@ -156,7 +156,7 @@ resources[8]{name,location}:
   Commands (24),commands/
   Rules (73),rules/{core|agent|workflow}/
   Skills (45),skills/
-  Hooks (54),hooks/
+  Hooks (53),hooks/
   MCP (6),.mcp.json
   AI References,docs/
   Human Docs,docs/README.md

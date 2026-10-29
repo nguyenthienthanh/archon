@@ -102,7 +102,7 @@ These live in `aura-frog/` and are optimized for Claude to read:
 
 - [Agents](../aura-frog/agents/README.md) — 15 agents with capabilities
 - [Skills](../aura-frog/skills/README.md) — 60 skills (9 auto-invoke + 51 on-demand)
-- [Commands](../aura-frog/commands/README.md) — 24 commands (core `/run`, `/check`, `/design`, `/project`, `/af`, `/help` + `/aura-frog:*` hierarchical-planning suite)
+- [Commands](../aura-frog/commands/README.md) — 24 commands (core `/run`, `/check`, `/design`, `/project`, `/af`, `/help` + `/archon-os:*` hierarchical-planning suite)
 - [Rules](../aura-frog/rules/README.md) — 72 rules (3-tier loading: 22 core / 20 agent / 30 workflow)
 - [Hooks](../aura-frog/hooks/README.md) — 51 lifecycle hooks
 - [Templates](../aura-frog/templates/README.md) — 20 document templates (incl. phase deliverable skeletons)

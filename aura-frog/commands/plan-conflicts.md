@@ -1,18 +1,18 @@
-# /aura-frog:plan-conflicts
+# /archon-os:plan-conflicts
 
-**Inspect, resolve, audit plan-tree conflicts.** Alias for `/aura-frog:plan conflicts <sub>` (v3.7.2+).
+**Inspect, resolve, audit plan-tree conflicts.** Alias for `/archon-os:plan conflicts <sub>` (v3.7.2+).
 
 ---
 
 ## Usage
 
 ```
-/aura-frog:plan-conflicts list                  # all (open + resolved)
-/aura-frog:plan-conflicts list --open
-/aura-frog:plan-conflicts show <CONFLICT-ID>
-/aura-frog:plan-conflicts resolve <CONFLICT-ID> <choice>
-/aura-frog:plan-conflicts history
-/aura-frog:plan-conflicts check                 # run L1+L2 detector against active.task
+/archon-os:plan-conflicts list                  # all (open + resolved)
+/archon-os:plan-conflicts list --open
+/archon-os:plan-conflicts show <CONFLICT-ID>
+/archon-os:plan-conflicts resolve <CONFLICT-ID> <choice>
+/archon-os:plan-conflicts history
+/archon-os:plan-conflicts check                 # run L1+L2 detector against active.task
 ```
 
 `<choice>`: `accept-proposed | accept-blocker | sequential | freeze-both | escalate`.

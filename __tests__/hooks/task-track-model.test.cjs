@@ -109,8 +109,8 @@ describe('task-track-model — pure helpers', () => {
   });
 
   describe('normalizeSubagentType', () => {
-    it('strips plugin prefix "aura-frog:"', () => {
-      expect(normalizeSubagentType('aura-frog:code-reviewer')).toBe('code-reviewer');
+    it('strips plugin prefix "archon-os:"', () => {
+      expect(normalizeSubagentType('archon-os:code-reviewer')).toBe('code-reviewer');
     });
     it('strips arbitrary plugin prefix', () => {
       expect(normalizeSubagentType('myplugin:agent-x')).toBe('agent-x');
@@ -157,7 +157,7 @@ describe('task-track-model — pure helpers', () => {
   describe('buildStackEntry', () => {
     it('builds a complete entry with mapped display', () => {
       const e = buildStackEntry({
-        subagentType: 'aura-frog:code-reviewer',
+        subagentType: 'archon-os:code-reviewer',
         agentFile: '/path/aura-frog/agents/code-reviewer.md',
         model: 'claude-sonnet-4-6',
         sessionId: 'sess-123',
@@ -263,7 +263,7 @@ describe('task-track-model — processPreToolUse end-to-end', () => {
     const result = processPreToolUse(
       {
         tool_name: 'Task',
-        tool_input: { subagent_type: 'aura-frog:code-reviewer', prompt: 'x' },
+        tool_input: { subagent_type: 'archon-os:code-reviewer', prompt: 'x' },
         session_id: 'sess-abc',
       },
       { projectRoot: tmpRoot, stackFile }

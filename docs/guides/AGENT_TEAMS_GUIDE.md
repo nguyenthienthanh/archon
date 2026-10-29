@@ -114,7 +114,7 @@ TaskCreate(
 ### Step 3: Spawn Teammates in Parallel (all in one message)
 
 ```
-Task(team_name="auth-system", name="architect", subagent_type="aura-frog:architect",
+Task(team_name="auth-system", name="architect", subagent_type="archon-os:architect",
   prompt="You are architect on team auth-system. Phase: 3-Build GREEN.
     1. Read team config: ~/.claude/teams/auth-system/config.json
     2. TaskList → claim tasks matching: API, backend, auth, service
@@ -126,12 +126,12 @@ Task(team_name="auth-system", name="architect", subagent_type="aura-frog:archite
     Files you own: src/api/, src/services/, migrations/
     CONTEXT: [project conventions, tech stack, existing patterns]")
 
-Task(team_name="auth-system", name="frontend", subagent_type="aura-frog:frontend",
+Task(team_name="auth-system", name="frontend", subagent_type="archon-os:frontend",
   prompt="You are frontend on team auth-system. Phase: 3-Build GREEN.
     [same pattern — claim UI tasks, own src/components/]
     CONTEXT: [design system, component patterns]")
 
-Task(team_name="auth-system", name="tester", subagent_type="aura-frog:tester",
+Task(team_name="auth-system", name="tester", subagent_type="archon-os:tester",
   prompt="You are tester on team auth-system. Phase: 3-Build GREEN.
     [same pattern — claim test tasks, own tests/]
     CONTEXT: [testing framework, coverage requirements]")

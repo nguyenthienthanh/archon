@@ -1,15 +1,15 @@
-# /aura-frog:plan-expand &lt;id&gt;
+# /archon-os:plan-expand &lt;id&gt;
 
-**Decompose a plan node one tier down** (T1→T2, T2→T3, T3→T4). Alias for `/aura-frog:plan expand <id>` (v3.7.2+).
+**Decompose a plan node one tier down** (T1→T2, T2→T3, T3→T4). Alias for `/archon-os:plan expand <id>` (v3.7.2+).
 
 ---
 
 ## Usage
 
 ```
-/aura-frog:plan-expand FEAT-A             # decompose Feature into Stories
-/aura-frog:plan-expand STORY-0042         # decompose Story into Tasks
-/aura-frog:plan-expand INIT-001           # decompose Initiative into Features
+/archon-os:plan-expand FEAT-A             # decompose Feature into Stories
+/archon-os:plan-expand STORY-0042         # decompose Story into Tasks
+/archon-os:plan-expand INIT-001           # decompose Initiative into Features
 ```
 
 ## Delegation
@@ -24,6 +24,6 @@ Then dispatch the appropriate agent (`feature-architect` for T1→T2, `story-pla
 
 ## Why an alias?
 
-Backwards-compatible from pre-v3.7.2 — old muscle memory still works. New users should prefer `/aura-frog:plan expand <id>` (consolidated form).
+Backwards-compatible from pre-v3.7.2 — old muscle memory still works. New users should prefer `/archon-os:plan expand <id>` (consolidated form).
 
 **Deprecation timeline:** soft-deprecated v3.7.2, warning v4.0, removed v5.0.

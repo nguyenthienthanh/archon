@@ -13,7 +13,7 @@
  *   - When status is `done` and no feature_done_detected / epic_summarized
  *     event exists yet for this feature in history.jsonl:
  *     - Append history.jsonl event: feature_done_detected (fired-once guard)
- *     - Emit stderr suggestion: "T2 done — invoke /aura-frog:reset-session to distill Epic"
+ *     - Emit stderr suggestion: "T2 done — invoke /archon-os:reset-session to distill Epic"
  *
  * Detection method:
  *   - Frontmatter status of the feature's node file (nothing in the engine
@@ -117,7 +117,7 @@ function main() {
 
   process.stderr.write(
     `[feature-done] ${featureId} reached status: done\n` +
-    '  Run /aura-frog:reset-session to distill into permanent_memory and start fresh.\n',
+    '  Run /archon-os:reset-session to distill into permanent_memory and start fresh.\n',
   );
 }
 

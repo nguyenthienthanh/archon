@@ -1,16 +1,16 @@
-# /aura-frog:plan-thaw
+# /archon-os:plan-thaw
 
-**Reverse a freeze.** Alias for `/aura-frog:plan thaw <id>` (v3.7.2+).
+**Reverse a freeze.** Alias for `/archon-os:plan thaw <id>` (v3.7.2+).
 
 ---
 
 ## Usage
 
 ```
-/aura-frog:plan-thaw <NODE_ID>                       # thaw + cascade descendants
-/aura-frog:plan-thaw <NODE_ID> --partial             # node only; descendants stay frozen
-/aura-frog:plan-thaw <NODE_ID> --discard             # set status: discarded, not planned
-/aura-frog:plan-thaw <NODE_ID> --grant-replan-budget 1
+/archon-os:plan-thaw <NODE_ID>                       # thaw + cascade descendants
+/archon-os:plan-thaw <NODE_ID> --partial             # node only; descendants stay frozen
+/archon-os:plan-thaw <NODE_ID> --discard             # set status: discarded, not planned
+/archon-os:plan-thaw <NODE_ID> --grant-replan-budget 1
 ```
 
 ## Delegation
@@ -32,7 +32,7 @@ The script:
 
 Compatibility check (git diff vs blocker's recorded artifacts per Tech Spec §21.6) is best-effort; full integration with conflict-arbiter ships in a later milestone.
 
-Companion: `/aura-frog:plan freeze`, `/aura-frog:plan replan`.
+Companion: `/archon-os:plan freeze`, `/archon-os:plan replan`.
 
 Full protocol in `commands/plan.md`.
 
