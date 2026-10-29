@@ -6,7 +6,13 @@ set -e
 BASE_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
 OUTPUT="$BASE_DIR/stats.json"
 
-VERSION=$(grep -oE '"version":\s*"[^"]+"' "$BASE_DIR/.claude-plugin/plugin.json" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
+# Carry the FULL version, prerelease suffix included. The old pattern stopped at
+# [0-9]+\.[0-9]+\.[0-9]+, so stats.json reported "4.0.0" while the plugin was
+# "4.0.0-alpha.2" — and every consumer that trusts stats.json then presents a
+# prerelease as a finished version. The showcase site was labelling it
+# "v4.0.0 Stable".
+VERSION=$(grep -oE '"version":[[:space:]]*"[^"]+"' "$BASE_DIR/.claude-plugin/plugin.json" \
+  | head -1 | sed -E 's/.*"version":[[:space:]]*"([^"]+)".*/\1/')
 AGENTS=$(find "$BASE_DIR/agents" -maxdepth 1 -name '*.md' ! -name 'README.md' | wc -l | tr -d ' ')
 SKILLS=$(find "$BASE_DIR/skills" -name 'SKILL.md' | wc -l | tr -d ' ')
 RULES_CORE=$(find "$BASE_DIR/rules/core" -name '*.md' | wc -l | tr -d ' ')
