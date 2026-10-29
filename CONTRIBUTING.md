@@ -93,7 +93,7 @@ aura-frog/                           # Repository root
 │   ├── CLAUDE.md                    # Core AI instructions
 │   ├── .mcp.json                    # Bundled MCP servers config (6 servers, all enabled)
 │   ├── agents/                      # 15 specialized agents
-│   ├── commands/                    # 24 commands (core /run /check /design /project /af /help + /aura-frog:* hierarchical-planning suite)
+│   ├── commands/                    # 24 commands (core /run /check /design /project /af /help + /archon-os:* hierarchical-planning suite)
 │   ├── skills/                      # 60 skills (9 auto-invoke + 51 reference)
 │   ├── rules/                       # 72 quality rules (22 core + 20 agent + 30 workflow)
 │   ├── hooks/                       # 51 lifecycle hooks (.cjs scripts)

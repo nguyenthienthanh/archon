@@ -1,15 +1,15 @@
-# /aura-frog:plan-freeze
+# /archon-os:plan-freeze
 
-**Manually freeze a plan node, cascading to descendants.** Alias for `/aura-frog:plan freeze <id>` (v3.7.2+).
+**Manually freeze a plan node, cascading to descendants.** Alias for `/archon-os:plan freeze <id>` (v3.7.2+).
 
 ---
 
 ## Usage
 
 ```
-/aura-frog:plan-freeze <NODE_ID> --reason "<text>"
-/aura-frog:plan-freeze <NODE_ID> --conflict <CONFLICT-ID>
-/aura-frog:plan-freeze --active --reason "..."
+/archon-os:plan-freeze <NODE_ID> --reason "<text>"
+/archon-os:plan-freeze <NODE_ID> --conflict <CONFLICT-ID>
+/archon-os:plan-freeze --active --reason "..."
 ```
 
 ## Delegation
@@ -28,7 +28,7 @@ The script:
 
 `--active` resolves to `active.task` via `resolve-node.sh --active`.
 
-Companion: `/aura-frog:plan thaw` (reverse), `/aura-frog:plan conflicts list` (find blocker IDs).
+Companion: `/archon-os:plan thaw` (reverse), `/archon-os:plan conflicts list` (find blocker IDs).
 
 Full protocol in `commands/plan.md`.
 

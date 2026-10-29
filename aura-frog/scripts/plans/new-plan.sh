@@ -202,18 +202,18 @@ If a JIRA / Linear / GitHub ticket ID is attached to a feature, use it as the pr
 2. Check the frontmatter: `id`, `tier`, `parent`, `status`, `intent`, `children: [...]`, `revision`.
 3. For feature folders: if `## Runs` section is non-empty, scroll there to see `/run` invocations and their run-state.json paths.
 4. Per-node aux dirs:
-   - `checkpoints/` — pre-mutation snapshots (each file is `{ISO8601}.json`). Drives `/aura-frog:plan undo`.
-   - `trace.jsonl` (task folders only) — append-only Claude tool-call events. Source of `/aura-frog:trace`.
+   - `checkpoints/` — pre-mutation snapshots (each file is `{ISO8601}.json`). Drives `/archon-os:plan undo`.
+   - `trace.jsonl` (task folders only) — append-only Claude tool-call events. Source of `/archon-os:trace`.
 5. Per-feature deliverables (`REQUIREMENTS.md`, `DESIGN.md`, `TEST_PLAN.md`) are scaffolded by `/run` Phase 1 when a Standard/Deep run anchors to the feature.
 6. Walk into child folders for decomposition (`stories/`, `tasks/`).
 
 ## Commands
 
 ```bash
-/aura-frog:plan                          # bootstrap T0/T1/T2 (interview)
-/aura-frog:plan expand FEAT-A            # decompose one tier down
-/aura-frog:plan next                     # claim next ready T4
-/aura-frog:plan status                   # render tree
+/archon-os:plan                          # bootstrap T0/T1/T2 (interview)
+/archon-os:plan expand FEAT-A            # decompose one tier down
+/archon-os:plan next                     # claim next ready T4
+/archon-os:plan status                   # render tree
 /run feature: FEAT-A "task description"  # anchor a new run to this feature
 /run resume FEAT-A                       # list + resume runs under this feature
 ```
@@ -249,4 +249,4 @@ echo ""
 echo "Next steps:"
 echo "  1. Read ${PLANS_DIR}/INDEX.md to understand the layout"
 echo "  2. Edit ${PLANS_DIR}/mission/mission.md to describe your project"
-echo "  3. Run /aura-frog:plan to interview-bootstrap T1 (Initiative) and T2 (Feature)"
+echo "  3. Run /archon-os:plan to interview-bootstrap T1 (Initiative) and T2 (Feature)"

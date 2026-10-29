@@ -17,7 +17,7 @@ The prefix is **derived, not hardcoded**. Read it from `<plugin>/.claude-plugin/
 
 ```
 ✓ subagent_type: ${PLUGIN_PREFIX}:architect       (resolved at dispatch)
-✗ subagent_type: aura-frog:architect              (hardcoded — breaks on rename/fork)
+✗ subagent_type: archon-os:architect              (hardcoded — breaks on rename/fork)
 ✗ subagent_type: architect                        (errors: "agent type 'architect' not found")
 ```
 
@@ -27,7 +27,7 @@ Built-in Claude Code agents (`general-purpose`, `Explore`, `Plan`, `statusline-s
 
 ## Why derive instead of hardcode
 
-A plugin's name lives in exactly one place: `<plugin>/.claude-plugin/plugin.json`. If a fork renames it (`my-fork`, `aura-frog-internal`, etc.), every hardcoded `aura-frog:architect` reference breaks. By looking up the prefix at runtime, the same skills/rules ship across forks unchanged.
+A plugin's name lives in exactly one place: `<plugin>/.claude-plugin/plugin.json`. If a fork renames it (`my-fork`, `aura-frog-internal`, etc.), every hardcoded `archon-os:architect` reference breaks. By looking up the prefix at runtime, the same skills/rules ship across forks unchanged.
 
 Skills, rules, and dispatch tables reference agents by **bare ID** (`architect`, `tester`, `feature-architect`). The orchestrator that actually invokes the Agent tool is the only place the prefix gets applied — and it gets the prefix dynamically.
 
@@ -54,7 +54,7 @@ prefix=$(jq -r '.name' "${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json")
 
 `hooks/session-start.cjs` emits the prefix in its banner at session start. Look for a line like:
 ```
-🐸 Aura Frog v3.7.0-beta.1 │ plugin-prefix: aura-frog
+🏛 Archon OS v4.0.0-alpha.1 │ plugin-prefix: archon-os
 ```
 The banner is the cheapest path — read once at session start, no per-call lookup.
 
@@ -82,7 +82,7 @@ plugin_agent_ids[14]{id,role}:
   epic-summarizer,T2 done → permanent_memory
 ```
 
-Reference patterns under `agents/reference/` use the form `<prefix>:reference:<name>` (e.g., `aura-frog:reference:architect-patterns` when the prefix resolves to `aura-frog`).
+Reference patterns under `agents/reference/` use the form `<prefix>:reference:<name>` (e.g., `archon-os:reference:architect-patterns` when the prefix resolves to `archon-os`).
 
 Built-in agents (no prefix, ever):
 
@@ -108,7 +108,7 @@ builtin_agents[4]{id,role}:
 
 ## Anti-patterns
 
-- **Hardcoding the literal string `aura-frog:` in skills/rules/docs** — breaks on rename or fork; always reference the prefix abstractly or via the helper
+- **Hardcoding the literal string `archon-os:` in skills/rules/docs** — breaks on rename or fork; always reference the prefix abstractly or via the helper
 - **Using a different prefix style** — if a fork is named `my-fork`, the prefix is `my-fork:`, not `myfork:` or `mf:`. Whatever's in `plugin.json#name`, exactly
 - **Mixed prefixing** — once you adopt the runtime prefix, use it for ALL plugin agent invocations in the same dispatch
 - **Stripping the prefix when documenting** — "the architect agent" is fine in prose; the literal `subagent_type:` value MUST carry the prefix at dispatch

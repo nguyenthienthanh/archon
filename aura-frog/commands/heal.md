@@ -1,4 +1,4 @@
-# /aura-frog:heal
+# /archon-os:heal
 
 **Self-healing orchestration.** Diagnose F2/F3 failures, view proposals, accept/decline, disable.
 
@@ -7,12 +7,12 @@
 ## Usage
 
 ```
-/aura-frog:heal diagnose <TASK_ID>          # run self-healing-orchestrator on the failed task; emit proposal
-/aura-frog:heal status                       # session counter, budget, last proposal, disabled state
-/aura-frog:heal accept <HEAL-ID>             # apply a proposal as a new T4 task with its own approval flow
-/aura-frog:heal decline <HEAL-ID> [reason]   # reject; counts toward session cap
-/aura-frog:heal disable                      # disable for this session (.claude/logs/.self-heal-disabled flag)
-/aura-frog:heal enable                       # re-enable for this session
+/archon-os:heal diagnose <TASK_ID>          # run self-healing-orchestrator on the failed task; emit proposal
+/archon-os:heal status                       # session counter, budget, last proposal, disabled state
+/archon-os:heal accept <HEAL-ID>             # apply a proposal as a new T4 task with its own approval flow
+/archon-os:heal decline <HEAL-ID> [reason]   # reject; counts toward session cap
+/archon-os:heal disable                      # disable for this session (.claude/logs/.self-heal-disabled flag)
+/archon-os:heal enable                       # re-enable for this session
 ```
 
 ## Protocol — `diagnose`
@@ -24,7 +24,7 @@
 5. Check `replan_budget_remaining` on the task; refuse if 0
 6. Invoke `self-healing-orchestrator` skill — it produces a proposal artifact at `.claude/plans/proposals/HEAL-<TASK_ID>-<NNN>.yaml`
 7. If confidence < 0.7: surface raw findings only ("self-heal couldn't reach a confident proposal — escalating findings"); do NOT create a proposal
-8. If confidence ≥ 0.7: surface diff + reasoning + risks; prompt user to `/aura-frog:heal accept` or `/aura-frog:heal decline`
+8. If confidence ≥ 0.7: surface diff + reasoning + risks; prompt user to `/archon-os:heal accept` or `/archon-os:heal decline`
 9. Append history.jsonl event: `event: self_heal_proposed`
 
 ## Protocol — `accept <HEAL-ID>`
@@ -70,7 +70,7 @@ If `disabled: true`: show source (env / session flag), and how to re-enable.
 
 ## Disable cascade
 
-When disabled, all `/aura-frog:heal diagnose` calls refuse. Existing proposals remain accessible via `/aura-frog:heal status` for forensic review but cannot be `accept`ed without re-enable.
+When disabled, all `/archon-os:heal diagnose` calls refuse. Existing proposals remain accessible via `/archon-os:heal status` for forensic review but cannot be `accept`ed without re-enable.
 
 ## Tie-Ins
 

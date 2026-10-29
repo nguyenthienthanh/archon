@@ -58,7 +58,7 @@ Where:
 | Score | Action |
 |-------|--------|
 | 0.0-0.3 | Continue normally |
-| 0.3-0.5 | Log warning to history.jsonl; surface in /aura-frog:plan-status |
+| 0.3-0.5 | Log warning to history.jsonl; surface in /archon-os:plan-status |
 | 0.5-0.7 | failure-classifier reduces F2 confidence by 0.1 (more likely to escalate) |
 | 0.7-1.0 | Auto-trigger replanner with `mutation: re_decompose` proposal |
 | > 1.0 | Treated as 1.0 (clamped) |
@@ -72,8 +72,8 @@ When `replan_budget_remaining == 0` and a replan is requested:
 1. master-planner emits `event: replan_refused_budget` to history.jsonl
 2. Node transitions to `status: frozen` with `freeze_reason: replan_budget_exhausted`
 3. `freeze_propagated_to: <descendants>` per spec §13.1 (cascade descendants only — Q10)
-4. User is surfaced via `/aura-frog:plan-status` warning
-5. User can `/aura-frog:plan-thaw <NODE_ID>` after manual triage; thawing **resets the budget**
+4. User is surfaced via `/archon-os:plan-status` warning
+5. User can `/archon-os:plan-thaw <NODE_ID>` after manual triage; thawing **resets the budget**
 
 ---
 
@@ -92,7 +92,7 @@ Reason: a thrash cycle indicates classifier confidence is too low for autonomous
 ## Anti-patterns
 
 - **Resetting `replan_budget_remaining` on partial progress** — only `done` status resets
-- **Increasing budget mid-flight** — only via explicit user override (`/aura-frog:plan-thaw --grant-replan-budget N`)
+- **Increasing budget mid-flight** — only via explicit user override (`/archon-os:plan-thaw --grant-replan-budget N`)
 - **Counting cosmetic revisions** (typo fixes) toward `revisions_since_planning` — exclude rev with diff_type: `cosmetic`
 
 ---

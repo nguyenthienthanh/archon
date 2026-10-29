@@ -154,7 +154,7 @@ set_field "$NODE_FILE" "archived_at" "$NOW"
 bump_revision "$NODE_FILE" >/dev/null
 
 if ! require_no_regression "$PLANS_DIR" "$VIOLATIONS_BEFORE"; then
-    echo "see ${PLANS_DIR}/checkpoints/ — restore via /aura-frog:plan undo" >&2
+    echo "see ${PLANS_DIR}/checkpoints/ — restore via /archon-os:plan undo" >&2
     exit 4
 fi
 

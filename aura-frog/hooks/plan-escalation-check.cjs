@@ -38,7 +38,7 @@ const ESCALATION_THRESHOLD = 3;
 
 // Prefixes that bypass the escalation heuristic entirely (run-plan-bridge.md):
 //   task:     → force task mode (skip ask)
-//   project:  → force project mode (already routes to /aura-frog:plan)
+//   project:  → force project mode (already routes to /archon-os:plan)
 //   must do: / just do: / exactly: → force modes that skip the whole bridge
 const BYPASS_PREFIXES = ['task:', 'project:', 'must do:', 'just do:', 'exactly:'];
 
@@ -154,7 +154,7 @@ function emitHint(weight, signals) {
     `\n🐸 plan-escalation: task scores ${weight} (≥${ESCALATION_THRESHOLD}) on the escalation rubric` +
     ` — signals: ${signals.join(', ')}. No active plan tree.\n` +
     `   Per rules/workflow/run-plan-bridge.md, offer the user before implementing:\n` +
-    `     plan    — bootstrap /aura-frog:plan first\n` +
+    `     plan    — bootstrap /archon-os:plan first\n` +
     `     deep    — proceed inline (record escalation_declined: true)\n` +
     `     details — show which signals fired\n`
   );

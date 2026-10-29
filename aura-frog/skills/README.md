@@ -24,7 +24,7 @@ auto_invoke[9]{name,priority,trigger,tokens}:
 
 **Note:** `run-orchestrator` is NOT auto-invoke — it fires when `/run` is typed or intent matches its `when_to_use` string (build feature, complex task, `fasttrack:` prefix). Listing it as auto-invoke would cause it to wastefully fire on every message.
 
-**New in v3.7.0-alpha (hierarchical planning):** `plan-loader` and `reasoning-trace-recorder` are silent on projects without `.claude/plans/` — zero overhead until users opt in via `/aura-frog:plan`.
+**New in v3.7.0-alpha (hierarchical planning):** `plan-loader` and `reasoning-trace-recorder` are silent on projects without `.claude/plans/` — zero overhead until users opt in via `/archon-os:plan`.
 
 ---
 

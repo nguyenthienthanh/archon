@@ -5,7 +5,7 @@
 # Rule: Extension Policy
 
 **Priority:** High
-**Applies To:** `extension-detector` skill, `/aura-frog:extend` command, any future automation that proposes new project-level capabilities
+**Applies To:** `extension-detector` skill, `/archon-os:extend` command, any future automation that proposes new project-level capabilities
 
 ---
 
@@ -58,7 +58,7 @@ The detection skill MUST:
 2. Wait for explicit `y` / `yes` / `confirm` / `go ahead` / `do it`
 3. Treat ANY other response (including silence, ambiguity, "let me think", "maybe later") as **no**
 4. On no: drop the proposal silently, do not retry within the same turn
-5. On yes: hand off to `/aura-frog:extend create <kind> <name>` — only that command writes files
+5. On yes: hand off to `/archon-os:extend create <kind> <name>` — only that command writes files
 
 The detector itself NEVER writes a file. Separation of detect vs. create is the safety boundary.
 
@@ -78,7 +78,7 @@ forbidden_paths[1]{path,reason}:
   aura-frog/**,"Plugin updates would clobber project-specific additions"
 ```
 
-`/aura-frog:extend` rejects any path resolution that lands inside `aura-frog/`. The check is on the absolute prefix — no path-traversal exploits.
+`/archon-os:extend` rejects any path resolution that lands inside `aura-frog/`. The check is on the absolute prefix — no path-traversal exploits.
 
 ---
 
@@ -106,13 +106,13 @@ Check before and after: `node aura-frog/scripts/context-budget.cjs <project>`. S
 
 ## Reference integrity follow-up
 
-After file creation, `/aura-frog:extend create` runs the audit step from CLAUDE.md "LESSON LEARNED — Reference Integrity Rule":
+After file creation, `/archon-os:extend create` runs the audit step from CLAUDE.md "LESSON LEARNED — Reference Integrity Rule":
 
 - New rule: must have ≥ 1 inbound reference within 1 turn (else surface as orphan-warning, not error)
 - New skill: description-triggers must not shadow plugin skills
 - New command: name must not collide with plugin commands (e.g., can't shadow `/run`)
 
-If audit produces output → user is shown findings; file is kept (user can fix or remove via `/aura-frog:extend remove`).
+If audit produces output → user is shown findings; file is kept (user can fix or remove via `/archon-os:extend remove`).
 
 ---
 
@@ -125,7 +125,7 @@ limits[3]{scope,cap}:
   per_repeat_signal,respect prior 'no' for the rest of the session
 ```
 
-After session cap, defer further proposals to user-initiated `/aura-frog:extend list` review.
+After session cap, defer further proposals to user-initiated `/archon-os:extend list` review.
 
 ---
 
@@ -143,7 +143,7 @@ After session cap, defer further proposals to user-initiated `/aura-frog:extend 
 ## Tie-Ins
 
 - **Skill:** `extension-detector` — only auto-invoked detector
-- **Command:** `/aura-frog:extend` — only writer of project extensions
+- **Command:** `/archon-os:extend` — only writer of project extensions
 - **Rule:** `rules/core/no-assumption.md` — same spirit (ask when uncertain)
 - **Rule:** `rules/core/contextual-separation.md` — proposals are draft until confirmed
 - **Project file:** `.claude/CLAUDE.md` — extension naming + tone should match project conventions

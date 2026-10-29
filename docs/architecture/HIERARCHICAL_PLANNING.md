@@ -6,7 +6,7 @@ audience: power-user
 
 # Hierarchical Planning — Runtime Deep Dive
 
-> Companion to [`README.md § Pillar 1`](../../README.md#1--hierarchical-planning--). The README gives you the *what*. This file walks the *how* — every agent invocation, every memory tier, every failure path — from the moment you type `/aura-frog:plan` until a T4 task closes out.
+> Companion to [`README.md § Pillar 1`](../../README.md#1--hierarchical-planning--). The README gives you the *what*. This file walks the *how* — every agent invocation, every memory tier, every failure path — from the moment you type `/archon-os:plan` until a T4 task closes out.
 >
 > Audience: anyone curious about the runtime mechanics. Required reading before you propose changes to: planning agents, plan-loader / permanent-memory-loader skills, the bare-word router, or the failure classifier.
 
@@ -22,12 +22,12 @@ audience: power-user
 
 ---
 
-## Stage 1 — Bootstrap: what runs when you type `/aura-frog:plan`
+## Stage 1 — Bootstrap: what runs when you type `/archon-os:plan`
 
 Walk-through with the example input:
 
 ```
-/aura-frog:plan "rebuild auth with OAuth + 2FA"
+/archon-os:plan "rebuild auth with OAuth + 2FA"
 ```
 
 ### 1.1 Hook chain fires before Claude sees the prompt
@@ -45,7 +45,7 @@ sequenceDiagram
     participant H5 as jira-auto-fetch
     participant C as Claude
 
-    U->>H1: "/aura-frog:plan rebuild auth…"
+    U->>H1: "/archon-os:plan rebuild auth…"
     H1->>H1: inject KERNEL rule reminders
     H1-->>H2: passthrough
     Note over H2: skips: prompt starts with /<br/>(already a command)
@@ -62,7 +62,7 @@ sequenceDiagram
 
 ### 1.2 Command file pulls in the orchestrator skill
 
-Claude sees `/aura-frog:plan`, opens `aura-frog/commands/plan.md`, and that file's "Execution Protocol" requires reading `aura-frog/skills/plan-orchestrator/SKILL.md` in full before any routing decision.
+Claude sees `/archon-os:plan`, opens `aura-frog/commands/plan.md`, and that file's "Execution Protocol" requires reading `aura-frog/skills/plan-orchestrator/SKILL.md` in full before any routing decision.
 
 ```
 commands/plan.md (user-facing surface)
@@ -214,7 +214,7 @@ A common failure mode after the plan tree exists: the user runs `/run feature: F
 
 **Anchoring is wiring, not bypass.** When `/run` finds `active.json#active.task`, it auto-anchors so deliverables sync back to the task — but every `/run` cycle still executes Phase 1 → 2 → 3 → 4 → 5. The most commonly-skipped phase under the misread is **Phase 2** ("the plan has acceptance criteria, why write failing tests?") — and that is the exact bug this contract exists to prevent. Acceptance criteria are *intent*; failing tests are *executable contracts*. Phase 2 converts one into the other; nothing else does.
 
-**One `/run` covers one task's full 5-phase cycle.** A feature with 5 tasks needs 5 `/run` invocations — each one claims the next ready task via `/aura-frog:plan next` (or just `next` as a bare word with a plan active), auto-anchors, and runs 5 phases. `/run feature: FEAT-A` does **not** loop through every task of FEAT-A automatically; it runs the 5 phases against one task and stops.
+**One `/run` covers one task's full 5-phase cycle.** A feature with 5 tasks needs 5 `/run` invocations — each one claims the next ready task via `/archon-os:plan next` (or just `next` as a bare word with a plan active), auto-anchors, and runs 5 phases. `/run feature: FEAT-A` does **not** loop through every task of FEAT-A automatically; it runs the 5 phases against one task and stops.
 
 ---
 
@@ -239,17 +239,17 @@ flowchart TB
     end
     subgraph T3["Tier 3 — reference only (never loaded into main turn)"]
         TJ["traces/TASK-*.jsonl<br/>write-only"]
-        HJ["history.jsonl<br/>read only via /aura-frog:trace command"]
+        HJ["history.jsonl<br/>read only via /archon-os:trace command"]
         MA[mcp-audit.jsonl<br/>write-only]
     end
-    subgraph T4["Tier 4 — distilled durable wisdom (survives /aura-frog:reset-session)"]
+    subgraph T4["Tier 4 — distilled durable wisdom (survives /archon-os:reset-session)"]
         PMF[permanent_memory.md<br/>≤500t per Epic · ≤8K total]
         AR["archive/{ID}_{slug}/<br/>compressed branches"]
     end
 
     T2 -. "plan-loader lazy reads" .-> T1
     T2 -. "T2 done — epic-summarizer" .-> T4
-    T3 -. "queried by aura-frog:trace" .-> T3
+    T3 -. "queried by archon-os:trace" .-> T3
     classDef t1 fill:#fef9c3,stroke:#a16207
     classDef t2 fill:#dbeafe,stroke:#1d4ed8
     classDef t3 fill:#fee2e2,stroke:#dc2626
@@ -264,8 +264,8 @@ flowchart TB
 |---|---|---|---|---|
 | **1 — Always loaded** | KERNEL rules + auto-invoke skill bodies + `mission.md` + `active.json` + permanent-memory summary lines | Every Claude turn | Until rule / skill removed | ~13.8K hard cap; skills measure on load |
 | **2 — On demand** | `feature.md` / `story.md` / `task.md` for the *active* branch only | `plan-loader` skill, on turns where the focus shifts | Loaded for the turn, dropped after | ≤ 800 tokens regardless of tree size |
-| **3 — Reference only** | `trace.jsonl` per task, `history.jsonl`, `conflicts.jsonl`, MCP audit log | `/aura-frog:trace`, `/aura-frog:plan undo`, forensic replay — *separate query, not the main turn* | Append-only forever | Never leaks into main context |
-| **4 — Distilled durable** | `permanent_memory.md` (≤ 500 tokens per Epic, ≤ 8K total file) + `archive/{ID}_{slug}/summary.md` | `permanent-memory-loader` (every turn — summary lines only); full Epic sections on demand | Survives `/aura-frog:reset-session` | Strict caps; oldest Epic archives when full |
+| **3 — Reference only** | `trace.jsonl` per task, `history.jsonl`, `conflicts.jsonl`, MCP audit log | `/archon-os:trace`, `/archon-os:plan undo`, forensic replay — *separate query, not the main turn* | Append-only forever | Never leaks into main context |
+| **4 — Distilled durable** | `permanent_memory.md` (≤ 500 tokens per Epic, ≤ 8K total file) + `archive/{ID}_{slug}/summary.md` | `permanent-memory-loader` (every turn — summary lines only); full Epic sections on demand | Survives `/archon-os:reset-session` | Strict caps; oldest Epic archives when full |
 
 ### Tier 2 — what `plan-loader` actually loads
 
@@ -345,7 +345,7 @@ Every claim about the codebase must reference a prior `file_read` event. Schema:
 
 `grounding-discipline.md` (always-loaded core rule) is the contract:
 
-> Every factual claim about codebase content MUST carry a `grounded_in` field pointing at a prior `file_read` event for the cited path. Claims missing `grounded_in` with confidence > 0.5 are flagged `ungrounded` and reviewed by `/aura-frog:trace --hallucinations`.
+> Every factual claim about codebase content MUST carry a `grounded_in` field pointing at a prior `file_read` event for the cited path. Claims missing `grounded_in` with confidence > 0.5 are flagged `ungrounded` and reviewed by `/archon-os:trace --hallucinations`.
 
 Conceptually the check looks like this (lookup, not LLM):
 
@@ -359,7 +359,7 @@ def check_output_claim(claim, prior_events):
     return OK
 ```
 
-User-facing surface (`/aura-frog:trace`):
+User-facing surface (`/archon-os:trace`):
 
 ```text
 🐸 47 events recorded:
@@ -372,7 +372,7 @@ User-facing surface (`/aura-frog:trace`):
      Confidence: 0.80
      No prior file_read for src/auth.ts mentions options.algorithm.
 
-   Recommend: /aura-frog:plan undo --to-event TR-00001-031
+   Recommend: /archon-os:plan undo --to-event TR-00001-031
 ```
 
 ### Mechanism 2 — Hallucination vs. logic error
@@ -582,7 +582,7 @@ Decision rules are regex over signals — no LLM call.
 
 ### Self-healing — propose, never auto-apply
 
-F2 / F3 with budget remaining and confidence ≥ 0.7 triggers `self-healing-orchestrator`. It **proposes** a patch and **stops**. The user approves via `/aura-frog:heal accept <id>`.
+F2 / F3 with budget remaining and confidence ≥ 0.7 triggers `self-healing-orchestrator`. It **proposes** a patch and **stops**. The user approves via `/archon-os:heal accept <id>`.
 
 ```
 🐸 Self-diagnosed (confidence 0.85, F3 local design):

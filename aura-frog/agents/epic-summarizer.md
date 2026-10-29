@@ -9,7 +9,7 @@ color: silver
 
 # Agent: Epic Summarizer
 
-**STATUS — v3.7.0-alpha.4 (Milestone C interim).** Pairs with `feature-done-trigger-archive` hook and `/aura-frog:reset-session` command.
+**STATUS — v3.7.0-alpha.4 (Milestone C interim).** Pairs with `feature-done-trigger-archive` hook and `/archon-os:reset-session` command.
 
 ## Purpose
 
@@ -26,8 +26,8 @@ When a T2 (Feature) transitions to `done`, this agent reads the Feature's storie
 ## When invoked
 
 - `feature-done-trigger-archive` hook fires on T2 status transition `active → done`
-- User runs `/aura-frog:reset-session` (manual trigger)
-- Owner runs `/aura-frog:plan-archive FEAT-XXX` (forces summarization before archive)
+- User runs `/archon-os:reset-session` (manual trigger)
+- Owner runs `/archon-os:plan-archive FEAT-XXX` (forces summarization before archive)
 
 ## Process
 
@@ -110,14 +110,14 @@ subsection, MUST write ONLY to `.claude/memory/`, ≤500-token-per-Epic cap.
 - **Editorializing** — distillation is descriptive, not prescriptive (no "this should have been done differently")
 - **Echoing the Feature intent verbatim** — capture *learned* knowledge, not the original plan
 - **Writing items below 0.7 confidence as facts** — they go in Tentative, marked clearly
-- **Skipping the cap** — if you can't fit important content in 500 tokens, surface that as a follow-up `/aura-frog:plan-promote` proposal, don't bloat memory
+- **Skipping the cap** — if you can't fit important content in 500 tokens, surface that as a follow-up `/archon-os:plan-promote` proposal, don't bloat memory
 
 ## Tie-Ins
 
 - **Spec:** §8.6, §19 (session reset)
 - **Hook:** `hooks/feature-done-trigger-archive.cjs` — primary trigger
 - **Hook:** `hooks/session-reset-trigger.cjs` — invokes after distillation completes
-- **Command:** `/aura-frog:reset-session` — user-initiated trigger
+- **Command:** `/archon-os:reset-session` — user-initiated trigger
 - **Skill:** `permanent-memory-loader` — only loader of this agent's output (auto-invoke)
 - **Skill:** `plan-archivist` — companion (compresses plan tree branches; this agent compresses *learning*)
 - **Rule:** `rules/workflow/session-reset-policy.md` — defines triggers, hard caps, what's NOT reset

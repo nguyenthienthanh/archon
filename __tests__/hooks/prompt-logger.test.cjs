@@ -95,7 +95,7 @@ describe('prompt-logger', () => {
       expect(extractReferences('/run then /check').commands).toEqual(['run', 'check']);
     });
     it('keeps namespaced commands intact', () => {
-      expect(extractReferences('/aura-frog:plan next').commands).toEqual(['aura-frog:plan']);
+      expect(extractReferences('/archon-os:plan next').commands).toEqual(['archon-os:plan']);
     });
     it('extracts a named agent, lowercased', () => {
       expect(extractReferences('ask the Architect about it').agent).toBe('architect');

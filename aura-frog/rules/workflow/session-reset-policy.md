@@ -5,7 +5,7 @@
 # Rule: Session Reset Policy
 
 **Priority:** High
-**Applies To:** epic-summarizer agent, /aura-frog:reset-session command, feature-done-trigger-archive + session-reset-trigger hooks
+**Applies To:** epic-summarizer agent, /archon-os:reset-session command, feature-done-trigger-archive + session-reset-trigger hooks
 
 ---
 
@@ -23,7 +23,7 @@ This rule formalizes when reset triggers, what gets distilled, what's preserved,
 triggers[3]{type,scope,frequency}:
   default,T2 (Feature) status: done,every Epic completion
   optional,T1 (Initiative) status: done,quarterly (rare)
-  manual,/aura-frog:reset-session command,user-initiated anytime
+  manual,/archon-os:reset-session command,user-initiated anytime
 ```
 
 T2 done is the **default** trigger because Features are the natural unit of "we shipped something" — they have user-facing acceptance criteria and a clear boundary.
@@ -129,7 +129,7 @@ preserved[5]{path,reason}:
 - **Agent:** `epic-summarizer` — sole writer of distilled output
 - **Skill:** `permanent-memory-loader` — auto-loads the output across sessions
 - **Skill:** `plan-archivist` — companion (compresses plan tree; this rule covers memory)
-- **Command:** `/aura-frog:reset-session` — user-initiated trigger
+- **Command:** `/archon-os:reset-session` — user-initiated trigger
 - **Hooks:** `feature-done-trigger-archive.cjs` (auto-trigger), `session-reset-trigger.cjs` (post-distillation prompt)
 - **Rule:** `rules/core/memory-trust-policy.md` — defines `trust: file` for loaded memory content
 - **Rule:** `rules/workflow/checkpoint-discipline.md` — distillation does NOT touch checkpoints (they have their own retention)

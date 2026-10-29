@@ -37,7 +37,7 @@ planned ────────► frozen (conflict detected at dispatch time)
 
 | From | To | Trigger |
 |------|----|---------|
-| planned | active | `/aura-frog:plan-next` returns this T4; OR user approves at Phase 1 gate |
+| planned | active | `/archon-os:plan-next` returns this T4; OR user approves at Phase 1 gate |
 | planned | frozen | conflict-detector flags conflict at dispatch (Milestone D) |
 | planned | discarded | parent's `replan` discards children |
 | active | done | acceptance check passes |
@@ -45,7 +45,7 @@ planned ────────► frozen (conflict detected at dispatch time)
 | active | discarded | user explicitly drops |
 | active | frozen | conflict detected mid-execution |
 | frozen | planned | blocker `done` AND output compatible (auto-thaw) |
-| frozen | discarded | user `/aura-frog:plan-thaw --discard` |
+| frozen | discarded | user `/archon-os:plan-thaw --discard` |
 | blocked | active | blocker reaches `done` |
 | done | archived | parent T2 archived (cascade) |
 

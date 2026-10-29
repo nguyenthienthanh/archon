@@ -28,7 +28,7 @@ The replanner is the **only** agent allowed to make LLM-mediated planning judgme
 ## When invoked
 
 - failure-classifier returns class F2/F3/F4 with confidence ≥ 0.6
-- master-planner explicitly dispatches via `/aura-frog:plan-replan <NODE_ID>`
+- master-planner explicitly dispatches via `/archon-os:plan-replan <NODE_ID>`
 - Token-overrun on a story (deviation_score ≥ 0.7 per spec §11.3)
 
 ## Mutation vocabulary

@@ -52,7 +52,7 @@ const AVAILABLE_SKILLS = [
 ];
 
 // Available command top-level categories. The core surface stays small (6 verbs)
-// so users never face discovery paralysis; specialized /aura-frog:* commands layer on
+// so users never face discovery paralysis; specialized /archon-os:* commands layer on
 // top for hierarchical planning and safety ops.
 const AVAILABLE_COMMAND_CATEGORIES = [
   'run', 'check', 'design', 'project', 'af', 'help', 'aura',

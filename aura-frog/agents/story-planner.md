@@ -19,7 +19,7 @@ A Story is one TDD-bounded unit (RED → GREEN → REFACTOR). Tasks are atoms a 
 
 ## When invoked
 
-- `/aura-frog:plan-expand STORY-NNNN` (T3 → T4 decomposition)
+- `/archon-os:plan-expand STORY-NNNN` (T3 → T4 decomposition)
 - TDD Phase 1 entry of an active run-orchestrator workflow (auto-paired)
 - replanner triggers story-level rewrite (Milestone B+)
 
@@ -69,12 +69,12 @@ TDD Phase 1 (Understand + Design)
 - Generating Tasks that touch the same file without DAG ordering
 - Acceptance criteria with no `test_ref` (untestable = unmergeable)
 - Story that decomposes into a single Task (Story too small — flatten into parent)
-- Story that needs 10+ Tasks (Story too big — split via `/aura-frog:plan-replan`)
+- Story that needs 10+ Tasks (Story too big — split via `/archon-os:plan-replan`)
 
 ## Tie-Ins
 
 - **Spec:** §8.4, §6.5 (Story schema), §6.6 (Task schema)
-- **Agent:** master-planner — dispatches story-planner on `/aura-frog:plan-expand STORY-*`
+- **Agent:** master-planner — dispatches story-planner on `/archon-os:plan-expand STORY-*`
 - **Agent:** feature-architect — feeds T2 context via `parent` field
 - **Skill:** run-orchestrator — pairs with story-planner in Phase 1 of TDD (a skill, invoked via the Skill tool — NOT an Agent-tool `subagent_type`)
 - **Agent:** tester — receives Tasks for TDD execution

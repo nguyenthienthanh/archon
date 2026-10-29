@@ -328,16 +328,16 @@ audience: contributor
 
 ### 6.1. Consolidated Command Surface
 
-**What:** A 6-command core (`/run` universal + `/check` quality + `/design` pre-code + `/project` config + `/af` system + `/help`) covers the everyday workflow. v3.7.0 layered an `/aura-frog:*` suite on top (plan, expand, freeze, conflicts, heal, mcp, dashboard, preflight, …) for hierarchical planning and safety operations. Total: 24 slash commands.
+**What:** A 6-command core (`/run` universal + `/check` quality + `/design` pre-code + `/project` config + `/af` system + `/help`) covers the everyday workflow. v3.7.0 layered an `/archon-os:*` suite on top (plan, expand, freeze, conflicts, heal, mcp, dashboard, preflight, …) for hierarchical planning and safety operations. Total: 24 slash commands.
 
-**How applied:** Core commands auto-detect intent. `/run fix login` → bugfix-quick skill. `/run implement X` → 5-phase workflow. `/aura-frog:*` commands operate on the plan tree at `.claude/plans/` (v3.7.3+; legacy `.aura/plans/` still resolved via fallback) and never compete with the core surface.
+**How applied:** Core commands auto-detect intent. `/run fix login` → bugfix-quick skill. `/run implement X` → 5-phase workflow. `/archon-os:*` commands operate on the plan tree at `.claude/plans/` (v3.7.3+; legacy `.aura/plans/` still resolved via fallback) and never compete with the core surface.
 
-**Why you need it:** Discovery paralysis is real (some plugins ship 25+ verbs). 6 core commands cover 80%+ of daily use; specialized `/aura-frog:*` verbs surface only when you actually use hierarchical planning.
+**Why you need it:** Discovery paralysis is real (some plugins ship 25+ verbs). 6 core commands cover 80%+ of daily use; specialized `/archon-os:*` verbs surface only when you actually use hierarchical planning.
 
 **Use cases:**
 - New user — memorize the 6 core commands in 30 seconds
 - Experienced user — muscle memory for `/run` on everything
-- Planner — opt-in to `/aura-frog:plan` only when a feature warrants T0-T4 decomposition
+- Planner — opt-in to `/archon-os:plan` only when a feature warrants T0-T4 decomposition
 
 ---
 
@@ -511,7 +511,7 @@ v3.7.0 ships eight composable features organized into four themes. Each pillar i
 
 **What:** Plans persist to `.claude/plans/` (v3.7.3+; legacy `.aura/plans/` still resolved via fallback) as a five-tier tree (Mission → Initiative → Feature → Story → Task). Every node is a folder named `{ID}_{kebab-slug}/` (v3.7.3) with its spec file + co-located aux (`checkpoints/`, `trace.jsonl` for tasks). `plan-loader` auto-loads minimum context per turn (mission + active branch + ancestors); the rest stays on disk. Five planning agents (`master-planner`, `strategist`, `feature-architect`, `story-planner`, `replanner`) decompose tier by tier.
 
-**How applied:** `/aura-frog:plan` interview-bootstraps T0-T2. `/aura-frog:plan expand <id>` drills one tier deeper. `/aura-frog:plan next` returns the next ready Task; `/aura-frog:run` auto-anchors to it via the run-plan bridge (`rules/workflow/run-plan-bridge.md`). `/run feature: FEAT-A <task>` (v3.7.3) anchors a new run; `/run resume FEAT-A` lists runs in the feature's `## Runs` table and prompts to pick.
+**How applied:** `/archon-os:plan` interview-bootstraps T0-T2. `/archon-os:plan expand <id>` drills one tier deeper. `/archon-os:plan next` returns the next ready Task; `/archon-os:run` auto-anchors to it via the run-plan bridge (`rules/workflow/run-plan-bridge.md`). `/run feature: FEAT-A <task>` (v3.7.3) anchors a new run; `/run resume FEAT-A` lists runs in the feature's `## Runs` table and prompts to pick.
 
 **Why you need it:** Long-running projects no longer lose decisions to `/compact`. Multi-week features get explicit decomposition. Team handoffs reduce to *"read `mission/mission.md`, the feature folder, and `active.json`"*. The folder-per-node layout keeps everything about a feature (spec, deliverables, traces, checkpoints, runs that touched it) in one place.
 
@@ -523,9 +523,9 @@ v3.7.0 ships eight composable features organized into four themes. Each pillar i
 
 **What:** Every Claude tool call writes an append-only event to the task's `trace.jsonl` (v3.7.3+: co-located inside `.claude/plans/features/.../tasks/{TASK_ID}_{slug}/trace.jsonl`; legacy fallback to `.claude/plans/traces/{TASK_ID}.jsonl`) with sha256-anchored evidence. Events include `tool_call`, `file_read` (path + sha256 + lines), `tool_result`, `output_claim` (claim + `grounded_in` references + confidence), `decision`, `plan_deviation`, `acceptance_check`. The `grounding-discipline` rule rejects any `output_claim` not backed by a prior `file_read`.
 
-**How applied:** `tool-call-tracer.cjs` fires PreToolUse + PostToolUse. `reasoning-trace-recorder` (auto-invoke) captures claims. `/aura-frog:trace --hallucinations` surfaces ungrounded claims; `--filter file_read --tail 20` shows recent reads.
+**How applied:** `tool-call-tracer.cjs` fires PreToolUse + PostToolUse. `reasoning-trace-recorder` (auto-invoke) captures claims. `/archon-os:trace --hallucinations` surfaces ungrounded claims; `--filter file_read --tail 20` shows recent reads.
 
-**Why you need it:** Catches hallucinations *before* they ship. "Why did Claude do that?" three months later resolves to a single `/aura-frog:trace` call. Audit trail for compliance / SOC2 / quality reviews.
+**Why you need it:** Catches hallucinations *before* they ship. "Why did Claude do that?" three months later resolves to a single `/archon-os:trace` call. Audit trail for compliance / SOC2 / quality reviews.
 
 **Use cases:** debugging hallucinations · audit trails · comparing approaches between attempts · onboarding (read past traces) · safety-critical code where evidence matters.
 
@@ -537,7 +537,7 @@ v3.7.0 ships eight composable features organized into four themes. Each pillar i
 
 **What:** When a Feature (T2) reaches `done`, `epic-summarizer` agent distills architectural decisions, gotchas, anti-patterns, and successful patterns into a structured Epic section in `.claude/memory/permanent_memory.md` (v3.7.3+; legacy `.aura/memory/` still resolved). Hard caps: ≤500 tokens per Epic, ≤8K total. `permanent-memory-loader` (auto-invoke) loads only the summary lines (≤120 always-loaded tokens). Master Planner then offers a clean session restart.
 
-**How applied:** `feature-done-trigger-archive.cjs` hook fires on T2 done. `/aura-frog:reset-session` manually invokes. `--dry-run` previews; `--no-prompt` is CI-friendly.
+**How applied:** `feature-done-trigger-archive.cjs` hook fires on T2 done. `/archon-os:reset-session` manually invokes. `--dry-run` previews; `--no-prompt` is CI-friendly.
 
 **Why you need it:** Distillation captures *what mattered* (decisions, gotchas) and discards *what was noise* (transcripts, tool output). Long projects no longer drift; quarterly retros become "read 8K tokens of permanent memory."
 
@@ -549,7 +549,7 @@ v3.7.0 ships eight composable features organized into four themes. Each pillar i
 
 **What:** Two-tier validation runs before any state-mutating tool call. Tier 1 (always available, zero deps): 7 bash linters — frontmatter, tool input/output, path safety, command allowlist, secret patterns, run-all aggregator. Tier 2 (v3.7.2+): 5 OPA Rego policies for plan structure, mutation safety, grounding, token budget, conflict respect.
 
-**How applied:** `pre-flight-validate.cjs` fires on PreToolUse. Exit codes: 0 pass, 1 warn (log + proceed), 2 fail (block). `/aura-frog:preflight bypass <reason ≥10 chars>` for per-call escape; warns after 3 bypasses/session.
+**How applied:** `pre-flight-validate.cjs` fires on PreToolUse. Exit codes: 0 pass, 1 warn (log + proceed), 2 fail (block). `/archon-os:preflight bypass <reason ≥10 chars>` for per-call escape; warns after 3 bypasses/session.
 
 **Why you need it:** AI-generated `rm -rf $HOME` is real. Hardcoded credentials in generated code are real. Pre-flight catches them before the tool fires — no rollback needed because the damage never happened.
 
@@ -577,13 +577,13 @@ v3.7.0 ships eight composable features organized into four themes. Each pillar i
 
 **What:** When a Task fails with class F2 (local logic) or F3 (local design), `self-healing-orchestrator` parses the error, queries `context7` MCP for known patterns, cross-references `permanent_memory.md` "Gotchas discovered" section, and produces a **proposed** patch with confidence ≥ 0.7 (below threshold escalates raw findings). Master Planner presents to user with source citations; user approves → patch applied as a new T4 with its own approval flow. **Never auto-applies.** Counts toward `replan_budget` (max 1/task, 5/session).
 
-**How applied:** `/aura-frog:heal diagnose <task-id>` manual invocation. `/aura-frog:heal status` shows recent attempts. Sources limited to context7 (official docs) and `permanent_memory.md` (project's own learning) — never random web sources.
+**How applied:** `/archon-os:heal diagnose <task-id>` manual invocation. `/archon-os:heal status` shows recent attempts. Sources limited to context7 (official docs) and `permanent_memory.md` (project's own learning) — never random web sources.
 
 **Why you need it:** "Cannot read property of undefined at line 42" stops sending you to Stack Overflow. Patches arrive with provenance — official docs + your project's own past gotchas.
 
 **Use cases:** stack trace explanations · repeating bugs · library version mismatches · patches with audit trail.
 
-**Disable:** `AF_SELF_HEAL_DISABLED=true` permanent · `/aura-frog:heal disable` per-session.
+**Disable:** `AF_SELF_HEAL_DISABLED=true` permanent · `/archon-os:heal disable` per-session.
 
 ---
 

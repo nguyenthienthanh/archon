@@ -104,7 +104,7 @@ function findRescanPair(conflict, recentDoneTasks) {
 function recommendationFor(compatible) {
   if (compatible === true) return 'auto_thaw';
   if (compatible === false) return 'auto_discard';
-  return 'inconclusive — manual /aura-frog:plan-thaw recommended';
+  return 'inconclusive — manual /archon-os:plan-thaw recommended';
 }
 
 // Pure: build the advisory history event for a recommendation.

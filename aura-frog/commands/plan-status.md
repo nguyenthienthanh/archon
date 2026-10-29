@@ -1,14 +1,14 @@
-# /aura-frog:plan-status
+# /archon-os:plan-status
 
-**Render the current plan tree.** Alias for `/aura-frog:plan status` (v3.7.2+).
+**Render the current plan tree.** Alias for `/archon-os:plan status` (v3.7.2+).
 
 ---
 
 ## Usage
 
 ```
-/aura-frog:plan-status
-/aura-frog:plan-status --detailed
+/archon-os:plan-status
+/archon-os:plan-status --detailed
 ```
 
 ## Delegation

@@ -1,15 +1,15 @@
-# /aura-frog:plan-replan &lt;id&gt;
+# /archon-os:plan-replan &lt;id&gt;
 
-**Force replan of a node and all descendants.** Alias for `/aura-frog:plan replan <id>` (v3.7.2+).
+**Force replan of a node and all descendants.** Alias for `/archon-os:plan replan <id>` (v3.7.2+).
 
 ---
 
 ## Usage
 
 ```
-/aura-frog:plan-replan TASK-00101
-/aura-frog:plan-replan STORY-0042 --reason "design pivot"
-/aura-frog:plan-replan FEAT-A --avoid src/legacy
+/archon-os:plan-replan TASK-00101
+/archon-os:plan-replan STORY-0042 --reason "design pivot"
+/archon-os:plan-replan FEAT-A --avoid src/legacy
 ```
 
 ## Delegation
@@ -27,6 +27,6 @@ The script:
 
 The caller (or `replanner` agent in Milestone B+) is then responsible for proposing the new subtree shape.
 
-Full protocol in `commands/plan.md`. Cannot replan `done|archived` — use `/aura-frog:plan undo` first if you need to revert.
+Full protocol in `commands/plan.md`. Cannot replan `done|archived` — use `/archon-os:plan undo` first if you need to revert.
 
 **Deprecation timeline:** soft-deprecated v3.7.2, warning v4.0, removed v5.0.

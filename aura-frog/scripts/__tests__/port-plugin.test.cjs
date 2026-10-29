@@ -20,6 +20,13 @@ const path = require('node:path');
 
 const porter = require('../port-plugin.cjs');
 
+// The plugin name has exactly one source of truth: plugin.json. Hardcoding the
+// literal here is what left this suite red through the v4 rebrand -- the name
+// moved and the expectation did not. Read it instead.
+const PLUGIN_NAME = JSON.parse(fs.readFileSync(
+  path.join(process.cwd(), 'aura-frog', '.claude-plugin', 'plugin.json'), 'utf8',
+)).name;
+
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
@@ -80,8 +87,8 @@ describe('collectUniversalLayer', () => {
     expect(sources.meta.version.length).toBeGreaterThan(0);
   });
 
-  test('meta.name equals "aura-frog" (from plugin.json)', () => {
-    expect(sources.meta.name).toBe('aura-frog');
+  test('meta.name matches plugin.json#name', () => {
+    expect(sources.meta.name).toBe(PLUGIN_NAME);
   });
 
   test('rules object has core, agent, workflow keys', () => {
@@ -456,7 +463,7 @@ describe('writePortBundle: copilot', () => {
 
   test('copilot-instructions.md contains plugin name', () => {
     const content = fs.readFileSync(path.join(tmpDir, '.github', 'copilot-instructions.md'), 'utf8');
-    expect(content).toContain('aura-frog');
+    expect(content).toContain(PLUGIN_NAME);
   });
 
   test('writes at least one .github/instructions/*.instructions.md file', () => {
