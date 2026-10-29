@@ -14,7 +14,7 @@
     {
       "name": "archon-os",
       "source": "./aura-frog",
-      "description": "Planning-first LLM OS for software engineering. Hierarchical planning (T0-T4) survives session reset · forensic reasoning traces · L1+L2 conflict detection · self-healing safety gates · Archon Memory Manager · durable project-context snapshots · cross-tool porter (Copilot/Codex/Cursor) · CLI dashboard. 15 agents, 5-phase TDD, 72 rules, 43 skills, 24 commands, 53 hooks, 6 MCP servers. Backward-compatible — /run unchanged.",
+      "description": "Planning-first LLM OS for software engineering. Hierarchical planning (T0-T4) survives session reset \u00b7 forensic reasoning traces \u00b7 L1+L2 conflict detection \u00b7 self-healing safety gates \u00b7 durable project-context snapshots \u00b7 cross-tool porter (Copilot/Codex/Cursor) \u00b7 CLI dashboard. 15 agents, 5-phase TDD, 72 rules, 43 skills, 24 commands, 52 hooks, 6 MCP servers. Backward-compatible \u2014 /run unchanged.",
       "version": "4.0.0-alpha.1",
       "author": {
         "name": "Nguyen Thien Thanh",
