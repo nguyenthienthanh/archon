@@ -7,7 +7,7 @@ estimated_reading_time: 8 minutes
 
 <div align="center">
 
-![Welcome to Aura Frog](../../assets/logo/mascot_full.png)
+<img alt="The Archon OS owl watching a plan tree" src="../../assets/brand/mascot.svg" width="480">
 
 # Get Started with Aura Frog
 

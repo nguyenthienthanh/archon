@@ -1,6 +1,9 @@
 <div align="center">
 
-![Aura Frog](assets/logo/github_banner.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/brand/banner-dark.png">
+  <img alt="Archon OS — a planning-first LLM operating system for software engineering" src="assets/brand/banner-light.png" width="860">
+</picture>
 
 # Aura Frog
 
@@ -749,7 +752,7 @@ MIT — See [LICENSE](LICENSE)
 
 <div align="center">
 
-![Aura Frog](assets/logo/mascot_coding_scene.png)
+<img alt="The Archon OS owl watching a plan tree" src="assets/brand/mascot.svg" width="520">
 
 ### Your AI writes code. Aura Frog runs the OS.
 

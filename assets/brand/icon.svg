@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Archon OS">
+  <title>Archon OS</title>
+  <!-- The owl of Athena. "Archon" is an Athenian magistrate; the owl is the one
+       that watches. The dispatch model now has a literal observer role, so the
+       mark is the watcher rather than a decoration.
+       Flat only - no gradients, per the workspace UX rule. The ear tufts are
+       LIGHTER than the head rather than darker: a darker tuft reads as depth on
+       a light page and disappears entirely on a dark one. -->
+  <!-- ear tufts, drawn first so the head overlaps their base -->
+  <path fill="#17A47A" d="M13 20 L15 5 L27 13 Z"/>
+  <path fill="#17A47A" d="M51 20 L49 5 L37 13 Z"/>
+  <!-- head -->
+  <path fill="#0E7C5A" d="M32 8 C47 8 58 18 58 31 C58 46 46 58 32 58 C18 58 6 46 6 31 C6 18 17 8 32 8 Z"/>
+  <!-- eye discs -->
+  <circle cx="22" cy="28" r="11" fill="#F7F8F7"/>
+  <circle cx="42" cy="28" r="11" fill="#F7F8F7"/>
+  <circle cx="22" cy="28" r="5" fill="#0A2A22"/>
+  <circle cx="42" cy="28" r="5" fill="#0A2A22"/>
+  <!-- beak: the only accent colour, on the one part that renders a verdict -->
+  <path fill="#E8A317" d="M32 34 L38 44 L26 44 Z"/>
+</svg>

@@ -1,0 +1,30 @@
+{
+  "$comment": "Single source of truth for the Archon OS identity. Everything in assets/brand/*.png is DERIVED from the .svg files here via build.sh — regenerate, never hand-edit. Pattern borrowed from ai-mv-factory's prompts/style-book/*.json.",
+  "id": "archon-os",
+  "name": "Archon OS",
+  "tagline": "A planning-first LLM operating system for software engineering.",
+  "mark": {
+    "subject": "owl",
+    "why": "An archon is an Athenian magistrate, and the owl is Athena's — the one that watches. The dispatch model now has a literal observer role (rules/workflow/three-role-dispatch.md), so the mark is the watcher, not a decoration.",
+    "style": "flat geometric, no gradients, no glow",
+    "predecessor": "the Aura Frog frog mark — retired with the name at v4.0.0"
+  },
+  "palette": {
+    "jade": "#0E7C5A",
+    "jade_bright": "#17A47A",
+    "jade_dark": "#0B6048",
+    "ink": "#0A2A22",
+    "paper": "#F7F8F7",
+    "paper_dark": "#0B0F0E",
+    "ink_on_dark": "#F2F6F4",
+    "muted_on_dark": "#43C195",
+    "amber": "#E8A317"
+  },
+  "accent_rule": "Amber is the single accent and it is reserved for the thing that renders a verdict — the owl's beak, the underline. Do not use it for decoration.",
+  "typography": {
+    "wordmark": "custom monoline geometric letterforms drawn as SVG paths — not a licensed font, so it renders identically everywhere",
+    "supporting": "\"Avenir Next\", \"Futura\", \"Helvetica Neue\", system-ui, sans-serif"
+  },
+  "sources": ["icon.svg", "wordmark.svg", "mascot.svg", "banner-light.svg", "banner-dark.svg"],
+  "derived": ["banner-light.png", "banner-dark.png", "og-image.png", "favicon-32.png", "apple-touch-icon.png"]
+}
