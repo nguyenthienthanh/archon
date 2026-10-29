@@ -20,25 +20,39 @@ A plugin for **[Claude Code](https://docs.anthropic.com/en/docs/claude-code)** t
 
 **Two entry points, same natural-language pattern.** `/run <task>` for task execution (5-phase TDD with agents). `/archon-os:plan <verb> [args]` for project planning (T0–T4 hierarchical tree). Both accept natural language, route through skills, and share state via the run↔feature bridge. You never lose decisions; every Claude tool call leaves a trace; conflicts are caught before silent overwrites.
 
-**[Install in 30 seconds](#-install)** · **[v3.7.4 highlights](#-whats-new-in-v374)** · **[Full benefits guide →](docs/reference/BENEFITS.md)**
+**[Install in 30 seconds](#-install)** · **[v4.0.0-alpha.2 highlights](#-whats-new-in-v400-alpha2)** · **[Full benefits guide →](docs/reference/BENEFITS.md)**
 
 ---
 
-## 🆕 What's new in v3.7.4
+## 🆕 What's new in v4.0.0-alpha.2
 
-v3.7.4 is a **documentation cleanup release** — no new features, no runtime behaviour change. Eliminates 122 stale command references that accumulated during the v3.6 → v3.7 transition, slims the README, and ships two new CI gates that prevent doc rot from re-entering main.
+The plugin is now **Archon OS**. This release is mostly about one thing: **the system no longer believes its own reports.**
 
 | Change | What it means |
 |---|---|
-| **CI guard against stale syntax** | New `aura-frog/scripts/ci/validate-docs-syntax.sh` ships an 18-entry BLOCKED_PATTERNS list covering every pre-v3.7 verb form (the old `workflow:*`-prefixed lifecycle verbs, the old `agent:` / `bugfix:` / `learn:` / `project:` namespaces, and the removed phase-hook MD paths). Any of these re-entering `docs/`, `README.md`, or `MIGRATION_TO_V3.7.md` blocks the commit. Wired into the validate job in `.github/workflows/ci.yml`. The full pattern list lives in the script header — single source of truth. |
-| **Doc maturity infrastructure** | Every `docs/**/*.md` (except `docs/showcase/`, `docs/specs/`) now carries `last_aligned_with` + `status` + `audience` frontmatter. `aura-frog/scripts/ci/validate-doc-maturity.sh` checks staleness (status=current docs warn at diff > 2 minor versions) and shape. 9 pre-v3.6 docs/guides/* flagged `needs_review` for contributor attention (non-blocking). |
-| **Onboarding fix** | `docs/getting-started/GET_STARTED.md` rewritten 472L → 148L. New `docs/getting-started/README.md` is the single ordered entry index (QUICKSTART → GET_STARTED → FIRST_WORKFLOW_TUTORIAL). Supplementary install paths extracted to new `docs/operations/INSTALLATION.md`. |
-| **Stale-syntax sweep** | 122 stale references across 12 files cleaned. Pre-v3.7 `docs/guides/USAGE_GUIDE.md` archived to `docs/marketing/USAGE_GUIDE.pre-v3.7.md`. Pre-v3.0 `docs/architecture/overview.md` archived to `docs/marketing/overview.pre-v3.0.md`. `docs/reference/TESTING_GUIDE.md` syntax refresh (31 hits) + frontmatter. |
-| **README slim** | 1294L → 706L (45% reduction). 8 Pillars deep-dives collapsed to per-pillar paragraphs linking to BENEFITS.md Part 9. Command Reference compressed to a single 8-row table. Optional-install `<details>` blocks moved to INSTALLATION.md. |
-| **AI vs human boundary** | All 56 SKILL.md files + 71 rule files now carry an *AI-consumed reference* banner pointing readers at `docs/architecture/HIERARCHICAL_PLANNING.md` / `docs/getting-started/`. `docs/README.md` declares **docs/ as canonical** with an 8-entry source-of-truth table. |
-| **Broader audit tool** | New `scripts/audit/stale-cmd-check.sh` for contributors — 3-pass detection (verb syntax · `/archon-os:*` namespaced · backticked bare `/word`). Knows about Claude Code built-ins (`/clear`, `/compact`, `/plugin`, …). Idempotent. |
+| **Session memory that actually survives compaction** | The transcript was never lost. Claude Code already writes every turn to `~/.claude/projects/<slug>/<session-id>.jsonl` — **3.5 MB, 1620 lines, 73 prompts** on a measured session — and compaction shrinks the *context window* without touching that file. Nothing read it back. A **turn index** now renders one line per turn carrying that turn's `uuid`, refreshed at `Stop`, injected at `SessionStart`. It is a derived cache: delete it and it rebuilds byte-identically. Live-verified at **5,853 of the 10,000-character cap**. |
+| **An independent verifier that cannot grade its own work** | `--aggregate` **refuses to issue a verdict** when the grader is the producer. A deterministic scope gate costs **zero model calls** and names the confounder it found; the model arm runs k=3 blind samples, **deletes each model's self-reported confidence**, and derives it from agreement instead. Measured false-positive rate on true claims: **0.00**. |
+| **Flat dispatch — specialist, observer, verifier** | Departments and leads are gone. `lead` keeps coordination and the approval gates but **loses the final verdict**. Independence, not seniority, is the mechanism — see below. |
+| **A code map that says where to look** | 282 files and 229 import edges on this repo, digest **1,611 chars** against the 10,000 cap, **190 ms cold / 70 ms** to queue a change. Over budget it names the tiers it dropped. |
+| **Dead code removed** | The "Archon Memory Manager" shipped in alpha.1 and **never ran once**: it computed a sliced output and then discarded it, the hook was `async`, and its vault was 0 bytes. Deleted with a zero-reference proof. |
+| **Six plan gates that reported success on bad input** | Including one where `resolve-node.sh` returned **two rows with exit 0**, a checkpoint snapshot first — so a mutating caller would write into history and report success. |
+| **CI is green again** | It had been red on every run since 2026-10-28. Two causes, both introduced by alpha.1 and both now fixed. |
+| **New identity** | An owl: an *archon* was an Athenian magistrate, and the owl is the one that **watches** — now a literal role in the dispatch model. **38 MB of PNG became 248 KB** of vector, including the dark-mode banner the old set never had. |
 
-**Zero runtime change.** No new agents, no new skills, no hook changes. The pre-v3.7 verb syntax has been gone since v3.7.0 — these are exclusively doc fixes. CI now prevents the same drift from recurring.
+### Why "independence, not seniority"
+
+A handoff written during this work claimed **"90/90 Jest test suites passed (1592 tests)"**. The real number was **89/90, 1591/1592**. It also claimed *"Live Verification"* of something that had only ever been unit-tested.
+
+Nobody lied. **The agent that graded the work was the agent that did it.** A more senior reviewer would not have caught it; a reviewer with no stake and no shared context would. That is the whole of FEAT-E and FEAT-G.
+
+**Suite: 97 suites · 1803 tests.**
+
+<details>
+<summary><b>v3.7.4 (docs cleanup — still shipped)</b></summary>
+
+Eliminated 122 stale command references, added two CI gates (`validate-docs-syntax.sh`, `validate-doc-maturity.sh`), rewrote onboarding, and slimmed the README by 45%. Zero runtime change.
+
+</details>
 
 <details>
 <summary><b>v3.7.3 highlights (still shipped — plan relocation + run linking)</b></summary>
