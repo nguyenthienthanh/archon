@@ -1,6 +1,9 @@
 <div align="center">
 
-![Aura Frog](assets/logo/github_banner.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/brand/banner-dark.png">
+  <img alt="Archon OS — a planning-first LLM operating system for software engineering" src="assets/brand/banner-light.png" width="860">
+</picture>
 
 # Aura Frog
 
@@ -311,9 +314,9 @@ Expected output:
 🐸 Aura Frog v3.8.0-alpha.19 — Ready
   Agents:   15 loaded (lead, architect, frontend, mobile, tester, security, devops, strategist, scanner,
                        master-planner, feature-architect, story-planner, replanner, epic-summarizer, conflict-arbiter)
-  Skills:   43 available (10 auto-invoke, 33 on-demand)
-  Rules:    72 loaded (22 core + 20 agent + 30 workflow)
-  Hooks:    52 registered
+  Skills:   45 available (10 auto-invoke, 35 on-demand)
+  Rules:    73 loaded (22 core + 20 agent + 31 workflow)
+  Hooks:    53 registered
   MCP:      context7, playwright, vitest, firebase, figma, slack
 ```
 
@@ -441,10 +444,10 @@ Details: `rules/core/execution-rules.md`, `skills/agent-detector/SKILL.md`, `ski
 | Component | Count | Why it matters |
 |-----------|:-----:|----------------|
 | **Agents** | 15 | Right expert auto-selected per task (build + review + planning + safety roles) |
-| **Skills** | 43 | 10 auto-invoke on context, 33 on-demand (incl. `design-vision-loop`) |
-| **Commands** | 24 | Core: `/run`, `/check`, `/design`, `/project`, `/af`, `/help` + `/archon-os:*` hierarchical-planning suite (14 user-facing + 10 legacy `/archon-os:plan-<verb>` alias stubs) |
-| **Rules** | 72 | 3-tier loading (22 core + 20 agent + 30 workflow) — only what's needed |
-| **Hooks** | 52 | Conditional — skip processing for non-code files (v3.7.2 adds `bare-word-router.cjs`) |
+| **Skills** | 45 | 10 auto-invoke on context, 33 on-demand (incl. `design-vision-loop`) |
+| **Commands** | 24 | Core: `/run`, `/check`, `/design`, `/project`, `/af`, `/help` + `/aura-frog:*` hierarchical-planning suite (14 user-facing + 10 legacy `/aura-frog:plan-<verb>` alias stubs) |
+| **Rules** | 73 | 3-tier loading (22 core + 20 agent + 30 workflow) — only what's needed |
+| **Hooks** | 53 | Conditional — skip processing for non-code files (v3.7.2 adds `bare-word-router.cjs`) |
 | **Backing scripts** | 12 | Hierarchical-planning operations (v3.7.2): `new-plan`, `validate-plan-tree`, `render-plan-tree` + 9 new (`expand`, `next`, `freeze`, `thaw`, `archive`, `conflicts`, `replan`, `promote`, `undo`) + `resolve-node` + `_lib` |
 | **MCP Servers** | 6 | All enabled — every `.mcp.json` entry starts, so opt-in servers are unbundled ([snippets](docs/operations/MCP_GUIDE.md#optional-servers-not-bundled)) |
 | **Tests** | 317 | Coverage gate at 25% statements floor; +102 tests in v3.7.2 (38 plan scripts + 64 bare-word router) |
@@ -629,7 +632,7 @@ Honest comparison with two popular plugins in the ecosystem (April 2026).
 | | **Aura Frog** | **wshobson/agents** | **Superpowers** |
 |---|---|---|---|
 | **Agents** | 15 curated | 184 across 78 plugins | ~20 |
-| **Skills** | 43 | 150 | Small focused set |
+| **Skills** | 45 | 150 | Small focused set |
 | **Commands** | 24 (14 user-facing + 10 legacy aliases) | 98 | ~10 |
 | **Workflow** | 5-phase TDD with 2 gates | No structured workflow | Phase-gated workflow |
 | **Agent routing** | Task-content Layer 0 override | Manual `/agent-name` | Similar to Aura Frog |
@@ -648,32 +651,39 @@ Combine freely — plugins coexist in Claude Code.
 
 ## Honest Maturity Report
 
-What works well, what doesn't, what's tracked. v3.7.2 polishes the surface; the underlying engineering still has real tech debt. We name it so you can plan around it.
+What works well, what doesn't, what's tracked. We name it so you can plan around it.
+
+> **Audited 2026-10-29.** Three entries in the table below were describing a world that no longer
+> existed, and two of them claimed *missing* things that had in fact shipped. Corrections are marked
+> inline rather than quietly deleted, because a maturity report that silently improves is one you
+> cannot trust in the other direction either.
 
 ### Confidence
 
 - **8 Pillars feature surface** — all shipped and exercised through the integration tests. Hierarchical planning, reasoning trace, conflict detection, self-healing proposals, MCP security, pre-flight, session reset, phase-role binding. Day-to-day production use is fine.
 - **Plan consolidation (v3.7.2) + uniform layout (v3.7.3)** — 43 unit tests against the 9 backing scripts + `link-run.sh` using temp `.claude/plans/` fixtures. 64 tests for the bare-word router with require()-based imports (no test theater).
-- **CI green on Node 18** — 317 tests, coverage gate held.
+- **CI runs the Node 18 / 20 / 22 matrix** — the suite is now **1600+ tests across 90+ suites**, not the 317 this line claimed until 2026-10-29.
 
 ### Known tech debt (tracked openly)
 
 | Item | Severity | Issue | Effort |
 |---|---|---|---|
 | 5 deferred env-var-dependent hooks still rely on undocumented `CLAUDE_TOOL_NAME` / `CLAUDE_FILE_PATHS` instead of the documented stdin-JSON contract. Only `mcp-call-gate` got the stdin fallback in v3.7.1. | medium | [#7](https://github.com/nguyenthienthanh/aura-frog/issues/7) | ~1d |
-| `hooks/lib/hook-runtime.cjs` doesn't exist yet — every hook re-implements stdin parsing + audit appending + atomic writes. Boilerplate × 43 files. | medium | [#6](https://github.com/nguyenthienthanh/aura-frog/issues/6) | ~2d |
-| `.claude/plans/.../trace.jsonl` files and `.aura/security/mcp-audit.jsonl` use append-only text. High-traffic logs would benefit from SQLite WAL but currently break "zero runtime dependencies." | low | [#8](https://github.com/nguyenthienthanh/aura-frog/issues/8) | open question (maintainer trade-off) |
+| ~~`hooks/lib/hook-runtime.cjs` doesn't exist yet — every hook re-implements stdin parsing + audit appending + atomic writes.~~ **✅ Fixed — this was stale.** The file is 699 lines and **39 hooks require it.** | — | [#6](https://github.com/nguyenthienthanh/aura-frog/issues/6) | done |
+| ~~Append-only text logs would benefit from SQLite WAL but break "zero runtime dependencies."~~ **Closed as decided, not fixed.** `node:sqlite` needs no dependency but is **Stability 1.1/1.2 (release candidate) on every Node line**, and on Node 26.10 `require('node:sqlite').Database` is `undefined` — only `DatabaseSync` exists, so the documented API is not the shipped one. Append-only text stays. The mission constraint also relaxed from "zero runtime" to **zero NATIVE dependencies** (2026-10-29). | — | [#8](https://github.com/nguyenthienthanh/aura-frog/issues/8) | decided |
 | Hook performance budget not enforced. ~19 hooks fire on every Write/Edit; estimated 100-300ms p95 but unmeasured. | medium | [#9](https://github.com/nguyenthienthanh/aura-frog/issues/9) | ~1d for budget + benchmark |
-| Node 20/22 test matrix hangs on Ubuntu CI runners (Node 18 + macOS pass in ~22s). Temporarily reduced to Node 18 only for v3.7.2 release. | low | (no open issue yet — investigate in v3.7.3) | ~2-4h to bisect |
+| ~~Node 20/22 test matrix hangs on Ubuntu CI runners; temporarily reduced to Node 18 only.~~ **✅ Fixed — this was stale.** `.github/workflows/ci.yml` runs the full `['18','20','22']` matrix. | — | — | done |
 | Pillar 4 Tier 2 OPA Rego policies, Pillar 5 L3+L4 LLM conflict detection, Pillar 6 auto-trigger on F2/F3 — all in the v3.7.0 roadmap, queued for v3.8+. | feature | — | varies |
 | `cc-plugin-eval` upstream npm peer-dep conflict (`madge` vs `typescript ^6`) breaks the behavioral-eval CI workflow. Not a regression in this plugin; tracked as upstream. | external | — | wait for cc-plugin-eval fix |
 
-### What v3.7.2 explicitly does NOT do
+### What this release explicitly does NOT do
 
 - It does not enable Tier 2 OPA pre-flight (queued v3.8+).
 - It does not add L3 (semantic LLM) or L4 (architectural LLM) conflict checks. The env var `AF_CONFLICT_LLM_DISABLED` is a no-op until v3.8+.
 - It does not auto-apply self-heal patches — proposals only, confidence ≥ 0.7, max 5/session.
 - It does not change `/run`'s 5-phase TDD flow. The escalation prompt adds an option, not a replacement.
+- It does not do semantic retrieval over session history. The turn index is a **list you read**, not a search index — at 73 turns there is nothing to search. No embeddings, no vector store, no third-party key.
+- It does not auto-update your project docs. That idea was considered and rejected; the reasoning is recorded in the FEAT-F plan node.
 
 ### How to assess fit
 
@@ -685,7 +695,7 @@ Use this checklist:
 - ✅ MCP-heavy workflows (Figma + Firebase + Slack + DBs) → per-agent allowlists + audit log
 - ⚠️ Single-file edits / quick prototypes → workflow overhead may not pay off; use `/run task: …` to bypass
 - ⚠️ Haiku-only budget — some features (planning, conflict, design phases) prefer Sonnet/Opus
-- ⚠️ Minimalist-plugin preference — Aura Frog is substantial (15 agents, 43 skills, 72 rules, 51 hooks)
+- ⚠️ Minimalist-plugin preference — Aura Frog is substantial; see the component counts above (generated, not hand-written)
 
 ---
 
@@ -697,7 +707,7 @@ Use this checklist:
 | **Getting Started** | [GET_STARTED.md](docs/getting-started/GET_STARTED.md) |
 | **First Workflow Tutorial** | [FIRST_WORKFLOW_TUTORIAL.md](docs/getting-started/FIRST_WORKFLOW_TUTORIAL.md) |
 | **All Commands (24)** | [commands/README.md](aura-frog/commands/README.md) |
-| **All Skills (43)** | [skills/README.md](aura-frog/skills/README.md) |
+| **All Skills (45)** | [skills/README.md](aura-frog/skills/README.md) |
 | **Agent Teams Guide** | [AGENT_TEAMS_GUIDE.md](docs/guides/AGENT_TEAMS_GUIDE.md) |
 | **MCP Setup** | [MCP_GUIDE.md](docs/operations/MCP_GUIDE.md) |
 | **Hooks & Lifecycle** | [hooks/README.md](aura-frog/hooks/README.md) |
@@ -742,7 +752,7 @@ MIT — See [LICENSE](LICENSE)
 
 <div align="center">
 
-![Aura Frog](assets/logo/mascot_coding_scene.png)
+<img alt="The Archon OS owl watching a plan tree" src="assets/brand/mascot.svg" width="520">
 
 ### Your AI writes code. Aura Frog runs the OS.
 

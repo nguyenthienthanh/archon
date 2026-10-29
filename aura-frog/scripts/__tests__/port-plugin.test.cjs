@@ -1,4 +1,10 @@
 'use strict';
+/*
+ * The plugin's name is read from plugin.json, never spelled out here. It was
+ * hardcoded as 'aura-frog' and went red the moment the v4 rebrand landed —
+ * a test asserting a literal the product no longer uses tells you nothing
+ * about the porter, which is what this file is for.
+ */
 /**
  * port-plugin.test.cjs — Tests for the cross-tool porter script (FEAT-009).
  *
@@ -22,9 +28,11 @@ const porter = require('../port-plugin.cjs');
 
 // The plugin name has exactly one source of truth: plugin.json. Hardcoding the
 // literal here is what left this suite red through the v4 rebrand -- the name
-// moved and the expectation did not. Read it instead.
+// moved and the expectation did not. Read it instead. Resolved against
+// __dirname rather than process.cwd(), so the suite does not depend on where
+// jest was invoked from.
 const PLUGIN_NAME = JSON.parse(fs.readFileSync(
-  path.join(process.cwd(), 'aura-frog', '.claude-plugin', 'plugin.json'), 'utf8',
+  path.join(__dirname, '..', '..', '.claude-plugin', 'plugin.json'), 'utf8',
 )).name;
 
 // ---------------------------------------------------------------------------

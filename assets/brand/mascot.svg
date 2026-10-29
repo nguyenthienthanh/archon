@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 320" width="560" height="320" role="img" aria-label="The Archon OS owl watching a plan tree in a terminal">
+  <title>Archon OS — the watcher</title>
+  <!-- The mascot scene, in the same flat geometric language as the mark.
+       Drawn rather than diffused: a generated raster would be ~500 KB and would
+       not match the geometry of the icon it sits next to. -->
+  <defs>
+    <clipPath id="win"><rect x="40" y="96" width="480" height="196" rx="14"/></clipPath>
+  </defs>
+
+  <!-- the owl, perched behind the window -->
+  <g transform="translate(372,16) scale(2.0)">
+<!-- ear tufts, drawn first so the head overlaps their base -->
+  <path fill="#17A47A" d="M13 20 L15 5 L27 13 Z"/>
+  <path fill="#17A47A" d="M51 20 L49 5 L37 13 Z"/>
+  <!-- head -->
+  <path fill="#0E7C5A" d="M32 8 C47 8 58 18 58 31 C58 46 46 58 32 58 C18 58 6 46 6 31 C6 18 17 8 32 8 Z"/>
+  <!-- eye discs -->
+  <circle cx="22" cy="28" r="11" fill="#F7F8F7"/>
+  <circle cx="42" cy="28" r="11" fill="#F7F8F7"/>
+  <circle cx="22" cy="28" r="5" fill="#0A2A22"/>
+  <circle cx="42" cy="28" r="5" fill="#0A2A22"/>
+  <!-- beak: the only accent colour, on the one part that renders a verdict -->
+  <path fill="#E8A317" d="M32 34 L38 44 L26 44 Z"/>
+  </g>
+
+  <!-- terminal -->
+  <rect x="40" y="96" width="480" height="196" rx="14" fill="#0A2A22"/>
+  <g clip-path="url(#win)">
+    <rect x="40" y="96" width="480" height="34" fill="#0B3A2E"/>
+  </g>
+  <circle cx="62" cy="113" r="5" fill="#E8A317"/>
+  <circle cx="80" cy="113" r="5" fill="#17A47A"/>
+  <circle cx="98" cy="113" r="5" fill="#2A5247"/>
+
+  <!-- a plan tree, which is what this thing actually does -->
+  <g font-family='"SF Mono",Menlo,Consolas,ui-monospace,monospace' font-size="15" fill="#8FB3A7">
+    <text x="64" y="162"><tspan fill="#17A47A">▸</tspan> MISSION</text>
+    <text x="84" y="188">└─ INIT-1  context integrity</text>
+    <text x="104" y="214">├─ <tspan fill="#F2F6F4">FEAT-B</tspan>  session memory</text>
+    <text x="104" y="240">└─ FEAT-E  independent verifier</text>
+  </g>
+  <text x="64" y="272" font-family='"SF Mono",Menlo,Consolas,ui-monospace,monospace' font-size="15" fill="#E8A317">✓ verified · not by the agent that wrote it</text>
+</svg>

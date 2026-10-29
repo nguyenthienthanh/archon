@@ -1,6 +1,6 @@
 <div align="center">
 
-![Contributing to Aura Frog](assets/logo/mascot_coding_scene.png)
+<img alt="The Archon OS owl watching a plan tree" src="assets/brand/mascot.svg" width="520">
 
 # Contributing to Aura Frog
 

@@ -70,6 +70,20 @@ routing[3]{level,approach,criteria}:
 
 *Selection handled by `skills/agent-detector/SKILL.md` (priority highest, Haiku/Flash).*
 
+**Dispatch is flat: three roles, no departments** (`rules/workflow/three-role-dispatch.md`, 2026-10-29).
+
+```toon
+dispatch_roles[3]{role,job,hard_constraint}:
+  specialist,"Owns one job end to end, independently","May not hand its own job to a peer and then bless the result"
+  observer,"Watches: progress, stalls, scope drift, budget","Does not do the work and does not grade it"
+  verifier,"Grades the result + confidence score","Not the producer, not the producer's context, no debate"
+```
+
+`orchestrator → specialist → verifier`, observer attached rather than interposed.
+A fourth layer requires a recorded context reason — an org chart is not one.
+**`lead` coordinates and observes; the final verdict belongs to the independent
+verifier**, because an agent asked to grade its own output agrees with itself.
+
 ```toon
 agents[15]{pid,name,domain,tools}:
   01,lead,Workflow coordination & loop watchdog,Read Grep Glob Edit Write Bash Skill
@@ -140,9 +154,9 @@ core_paths[12]{topic,path}:
 resources[8]{name,location}:
   Agents (15),agents/
   Commands (24),commands/
-  Rules (72),rules/{core|agent|workflow}/
-  Skills (43),skills/
-  Hooks (52),hooks/
+  Rules (73),rules/{core|agent|workflow}/
+  Skills (45),skills/
+  Hooks (53),hooks/
   MCP (6),.mcp.json
   AI References,docs/
   Human Docs,docs/README.md

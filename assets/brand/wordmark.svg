@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 472 64" width="472" height="64" role="img" aria-label="ARCHON OS">
+  <title>ARCHON OS</title>
+  <!-- Monoline geometric letterforms drawn as paths. Deliberately not set in a
+       system font: a wordmark that depends on the viewer having Futura
+       installed renders differently for every viewer.
+       Colour comes from `currentColor`, so one file serves light and dark. -->
+  <g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path transform="translate(6,0)" d="M 2,52 L 21,12 L 40,52"/>
+    <path transform="translate(6,0)" d="M 10,38 H 32"/>
+    <path transform="translate(63,0)" d="M 2,52 V12"/>
+    <path transform="translate(63,0)" d="M 2,12 H 20 A 10 10 0 0 1 20,32 H 2"/>
+    <path transform="translate(63,0)" d="M 18,32 L 36,52"/>
+    <path transform="translate(118,0)" d="M 37.5,19.4 A 20 20 0 1 0 37.5,44.6"/>
+    <path transform="translate(177,0)" d="M 2,12 V52"/>
+    <path transform="translate(177,0)" d="M 36,12 V52"/>
+    <path transform="translate(177,0)" d="M 2,32 H 36"/>
+    <path transform="translate(232,0)" d="M 2,32 A 20 20 0 1 1 42,32 A 20 20 0 1 1 2,32"/>
+    <path transform="translate(291,0)" d="M 2,52 V12"/>
+    <path transform="translate(291,0)" d="M 2,12 L 36,52"/>
+    <path transform="translate(291,0)" d="M 36,52 V12"/>
+    <path transform="translate(365,0)" d="M 2,32 A 20 20 0 1 1 42,32 A 20 20 0 1 1 2,32"/>
+    <path transform="translate(424,0)" d="M 35,21 C 35,15 28,12 21,12 C 14,12 7,16 7,22 C 7,28 13,30 21,32 C 29,34 35,37 35,43 C 35,49 28,52 21,52 C 14,52 7,49 7,43"/>
+  </g>
+</svg>

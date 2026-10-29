@@ -1,6 +1,6 @@
 ---
 title: Aura Frog — Consolidated Roadmap & Research
-last_aligned_with: v3.8.0-alpha.10
+last_aligned_with: v4.0.0-alpha.2
 status: current
 audience: contributor
 generated: 2026-07-09
@@ -31,7 +31,25 @@ generated: 2026-07-09
 | FEAT-011 | Research integrations | ⏳ planned |
 | FEAT-009 | Frontend design quality | ✅ **done** — Design Intelligence v2 shipped (vision loop · design SoT · Stitch MCP opt-in), PR #26 |
 
-Actual on-disk counts (v3.8.0-alpha.9): **15 agents · 60 skills · 72 rules · 24 commands · 50 hooks · 6 MCPs**.
+### v4 plan tree (`.claude/plans/`, 2026-10-29)
+
+| Node | Theme | Status |
+|---|---|---|
+| **FEAT-A** | AMM remediation | ✅ **done** — the Archon Memory Manager was dead code; deleted with a zero-reference proof. It sliced nothing: `tool-output-slicer.cjs` computed a virtualized output then discarded it, the hook was `async`, the vault was 0 bytes, and the *installed* plugin carried neither file. |
+| **FEAT-B** | Session memory: turn index + handoff preservation | ✅ **done** — see §2.4 |
+| **FEAT-C** | npm release + plugin version sync | ⏳ planned — needs a publish decision |
+| **FEAT-D** | Plan-infrastructure correctness | ✅ **done** — six gates that reported success on bad input |
+| **FEAT-E** | Independent cheap-model verifier | 🚧 in progress |
+| **FEAT-F** | Code map (startup digest) | 🚧 in progress · `priority: low` |
+| **FEAT-G** | Orchestrator reshape → flat three-role dispatch | ✅ **rule shipped**; enforcement rides on FEAT-E |
+
+> ⚠️ `priority:` is written in FEAT-F's frontmatter but **no script reads it** —
+> `grep "priority:" scripts/plans/` returns nothing. It is a label for humans, not a scheduler.
+
+Counts: regenerate with `bash aura-frog/scripts/ci/generate-stats.sh`; `stats.json` is the single
+source and `scripts/ci/validate-readme-counts.sh` is the gate. Do not hand-copy them here — a
+hand-copied count is correct until the next file is added, and when it is wrong it does not go
+red, it just goes quiet.
 
 ---
 
@@ -75,6 +93,44 @@ persistent "memory" and fast structural understanding without paying a huge toke
    and infra-free; strengthen the linking discipline rather than add a vector DB.
 4. **Use `detect_changes`/`trace_path` as the deterministic backend for the deferred L3/L4 conflict
    levels** instead of LLM calls (cheaper, grounded). → **FEAT-011 / STORY-0028 (spike)**.
+
+### 2.4 Resolved 2026-10-29 — and the premise above was wrong
+
+§2 asks *"how does the agent gain persistent memory without paying a huge token cost each
+session?"* and then compares four ways to **build a store**. Research in the FEAT-B session
+invalidated that framing:
+
+> **Claude Code already writes the store.** Every turn lands in
+> `~/.claude/projects/<slug>/<session-id>.jsonl` — measured at **3.5 MB / 1620 lines / 73 user
+> prompts** on one real session. Compaction shrinks the *context window*; it never touches that
+> file. The memory was intact on disk and nothing read it back.
+
+That collapsed the scope. There was no store to build, and the hook plumbing
+(`PreCompact` / `PostCompact` / `SessionStart` / `Stop`) was already wired end to end. The actual
+defect was that `compact-handoff.cjs` discarded almost everything it read —
+`recent_prompts: []`, `context: {}`, `session_id: null` on a real handoff.
+
+**Shipped instead:** a turn index (`hooks/lib/turn-index.cjs`) — one line per turn carrying the
+turn's `uuid` as a pointer, refreshed at `Stop`, injected at `SessionStart`. A derived cache that
+rebuilds byte-identically from the transcript, so nothing can live only in it.
+
+**The open "vector search" follow-up in §2 is now closed, rejected.** Two reasons, the second
+decisive: there is no first-party embeddings endpoint (a third-party key would break the no-key
+install), and **the corpus is 73 rows, not 73,000** — ANN search over 73 rows would be the wrong
+tool even if vectors were free and instant. Measured: 73 rendered lines ≈ 8,760 characters against
+the 10,000-character injection cap, so tiering is needed at roughly 80 turns, not at turn one.
+
+**Recommendation 1 (adopt a code-graph MCP as opt-in) is superseded by FEAT-F**, scoped down to a
+startup digest with no native binary and no installer — the zero-native-dependency constraint rules
+out tree-sitter/LSP servers regardless of their merits. Measured during FEAT-B research: pure-Node
+extraction runs 71–77 ms at 121k LOC and 130–149 ms at 217k LOC, against 258 ms / 593 ms for
+`ts.createSourceFile` — so the compiler API buys nothing here either.
+
+**Also rejected, with reasons recorded in the plan tree:** a "Project Brain" synthesized store (a
+second source of truth beside `CLAUDE.md`, the plan tree and `history.jsonl`), a `node:sqlite`
+episodic log (the transcript already is the log; and on Node 26.10
+`require('node:sqlite').Database` is `undefined` — only `DatabaseSync` exists, so the documented
+API is not the shipped one), and continuously auto-updating project docs.
 
 ---
 

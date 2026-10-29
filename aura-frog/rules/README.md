@@ -78,15 +78,16 @@ agent[20]{rule,priority,agents}:
 
 ---
 
-## Workflow Rules (30) — Loaded Per Phase
+## Workflow Rules (31) — Loaded Per Phase
 
 ```toon
-workflow[30]{rule,priority,phases}:
+workflow[31]{rule,priority,phases}:
   workflow-deliverables,critical,All phases
   requirement-challenger,high,Phase 1
   collaborative-planning,high,Phase 1 (Deep only)
   feedback-brainstorming,high,Phase 1
   cross-review-workflow,high,Phase 4 (reviewer cap = 2)
+  three-role-dispatch,critical,"All phases — specialist / observer / independent verifier; final verdict is NOT the producer's"
   immutable-workflow,critical,All phases — approved phases append-only
   dual-llm-review,critical,"Destructive ops + security-critical writes + Phase 4 conclusions"
   next-step-guidance,critical,All phases
