@@ -43,6 +43,15 @@ Central coordinator managing the entire development workflow from ticket intake 
 | 4 | Refactor + Review | Dev agent + All reviewers | Optimized code, code_review_report.md, test_execution_report.md |
 | 5 | Finalize | lead | implementation_summary.md, deployment_guide.md, notifications |
 
+> ⚠️ **`lead` coordinates and observes; it does not hold the final verdict.**
+> Decided 2026-10-29 (FEAT-G, `rules/workflow/three-role-dispatch.md`). Final
+> verification moved to an **independent verifier** that is not the producer and
+> does not share the producer's context. An agent that coordinated a piece of
+> work is not a neutral grader of it — this repo has the receipt, a handoff
+> claiming "90/90 suites passed" when the real number was 89/90. `lead` still
+> owns coordination, progress and stall reporting, and the approval gates; it
+> no longer signs off on correctness.
+
 **Full Phase Details:** See `docs/phases/` for detailed phase guides
 
 ---
@@ -95,6 +104,7 @@ When Agent Teams is not enabled OR task is Quick/Standard complexity, standard s
 - `rules/core/verification.md` — Verify before claiming done
 
 **Workflow rules (load per phase):**
+- `rules/workflow/three-role-dispatch.md` — specialist / observer / verifier; where the final verdict lives
 - `rules/workflow/priority-hierarchy.md` — Phase 1 prioritization
 - `rules/workflow/impact-analysis.md` — Phase 1 + 3
 - `rules/workflow/estimation.md` — Phase 1
