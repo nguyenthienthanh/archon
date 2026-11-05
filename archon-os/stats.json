@@ -1,6 +1,6 @@
 {
   "version": "4.0.0-alpha.3",
-  "generated": "2026-11-05T09:01:54Z",
+  "generated": "2026-11-05T09:04:18Z",
   "components": {
     "agents": 15,
     "skills": { "total": 45, "autoInvoke": 10 },
@@ -18,7 +18,7 @@
   },
   "codebase": {
     "cjsLines": 31729,
-    "mdLines": 25117,
+    "mdLines": 25124,
     "shLines": 14908,
     "totalFiles": 486
   }
