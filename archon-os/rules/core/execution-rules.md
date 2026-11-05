@@ -75,17 +75,28 @@ After approval, continue until: next approval gate, blocking condition, workflow
 
 ## Team Mode (Agent Teams)
 
-**When:** `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` enabled.
+**When:** `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` enabled. **Off by default — and keep it off unless a team is the point.**
 
 ```toon
 team_gate[4]{complexity,domains,mode,cost}:
   Quick,any,single agent,1x
   Standard,any,subagent,1x
   Deep,1 domain,subagent,1x
-  Deep,2+ domains (≥50 each),team,~3x
+  Deep,2+ domains (≥50 each),team,"~7x (plan-mode teammates, Claude Code costs docs) — grows with team size"
 ```
 
+**This table is the single source for the team cost figure.** Other docs point here; they do not restate the number.
+Source: https://code.claude.com/docs/en/costs#agent-team-token-costs (checked 2026-11-05). Each teammate
+is a full Claude Code instance (own CLAUDE.md, MCP servers, skills, 5-minute cache) and **keeps consuming
+tokens while idle, until it is shut down.**
+
 Team mode ONLY for Deep + multi-domain. If agent-detector returns `Mode: subagent`, do NOT create a team.
+
+> ⚠️ **Implicit teams.** While the env var is on, **any subagent you give a `name` launches as a teammate**
+> (agent-teams docs). Do not name Agent-tool calls in a session that has the variable set unless you
+> mean to form a team. Teams also cannot form in `-p`/SDK sessions — named subagents run as plain subagents there.
+
+**Shutdown is part of the job:** when a teammate's work is accepted, ask it to shut down. Idle ≠ free.
 
 **Startup:** TeamCreate → TaskCreate × N (one message) → Task × N (parallel) → teammates work independently.
 

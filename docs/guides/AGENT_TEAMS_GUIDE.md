@@ -35,6 +35,9 @@ Add to your Claude Code settings:
 }
 ```
 
+> ⚠️ With the variable on, **every subagent given a `name` becomes a teammate** — teams can form without
+> anyone asking. Enable it per-shell for the session that needs a team, not globally.
+
 ### 2. Environment Variable
 
 Or set directly:
@@ -51,19 +54,18 @@ The `isAgentTeamsEnabled()` utility in `hooks/lib/config-utils.cjs` checks both 
 
 ## Complexity Gate (CRITICAL — Token Savings)
 
-**Team mode ONLY activates for Deep complexity + multi-domain tasks.** This saves ~3x tokens for all other task types.
+**Team mode ONLY activates for Deep complexity + multi-domain tasks.** Teams cost several times a subagent run — the current figure lives in one place, [`rules/core/execution-rules.md` § Team Mode](../../archon-os/rules/core/execution-rules.md#team-mode-agent-teams).
 
 ```toon
 team_gate[4]{complexity,domains,mode,token_cost}:
   Quick,any,single agent,1x (baseline)
   Standard,any,subagent,1x (baseline)
   Deep,1 domain,subagent,1x (baseline)
-  Deep,2+ domains (≥50 each),team,~3x (parallel contexts)
+  Deep,2+ domains (≥50 each),team,see execution-rules.md (parallel full instances)
 ```
 
-**Why this gate?** Each teammate is an independent Claude instance with its own context window. Spawning 3 teammates costs ~3x tokens. Only justified when:
+**Why this gate?** Each teammate is an independent Claude instance with its own context window. Cost grows with team size, and an idle teammate keeps consuming tokens until it is shut down. Only justified when:
 - Task requires parallel cross-domain work (backend + frontend + tests)
-- Sequential execution would take 3x longer
 - Multiple file ownership domains need simultaneous editing
 
 **Examples:**
@@ -201,7 +203,7 @@ phase_teams[5]{phase,lead,primary,secondary,team_size}:
 
 ### ALWAYS
 
-1. **Only use teams for Deep + multi-domain tasks** - Saves ~3x tokens on all other tasks
+1. **Only use teams for Deep + multi-domain tasks** - Teams are the most expensive dispatch mode
 2. **Max 3 teammates per phase** - Prevents coordination overhead
 3. **Spawn teammates in parallel** - Multiple Task calls in one message
 4. **Pass complete context in prompts** - Teammates don't share conversation history
