@@ -26,7 +26,7 @@ set -euo pipefail
 #   - .claude-plugin/plugin.json           "version"
 #   - .claude-plugin/marketplace.json      "version" (x2)   [repo root]
 #   - package.json                         "version"        [npm publish đọc file này]
-#   - CLAUDE.md                            header / 8-Pillars / footer
+#   - AGENTS.md                            header / footer (CLAUDE.md only points at it)
 #   - docs/**/*.md                         last_aligned_with: frontmatter
 #   - docs/reference/CHANGELOG.md          [Unreleased] -> [version] stamp
 # =============================================================================
@@ -44,7 +44,7 @@ REPO_ROOT="$(cd "$BASE_DIR/.." && pwd)"
 PLUGIN_JSON="$BASE_DIR/.claude-plugin/plugin.json"
 MARKETPLACE_JSON="$REPO_ROOT/.claude-plugin/marketplace.json"
 PKG_JSON="$BASE_DIR/package.json"
-CLAUDE_MD="$BASE_DIR/CLAUDE.md"
+CLAUDE_MD="$BASE_DIR/AGENTS.md"   # CLAUDE.md is now a one-line pointer; versions live in AGENTS.md
 CHANGELOG="$REPO_ROOT/docs/reference/CHANGELOG.md"
 
 # semver-ish: MAJOR.MINOR.PATCH with optional -prerelease (alpha.N / beta.N / rc.N)
@@ -78,7 +78,10 @@ cmd_prepare() {
   # package.json — file mà `npm publish` đọc version từ đó. Trước v3.8.0-alpha.13 nó
   # KHÔNG nằm trong danh sách canonical nào (cả release.sh lẫn sync-version.sh), nên
   # mỗi lần phát hành phải nhớ sửa tay; quên là npm lệch khỏi plugin.json.
-  subst "$PKG_JSON"         "s/(\"version\"\s*:\s*\")\Q$OLD\E(\")/\${1}$NEW\${2}/g"
+  # Match ANY prior version, not $OLD: alpha.3 shipped with package.json still on
+  # alpha.2, and an $OLD-only replace then no-ops forever. Verified right after.
+  subst "$PKG_JSON"         "s/^(  \"version\"\s*:\s*\")[^\"]+(\")/\${1}$NEW\${2}/m"
+  grep -qE "^  \"version\": \"${NEW//./\\.}\"" "$PKG_JSON" || die "package.json version was not bumped to $NEW"
 
   # 2) CLAUDE.md — every current-version ref (header, 8-Pillars, footer). No
   #    historical version strings live in this file, so a scoped replace is safe.

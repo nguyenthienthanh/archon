@@ -1,6 +1,6 @@
 # Archon OS — Planning-First AI Engineering Operating System
 
-**System:** Archon OS v4.0.0-alpha.1 | **Format:** [TOON](https://github.com/toon-format/toon)
+**System:** Archon OS v4.0.0-alpha.4 | **Format:** [TOON](https://github.com/toon-format/toon)
 **Philosophy:** Claude is the **Kernel** — orchestrates, verifies, and schedules. 15 specialized agent processes, 5-phase TDD scheduler, TOON-compressed state, multi-session memory, and deterministic safety gates.
 
 ---
@@ -165,4 +165,4 @@ resources[8]{name,location}:
 
 ---
 
-**Version:** 4.0.0-alpha.1 | **Single Source of Truth:** `archon-os/AGENTS.md`
+**Version:** 4.0.0-alpha.4 | **Single Source of Truth:** `archon-os/AGENTS.md`
