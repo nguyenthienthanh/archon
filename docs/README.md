@@ -155,8 +155,8 @@ Accurate, but execution-oriented. Use the docs above for onboarding.
 
 - [Agents](../archon-os/agents/README.md) — 15 agents and their tool scopes
 - [Skills](../archon-os/skills/README.md) — 45 skills (10 auto-invoke + 35 on-demand)
-- [Commands](../archon-os/commands/README.md) — 25 commands
+- [Commands](../archon-os/commands/README.md) — 26 commands
 - [Rules](../archon-os/rules/README.md) — 73 rules, 3-tier loading
-- [Hooks](../archon-os/hooks/README.md) — 53 lifecycle hooks
+- [Hooks](../archon-os/hooks/README.md) — 54 lifecycle hooks
 - [Templates](../archon-os/templates/README.md) — document templates, incl. phase deliverables
 - [Scripts](../archon-os/scripts/README.md) — CI, plans, preflight, workflow, security

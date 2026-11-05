@@ -108,13 +108,14 @@ agents[15]{pid,name,domain,tools}:
 ## 🎯 Commands Reference
 
 ```toon
-commands[13]{cmd,purpose}:
+commands[14]{cmd,purpose}:
   /run,"Universal execution entrypoint: <task> with auto-detected intent (5-phase TDD)"
   /check,"Code quality, security SAST, performance profiling, coverage audit"
   /design,"API endpoints, database schema, tech spec, architecture documentation"
   /project,"Detect stack, refresh context snapshots, env inspection, settings sync"
   /archon,"System status, agent roster, prompt metrics, learning loop (/archon alias supported)"
   /help,"Interactive plugin documentation and routing guide"
+  /archon:research,"Plan-only research: clarify until clear → scouts → plan → independent verify → artifact. Writes no code (hook-enforced)"
   /archon:plan,"Hierarchical planning engine: plan/expand/next/replan/promote/archive/status/undo"
   /archon:heal,"Self-healing diagnostic: propose safe patches for F2/F3 failures"
   /archon:mcp,"MCP rate limit monitoring, per-agent access control, sanitized audit"
@@ -153,10 +154,10 @@ core_paths[12]{topic,path}:
 ```toon
 resources[8]{name,location}:
   Agents (15),agents/
-  Commands (25),commands/
+  Commands (26),commands/
   Rules (73),rules/{core|agent|workflow}/
   Skills (45),skills/
-  Hooks (53),hooks/
+  Hooks (54),hooks/
   MCP (6),.mcp.json
   AI References,docs/
   Human Docs,docs/README.md

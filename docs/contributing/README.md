@@ -32,7 +32,7 @@ need to know why something is shaped the way it is.
 
 ### Hooks — `archon-os/hooks/`
 
-53 lifecycle hooks, each its own process launched by Claude Code. They are the only part of
+54 lifecycle hooks, each its own process launched by Claude Code. They are the only part of
 Archon OS that is not portable markdown, which makes them the part most worth keeping small.
 
 - **Shared runtime:** `hooks/lib/hook-runtime.cjs` — stdin parsing, locked NDJSON appends,

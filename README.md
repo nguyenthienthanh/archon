@@ -68,7 +68,7 @@ Archon OS v4.0.0-alpha.3 — Ready
   Agents:   15 loaded
   Skills:   45 available (10 auto-invoke, 35 on-demand)
   Rules:    73 loaded (22 core + 20 agent + 31 workflow)
-  Hooks:    53 registered
+  Hooks:    54 registered
   MCP:      context7, playwright, vitest, firebase, figma, slack
 ```
 
@@ -216,7 +216,7 @@ at a time rather than all at once.
 | `/archon` | "How are you doing?" `status` · `agents` · `metrics` · `learn` · `setup` |
 | `/help` | "What can you do?" `/help <command>` also works. |
 
-[All 25 commands, every flag →](archon-os/commands/README.md)
+[All 26 commands, every flag →](archon-os/commands/README.md)
 
 ---
 

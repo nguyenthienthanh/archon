@@ -65,7 +65,7 @@ For a project-scope task that touches 5+ features, `/run` will offer to escalate
 
 - [GET_STARTED.md](GET_STARTED.md) — Full setup walkthrough with first workflow
 - [FIRST_WORKFLOW_TUTORIAL.md](FIRST_WORKFLOW_TUTORIAL.md) — Guided hands-on tutorial
-- [All Commands](../../archon-os/commands/README.md) — 25 commands (core 6 + `/archon-os:*` planning suite)
+- [All Commands](../../archon-os/commands/README.md) — 26 commands (core 6 + `/archon-os:*` planning suite)
 - [MCP Guide](../operations/MCP_GUIDE.md) — 6 bundled MCP servers (all enabled) + opt-in snippets
 - [Agent Selection Guide](../guides/AGENT_SELECTION_GUIDE.md) — How agents are auto-picked per task
 

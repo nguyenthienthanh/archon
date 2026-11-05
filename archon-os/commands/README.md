@@ -1,6 +1,6 @@
 # Archon OS Commands
 
-**Total:** 25 command files (5 bundled + 1 standalone + 12 hierarchical-planning slash commands + 1 project-extension + 1 session-reset + 1 pre-flight + 3 self-healing/MCP-security/dashboard + 1 legacy `/af` alias)
+**Total:** 26 command files (5 bundled + 1 standalone + 1 research + 12 hierarchical-planning slash commands + 1 project-extension + 1 session-reset + 1 pre-flight + 3 self-healing/MCP-security/dashboard + 1 legacy `/af` alias)
 
 ---
 
@@ -20,6 +20,13 @@ bundled[5]{command,subs,count}:
 ```toon
 standalone[1]{command,file,description}:
   help,help.md,Show help and available commands
+```
+
+## Research (plan-only)
+
+```toon
+research[1]{command,file,purpose}:
+  /archon-os:research,research.md,"Interview until a 7-item checklist is clean + user confirms → scouts → plan.md → independent verify → private artifact. Writes only under .claude/research/ (hooks/research-write-guard.cjs)"
 ```
 
 ## Hierarchical Planning (alpha — opt-in)
