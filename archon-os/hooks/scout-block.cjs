@@ -5,9 +5,9 @@
  *
  * Prevents wasteful token usage by blocking access to:
  * - node_modules, __pycache__, .git, dist, build, vendor
- * - Custom patterns from .afignore
+ * - Custom patterns from .archonignore (legacy .afignore still read)
  *
- * Disable: AF_SCOUT_BLOCK=false
+ * Disable: ARCHON_SCOUT_BLOCK=false
  *
  * Exit codes:
  * - 0: Command allowed
@@ -21,7 +21,7 @@ const path = require('path');
 // Default blocked patterns.
 // Note: `bin` and `obj` are NOT included by default — they collide with
 // legitimate Node `bin/` entrypoints, Go cmd/, and committed compiled assets.
-// Projects that want them blocked can add them in `.afignore`.
+// Projects that want them blocked can add them in `.archonignore`.
 const DEFAULT_BLOCKED = [
   'node_modules',
   '__pycache__',
@@ -49,12 +49,21 @@ const ALLOWED_COMMANDS = [
   'dotnet build',
 ];
 
+// v4 renamed the scan-exclusion file .afignore -> .archonignore. The old name is
+// still honoured because it lives in the USER's repo, not in the plugin: an
+// upgrade cannot rewrite it, and silently ignoring it would start scanning
+// directories the project had deliberately excluded.
+const IGNORE_FILES = ['.archonignore', '.afignore'];
+
 /**
- * Load custom patterns from .afignore
+ * Load custom scan-exclusion patterns from .archonignore (or legacy .afignore).
+ * The first file that exists wins; the two are not merged, so a project that has
+ * both gets exactly the canonical one it just wrote.
  */
 function loadCustomPatterns(projectRoot) {
-  const ignoreFile = path.join(projectRoot, '.afignore');
-  if (fs.existsSync(ignoreFile)) {
+  for (const name of IGNORE_FILES) {
+    const ignoreFile = path.join(projectRoot, name);
+    if (!fs.existsSync(ignoreFile)) continue;
     return fs.readFileSync(ignoreFile, 'utf-8')
       .split('\n')
       .map(line => line.trim())
@@ -109,7 +118,7 @@ function isAllowedBuildCommand(command) {
 }
 
 function main() {
-  if (process.env.AF_SCOUT_BLOCK === 'false') process.exit(0);
+  if (process.env.ARCHON_SCOUT_BLOCK === 'false') process.exit(0);
 
   try {
     // Read hook input from stdin
@@ -126,12 +135,12 @@ function main() {
 
     // Load patterns.
     //
-    // Two lists, deliberately. `.afignore` describes directories not worth
+    // Two lists, deliberately. `.archonignore` describes directories not worth
     // SCANNING ("blocked from scanning to save tokens", per its own header) —
     // it is a token-economy list, not a safety boundary. DEFAULT_BLOCKED is the
     // safety boundary: nobody should be writing into node_modules, dist or .git.
     //
-    // Applying .afignore to writes made the plugin contradict itself: this repo
+    // Applying .archonignore to writes made the plugin contradict itself: this repo
     // lists `__tests__`, and the plugin's own rules make Phase 2 Test RED
     // mandatory, so creating the required failing test was blocked by the
     // plugin that required it. Writes therefore consult DEFAULT_BLOCKED only.

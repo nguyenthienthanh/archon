@@ -114,9 +114,9 @@ function readPluginMeta(pluginRoot) {
   const p = path.join(pluginRoot, PLUGIN_JSON_REL);
   try {
     const obj = JSON.parse(fs.readFileSync(p, 'utf8'));
-    return { name: obj.name || 'aura-frog', version: obj.version || 'unknown' };
+    return { name: obj.name || 'archon-os', version: obj.version || 'unknown' };
   } catch (_) {
-    return { name: 'aura-frog', version: 'unknown' };
+    return { name: 'archon-os', version: 'unknown' };
   }
 }
 

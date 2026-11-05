@@ -7,7 +7,7 @@
 set -e
 PLUGIN_DIR="${1:-archon-os}"
 
-echo "🦉 Archon OS Performance Report"
+echo "Archon OS Performance Report"
 echo "================================"
 echo "Date: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo "Version: $(grep '"version"' "$PLUGIN_DIR/.claude-plugin/plugin.json" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')"

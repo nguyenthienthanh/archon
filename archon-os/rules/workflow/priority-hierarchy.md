@@ -31,7 +31,7 @@ security/override rule in `~/.claude/rules/` is never relaxed by a plugin rule.
 
 `session-start` prints the host index (`🧩 Host extensions`) and `subagent-init` injects it
 into every subagent (plugin agents carry the `Skill` tool for this). Disable with
-`AF_HOST_EXTENSIONS_DISABLED=true`.
+`ARCHON_HOST_EXTENSIONS_DISABLED=true`.
 
 **Skills Claude Code never registers:** only `.claude/skills/<name>/SKILL.md` with
 `description` frontmatter loads. Flat `.claude/skills/<name>.md` files are silently ignored —

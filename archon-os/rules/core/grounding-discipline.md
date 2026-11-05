@@ -80,4 +80,4 @@ The grounding check itself is binary (grounded or not). Tools layered on top of 
 - **Command:** `/archon-os:trace` — surfaces ungrounded claims
 - **Rule:** `rules/core/no-assumption.md` — same spirit; ask when uncertain
 - **Rule:** `rules/core/verification.md` — verify before claiming success
-- **Spec:** `docs/specs/AURA_FROG_V3.7.0_TECH_SPEC.md` §11.1
+- **Spec:** `docs/specs/ARCHON_V3.7.0_TECH_SPEC.md` §11.1

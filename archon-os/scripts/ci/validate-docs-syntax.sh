@@ -2,7 +2,7 @@
 # Validate that user-facing docs use current v3.7.x command syntax.
 #
 # Catches stale references like `workflow:start` (pre-v3.7) that should
-# read `/run`, or `agent:list` (pre-v3.7) that should read `/af agents`.
+# read `/run`, or `agent:list` (pre-v3.7) that should read `/archon agents`.
 #
 # Detection rules:
 #   1. Match each pattern in BLOCKED_PATTERNS against docs/**/*.md +
@@ -46,12 +46,12 @@ BLOCKED_PATTERNS=(
   "workflow:handoff|use bare 'handoff' verb (context-aware)"
   "workflow:resume|use /run resume <id>"
   "workflow:rollback|use 'rollback' verb (or /run rollback [phase])"
-  "agent:list|use /af agents"
+  "agent:list|use /archon agents"
   "bugfix:quick|use /run \"fix ...\""
-  "learn:status|use /af learn status"
-  "learn:analyze|use /af learn analyze"
-  "learn:apply|use /af learn apply"
-  "learn:feedback|use /af learn feedback"
+  "learn:status|use /archon learn status"
+  "learn:analyze|use /archon learn analyze"
+  "learn:apply|use /archon learn apply"
+  "learn:feedback|use /archon learn feedback"
   "project:reload-env|use /project env (or session-start auto-reload)"
   "hooks/pre-phase\.md|removed — lifecycle handled by .cjs hooks"
   "hooks/post-phase\.md|removed — lifecycle handled by .cjs hooks"

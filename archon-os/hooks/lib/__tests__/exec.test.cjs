@@ -1,5 +1,5 @@
 /**
- * Tests for archon-os/hooks/lib/af-exec.cjs
+ * Tests for archon-os/hooks/lib/exec.cjs
  *
  * The point of this module is that a subprocess limit breach becomes VISIBLE
  * instead of being swallowed by a bare catch, so that is what is asserted.
@@ -14,9 +14,9 @@ const {
   TIMEOUT_SLOW_MS,
   MAX_BUFFER_DEFAULT,
   MAX_BUFFER_LARGE,
-} = require('../af-exec.cjs');
+} = require('../exec.cjs');
 
-describe('af-exec', () => {
+describe('exec', () => {
   describe('classifyExecError', () => {
     it('classifies ENOBUFS as a buffer breach', () => {
       expect(classifyExecError({ code: 'ENOBUFS' })).toBe('buffer');

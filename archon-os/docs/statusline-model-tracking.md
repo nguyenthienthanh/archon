@@ -23,7 +23,7 @@ that surfaces the per-step model on the statusline.
 
 ```
 ┌──────────────┐  push   ┌────────────────────────────┐   read tail
-│ PreToolUse   │ ──────▶ │ .aura-frog/runtime/        │ ─────────────▶ ┌──────────────┐
+│ PreToolUse   │ ──────▶ │ .archon/runtime/        │ ─────────────▶ ┌──────────────┐
 │ matcher:Task │         │ model-stack.jsonl (JSONL)  │                │ statusline.sh │
 └──────────────┘         └────────────────────────────┘                └──────────────┘
         │                          ▲                                           │
@@ -40,7 +40,7 @@ that surfaces the per-step model on the statusline.
    appends one JSONL line to the stack.
 2. `archon-os/scripts/statusline.sh` reads `tail -n 1` of the stack on
    every render. When non-empty, it switches from the idle format to:
-   `🦉 AF v{ver} │ ▶ {phase} │ {step_model} ⏱{duration} │ session: {session_model} │ {ctx}% ctx`.
+   `archon v{ver} │ ▶ {phase} │ {step_model} ⏱{duration} │ session: {session_model} │ {ctx}% ctx`.
 3. `archon-os/hooks/task-clear-model.cjs` fires on `PostToolUse(Task)` and
    pops the most-recent line. When the stack is empty, the file is removed.
 
@@ -51,9 +51,9 @@ unwind correctly.
 
 ## State location
 
-`.aura-frog/runtime/model-stack.jsonl` — gitignored via
-`.aura-frog/runtime/.gitignore`. Per-machine, per-session. Override the
-path for tests with `AF_MODEL_STACK_FILE`.
+`.archon/runtime/model-stack.jsonl` — gitignored via
+`.archon/runtime/.gitignore`. Per-machine, per-session. Override the
+path for tests with `ARCHON_MODEL_STACK_FILE`.
 
 ## Disable temporarily
 

@@ -25,7 +25,7 @@
 - /project init / status / refresh / detect / env / sync
 
 **System:**
-- /af status / agents / metrics / learn / setup / update / mcp
+- /archon status / agents / metrics / learn / setup / update / mcp
 
 **Help:**
 - /help — Show this reference

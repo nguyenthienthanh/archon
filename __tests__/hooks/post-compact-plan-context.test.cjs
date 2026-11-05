@@ -69,15 +69,21 @@ describe('post-compact — accepts what compact-handoff actually writes', () => 
     // Legacy workflow state is only written for code projects.
     fs.mkdirSync(path.join(root, '.git'));
     savedEnv = { ...process.env };
+    // This test needs a controlled environment, and the host running it is often
+    // a Claude Code session with the plugin's own AF_* variables exported. The v4
+    // env-compat bridge mirrors those onto ARCHON_* at require time — i.e. after
+    // this hook deletes them — so a `delete` alone would be undone by the host's
+    // AF_CLAUDE_SESSION_ID. Switch the bridge off instead of chasing each alias.
+    process.env.ARCHON_ENV_COMPAT_OFF = 'true';
     // compact-handoff resolves its file paths at module load, so the root has to
     // be in place before the fresh require below.
-    process.env.AF_PROJECT_ROOT = root;
-    delete process.env.AF_CLAUDE_SESSION_ID;
-    delete process.env.AF_TRANSCRIPT_PATH;
-    process.env.AF_WORKFLOW_ID = 'wf-test-1';
-    process.env.AF_CURRENT_PHASE = '3';
-    process.env.AF_CURRENT_AGENT = 'frontend';
-    process.env.AF_TASK_DESCRIPTION = 'ship the thing';
+    process.env.ARCHON_PROJECT_ROOT = root;
+    delete process.env.ARCHON_CLAUDE_SESSION_ID;
+    delete process.env.ARCHON_TRANSCRIPT_PATH;
+    process.env.ARCHON_WORKFLOW_ID = 'wf-test-1';
+    process.env.ARCHON_CURRENT_PHASE = '3';
+    process.env.ARCHON_CURRENT_AGENT = 'frontend';
+    process.env.ARCHON_TASK_DESCRIPTION = 'ship the thing';
   });
 
   afterEach(() => {
@@ -153,21 +159,21 @@ const { composeBanner } = require('../../archon-os/hooks/session-start-restore-a
 describe('session-start-restore-active — composeBanner', () => {
   it('shows a feature with its story and task', () => {
     expect(composeBanner({ active: { feature: 'FEAT-A', story: 'S1', task: 'T1' } }))
-      .toEqual(['🦉 Active plan: FEAT-A', 'Story: S1', 'Task: T1']);
+      .toEqual(['Active plan: FEAT-A', 'Story: S1', 'Task: T1']);
   });
 
   it('prefers feature over initiative and mission', () => {
     expect(composeBanner({ active: { feature: 'F', initiative: 'I', mission: 'M' } }))
-      .toEqual(['🦉 Active plan: F']);
+      .toEqual(['Active plan: F']);
   });
 
   it('falls back to initiative when there is no feature', () => {
     expect(composeBanner({ active: { initiative: 'INIT-1', mission: 'M' } }))
-      .toEqual(['🦉 Active plan: INIT-1']);
+      .toEqual(['Active plan: INIT-1']);
   });
 
   it('falls back to mission when there is neither feature nor initiative', () => {
-    expect(composeBanner({ active: { mission: 'Ship it' } })).toEqual(['🦉 Active mission: Ship it']);
+    expect(composeBanner({ active: { mission: 'Ship it' } })).toEqual(['Active mission: Ship it']);
   });
 
   it('is empty for no active anchor or a malformed object', () => {

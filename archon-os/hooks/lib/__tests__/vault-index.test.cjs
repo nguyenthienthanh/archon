@@ -160,14 +160,14 @@ describe('updateEntry', () => {
         expect(after.nodes['TASK-00099']).toBeDefined();
     });
 
-    it('is inert when AF_GRAPH_INDEX_DISABLED=true', () => {
+    it('is inert when ARCHON_GRAPH_INDEX_DISABLED=true', () => {
         idx.rebuildIndex(plans);
         const before = fs.readFileSync(idx.indexPath(plans), 'utf8');
         const file = path.join(plans, idx.readIndex(plans).nodes['TASK-00001'].path);
         fs.writeFileSync(file, fs.readFileSync(file, 'utf8').replace('status: planned', 'status: done'));
 
-        process.env.AF_GRAPH_INDEX_DISABLED = 'true';
-        try { idx.updateEntry(plans, file); } finally { delete process.env.AF_GRAPH_INDEX_DISABLED; }
+        process.env.ARCHON_GRAPH_INDEX_DISABLED = 'true';
+        try { idx.updateEntry(plans, file); } finally { delete process.env.ARCHON_GRAPH_INDEX_DISABLED; }
 
         expect(fs.readFileSync(idx.indexPath(plans), 'utf8')).toBe(before);
     });
@@ -351,7 +351,7 @@ describe('CLI', () => {
         run('--plans-dir', plans, '--rebuild');
         const r = spawnSync(
             process.execPath, [path.join(__dirname, '..', 'vault-index.cjs'), '--plans-dir', plans, '--render'],
-            { encoding: 'utf8', env: { ...process.env, AF_GRAPH_INDEX_DISABLED: 'true' } },
+            { encoding: 'utf8', env: { ...process.env, ARCHON_GRAPH_INDEX_DISABLED: 'true' } },
         );
         expect(r.status).toBe(3);
     });

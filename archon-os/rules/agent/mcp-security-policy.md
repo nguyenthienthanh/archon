@@ -78,17 +78,17 @@ Per-MCP per-session counters live in `.claude/logs/.mcp-rate-counter.json`. Coun
 
 ## Audit log (per spec §23.2)
 
-`<security-dir>/mcp-audit.jsonl` (append-only; `<security-dir>` resolves as `$AF_SECURITY_DIR`, else `.claude/security/` if it exists, else `.aura/security/` — see `hooks/lib/security-dir.cjs`). Schema:
+`<security-dir>/mcp-audit.jsonl` (append-only; `<security-dir>` resolves as `$ARCHON_SECURITY_DIR`, else `.claude/security/` if it exists, else `.aura/security/` — see `hooks/lib/security-dir.cjs`). Schema:
 
 ```jsonl
 {"ts":"<ISO>","agent":"<id>","mcp":"<server>","method":"<method>","input":<sanitized>,"output_size_bytes":<N>,"latency_ms":<N>,"success":<bool>,"BLOCKED":<bool>,"reason":"<if blocked>"}
 ```
 
-Retention: `AF_MCP_AUDIT_RETENTION_DAYS=30` default; pruned on SessionStart.
+Retention: `ARCHON_MCP_AUDIT_RETENTION_DAYS=30` default; pruned on SessionStart.
 
 ## Disable mechanism
 
-- `AF_MCP_AUDIT_DISABLED=true` — disables audit logging (NOT enforcement; the gate hook still enforces allowlist + rate limits)
+- `ARCHON_MCP_AUDIT_DISABLED=true` — disables audit logging (NOT enforcement; the gate hook still enforces allowlist + rate limits)
 - Disabling logging is **strongly discouraged** — audit is your forensic safety net
 
 ## Workflow integration

@@ -31,7 +31,7 @@ When always-loaded budget approaches 13,500 tokens:
 ## Tie-Ins
 
 - **Owns:** `.claude/plans/active.json` (read), `.claude/plans/mission.md` (read), `.claude/plans/<active path>/*.md` (read)
-- **Skill spec:** `docs/specs/AURA_FROG_V3.7.0_TECH_SPEC.md` §9.1
+- **Skill spec:** `docs/specs/ARCHON_V3.7.0_TECH_SPEC.md` §9.1
 - **Rule:** `rules/core/plan-trust-policy.md` — content loaded by this skill is `trust: plan`
 - **Hook:** `hooks/pre-execute-load-plan-context.cjs` — invokes this skill on every PreToolUse
 - **Companion:** `skills/plan-validator/SKILL.md` — runs `validate-plan-tree.sh` on demand

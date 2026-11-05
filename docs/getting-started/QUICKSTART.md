@@ -6,7 +6,7 @@ audience: first-time
 
 # Archon OS — 60-Second Quickstart
 
-> v3.7.x syntax. The current command surface is `/run` (universal entry point with intent detection) + `/archon-os:*` (plan / heal / mcp / trace / dashboard) + `/af` (status / agents / learn). Older `workflow:*`-prefixed verbs from v3.6 are documented in `MIGRATION_TO_V3.7.md`.
+> v3.7.x syntax. The current command surface is `/run` (universal entry point with intent detection) + `/archon-os:*` (plan / heal / mcp / trace / dashboard) + `/archon` (status / agents / learn). Older `workflow:*`-prefixed verbs from v3.6 are documented in `MIGRATION_TO_V3.7.md`.
 
 ## Install
 
@@ -38,7 +38,7 @@ For a project-scope task that touches 5+ features, `/run` will offer to escalate
 
 ```bash
 # Check current version
-/af status
+/archon status
 
 # Update to latest
 /plugin marketplace update archon
@@ -47,7 +47,7 @@ For a project-scope task that touches 5+ features, `/run` will offer to escalate
 /exit
 ```
 
-**Auto-check:** Archon OS checks for updates daily. Set `AF_UPDATE_CHECK=false` to disable.
+**Auto-check:** Archon OS checks for updates daily. Set `ARCHON_UPDATE_CHECK=false` to disable.
 
 ## Essential Commands
 
@@ -58,14 +58,14 @@ For a project-scope task that touches 5+ features, `/run` will offer to escalate
 | `/check` | Quality scan — security / perf / complexity / debt / coverage / deps |
 | `/design` | Pre-code design — API / DB / docs |
 | `/project init` | Scan repo, detect stack, generate `.claude/project-contexts/` |
-| `/af status` | Plugin status — version, agents, MCP servers, learning system |
+| `/archon status` | Plugin status — version, agents, MCP servers, learning system |
 | `/help` | Plugin overview, per-command help, agent routing guide |
 
 ## Learn More
 
 - [GET_STARTED.md](GET_STARTED.md) — Full setup walkthrough with first workflow
 - [FIRST_WORKFLOW_TUTORIAL.md](FIRST_WORKFLOW_TUTORIAL.md) — Guided hands-on tutorial
-- [All Commands](../../archon-os/commands/README.md) — 24 commands (core 6 + `/archon-os:*` planning suite)
+- [All Commands](../../archon-os/commands/README.md) — 25 commands (core 6 + `/archon-os:*` planning suite)
 - [MCP Guide](../operations/MCP_GUIDE.md) — 6 bundled MCP servers (all enabled) + opt-in snippets
 - [Agent Selection Guide](../guides/AGENT_SELECTION_GUIDE.md) — How agents are auto-picked per task
 

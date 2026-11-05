@@ -3,7 +3,7 @@
  * Pure-function tests via require()-from-source.
  */
 
-jest.mock('../../archon-os/hooks/lib/af-learning.cjs', () => ({
+jest.mock('../../archon-os/hooks/lib/learning.cjs', () => ({
   recordPattern: jest.fn(),
   isLearningEnabled: jest.fn(() => true),
   isLocalMode: jest.fn(() => true),

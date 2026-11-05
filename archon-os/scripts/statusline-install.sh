@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# Bridges legacy AF_* / AURA_FROG_* variables onto their ARCHON_* names (v4 rebrand).
+. "$(dirname "${BASH_SOURCE[0]}")/lib/env-compat.sh"
+
 # Archon OS plugin — statusline installer / updater.
 #
 # Copies the plugin's canonical statusline scripts into ~/.claude/ and wires
@@ -6,7 +10,7 @@
 # is backed up first and applied via python3 (never sed) for safe JSON.
 #
 # Subcommands:
-#   install [--billing-day N] [--plan LABEL] [--style cost|af]
+#   install [--billing-day N] [--plan LABEL] [--style cost|archon]
 #   update
 #   status
 set -euo pipefail
@@ -21,19 +25,20 @@ usage() {
 Archon OS statusline installer
 
 Usage:
-  statusline-install.sh install [--billing-day N] [--plan LABEL] [--style cost|af]
+  statusline-install.sh install [--billing-day N] [--plan LABEL] [--style cost|archon]
       Copy the 3 statusline scripts into ~/.claude/ and wire settings.json.
       --style cost (default): point statusLine at ~/.claude/statusline-cost.sh
-      --style af           : point statusLine at the plugin's classic scripts/statusline.sh
-      --billing-day N      : set settings.json .env.AF_BILLING_DAY
-      --plan LABEL         : set settings.json .env.AF_PLAN_LABEL
+      --style archon       : point statusLine at the plugin's classic scripts/statusline.sh
+                             (pre-v4 spelling `af` still accepted)
+      --billing-day N      : set settings.json .env.ARCHON_BILLING_DAY
+      --plan LABEL         : set settings.json .env.ARCHON_PLAN_LABEL
 
   statusline-install.sh update
       Re-copy ONLY the 3 script files into ~/.claude/ (overwrite). Does NOT touch
       settings.json — preserves your wiring, billing day, and plan label.
 
   statusline-install.sh status
-      Show the active statusLine command, resolved AF_BILLING_DAY / AF_PLAN_LABEL,
+      Show the active statusLine command, resolved ARCHON_BILLING_DAY / ARCHON_PLAN_LABEL,
       cache freshness, and availability of python3 / bunx / npx.
 EOF
 }
@@ -65,7 +70,10 @@ cmd_install() {
       *) echo "Unknown option: $1" >&2; usage; exit 2 ;;
     esac
   done
-  case "$style" in cost|af) ;; *) echo "Invalid --style: $style (cost|af)" >&2; exit 2 ;; esac
+  # `af` was the pre-v4 spelling and is still accepted: it is a flag people have in
+  # their own install scripts, and rejecting it would break them for a rename.
+  [ "$style" = "af" ] && style="archon"
+  case "$style" in cost|archon) ;; *) echo "Invalid --style: $style (cost|archon)" >&2; exit 2 ;; esac
 
   copy_scripts
 
@@ -74,7 +82,7 @@ cmd_install() {
 
   # statusLine command target depends on style.
   local sl_cmd
-  if [ "$style" = "af" ]; then
+  if [ "$style" = "archon" ]; then
     # Point at the plugin's classic statusline (left untouched by this installer).
     sl_cmd="bash $SCRIPT_DIR/statusline.sh"
   else
@@ -110,9 +118,9 @@ if billing_day or plan:
     if not isinstance(env, dict):
         env = {}
     if billing_day:
-        env["AF_BILLING_DAY"] = str(billing_day)
+        env["ARCHON_BILLING_DAY"] = str(billing_day)
     if plan:
-        env["AF_PLAN_LABEL"] = str(plan)
+        env["ARCHON_PLAN_LABEL"] = str(plan)
     data["env"] = env
 
 os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -125,8 +133,8 @@ PY
   echo "  Scripts copied to $CLAUDE_DIR/:"
   for f in "${SCRIPTS[@]}"; do echo "    - $f"; done
   echo "  statusLine.command -> $sl_cmd"
-  [ -n "$billing_day" ] && echo "  env.AF_BILLING_DAY -> $billing_day"
-  [ -n "$plan" ] && echo "  env.AF_PLAN_LABEL  -> $plan"
+  [ -n "$billing_day" ] && echo "  env.ARCHON_BILLING_DAY -> $billing_day"
+  [ -n "$plan" ] && echo "  env.ARCHON_PLAN_LABEL  -> $plan"
   if [ -n "$bak" ]; then
     echo "  settings.json backup: $bak"
   else
@@ -162,16 +170,16 @@ except Exception:
 sl = (data.get("statusLine") or {}) if isinstance(data, dict) else {}
 env = (data.get("env") or {}) if isinstance(data, dict) else {}
 cmd = sl.get("command", "(none)")
-bd = env.get("AF_BILLING_DAY") or os.environ.get("AF_BILLING_DAY") or "1 (default)"
-pl = env.get("AF_PLAN_LABEL") or os.environ.get("AF_PLAN_LABEL") or "Claude (default)"
+bd = env.get("ARCHON_BILLING_DAY") or os.environ.get("ARCHON_BILLING_DAY") or "1 (default)"
+pl = env.get("ARCHON_PLAN_LABEL") or os.environ.get("ARCHON_PLAN_LABEL") or "Claude (default)"
 print(f"  statusLine.command : {cmd}")
-print(f"  AF_BILLING_DAY     : {bd}")
-print(f"  AF_PLAN_LABEL      : {pl}")
+print(f"  ARCHON_BILLING_DAY     : {bd}")
+print(f"  ARCHON_PLAN_LABEL      : {pl}")
 PY
   else
     echo "  settings.json      : not found ($SETTINGS)"
-    echo "  AF_BILLING_DAY     : ${AF_BILLING_DAY:-1 (default)}"
-    echo "  AF_PLAN_LABEL      : ${AF_PLAN_LABEL:-Claude (default)}"
+    echo "  ARCHON_BILLING_DAY     : ${ARCHON_BILLING_DAY:-1 (default)}"
+    echo "  ARCHON_PLAN_LABEL      : ${ARCHON_PLAN_LABEL:-Claude (default)}"
   fi
 
   local cyc="$CLAUDE_DIR/cache/usage-cycle.json"

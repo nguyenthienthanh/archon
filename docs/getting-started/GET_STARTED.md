@@ -50,7 +50,7 @@ That's it. Archon OS is now installed globally and available in every Claude Cod
 /help
 ```
 
-You should see a category called *Archon OS* listing commands like `/run`, `/af`, `/archon-os:plan`, `/check`, `/project`.
+You should see a category called *Archon OS* listing commands like `/run`, `/archon`, `/archon-os:plan`, `/check`, `/project`.
 
 **Initialize for this project (optional, recommended once):**
 
@@ -139,7 +139,7 @@ Top 5 install-time questions — fuller fixes in [TROUBLESHOOTING.md](../operati
 
 1. **`/plugin marketplace add` reports an error.** Make sure your Claude Code is recent enough to support marketplace plugins (Anthropic ships this in current builds). If not, use the [manual install path](../operations/INSTALLATION.md#manual-install).
 2. **`/help` doesn't show Archon OS commands.** Re-run `/plugin install archon-os@archon`; check that `~/.claude/plugins/marketplaces/archon/archon-os/` exists.
-3. **First `/run` doesn't auto-detect a flow.** Type a more concrete verb-noun task description (e.g. `/run add password reset to the login form`). Force flow with prefixes: `/run task: …` / `/run project: …`. Disable escalation per-session with `AF_ESCALATION_DISABLED=true`.
+3. **First `/run` doesn't auto-detect a flow.** Type a more concrete verb-noun task description (e.g. `/run add password reset to the login form`). Force flow with prefixes: `/run task: …` / `/run project: …`. Disable escalation per-session with `ARCHON_ESCALATION_DISABLED=true`.
 4. **An approval gate seems stuck.** Type bare `status` to see what's pending, or bare `rollback` to revert to the last checkpoint. Full action list above.
 5. **MCP server didn't fire.** Some MCPs need env vars (`FIGMA_API_TOKEN`, `SLACK_BOT_TOKEN`, `firebase login`). They silently no-op if unset — see [MCP_GUIDE.md](../operations/MCP_GUIDE.md) for per-MCP setup.
 

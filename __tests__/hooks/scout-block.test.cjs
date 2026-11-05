@@ -76,7 +76,7 @@ describe('scout-block', () => {
 
     // Reflects current behavior: bin/ and obj/ are NOT in DEFAULT_BLOCKED anymore
     // (they collided with Node bin/ entrypoints, Go cmd/, committed binaries).
-    // Projects that want them blocked add to .afignore.
+    // Projects that want them blocked add to .archonignore.
     it('does NOT block path containing bin by default (Node/Go bin/ collide)', () => {
       expect(isBlocked('/project/bin/server', DEFAULT_BLOCKED)).toBe(false);
     });
@@ -173,33 +173,48 @@ describe('scout-block', () => {
     });
 
     afterEach(() => {
-      const ignoreFile = path.join(tmpDir, '.afignore');
-      if (fs.existsSync(ignoreFile)) fs.unlinkSync(ignoreFile);
-      if (fs.existsSync(tmpDir)) fs.rmdirSync(tmpDir);
+      // Recursive, not a named-file unlink: the loader reads two filenames now
+      // (.archonignore and the legacy .afignore), and an rmdir that only knows
+      // about one leaves the other behind and fails with ENOTEMPTY.
+      fs.rmSync(tmpDir, { recursive: true, force: true });
     });
 
-    it('returns empty array when .afignore does not exist', () => {
+    it('returns empty array when .archonignore does not exist', () => {
       expect(loadCustomPatterns(tmpDir)).toEqual([]);
     });
 
-    it('loads patterns from .afignore', () => {
-      fs.writeFileSync(path.join(tmpDir, '.afignore'), 'custom_dir\nanother_dir\n');
+    it('loads patterns from .archonignore', () => {
+      fs.writeFileSync(path.join(tmpDir, '.archonignore'), 'custom_dir\nanother_dir\n');
       expect(loadCustomPatterns(tmpDir)).toEqual(['custom_dir', 'another_dir']);
     });
 
     it('ignores comment lines', () => {
-      fs.writeFileSync(path.join(tmpDir, '.afignore'), '# comment\ncustom_dir\n# another comment\n');
+      fs.writeFileSync(path.join(tmpDir, '.archonignore'), '# comment\ncustom_dir\n# another comment\n');
       expect(loadCustomPatterns(tmpDir)).toEqual(['custom_dir']);
     });
 
     it('ignores empty lines', () => {
-      fs.writeFileSync(path.join(tmpDir, '.afignore'), 'dir1\n\n\ndir2\n');
+      fs.writeFileSync(path.join(tmpDir, '.archonignore'), 'dir1\n\n\ndir2\n');
       expect(loadCustomPatterns(tmpDir)).toEqual(['dir1', 'dir2']);
     });
 
     it('trims whitespace', () => {
-      fs.writeFileSync(path.join(tmpDir, '.afignore'), '  dir1  \n  dir2  \n');
+      fs.writeFileSync(path.join(tmpDir, '.archonignore'), '  dir1  \n  dir2  \n');
       expect(loadCustomPatterns(tmpDir)).toEqual(['dir1', 'dir2']);
+    });
+
+    // The ignore file lives in the user's repo, so a plugin upgrade cannot
+    // rewrite it. Dropping the legacy name would silently start scanning
+    // directories a project had deliberately excluded.
+    it('still reads a legacy .afignore when .archonignore is absent', () => {
+      fs.writeFileSync(path.join(tmpDir, '.afignore'), 'legacy_dir\n');
+      expect(loadCustomPatterns(tmpDir)).toEqual(['legacy_dir']);
+    });
+
+    it('prefers .archonignore over a legacy .afignore rather than merging them', () => {
+      fs.writeFileSync(path.join(tmpDir, '.archonignore'), 'canonical_dir\n');
+      fs.writeFileSync(path.join(tmpDir, '.afignore'), 'legacy_dir\n');
+      expect(loadCustomPatterns(tmpDir)).toEqual(['canonical_dir']);
     });
   });
 
@@ -241,8 +256,8 @@ describe('scout-block', () => {
       expect(runHook({ command: 'cat node_modules/x/package.json' }).status).toBe(2);
     });
 
-    it('AF_SCOUT_BLOCK=false disables the hook', () => {
-      const r = runHook({ command: 'cat node_modules/x/package.json' }, { AF_SCOUT_BLOCK: 'false' });
+    it('ARCHON_SCOUT_BLOCK=false disables the hook', () => {
+      const r = runHook({ command: 'cat node_modules/x/package.json' }, { ARCHON_SCOUT_BLOCK: 'false' });
       expect(r.status).toBe(0);
     });
   });

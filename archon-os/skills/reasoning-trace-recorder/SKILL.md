@@ -1,7 +1,7 @@
 ---
 name: reasoning-trace-recorder
-description: "Auto-invokes for every Claude turn during active T4 task execution. Emits append-only trace events (file_read, output_claim, tool_call, decision) to .claude/plans/traces/{TASK_ID}.jsonl. Source of grounding-discipline checks. Disable: AF_TRACE_DISABLED=true."
-when_to_use: "Every Claude turn during active T4 execution; silent if no .claude/plans/active.json or no active.task or AF_TRACE_DISABLED=true"
+description: "Auto-invokes for every Claude turn during active T4 task execution. Emits append-only trace events (file_read, output_claim, tool_call, decision) to .claude/plans/traces/{TASK_ID}.jsonl. Source of grounding-discipline checks. Disable: ARCHON_TRACE_DISABLED=true."
+when_to_use: "Every Claude turn during active T4 execution; silent if no .claude/plans/active.json or no active.task or ARCHON_TRACE_DISABLED=true"
 autoInvoke: true
 allowed-tools: Read, Bash
 effort: low
@@ -14,7 +14,7 @@ Forensic reproducibility. Append-only; never calls an LLM, never edits plan file
 
 ## Behavior
 
-1. **Detect:** no `.claude/plans/active.json`, or `active.task` null, or `AF_TRACE_DISABLED=true` → exit silently
+1. **Detect:** no `.claude/plans/active.json`, or `active.task` null, or `ARCHON_TRACE_DISABLED=true` → exit silently
 2. **Append** one JSON line per emitted event to `.claude/plans/traces/{TASK_ID}.jsonl` (one file per T4 task)
 
 ## Event types

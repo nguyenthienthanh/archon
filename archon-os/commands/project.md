@@ -58,7 +58,7 @@ Invalidates detection cache and re-scans framework, package manager, project typ
 
 **Trigger:** `/project regen [project-name]` -- regenerate all context files.
 
-Re-scans and updates all 7 context files while preserving manual customizations (marked `<!-- MANUAL -->` or `<!-- CUSTOM -->`). Creates timestamped backup before changes. Re-runs all generator scripts, syncs plugin settings, and updates `.claude/CLAUDE.md` (auto-updates AURA-FROG section, preserves USER-CUSTOM section). Differs from `/project init`: regen updates existing context, init creates from scratch.
+Re-scans and updates all 7 context files while preserving manual customizations (marked `<!-- MANUAL -->` or `<!-- CUSTOM -->`). Creates timestamped backup before changes. Re-runs all generator scripts, syncs plugin settings, and updates `.claude/CLAUDE.md` (auto-updates ARCHON OS section, preserves USER-CUSTOM section). Differs from `/project init`: regen updates existing context, init creates from scratch.
 
 ---
 

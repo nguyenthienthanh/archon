@@ -333,7 +333,7 @@ detect_agents() {
 show_banner() {
     echo ""
     echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-    echo -e "${BLUE}🦉 Archon OS Workflow Initialization v2.0${NC}"
+    echo -e "${BLUE}Archon OS Workflow Initialization v2.0${NC}"
     echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     echo ""
 }

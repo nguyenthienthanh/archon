@@ -53,7 +53,7 @@ new `node_type: pattern` **leaf** — a piece of user-approved learned memory
 hanging off a Feature (T2) or the mission root. This is distinct from the T0–T4
 tiered task nodes.
 
-**Gate — default OFF.** Promotion is a NO-OP unless `AF_KG_PROMOTE=true`.
+**Gate — default OFF.** Promotion is a NO-OP unless `ARCHON_KG_PROMOTE=true`.
 With the gate closed nothing is written, no counter is minted, and the on-disk
 plan format is byte-for-byte unchanged. Backing script:
 `scripts/plans/promote-pattern.sh` (writes `patterns/<PAT-ID>_<slug>/pattern.md`,
@@ -122,4 +122,4 @@ Example: a plan says "edit `src/auth.py` to add JWT support". The plan's instruc
 - `rules/core/no-assumption.md` — when plan and file disagree, ASK
 - `rules/core/verification.md` — verify before claiming acceptance pass
 - `skills/plan-loader/SKILL.md` — applies this trust tier on read
-- **Spec source:** `docs/specs/AURA_FROG_V3.7.0_TECH_SPEC.md` §11.1
+- **Spec source:** `docs/specs/ARCHON_V3.7.0_TECH_SPEC.md` §11.1

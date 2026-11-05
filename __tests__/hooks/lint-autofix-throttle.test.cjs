@@ -15,18 +15,18 @@ let hook;
 let prevProjectRoot;
 
 beforeEach(() => {
-  prevProjectRoot = process.env.AF_PROJECT_ROOT;
+  prevProjectRoot = process.env.ARCHON_PROJECT_ROOT;
   jest.resetModules();
   tmpRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'af-lint-throttle-'));
-  process.env.AF_PROJECT_ROOT = tmpRoot;
+  process.env.ARCHON_PROJECT_ROOT = tmpRoot;
   hook = require('../../archon-os/hooks/lint-autofix.cjs');
 });
 
 afterEach(() => {
-  // Restore rather than delete — AF_PROJECT_ROOT may be set ambiently, and
+  // Restore rather than delete — ARCHON_PROJECT_ROOT may be set ambiently, and
   // other suites in this worker rely on it.
-  if (prevProjectRoot === undefined) delete process.env.AF_PROJECT_ROOT;
-  else process.env.AF_PROJECT_ROOT = prevProjectRoot;
+  if (prevProjectRoot === undefined) delete process.env.ARCHON_PROJECT_ROOT;
+  else process.env.ARCHON_PROJECT_ROOT = prevProjectRoot;
   jest.restoreAllMocks();
   fs.rmSync(tmpRoot, { recursive: true, force: true });
 });

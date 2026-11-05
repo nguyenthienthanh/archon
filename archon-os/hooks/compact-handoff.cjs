@@ -24,16 +24,16 @@
  * State sources (newest schema first):
  *   1. .claude/logs/runs/<id>/run-state.json  — what /run writes today
  *   2. .claude/plans/active.json               — hierarchical plan anchor
- *   3. .claude/cache/workflow-state.json + AF_WORKFLOW_ID env — legacy workflows
+ *   3. .claude/cache/workflow-state.json + ARCHON_WORKFLOW_ID env — legacy workflows
  *
  * Context usage comes from .claude/cache/context-usage.json, written by
  * scripts/statusline.sh (the only surface Claude Code hands used_percentage to).
  *
  * Env:
- *   AF_HANDOFF_THRESHOLD=70    Stop-save threshold (percent)
- *   AF_CLAUDE_SESSION_ID / AF_TRANSCRIPT_PATH — exported on SessionStart via
+ *   ARCHON_HANDOFF_THRESHOLD=70    Stop-save threshold (percent)
+ *   ARCHON_CLAUDE_SESSION_ID / ARCHON_TRANSCRIPT_PATH — exported on SessionStart via
  *     CLAUDE_ENV_FILE so the manual --save knows which session it is.
- *   AF_COMPACT_HANDOFF_DISABLED=true
+ *   ARCHON_COMPACT_HANDOFF_DISABLED=true
  *
  * Exit Codes:
  *   0 - always (non-blocking)
@@ -80,7 +80,7 @@ const CODE_MARKERS = ['.git', 'package.json', 'pyproject.toml', 'requirements.tx
 const PLAN_DOC_RE = /(plan|roadmap|handoff|backlog|todo)[^/]*\.(md|markdown|html|txt)$/i;
 const OPEN_RUN_STATUSES = new Set(['in_progress', 'paused', 'active', 'blocked']);
 
-// Resolved per call (not at module load) so AF_PROJECT_ROOT can redirect tests.
+// Resolved per call (not at module load) so ARCHON_PROJECT_ROOT can redirect tests.
 function getPaths(root = findProjectRoot()) {
   const cache = path.join(root, '.claude', 'cache');
   return {
@@ -234,14 +234,14 @@ function getLegacyWorkflowState(p = getPaths()) {
     const state = readJson(loc);
     if (state && state.workflow_id) return state;
   }
-  if (process.env.AF_WORKFLOW_ID || process.env.AF_CURRENT_PHASE) {
+  if (process.env.ARCHON_WORKFLOW_ID || process.env.ARCHON_CURRENT_PHASE) {
     return {
-      workflow_id: process.env.AF_WORKFLOW_ID || `session-${Date.now()}`,
-      current_phase: parseInt(process.env.AF_CURRENT_PHASE || '1', 10),
-      current_sub_phase: process.env.AF_CURRENT_SUBPHASE || null,
+      workflow_id: process.env.ARCHON_WORKFLOW_ID || `session-${Date.now()}`,
+      current_phase: parseInt(process.env.ARCHON_CURRENT_PHASE || '1', 10),
+      current_sub_phase: process.env.ARCHON_CURRENT_SUBPHASE || null,
       status: 'in_progress',
-      task: { description: process.env.AF_TASK_DESCRIPTION || 'Workflow in progress' },
-      agents: { primary: process.env.AF_CURRENT_AGENT || 'general-purpose' },
+      task: { description: process.env.ARCHON_TASK_DESCRIPTION || 'Workflow in progress' },
+      agents: { primary: process.env.ARCHON_CURRENT_AGENT || 'general-purpose' },
     };
   }
   return null;
@@ -260,7 +260,7 @@ function getLegacyWorkflowState(p = getPaths()) {
  */
 function resolveTranscript(input = {}, { cwd, home, env = process.env } = {}) {
   if (input && input.transcript_path) return input.transcript_path;
-  if (env && env.AF_TRANSCRIPT_PATH) return env.AF_TRANSCRIPT_PATH;
+  if (env && env.ARCHON_TRANSCRIPT_PATH) return env.ARCHON_TRANSCRIPT_PATH;
   const opts = {};
   if (cwd) opts.cwd = cwd;
   if (home) opts.home = home;
@@ -271,7 +271,7 @@ function resolveTranscript(input = {}, { cwd, home, env = process.env } = {}) {
 function gitBranch(root) {
   try {
     const { execSync } = require('child_process');
-    const { TIMEOUT_DEFAULT_MS, MAX_BUFFER_DEFAULT } = require('./lib/af-exec.cjs');
+    const { TIMEOUT_DEFAULT_MS, MAX_BUFFER_DEFAULT } = require('./lib/exec.cjs');
     const out = execSync('git rev-parse --abbrev-ref HEAD 2>/dev/null', {
       cwd: root,
       encoding: 'utf-8',
@@ -306,14 +306,14 @@ function projectName(root) {
 function getSessionContext({ root = findProjectRoot(), env = process.env } = {}) {
   const plan = readActivePlan(root);
   const ctx = {
-    project_name: env.PROJECT_NAME || env.AF_PROJECT_NAME || projectName(root),
-    project_type: env.AF_PROJECT_TYPE || (isCodeProject(root) ? 'code' : 'non-code'),
-    framework: env.AF_FRAMEWORK,
-    git_branch: env.AF_GIT_BRANCH || gitBranch(root),
-    active_plan: env.AF_ACTIVE_PLAN
+    project_name: env.PROJECT_NAME || env.ARCHON_PROJECT_NAME || projectName(root),
+    project_type: env.ARCHON_PROJECT_TYPE || (isCodeProject(root) ? 'code' : 'non-code'),
+    framework: env.ARCHON_FRAMEWORK,
+    git_branch: env.ARCHON_GIT_BRANCH || gitBranch(root),
+    active_plan: env.ARCHON_ACTIVE_PLAN
       || (plan ? plan.task || plan.story || plan.feature || plan.initiative || plan.mission : null),
-    current_agent: env.AF_CURRENT_AGENT,
-    complexity: env.AF_COMPLEXITY,
+    current_agent: env.ARCHON_CURRENT_AGENT,
+    complexity: env.ARCHON_COMPLEXITY,
   };
   for (const k of Object.keys(ctx)) if (ctx[k] == null || ctx[k] === '') delete ctx[k];
   return ctx;
@@ -419,7 +419,7 @@ function recentUserPrompts(transcriptPath, n = 3, windows = [512 * 1024, 4 * 102
 function modifiedFiles(root) {
   try {
     const { execSync } = require('child_process');
-    const { TIMEOUT_DEFAULT_MS, MAX_BUFFER_LARGE } = require('./lib/af-exec.cjs');
+    const { TIMEOUT_DEFAULT_MS, MAX_BUFFER_LARGE } = require('./lib/exec.cjs');
     const out = execSync('git diff --name-only HEAD 2>/dev/null', {
       cwd: root,
       encoding: 'utf-8',
@@ -441,7 +441,7 @@ function buildHandoff({ p = getPaths(), input = {}, reason = 'compact', kind = '
   const workflow = run || !codeProject ? null : getLegacyWorkflowState(p);
   const plan = readActivePlan(p.root);
   const context = getSessionContext();
-  const sessionId = input.session_id || process.env.AF_CLAUDE_SESSION_ID || null;
+  const sessionId = input.session_id || process.env.ARCHON_CLAUDE_SESSION_ID || null;
   const transcript = resolveTranscript(input, { cwd: p.root });
   const title = sessionTitle(transcript);
   const name = resolveHandoffName(p, sessionId, title);
@@ -579,7 +579,7 @@ function appendTurnIndex(additionalContext, p = getPaths(), input = {}) {
     // Rebuild only from a transcript THIS session named. Discovery would pick
     // the project's newest transcript, which on a fresh session is a different
     // session's — and its prompts are not ours to inject.
-    const own = (input && input.transcript_path) || process.env.AF_TRANSCRIPT_PATH || null;
+    const own = (input && input.transcript_path) || process.env.ARCHON_TRANSCRIPT_PATH || null;
     turns = own ? refreshTurnIndex(p, own) : [];
   }
   if (!turns.length) return additionalContext;
@@ -602,7 +602,7 @@ function findHandoff(query, p = getPaths()) {
 /** Pure: short index of named handoffs for a NEW session (no content leak). */
 function generateHandoffIndex(handoffs = []) {
   if (!handoffs.length) return '';
-  const lines = ['# 🦉 Archon OS — saved handoffs in this project', ''];
+  const lines = ['# Archon OS — saved handoffs in this project', ''];
   for (const h of handoffs) {
     const what = (h.run && h.run.task) || h.note || '';
     lines.push(`- **${h.name}**${h.title && slugify(h.title) !== h.name ? ` (${h.title})` : ''} · saved ${h.saved_at.slice(0, 16).replace('T', ' ')}` +
@@ -711,8 +711,8 @@ function shq(v) {
 function exportSessionEnv(input) {
   const envFile = process.env.CLAUDE_ENV_FILE;
   if (!envFile || !input.session_id) return;
-  const lines = [`export AF_CLAUDE_SESSION_ID=${shq(input.session_id)}`];
-  if (input.transcript_path) lines.push(`export AF_TRANSCRIPT_PATH=${shq(input.transcript_path)}`);
+  const lines = [`export ARCHON_CLAUDE_SESSION_ID=${shq(input.session_id)}`];
+  if (input.transcript_path) lines.push(`export ARCHON_TRANSCRIPT_PATH=${shq(input.transcript_path)}`);
   try { fs.appendFileSync(envFile, lines.join('\n') + '\n'); } catch { /* best effort */ }
 }
 
@@ -722,7 +722,7 @@ function argValue(argv, flag) {
 }
 
 function main() {
-  if (process.env.AF_COMPACT_HANDOFF_DISABLED === 'true') return;
+  if (process.env.ARCHON_COMPACT_HANDOFF_DISABLED === 'true') return;
   const argv = process.argv.slice(2);
   const mode = argv[0] || 'stop';
 
@@ -799,7 +799,7 @@ function main() {
   // is always one that already happened.
   refreshTurnIndex(p, resolveTranscript(input, { cwd: p.root }));
   const usage = readContextUsage(p);
-  const threshold = Number(process.env.AF_HANDOFF_THRESHOLD) || DEFAULT_THRESHOLD;
+  const threshold = Number(process.env.ARCHON_HANDOFF_THRESHOLD) || DEFAULT_THRESHOLD;
   if (shouldSaveOnStop({ usage, threshold, hasOpenWork: Boolean(findActiveRun(p)) })) {
     saveHandoff({ input, reason: 'stop-threshold' });
   }

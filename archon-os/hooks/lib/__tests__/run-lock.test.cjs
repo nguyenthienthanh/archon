@@ -1,18 +1,18 @@
 /**
- * Tests for archon-os/hooks/lib/af-run-lock.cjs
+ * Tests for archon-os/hooks/lib/run-lock.cjs
  */
 
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
 
-const { acquireRunLock, isStaleLock, isPidAlive, DEFAULT_STALE_MS } = require('../af-run-lock.cjs');
+const { acquireRunLock, isStaleLock, isPidAlive, DEFAULT_STALE_MS } = require('../run-lock.cjs');
 
 let dir;
 let lockPath;
 
 beforeEach(() => {
-  dir = fs.mkdtempSync(path.join(os.tmpdir(), 'af-run-lock-'));
+  dir = fs.mkdtempSync(path.join(os.tmpdir(), 'run-lock-'));
   lockPath = path.join(dir, 'nested', 'run.lock');
 });
 
@@ -20,7 +20,7 @@ afterEach(() => {
   fs.rmSync(dir, { recursive: true, force: true });
 });
 
-describe('af-run-lock', () => {
+describe('run-lock', () => {
   describe('isPidAlive', () => {
     it('is true for this process', () => {
       expect(isPidAlive(process.pid)).toBe(true);

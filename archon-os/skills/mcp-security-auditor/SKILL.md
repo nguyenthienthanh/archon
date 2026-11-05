@@ -20,7 +20,7 @@ user-invocable: false
 
 1. Read `<security-dir>/mcp-audit.jsonl` (append-only; produced by `hooks/mcp-call-gate.cjs`).
    Resolve `<security-dir>` the same way the writer does — see `hooks/lib/security-dir.cjs`:
-   `$AF_SECURITY_DIR`, else `.claude/security/` if it exists, else `.aura/security/`.
+   `$ARCHON_SECURITY_DIR`, else `.claude/security/` if it exists, else `.aura/security/`.
    Do NOT hardcode one of them: read the first that exists, and report "no audit log yet" if neither does.
 2. Group entries by:
    - Agent → MCP server → method
@@ -67,7 +67,7 @@ blocked[3]{ts,agent,mcp,reason}:
 
 ## Retention (per spec §23.2)
 
-`AF_MCP_AUDIT_RETENTION_DAYS=30` (default) — older entries are pruned by a session-start sweep (NOT this skill).
+`ARCHON_MCP_AUDIT_RETENTION_DAYS=30` (default) — older entries are pruned by a session-start sweep (NOT this skill).
 
 ## Tie-Ins
 

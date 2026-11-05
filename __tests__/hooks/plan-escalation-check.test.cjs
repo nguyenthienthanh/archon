@@ -109,7 +109,7 @@ describe('plan-escalation-check', () => {
         input: JSON.stringify({ prompt }),
         cwd: tmpDir,
         encoding: 'utf8',
-        env: { ...process.env, CLAUDE_USER_PROMPT: '', AF_PLANS_DIR: path.join(tmpDir, '.claude', 'plans'), ...env },
+        env: { ...process.env, CLAUDE_USER_PROMPT: '', ARCHON_PLANS_DIR: path.join(tmpDir, '.claude', 'plans'), ...env },
         timeout: 10000,
         killSignal: 'SIGKILL',
       });
@@ -128,8 +128,8 @@ describe('plan-escalation-check', () => {
       expect(r.stderr).not.toContain('plan-escalation');
     });
 
-    it('stays silent when AF_ESCALATION_DISABLED=true', () => {
-      const r = runHook('rebuild everything from scratch and rollout v2.0', { AF_ESCALATION_DISABLED: 'true' });
+    it('stays silent when ARCHON_ESCALATION_DISABLED=true', () => {
+      const r = runHook('rebuild everything from scratch and rollout v2.0', { ARCHON_ESCALATION_DISABLED: 'true' });
       expect(r.status).toBe(0);
       expect(r.stderr).not.toContain('plan-escalation');
     });

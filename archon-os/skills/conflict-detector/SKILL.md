@@ -52,7 +52,7 @@ ON dispatch_request(task):
 
 ## Disable
 
-Set `AF_CONFLICT_LLM_DISABLED=true` to short-circuit L3+L4 dispatch even after they land in rc.1+ — useful for cost-sensitive sessions. L1+L2 (deterministic bash) always run; the env var only affects the LLM-backed layers. In v3.7.0-beta.2 / rc.1 it is effectively a no-op because L3+L4 are already stubbed; documented for forward compatibility with v3.7.x patch releases.
+Set `ARCHON_CONFLICT_LLM_DISABLED=true` to short-circuit L3+L4 dispatch even after they land in rc.1+ — useful for cost-sensitive sessions. L1+L2 (deterministic bash) always run; the env var only affects the LLM-backed layers. In v3.7.0-beta.2 / rc.1 it is effectively a no-op because L3+L4 are already stubbed; documented for forward compatibility with v3.7.x patch releases.
 
 ## Behavior
 

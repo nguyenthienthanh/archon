@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+
+# Bridges legacy AF_* / AURA_FROG_* variables onto their ARCHON_* names (v4 rebrand).
+. "$(dirname "${BASH_SOURCE[0]}")/../lib/env-compat.sh"
+
 # Render the plan tree as an ASCII tree.
 #
 # Usage: bash archon-os/scripts/plans/render-plan-tree.sh [.claude/plans/ path] [--rebuild]
@@ -10,7 +14,7 @@
 # always correct, so the index can cost time but never accuracy.
 #
 # --rebuild regenerates the index first (also how a project opts in).
-# AF_GRAPH_INDEX_DISABLED=true turns the index off entirely.
+# ARCHON_GRAPH_INDEX_DISABLED=true turns the index off entirely.
 
 set -euo pipefail
 

@@ -23,9 +23,9 @@
 const { execSync, spawnSync } = require('child_process');
 const { readStdinSafely } = require('./lib/safe-stdin.cjs');
 const { findProjectRoot } = require('./lib/hook-runtime.cjs');
-const { acquireRunLock } = require('./lib/af-run-lock.cjs');
-const { TIMEOUT_QUICK_MS, warnExecLimit } = require('./lib/af-exec.cjs');
-const { filterChildEnv } = require('./lib/af-child-env.cjs');
+const { acquireRunLock } = require('./lib/run-lock.cjs');
+const { TIMEOUT_QUICK_MS, warnExecLimit } = require('./lib/exec.cjs');
+const { filterChildEnv } = require('./lib/child-env.cjs');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
@@ -184,7 +184,7 @@ function readJsonFile(file) {
 /**
  * Fingerprint of everything `isLinterAvailable` looks at: the manifests it
  * parses plus every config file it probes for. Same idiom as
- * af-project-cache.calculateKeyFilesHash — mtime+size, not content.
+ * project-cache.calculateKeyFilesHash — mtime+size, not content.
  */
 function computeProbeHash(cwd = process.cwd()) {
   const watched = new Set(['package.json', 'composer.json']);
@@ -488,7 +488,7 @@ function extractFilePath(stdinData) {
  */
 async function main() {
   // Check if auto-fix is enabled (default: true)
-  if (process.env.AF_LINT_AUTOFIX === 'false') {
+  if (process.env.ARCHON_LINT_AUTOFIX === 'false') {
     process.exit(0);
   }
 

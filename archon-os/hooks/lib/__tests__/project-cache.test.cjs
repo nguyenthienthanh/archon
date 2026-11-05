@@ -1,9 +1,9 @@
 'use strict';
 /**
- * af-project-cache.test.cjs — Phase 2 RED tests for FEAT-008 / STORY-0013
+ * project-cache.test.cjs — Phase 2 RED tests for FEAT-008 / STORY-0013
  *
  * Defines the BEHAVIORAL CONTRACT for the rewritten cache-invalidation logic in
- * archon-os/hooks/lib/af-project-cache.cjs.
+ * archon-os/hooks/lib/project-cache.cjs.
  *
  * Root cause being fixed: the old invalidation keyed off a 24h TTL + a KEY_FILES
  * list that only contains JS/TS/Go/Python config files. For a markdown/bash/yaml
@@ -27,7 +27,7 @@ const os   = require('node:os');
 const path = require('node:path');
 const { execSync } = require('node:child_process');
 
-const cache = require('../af-project-cache.cjs');
+const cache = require('../project-cache.cjs');
 
 const REPO_ROOT = process.cwd();
 
@@ -39,7 +39,7 @@ function rmTmp(dir) {
   try { fs.rmSync(dir, { recursive: true, force: true }); } catch (_) {}
 }
 
-describe('af-project-cache: new invalidation API surface (STORY-0013)', () => {
+describe('project-cache: new invalidation API surface (STORY-0013)', () => {
   test('exports the new functions + schema constant', () => {
     expect(typeof cache.getGitHead).toBe('function');
     expect(typeof cache.calculateContentHash).toBe('function');
@@ -50,7 +50,7 @@ describe('af-project-cache: new invalidation API surface (STORY-0013)', () => {
   });
 });
 
-describe('af-project-cache: getGitHead', () => {
+describe('project-cache: getGitHead', () => {
   test('returns the current HEAD sha (40-hex) when called on a git repo', () => {
     const expected = execSync('git rev-parse HEAD', { cwd: REPO_ROOT }).toString().trim();
     expect(cache.getGitHead(REPO_ROOT)).toBe(expected);
@@ -67,7 +67,7 @@ describe('af-project-cache: getGitHead', () => {
   });
 });
 
-describe('af-project-cache: calculateContentHash + resolveWatchMode (project-type-aware)', () => {
+describe('project-cache: calculateContentHash + resolveWatchMode (project-type-aware)', () => {
   test('content hash is stable across calls for an unchanged dir', () => {
     const tmp = mkTmp('af-stable-');
     try {
@@ -120,7 +120,7 @@ describe('af-project-cache: calculateContentHash + resolveWatchMode (project-typ
   });
 });
 
-describe('af-project-cache: isCacheValid — git-SHA + content-hash, NO 24h clock', () => {
+describe('project-cache: isCacheValid — git-SHA + content-hash, NO 24h clock', () => {
   function freshCacheForDir(dir) {
     return {
       gitHead: cache.getGitHead(dir),
@@ -174,9 +174,9 @@ describe('af-project-cache: isCacheValid — git-SHA + content-hash, NO 24h cloc
   });
 });
 
-describe('af-project-cache: getProjectName resolution order (STORY-0014 — fix ghost-dir bug)', () => {
-  // Bug: getProjectName preferred package.json `name` ("aura-frog-dev") over the
-  // dir basename ("aura-frog") where the real context lives → permanent cache miss.
+describe('project-cache: getProjectName resolution order (STORY-0014 — fix ghost-dir bug)', () => {
+  // Bug: getProjectName preferred package.json `name` ("archon-dev") over the
+  // dir basename ("archon") where the real context lives → permanent cache miss.
   // Fix: an existing .claude/project-contexts/<basename>/ dir wins over package.json.
   function mkProj(name) {
     const base = mkTmp('af-name-');
@@ -194,11 +194,11 @@ describe('af-project-cache: getProjectName resolution order (STORY-0014 — fix 
   });
 
   test('prefers dir basename when .claude/project-contexts/<basename>/ already exists', () => {
-    const { base, proj } = mkProj('aura-frog');
+    const { base, proj } = mkProj('archon');
     try {
-      fs.writeFileSync(path.join(proj, 'package.json'), '{"name":"aura-frog-dev"}');
-      fs.mkdirSync(path.join(proj, '.claude', 'project-contexts', 'aura-frog'), { recursive: true });
-      expect(cache.getProjectName(proj)).toBe('aura-frog');
+      fs.writeFileSync(path.join(proj, 'package.json'), '{"name":"archon-dev"}');
+      fs.mkdirSync(path.join(proj, '.claude', 'project-contexts', 'archon'), { recursive: true });
+      expect(cache.getProjectName(proj)).toBe('archon');
     } finally { rmTmp(base); }
   });
 
@@ -210,7 +210,7 @@ describe('af-project-cache: getProjectName resolution order (STORY-0014 — fix 
   });
 });
 
-describe('af-project-cache: getCacheStaleness (powers the session-start banner)', () => {
+describe('project-cache: getCacheStaleness (powers the session-start banner)', () => {
   test('reports stale=true with a sha-mismatch reason', () => {
     const c = {
       gitHead: '0000000000000000000000000000000000000000',

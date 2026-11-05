@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+
+# Bridges legacy AF_* / AURA_FROG_* variables onto their ARCHON_* names (v4 rebrand).
+. "$(dirname "${BASH_SOURCE[0]}")/../lib/env-compat.sh"
+
 # Pop the next ready T4 task and mark it active.
 #
 # Algorithm:
@@ -23,7 +27,7 @@
 #
 # --rebuild regenerates graph-index.json from the tree before dispatching. Use
 # it to opt a project in, or to heal an index the staleness check keeps
-# rejecting. AF_GRAPH_INDEX_DISABLED=true turns the index off entirely.
+# rejecting. ARCHON_GRAPH_INDEX_DISABLED=true turns the index off entirely.
 #
 # Exit codes:
 #   0 success — prints "TASK-NNNNN\t<file_path>"

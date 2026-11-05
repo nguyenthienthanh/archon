@@ -1,5 +1,5 @@
 #!/bin/bash
-# claude-md-update.sh - Update AURA-FROG section in project CLAUDE.md
+# claude-md-update.sh - Update ARCHON OS section in project CLAUDE.md
 # Preserves USER-CUSTOM sections and other project-specific content
 #
 # Usage: bash claude-md-update.sh [project-claude-md-path]
@@ -41,7 +41,7 @@ if [ ! -f "$TEMPLATE_PATH" ]; then
     exit 1
 fi
 
-print_info "Updating AURA-FROG section in: $PROJECT_CLAUDE"
+print_info "Updating ARCHON OS section in: $PROJECT_CLAUDE"
 
 # Create backup
 BACKUP_PATH="${PROJECT_CLAUDE}.backup.$(date +%Y%m%d%H%M%S)"
@@ -49,22 +49,22 @@ cp "$PROJECT_CLAUDE" "$BACKUP_PATH"
 print_info "Backup created: $BACKUP_PATH"
 
 # Extract sections from current file
-BEFORE_AURA=$(sed -n '1,/<!-- AURA-FROG:START/p' "$PROJECT_CLAUDE" | sed '$d')
-AFTER_AURA=$(sed -n '/<!-- AURA-FROG:END -->/,$p' "$PROJECT_CLAUDE" | sed '1d')
+BEFORE_AURA=$(sed -n '1,/<!-- ARCHON OS:START/p' "$PROJECT_CLAUDE" | sed '$d')
+AFTER_AURA=$(sed -n '/<!-- ARCHON OS:END -->/,$p' "$PROJECT_CLAUDE" | sed '1d')
 
-# Extract new AURA-FROG section from template
-NEW_AURA=$(sed -n '/<!-- AURA-FROG:START/,/<!-- AURA-FROG:END -->/p' "$TEMPLATE_PATH")
+# Extract new ARCHON OS section from template
+NEW_AURA=$(sed -n '/<!-- ARCHON OS:START/,/<!-- ARCHON OS:END -->/p' "$TEMPLATE_PATH")
 
 # Check if sections were found
 if [ -z "$NEW_AURA" ]; then
-    print_error "Could not find AURA-FROG section in template"
+    print_error "Could not find ARCHON OS section in template"
     rm "$BACKUP_PATH"
     exit 1
 fi
 
-# If no AURA-FROG markers in project file, add them
-if ! grep -q "AURA-FROG:START" "$PROJECT_CLAUDE"; then
-    print_warning "No AURA-FROG markers found. Adding section after header..."
+# If no ARCHON OS markers in project file, add them
+if ! grep -q "ARCHON OS:START" "$PROJECT_CLAUDE"; then
+    print_warning "No ARCHON OS markers found. Adding section after header..."
 
     # Get header (first 7 lines typically)
     HEADER=$(head -n 7 "$PROJECT_CLAUDE")
@@ -79,7 +79,7 @@ if ! grep -q "AURA-FROG:START" "$PROJECT_CLAUDE"; then
         echo "$REST"
     } > "$PROJECT_CLAUDE"
 else
-    # Rebuild file with new AURA-FROG section
+    # Rebuild file with new ARCHON OS section
     {
         echo "$BEFORE_AURA"
         echo "$NEW_AURA"
@@ -100,7 +100,7 @@ if command -v diff &> /dev/null; then
     diff "$BACKUP_PATH" "$PROJECT_CLAUDE" || true
 fi
 
-print_success "Updated AURA-FROG section successfully!"
+print_success "Updated ARCHON OS section successfully!"
 print_info "User sections preserved (USER-CUSTOM and other content)"
 print_info "Backup saved at: $BACKUP_PATH"
 

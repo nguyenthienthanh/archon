@@ -35,7 +35,7 @@ per_agent_allowlists[*]{agent,allowlist}:
 ## Protocol — `audit`
 
 1. Read `<security-dir>/mcp-audit.jsonl` (already sanitized — no credentials in this file).
-   `<security-dir>` resolves as `$AF_SECURITY_DIR`, else `.claude/security/` if it exists, else `.aura/security/` — see `hooks/lib/security-dir.cjs`.
+   `<security-dir>` resolves as `$ARCHON_SECURITY_DIR`, else `.claude/security/` if it exists, else `.aura/security/` — see `hooks/lib/security-dir.cjs`.
 2. Project via `mcp-security-auditor` skill (NEVER load raw JSONL into context)
 3. Filter by `--window` (default 24h) and `--blocked-only` if set
 4. Render TOON summary + top 10 events
@@ -90,4 +90,4 @@ Output shows: latency, success, sanitized output snippet (or error).
 - **Rule:** `rules/agent/mcp-security-policy.md` — allowlist + rate limits
 - **Rule:** `rules/agent/db-access-policy.md` — DB-specific rules
 - **Files:** `<security-dir>/mcp-audit.jsonl` (see `hooks/lib/security-dir.cjs`), `.claude/logs/.mcp-rate-counter.json`
-- **Env:** `AF_MCP_AUDIT_DISABLED=true` (disables audit logging — strongly discouraged), `AF_MCP_AUDIT_RETENTION_DAYS=30` (default)
+- **Env:** `ARCHON_MCP_AUDIT_DISABLED=true` (disables audit logging — strongly discouraged), `ARCHON_MCP_AUDIT_RETENTION_DAYS=30` (default)

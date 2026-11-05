@@ -84,7 +84,7 @@ Run parallel agents for independent tasks:
 **Implementation:**
 ```bash
 # Main session delegates to background
-# Background agent writes to /tmp/aura-frog/agents/
+# Background agent writes to /tmp/archon/agents/
 
 # Agent 1: Write tests
 # Agent 2: Generate docs
@@ -333,7 +333,7 @@ No special handling needed. Use standard workflow.
 
 ```bash
 # Create agent task file
-cat > /tmp/aura-frog/agents/task-tests.md << EOF
+cat > /tmp/archon/agents/task-tests.md << EOF
 # Background Task: Write Tests
 
 ## Context
@@ -356,10 +356,10 @@ EOF
 
 ```bash
 # Check background agent output
-cat /tmp/aura-frog/agents/output-tests.md
+cat /tmp/archon/agents/output-tests.md
 
 # If acceptable, merge into main workflow
-cp /tmp/aura-frog/agents/tests/* tests/
+cp /tmp/archon/agents/tests/* tests/
 
 # Update state
 bash scripts/workflow-manager.sh set wf-001 "deliverables" "tests/auth/Login.test.tsx"

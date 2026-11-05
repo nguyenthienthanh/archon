@@ -55,7 +55,7 @@ For now: defer all retry/replan/escalation choices to the human user via prompte
 
 ## Tie-Ins
 
-- **Spec source:** `docs/specs/AURA_FROG_V3.7.0_TECH_SPEC.md` §8.1
+- **Spec source:** `docs/specs/ARCHON_V3.7.0_TECH_SPEC.md` §8.1
 - **Decisions:** `docs/specs/V3.7.0_DECISIONS.md` (Q1: deterministic decisions; LLM only in replanner)
 - **Plans this owns:** `.claude/plans/INIT-001.md`, `.claude/plans/features/FEAT-A/feature.md`
 - **Sub-agents it dispatches to:** strategist (T0-T1), feature-architect (T2), story-planner (T3), replanner (Milestone B+)

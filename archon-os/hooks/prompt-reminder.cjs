@@ -8,7 +8,7 @@
  * @version 1.1.0
  */
 
-const { readSessionState } = require('./lib/af-config-utils.cjs');
+const { readSessionState } = require('./lib/config-utils.cjs');
 const { readPromptFromStdin } = require('./lib/safe-stdin.cjs');
 
 // Load session state

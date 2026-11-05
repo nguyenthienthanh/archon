@@ -11,7 +11,7 @@
  *   2 - Deep (complex: multi-file, architecture)
  *   3 - Maximum (critical: security audit, data migration)
  *
- * Disable: AF_THINKING_BOOST=0 in .envrc
+ * Disable: ARCHON_THINKING_BOOST=0 in .envrc
  *
  * @version 1.0.0
  */
@@ -21,7 +21,7 @@ const { readStdinSafely } = require('./lib/safe-stdin.cjs');
 const path = require('path');
 
 // Check if disabled
-if (process.env.AF_THINKING_BOOST === '0' || process.env.AF_THINKING_BOOST === 'false') {
+if (process.env.ARCHON_THINKING_BOOST === '0' || process.env.ARCHON_THINKING_BOOST === 'false') {
   process.exit(0);
 }
 

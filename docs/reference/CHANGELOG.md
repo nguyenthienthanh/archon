@@ -1,16 +1,109 @@
 ---
-last_aligned_with: v3.8.0-alpha.8
+last_aligned_with: v4.0.0-alpha.3
 status: reference
 audience: contributor
 ---
 
-# Aura Frog - Changelog
+# Archon OS - Changelog
 
-All notable changes to Aura Frog will be documented in this file.
+All notable changes to Archon OS will be documented in this file.
 
 ---
 
 ## [Unreleased]
+
+## [4.0.0-alpha.3] - 2026-10-29 (Rename finished: every identifier is Archon OS, every old name still works)
+
+### Changed
+
+- **The rename is finished: every `Aura Frog` identifier is now `Archon OS` — and every old
+  one still works.** alpha.1 and alpha.2 renamed the product, the marketplace, the plugin and
+  the directory; the identifiers *inside* it were still the old brand. 195 files carried
+  `Aura Frog` / `aura-frog` / `aurafrog` / `AURA_FROG_` / `AF_`, which meant the name was
+  wrong in the one place a user actually types it. Renamed:
+
+  | Surface | Before | After | Compatibility |
+  |---|---|---|---|
+  | Environment variables | `AF_*` (125 names), `AURA_FROG_*` (5) | `ARCHON_*` | **Bridged** — legacy names mirrored at startup |
+  | CLI | `scripts/af` | `scripts/archon` | **Alias** — `af` is a symlink and prints its help as `af` |
+  | Slash command | `/af` | `/archon` | **Alias stub** — `commands/af.md` delegates |
+  | Runtime state | `.aura-frog/runtime/` | `.archon/runtime/` | **Per-file fallback** — reads whichever holds state |
+  | `.envrc` trust file | `~/.config/aura-frog/` | `~/.config/archon/` | **Fallback on read, one-shot copy on write** |
+  | Scan exclusions | `.afignore` | `.archonignore` | **Both read**, canonical first, not merged |
+  | Session temp state | `/tmp/af-session-<ppid>.json` | `/tmp/archon-session-<ppid>.json` | **Fallback on read; sweeper collects both** |
+  | Scratch output root | `/tmp/aura-frog-<uid>/` | `/tmp/archon-<uid>/` | — (ephemeral) |
+  | `hooks/lib/` modules | `af-exec.cjs`, `af-learning.cjs`, … | `exec.cjs`, `learning.cjs`, … | — (internal; the directory already scopes them) |
+  | Statusline label | `🐸 AF v…` | `archon v…` | — |
+  | `--style af` (statusline install) | `af` | `archon` | **`af` still accepted** |
+
+  **Why the fallbacks are not optional.** Four of those paths live in the *user's* repo or home
+  directory, where an upgrade cannot reach: an exported `AF_DEFAULT_COVERAGE`, a hand-approved
+  `.envrc`, a project's `.afignore`, a model stack pushed by a session that was mid-run when
+  the plugin upgraded under it. Resolving only to the new name would silently revert settings,
+  revoke approvals a human granted, start scanning excluded directories, and orphan live state —
+  and every one of those failures is quiet. Where both names are present the **new one wins**, so
+  a partial migration never fights itself. A revocation still revokes: the `.envrc` fallback
+  triggers on *the new file being absent*, not on *a path missing from it*.
+
+- **Two env bridges, one contract.** `hooks/lib/env-compat.cjs` (required from `safe-stdin.cjs`,
+  which 105 modules reach, plus the entrypoints that bypass it) and
+  `scripts/lib/env-compat.sh` (sourced by the 15 shell scripts that read plugin variables).
+  Both are idempotent, neither overwrites a canonical name, and `ARCHON_ENV_COMPAT_OFF=true`
+  disables them — which is how you verify you no longer depend on a legacy name. Both scheduled
+  for removal in **v5**. 20 tests across the two.
+
+- **The frog is gone and nothing replaced it.** 76 `🐸` glyphs removed rather than swapped: the
+  v4 mark is an owl, a frog pointed at a product that no longer exists, and the statusline is
+  more legible without a glyph that depends on the terminal's emoji font. `assets/brand/`
+  still names the frog as the retired predecessor — that is a record, not a leftover.
+
+### Documentation
+
+- **README rewritten for someone who has never seen this before: 777 → 280 lines.** It had
+  become a specification — eight pillars in full, a routing diagram, component counts, a
+  130-line FAQ, a maturity audit — so the one thing a new reader needs (install it, type a
+  command, see what happens) was buried past the fold. The landing page now covers the problem,
+  install, the first five minutes with a real transcript, what the eight features *prevent*,
+  the seven commands you actually type, and whether it suits you. Everything else moved out
+  intact, not deleted.
+- **New: [`docs/operations/MIGRATION_V4.md`](../operations/MIGRATION_V4.md)** — what the rename
+  changed, what is still accepted and until when, and the optional manual migration. Answers
+  "do I have to do anything?" in the first paragraph. (No.)
+- **New: [`docs/contributing/README.md`](../contributing/README.md)** — the contributor hub.
+  Subsystems (hooks, scripts, markdown layers), the state-on-disk table and what "derived"
+  obliges, and the conventions that get a PR sent back — including *a rename needs a fallback
+  when the file is the user's*, which is this release's lesson written down.
+- **Extracted from the README, unchanged in substance:**
+  [`reference/PILLARS.md`](PILLARS.md) (the 8 pillars in full),
+  [`reference/ROUTING.md`](ROUTING.md) (Quick/Standard/Deep + the prompt-to-code flow),
+  [`reference/COMPONENTS.md`](COMPONENTS.md) (counts + directory layout),
+  [`reference/MATURITY.md`](MATURITY.md), [`reference/COMPARISON.md`](COMPARISON.md), and the
+  FAQ into [`operations/TROUBLESHOOTING.md`](../operations/TROUBLESHOOTING.md).
+- **`docs/README.md` rebuilt as a "pick your path" index** rather than a flat file listing.
+
+### Fixed
+
+- **`archon doctor` read the wrong trust file.** It resolved `~/.config/aura-frog/` directly
+  while `envrc-guarded-source.sh` had its own resolution, so after the move `doctor` would
+  report an approved `.envrc` as untrusted. Both now resolve identically.
+- **`archon-os/README.md` npm badge pointed at the old package.** The link said
+  `npmjs.com/package/aura-frog` while the label and the root README said `archon-os`.
+- **A test depended on the host not being a Claude Code session.**
+  `post-compact-plan-context.test.cjs` deleted `ARCHON_CLAUDE_SESSION_ID` to assert the
+  no-session path, but the host exports `AF_CLAUDE_SESSION_ID`, which the new bridge mirrors
+  back *after* the delete. It now sets `ARCHON_ENV_COMPAT_OFF` instead of chasing aliases.
+- **`scout-block`'s test fixture teardown unlinked one filename** and then `rmdir`'d the
+  directory, so the second ignore-file name failed the run with `ENOTEMPTY`.
+
+### Notes
+
+- **Changelog entries for v3 and earlier keep their original variable names.** `AF_*` was the
+  real API at the time; a changelog that edits its own history stops being a record.
+- **`.aura/plans/` is untouched.** It is a different, older legacy path (plans moved to
+  `.claude/plans/` in v3.7.3), with its own fallback and its own removal schedule. Override it
+  with `ARCHON_PLANS_DIR`.
+- **Suite: 100 suites · 1842 tests.** +39 over alpha.2, all covering the compatibility
+  fallbacks above — because an untested fallback is a claim, not a guarantee.
 
 ## [4.0.0-alpha.2] - 2026-10-29 (Session memory, independent verifier, code map, flat dispatch, Archon OS brand)
 
@@ -103,7 +196,7 @@ All notable changes to Aura Frog will be documented in this file.
   true` (and PostToolUse cannot rewrite a tool result anyway); the vault was **0
   bytes, 0 files**; and the *installed* plugin contained neither file. Removed with
   a 14-identifier zero-reference proof and a prefix-match guard confirming
-  `permanent-memory-loader` and `af-memory-loader` survive.
+  `permanent-memory-loader` and `memory-loader` survive.
 - **453 dispatch strings still named the old plugin prefix** across 98 files. Plugin
   agents are namespaced by `plugin.json#name`, so `aura-frog:architect` resolved to
   nothing once the plugin became `archon-os`. `CHANGELOG.md` deliberately excluded —
@@ -282,7 +375,7 @@ All notable changes to Aura Frog will be documented in this file.
 - **Agent-roster hygiene.** Deleted orphaned `skills/agent-detector/task-based-agent-selection.md`
   (517 lines referencing fictitious agents: `backend-laravel`, `web-nextjs`, "Dev agent");
   `story-planner.md` no longer labels `run-orchestrator` an Agent (it's a skill) nor references a
-  nonexistent `tdd-engineer` (→ `tester`); `af-project-cache.cjs#detectAgentMapping` now emits the
+  nonexistent `tdd-engineer` (→ `tester`); `project-cache.cjs#detectAgentMapping` now emits the
   canonical 15-agent roster instead of stale `web-*`/`backend-*` labels.
 - **Portability polish.** Hard `.claude/CLAUDE.md` paths accept a root `CLAUDE.md` too;
   `frontend-aesthetics` house style is an overridable default (host project's design language
@@ -451,11 +544,11 @@ Remediation of the deep-research audit (PR #50). Baseline 79 suites / 1296 tests
 
 - **State files that grew forever, read whole on every Stop.** `history.jsonl` and `conflicts.jsonl` were append-only with no pruning, and three Stop-registered hooks each slurped the entire history file and split it into an array — 2× file size, three times, every Stop. New `hooks/lib/jsonl-tail.cjs` reads only the trailing window and drops the partial first line, decoding with `StringDecoder` because a truncated read can start mid-UTF-8-sequence and `toString()` would inject a replacement char into an otherwise valid record. Safe by each hook's own logic, not by assumption: every one breaks at the first event outside its 60s window, and `foldLatestConflicts` wants the newest record per `conflict_id`, which in an append-only log is the last one. Both files joined `sweepRetention()` under the existing `AF_AUDIT_RETENTION_DAYS` policy; `pruneJsonlByTimestamp` now rewrites in 64KB chunks rather than loading the file, which matters for exactly the large-and-stale file its old size guard let through. Co-located `trace.jsonl` (inside task folders since v3.7.3) had escaped the sweep entirely — only the legacy `traces/` dir was pruned — and `.claude/logs/runs` accumulated one directory per workflow forever; both are now swept, with the run named by `active-workflow.txt` pinned so a resume still finds its state.
 
-- **Every subprocess call is bounded.** Eight sites had no `timeout`, so a hung child wedged the hook and, under the dispatcher, the whole chain; none set `maxBuffer`, so oversize output hit Node's 1MB default, threw, and was swallowed by a bare catch — silently becoming "no data". New `hooks/lib/af-exec.cjs` provides timeout tiers (2s/5s/10s), maxBuffer tiers (2MB/16MB) and `warnExecLimit()`, which tells a timeout from an ENOBUFS and says so on stderr. Bounded: `execSafe` (the generic escape hatch, so every caller inherits a default), `firebase login:list`, `ps -Ao`, `git diff`, `git diff sha..HEAD`, `git show`, `which`, `git rev-parse`. A source-walking test now fails on **any** exec/spawn site in `hooks/` lacking a timeout, so a new unbounded call can't be added silently.
+- **Every subprocess call is bounded.** Eight sites had no `timeout`, so a hung child wedged the hook and, under the dispatcher, the whole chain; none set `maxBuffer`, so oversize output hit Node's 1MB default, threw, and was swallowed by a bare catch — silently becoming "no data". New `hooks/lib/exec.cjs` provides timeout tiers (2s/5s/10s), maxBuffer tiers (2MB/16MB) and `warnExecLimit()`, which tells a timeout from an ENOBUFS and says so on stderr. Bounded: `execSafe` (the generic escape hatch, so every caller inherits a default), `firebase login:list`, `ps -Ao`, `git diff`, `git diff sha..HEAD`, `git show`, `which`, `git rev-parse`. A source-walking test now fails on **any** exec/spawn site in `hooks/` lacking a timeout, so a new unbounded call can't be added silently.
 
-- **`lint-autofix` ran up to two linters per Write with no cache, lock or debounce, at 30s each.** The availability probe re-parsed `package.json`/`composer.json` once per candidate linter per Write; nothing stopped N concurrent Writes each launching eslint; and an unchanged file was re-linted every time. Now: probe cached (process memo plus an on-disk cache keyed by an mtime/size fingerprint of every manifest it consults), single-flight via the new shared `hooks/lib/af-run-lock.cjs` (exclusive `wx` create, stale reclaim on a dead PID, idempotent release that won't drop a lock another process has taken over — also now used by `auto-test-runner`), a content-hash debounce capped at 200 entries that records the *post*-lint hash so a formatter rewrite still debounces, and 10s per linter.
+- **`lint-autofix` ran up to two linters per Write with no cache, lock or debounce, at 30s each.** The availability probe re-parsed `package.json`/`composer.json` once per candidate linter per Write; nothing stopped N concurrent Writes each launching eslint; and an unchanged file was re-linted every time. Now: probe cached (process memo plus an on-disk cache keyed by an mtime/size fingerprint of every manifest it consults), single-flight via the new shared `hooks/lib/run-lock.cjs` (exclusive `wx` create, stale reclaim on a dead PID, idempotent release that won't drop a lock another process has taken over — also now used by `auto-test-runner`), a content-hash debounce capped at 200 entries that records the *post*-lint hash so a formatter rewrite still debounces, and 10s per linter.
 
-- **Caches that grew without bound now have caps**, each keeping what carries the signal: `learned-patterns.md` 50 blocks by occurrence count (ties newer, original file order preserved so diffs stay stable — it was previously read whole, string-concatenated and rewritten on every learnable prompt with no cap at all); `auto-learn` `cache.patterns` 200 by count; `smart-learn` file/code/bashPatterns 100 by count then recency; `af-learning` `patterns.json` `slice(-500)` — deliberately *not* frequency-sorted, since a new pattern has frequency 1 and would be the first thing discarded; `updateLearnedRulesMD` renders the top 25 per category with a "top N of M" note.
+- **Caches that grew without bound now have caps**, each keeping what carries the signal: `learned-patterns.md` 50 blocks by occurrence count (ties newer, original file order preserved so diffs stay stable — it was previously read whole, string-concatenated and rewritten on every learnable prompt with no cap at all); `auto-learn` `cache.patterns` 200 by count; `smart-learn` file/code/bashPatterns 100 by count then recency; `learning` `patterns.json` `slice(-500)` — deliberately *not* frequency-sorted, since a new pattern has frequency 1 and would be the first thing discarded; `updateLearnedRulesMD` renders the top 25 per category with a "top N of M" note.
 
 - **`json-toon-projector` walked all of `.claude/logs` on the `Read|mcp__.*` hot path** with no depth limit, no candidate cap, and two `statSync` per file just to filter for files touched in the last 60s — then read, parsed and converted the target, holding three copies. Now depth 4, 50 candidates, one `statSync` per entry, mtime-pruned directories, and a 1MB ceiling above which a file is skipped. The directory prune uses a 24h grace rather than the 60s window: a directory's mtime doesn't move when a file inside is rewritten in place, so a 60s prune would silently miss in-place appends.
 
@@ -479,7 +572,7 @@ Remediation of the deep-research audit (PR #50). Baseline 79 suites / 1296 tests
 
 - **CI gates that could not fail.** `npm run lint` had every ESLint rule at `warn` and no `--max-warnings`, so lint could never go red; it is now a ratchet at the current count, failing on any new warning. `validate-counts.sh` silently stopped checking agents/skills/commands when `CLAUDE.md` dropped its inline counts (reporting `??` rather than failing) and now reads the Resources block, hard-fails on a missing marker, and cross-checks `plugin.json`. `audit-refs.sh`'s orphan check used an unanchored substring grep, so a rule named after a common word could never be flagged; the match is now anchored to the rule's full path. `validate-hook-parity.cjs` only recognised `hooks/<name>.cjs` paths, so a hook moved into a dispatch chain looked unregistered on that event — it now parses dispatch's spec grammar.
 
-- **101 tests asserted against code that was copy-pasted into the test file.** `__tests__/hooks/lib/af-project-cache.test.cjs` and `af-learning.test.cjs` re-implemented the functions they claimed to cover, and the `af-project-cache` replica still asserted a 24h-TTL contract the real module had removed. The replica suite is deleted (a genuine one already exists next to the module) and `af-learning`'s 37 tests now `require()` the real module. Also: `next-counter-lock` ran unbounded synchronous bash under load (jest's per-test timeout cannot interrupt `spawnSync`), and `hook-runtime` leaked un-cleared 2s timers plus an assertion-free test whose premise was false.
+- **101 tests asserted against code that was copy-pasted into the test file.** `__tests__/hooks/lib/project-cache.test.cjs` and `learning.test.cjs` re-implemented the functions they claimed to cover, and the `project-cache` replica still asserted a 24h-TTL contract the real module had removed. The replica suite is deleted (a genuine one already exists next to the module) and `learning`'s 37 tests now `require()` the real module. Also: `next-counter-lock` ran unbounded synchronous bash under load (jest's per-test timeout cannot interrupt `spawnSync`), and `hook-runtime` leaked un-cleared 2s timers plus an assertion-free test whose premise was false.
 
 - **`scripts/sync-version.sh` silently updated nothing on macOS** — nine BSD-incompatible `sed` expressions, a version regex that rejected the project's own `-alpha.N` scheme, and a zero-files-changed run that still reported success. `file-registry-gen.sh` and `architecture-gen.sh` likewise depended on GNU-only `grep -P` with the failure suppressed, emitting empty output on macOS.
 
@@ -641,12 +734,12 @@ New model releases no longer require a plugin update to be used for complex work
 
 ## [3.8.0-alpha.5] - 2026-06-09 (Hotfix: botched findProjectRoot() migration)
 
-> The v3.8.0-alpha.2 `findProjectRoot()` migration inserted `const { findProjectRoot } = require('./hook-runtime.cjs');` **inside an array literal** in 4 hook files, producing a `SyntaxError: Unexpected token 'const'`. The bug stayed latent while the installed plugin was 3.7.4; updating to the 3.8.0-alpha line surfaced it ("Failed with non-blocking status code: …/af-config-utils.cjs:498"). Any hook that `require()`d an affected lib failed to load.
+> The v3.8.0-alpha.2 `findProjectRoot()` migration inserted `const { findProjectRoot } = require('./hook-runtime.cjs');` **inside an array literal** in 4 hook files, producing a `SyntaxError: Unexpected token 'const'`. The bug stayed latent while the installed plugin was 3.7.4; updating to the 3.8.0-alpha line surfaced it ("Failed with non-blocking status code: …/config-utils.cjs:498"). Any hook that `require()`d an affected lib failed to load.
 
 ### Fixed
 
 - **`SyntaxError` in 4 hook files** — hoisted the lazy `require('./hook-runtime.cjs')` out of the array literal to a valid statement position (immediately before the array, preserving the lazy-require to avoid a circular dependency with `hook-runtime.cjs`):
-  - `aura-frog/hooks/lib/af-config-utils.cjs` (`isAgentTeamsEnabled`, line 498) — `af-config-utils` is required by **12 hooks**, so this was the highest-impact instance.
+  - `aura-frog/hooks/lib/config-utils.cjs` (`isAgentTeamsEnabled`, line 498) — `config-utils` is required by **12 hooks**, so this was the highest-impact instance.
   - `aura-frog/hooks/lib/record-workflow-event.cjs` (`getActiveWorkflowId`)
   - `aura-frog/hooks/lib/team-bridge.cjs` (`resolveWorkflowDir`)
   - `aura-frog/hooks/subagent-init.cjs` (workflow-state path resolution)
@@ -662,7 +755,7 @@ New model releases no longer require a plugin update to be used for complex work
 
 - **`scripts/statusline.sh` now owns the full multi-line status line** (was: single AF segment only):
   - **Line 1** — `➜ {dir}  git:({branch}) {✓|✗N} {↑ahead} {↓behind}   🕐 HH:MM`. Working-tree state via `git status --porcelain` (✓ clean / ✗N changed-file count); ahead/behind via `git rev-list --left-right --count @{upstream}...HEAD` (shown only when non-zero). All git calls use `--no-optional-locks`, are guarded by an `is-inside-work-tree` probe (non-git cwd skips them entirely), and degrade silently (detached HEAD / no upstream).
-  - **Lines 2–3** — the AF context line is split on ` │ ` (`🐸 AF v… │ {mode} {step} │ {agent}` then `{model} │ {ctx}% ctx`) so long lines no longer clip. The exact AF substring is preserved internally before the split.
+  - **Lines 2–3** — the AF context line is split on ` │ ` (`archon v… │ {mode} {step} │ {agent}` then `{model} │ {ctx}% ctx`) so long lines no longer clip. The exact AF substring is preserved internally before the split.
   - **Line 4 (opt-in)** — `💰 ${cost} │ +{added}/-{removed} │ ⏱ {duration} │ cc {version}`, rendered **only** when `AF_STATUSLINE_COST=1` AND the cost data is present. Cost was pulled from the always-on line in v3.7.4 ("visual noise without per-call breakdown"); this re-adds it behind a flag. Added green / removed red, line dimmed; duration `Xh Ym` / `Xm Ys` / `Zs`.
   - Parses `workspace.current_dir` → `cwd` → `$PWD` for the dir; all fields via the existing grep/sed fallback so it runs **with or without jq**; always `exit 0`.
 
@@ -690,14 +783,14 @@ New model releases no longer require a plugin update to be used for complex work
 
 ### Fixed
 
-- **Cache invalidation never fired for non-JS projects** — `af-project-cache.cjs` keyed invalidation off a 24h TTL + a `KEY_FILES` list of JS/TS/Go/Python configs. For this markdown/bash/yaml plugin none of those exist, so the cache froze (observed: `project-detection.json` stuck at 2026-02-11 reporting 11 agents / 53 skills while reality was 15 / 56). Invalidation is now **project-type-aware** (content-hash of structural dirs — `agents/`, `skills/`, `rules/`, … — discovered at depth ≤2) **+ git-HEAD-sha**, the TTL is removed, and a `CACHE_SCHEMA_VERSION` bump rebuilds old-format caches. New exports: `getGitHead`, `calculateContentHash`, `resolveWatchMode`, `findStructuralDirs`, `getCacheStaleness`.
+- **Cache invalidation never fired for non-JS projects** — `project-cache.cjs` keyed invalidation off a 24h TTL + a `KEY_FILES` list of JS/TS/Go/Python configs. For this markdown/bash/yaml plugin none of those exist, so the cache froze (observed: `project-detection.json` stuck at 2026-02-11 reporting 11 agents / 53 skills while reality was 15 / 56). Invalidation is now **project-type-aware** (content-hash of structural dirs — `agents/`, `skills/`, `rules/`, … — discovered at depth ≤2) **+ git-HEAD-sha**, the TTL is removed, and a `CACHE_SCHEMA_VERSION` bump rebuilds old-format caches. New exports: `getGitHead`, `calculateContentHash`, `resolveWatchMode`, `findStructuralDirs`, `getCacheStaleness`.
 - **Ghost-dir cache miss** — `getProjectName()` preferred `package.json` `name` (`aura-frog-dev`) over the dir basename (`aura-frog`) where context actually lives, so the cache read/wrote a path that never matched the real data → permanent cache miss. Now an existing `.claude/project-contexts/<basename>/` wins.
 
 ### Changed
 
 - **Hooks: 45 → 46** (added `context-auto-refresh.cjs`; wired into `hooks.json` `Stop`, async).
 - **`jest.config.cjs`** — added `aura-frog/scripts/__tests__` to `roots`.
-- Tests: **+44** — `af-project-cache.test.cjs` (17, NEW), `context-snapshot.test.cjs` (5, NEW), `context-auto-refresh.test.cjs` (8, NEW), `port-plugin.test.cjs` (74, NEW).
+- Tests: **+44** — `project-cache.test.cjs` (17, NEW), `context-snapshot.test.cjs` (5, NEW), `context-auto-refresh.test.cjs` (8, NEW), `port-plugin.test.cjs` (74, NEW).
 
 ### Stats
 
@@ -719,7 +812,7 @@ New model releases no longer require a plugin update to be used for complex work
 
 - **25 hook files** migrated from `path.join(process.cwd(), '.claude', ...)` to `path.join(findProjectRoot(), '.claude', ...)`:
   - Hooks: `auto-learn`, `changelog-notify`, `compact-handoff`, `feedback-capture`, `jira-auto-fetch`, `json-toon-projector`, `mcp-call-gate`, `phase-checkpoint`, `pre-flight-validate`, `prompt-logger`, `session-metrics`, `session-reset-trigger`, `session-start`, `smart-learn`, `subagent-init`, `test-pattern-extractor`, `thinking-boost`, `token-tracker`, `update-check`, `workflow-edit-learn`
-  - Lib: `af-config-utils`, `af-learning`, `af-memory-loader`, `record-workflow-event`, `team-bridge`
+  - Lib: `config-utils`, `learning`, `memory-loader`, `record-workflow-event`, `team-bridge`
 - **3 shell scripts** picked up an equivalent `find_project_root` bash function: `aura-frog/scripts/statusline.sh`, `aura-frog/scripts/dashboard.sh`, `aura-frog/scripts/project-refresh-incremental.sh`.
   - `statusline.sh` also now prefers the `cwd` field that Claude Code passes via stdin JSON.
 
@@ -864,7 +957,7 @@ This release shipped as `FEAT-006 — Docs Cleanup & Reference-Integrity Sweep` 
 
 #### Changed
 
-- **`aura-frog/scripts/statusline.sh`** — adds a `render_active()` block. When `.aura-frog/runtime/model-stack.jsonl` is non-empty, renders `🐸 AF v{ver} │ ▶ {phase} │ {step_model} ⏱{duration} │ session: {session_model} │ {ctx}% ctx`. When empty (or corrupted last line, or jq missing), falls through to the existing idle render byte-identically. Duration formatter handles `Ns` / `MmSSs` / `HhMMm`; UTC parsing fixed for macOS BSD `date`.
+- **`aura-frog/scripts/statusline.sh`** — adds a `render_active()` block. When `.aura-frog/runtime/model-stack.jsonl` is non-empty, renders `archon v{ver} │ ▶ {phase} │ {step_model} ⏱{duration} │ session: {session_model} │ {ctx}% ctx`. When empty (or corrupted last line, or jq missing), falls through to the existing idle render byte-identically. Duration formatter handles `Ns` / `MmSSs` / `HhMMm`; UTC parsing fixed for macOS BSD `date`.
 - **`aura-frog/hooks/hooks.json`** — registers both new hooks under `matcher: "Task"` (Pre + Post), async, `2>&1`. No other hook entries touched.
 
 #### Stats diff (post-release)
@@ -953,7 +1046,7 @@ The legacy `.aura/plans/` fallback in `plans_dir()` is removed in v4.0.
 
 ### Added — Statusline transparency + per-step agent announcements (PR #19)
 
-- **New statusline format:** `🐸 AF v{version} │ {mode} {step} │ {agent} │ {model} │ {ctx}% ctx`
+- **New statusline format:** `archon v{version} │ {mode} {step} │ {agent} │ {model} │ {ctx}% ctx`
   - **mode** — read from `run-state.json#flow` (specific: `feature-deep`, `bugfix`, `refactor`, `test`, `security`, `review`, `deploy`, `quality`); falls back to `#complexity` (Quick/Standard/Deep/Project); `idle` when no in-progress run.
   - **step** — `P{N}` for 5-phase Deep runs (from `current_phase`); `S{N}` for bugfix's 4-step TDD (`current_step` ∈ `investigate`/`test-red`/`fix-green`/`verify`); omitted for quick/idle.
   - **agent** — `run-state.json#active_agent`, updated by run-orchestrator at every dispatch; falls back to last entry in `agents[]` array, then the session-start cache.
@@ -1088,7 +1181,7 @@ The legacy `.aura/plans/` fallback in `plans_dir()` is removed in v4.0.
 
 **A planning-first LLM OS for software engineering.** Plans persist across sessions; every Claude decision is forensically reproducible; conflicts are detected before silent overwrites; backward-compatible — your existing `/run` workflow continues unchanged.
 
-### 🐸 The 8 Pillars (feature highlights)
+### The 8 Pillars (feature highlights)
 
 v3.7.0 lands eight composable features organized into four themes. Full marketing breakdown in [README.md § The 8 Pillars](../../README.md#-the-8-pillars-of-the-planning-first-llm-os) and engineering depth in [BENEFITS.md Part 9](BENEFITS.md#part-9--the-8-pillars-of-the-planning-first-llm-os-v370).
 
@@ -1191,7 +1284,7 @@ A second senior review pulled the post-fix tree and flagged 7 remaining findings
 
 - **Command namespace consistency** — renamed 18 `aura-*.md` command files to drop the redundant `aura-` prefix; the slash form was displaying as `/aura-frog:aura-plan` (plugin prefix + filename redundancy). New slash forms match the core `/aura-frog:run` convention: `/aura-frog:plan`, `/aura-frog:plan-expand`, `/aura-frog:trace`, `/aura-frog:heal`, `/aura-frog:mcp`, `/aura-frog:dashboard`, `/aura-frog:extend`, `/aura-frog:preflight`, `/aura-frog:reset-session`, plus 10 `plan-*` subcommands. Updated ~140 references across docs, agents, hooks, rules, scripts, READMEs to long-form (e.g. `/aura:plan:expand` → `/aura-frog:plan-expand`). `git mv` preserved history. Audit clean.
 - **Doc count drift** — synced stale v3.6.x counts in `README.md` (L101 / L533 / L697-700 / L708 / L1011-1019), `CONTRIBUTING.md` (project-structure block), `docs/README.md` (Plugin Internals list), `docs/reference/BENEFITS.md` (§4.3, §5.1, §6.1, §7.x) to v3.7.0 reality (15 / 55 / 70 / 24 / 42)
-- **`install.sh` removed** — deprecated since v3.6 marketplace publish; only historical reference retained in this changelog. Use `/plugin install aura-frog@aurafrog` instead.
+- **`install.sh` removed** — deprecated since v3.6 marketplace publish; only historical reference retained in this changelog. Use `/plugin install archon-os@archon` instead.
 - **`scripts/jira-fetch.sh` removed** — `hooks/jira-auto-fetch.cjs` already calls the JIRA REST API directly (verified end-to-end against `IGNT-1975` on `fwdnextgen.atlassian.net`), so the standalone CLI script duplicated logic with no callers. Hook is now the single source of truth for JIRA fetching. Updated refs in `scripts/README.md`, `rules/workflow/mcp-response-logging.md`, `docs/operations/MCP_GUIDE.md`, `docs/getting-started/GET_STARTED.md`. Confluence fetch script kept (no equivalent hook). README gains a "JIRA Ticket Auto-Fetch" entry in the *More features* section.
 - **`evaluate-prompts.cjs` refresh** — version-agnostic comments for command/agent surface; `AVAILABLE_AGENTS` array updated for the 15-agent roster (added master-planner, feature-architect, story-planner, replanner, epic-summarizer, conflict-arbiter); `AVAILABLE_COMMAND_CATEGORIES` adds `aura` namespace; `AVAILABLE_SKILLS` extended with auto-invoke planners + hierarchical-planning/safety skills
 - **Audit clean** — zero orphan rules, zero dead markdown links, all 55 skills carry `user-invocable: false`
@@ -1688,7 +1781,7 @@ This keeps each pre-release reviewable and avoids bundling unrelated changes.
 
 **Hooks (2 new — 28 → 30)**
 - `hooks/pre-execute-load-plan-context.cjs` — PreToolUse: emits `[plan-context | trust:plan]` to stderr (silent if no `.aura/plans/`)
-- `hooks/session-start-restore-active.cjs` — SessionStart: emits `🐸 Active plan` banner; appends `event: session_start` to history.jsonl
+- `hooks/session-start-restore-active.cjs` — SessionStart: emits `Active plan` banner; appends `event: session_start` to history.jsonl
 
 **Scripts**
 - `scripts/plans/new-plan.sh` — idempotent skeleton initializer
@@ -1980,7 +2073,7 @@ This keeps each pre-release reviewable and avoids bundling unrelated changes.
 
 ### LLM OS Architecture
 
-Major architecture rewrite. Aura Frog now frames Claude Code as an Operating System — Claude as kernel, agents as processes, context window as managed RAM.
+Major architecture rewrite. Archon OS now frames Claude Code as an Operating System — Claude as kernel, agents as processes, context window as managed RAM.
 
 #### Added
 - **OS Architecture document** (`docs/os-architecture.md`) — Process table, memory segments, 3-tier compression, context switch protocol, golden rules
@@ -2309,7 +2402,7 @@ Full Claude Agent Teams integration for real multi-agent orchestration with pers
 
 #### Added
 - **Agent Teams integration** - Real multi-agent orchestration via Claude's experimental Agent Teams feature
-- **`isAgentTeamsEnabled()` utility** - Detection function in `af-config-utils.cjs` checking settings.json + env
+- **`isAgentTeamsEnabled()` utility** - Detection function in `config-utils.cjs` checking settings.json + env
 - **`teammate-idle.cjs` hook** - TeammateIdle lifecycle hook for assigning cross-review work to idle teammates
 - **`task-completed.cjs` hook** - TaskCompleted lifecycle hook for validating teammate task completion quality gates
 - **Team mode detection** in agent-detector skill - Decision matrix for team vs subagent mode
@@ -2451,7 +2544,7 @@ Major improvements to the learning system with local-first storage and automatic
   - 30-minute window for resume
 
 #### Updated
-- **`hooks/lib/af-learning.cjs`** v2.0.0 - Dual-mode storage (local/Supabase)
+- **`hooks/lib/learning.cjs`** v2.0.0 - Dual-mode storage (local/Supabase)
   - `isLearningEnabled()` - Always true unless explicitly disabled
   - `isLocalMode()` - True when Supabase not configured
   - Auto-generates `learned-rules.md` for human-readable rules
@@ -2676,7 +2769,7 @@ if [ -f .envrc ]; then set -a; source .envrc; set +a; fi; node "hooks/session-st
 Learned patterns and insights now automatically load at session start!
 
 #### Added
-- **Memory auto-loader** - `hooks/lib/af-memory-loader.cjs`
+- **Memory auto-loader** - `hooks/lib/memory-loader.cjs`
   - Queries Supabase for learned patterns at session start
   - Caches results to `.claude/cache/memory-context.md`
   - 1-hour cache TTL, auto-refreshes when stale
@@ -2729,7 +2822,7 @@ Session Start
 - **Version sync script** - Improved `scripts/sync-version.sh`:
   - Added more files to update list (global CLAUDE.md, docs with banners)
   - Improved pattern matching for different version string formats
-  - Now handles: `System: Aura Frog vX.Y.Z`, `Plugin: Aura Frog vX.Y.Z`, banner headers
+  - Now handles: `System: Archon OS vX.Y.Z`, `Plugin: Archon OS vX.Y.Z`, banner headers
 
 #### Updated
 - **`/learn:feedback`** - Added CRITICAL execution note
@@ -2783,7 +2876,7 @@ Session Start
 
 ### Learning System - Self-Improvement via Supabase
 
-Aura Frog can now learn and improve over time by collecting feedback, tracking metrics, and applying learned patterns.
+Archon OS can now learn and improve over time by collecting feedback, tracking metrics, and applying learned patterns.
 
 #### Added
 
@@ -2813,7 +2906,7 @@ Aura Frog can now learn and improve over time by collecting feedback, tracking m
   - `hooks/feedback-capture.cjs` - Capture user corrections (auto on Write/Edit)
   - `hooks/workflow-metrics.cjs` - Send metrics to Supabase
   - `hooks/session-metrics.cjs` - Auto-send metrics on session end
-  - `hooks/lib/af-learning.cjs` - Learning system utilities
+  - `hooks/lib/learning.cjs` - Learning system utilities
 
 - **Updated Hooks**
   - `hooks/subagent-init.cjs` - Now tracks agent usage for learning
@@ -3170,7 +3263,7 @@ Removed Atlassian MCP from default bundled servers due to OAuth stability issues
 Code quality improvements and documentation fixes.
 
 #### Fixed
-- **Removed duplicate session state functions** - `session-state.cjs` now imports from `af-config-utils.cjs` instead of duplicating code
+- **Removed duplicate session state functions** - `session-state.cjs` now imports from `config-utils.cjs` instead of duplicating code
 - **Fixed hook count mismatch** - README documented 14 hooks but only 11 exist (removed ghost JIRA/Figma/Confluence/GitHub detection sections)
 - **Removed unused import** - `set-active-plan.cjs` no longer imports unused `getSessionTempPath`
 - **Fixed duplicate section numbering** - hooks/README.md had two section "3"s
@@ -3180,9 +3273,9 @@ Code quality improvements and documentation fixes.
   - `slack`: `@anthropic/slack-mcp` → `@modelcontextprotocol/server-slack` (added `SLACK_TEAM_ID`)
 
 #### Updated
-- `hooks/lib/session-state.cjs` - v1.1.0: Uses `af-config-utils.cjs` for core operations
-- `hooks/subagent-init.cjs` - v1.2.0: Removed fallback duplication, uses `af-config-utils.cjs`
-- `hooks/prompt-reminder.cjs` - v1.1.0: Uses `af-config-utils.cjs` for session state
+- `hooks/lib/session-state.cjs` - v1.1.0: Uses `config-utils.cjs` for core operations
+- `hooks/subagent-init.cjs` - v1.2.0: Removed fallback duplication, uses `config-utils.cjs`
+- `hooks/prompt-reminder.cjs` - v1.1.0: Uses `config-utils.cjs` for session state
 - `hooks/README.md` - Fixed to show correct 11 hooks, removed ghost sections
 
 #### Stats
@@ -3277,7 +3370,7 @@ Major improvements focused on token efficiency and automatic complexity detectio
 
 #### New Files
 - `hooks/session-start.cjs` - SessionStart hook with env injection
-- `hooks/lib/af-config-utils.cjs` - Cascading config + project detection utils
+- `hooks/lib/config-utils.cjs` - Cascading config + project detection utils
 - `hooks/set-active-plan.cjs` - Set active plan CLI command
 - `.af.json.example` - Example config file with all options
 - `commands/plan/set.md` - Plan set command documentation
@@ -3304,7 +3397,7 @@ Major improvements focused on token efficiency and automatic complexity detectio
 - `rules/sast-security-scanning.md` - Converted tables to TOON
 - `hooks/hooks.json` - Added SessionStart, scout-block, SubagentStart, UserPromptSubmit hooks
 - `hooks/README.md` - Updated with new hooks (7 → 11)
-- `hooks/subagent-init.cjs` - Now uses af-config-utils, shows framework/PM (v1.1.0)
+- `hooks/subagent-init.cjs` - Now uses config-utils, shows framework/PM (v1.1.0)
 - `hooks/lib/session-state.cjs` - Added projectType, packageManager, framework fields
 - `skills/README.md` - Added new skills (35 → 37)
 - `agents/backend-expert.md` - Model specification
@@ -3422,7 +3515,7 @@ Streamlined the plugin by replacing custom integration scripts with bundled MCP 
   - Auto-keeps "latest" file for each identifier
 - **MCP in Agent Banner** - Show which MCP servers are active (single or multiple)
 - **Sectioned CLAUDE.md Template** - Auto-update plugin sections, preserve user content:
-  - `<!-- AURA-FROG:START -->` / `<!-- AURA-FROG:END -->` - Plugin-managed
+  - `<!-- ARCHON OS:START -->` / `<!-- ARCHON OS:END -->` - Plugin-managed
   - `<!-- USER-CUSTOM:START -->` / `<!-- USER-CUSTOM:END -->` - User-preserved
 - **claude-md-update.sh Script** - Sync plugin sections without losing customizations
 - **project:init/regen Integration** - Automatically uses update script
@@ -3447,7 +3540,7 @@ Streamlined the plugin by replacing custom integration scripts with bundled MCP 
 
 #### New Files
 - **docs/MCP_GUIDE.md** - Complete guide for using and creating MCP servers
-- **scripts/claude-md-update.sh** - Update AURA-FROG sections in project CLAUDE.md
+- **scripts/claude-md-update.sh** - Update ARCHON OS sections in project CLAUDE.md
 - **scripts/workflow/save-deliverable.sh** - Save phase deliverables (MD files) to logs
 - **scripts/workflow/save-mcp-response.sh** - Save MCP responses (JIRA, Figma, etc.) to logs
 - **templates/project-claude.md** - Sectioned template with auto-update markers
@@ -3758,12 +3851,12 @@ Major update standardizing skill file format and streamlining plugin structure.
 
 ## [1.0.0] - 2025-11-28
 
-### Rebranding: CCPM to Aura Frog
+### Rebranding: CCPM to Archon OS
 
 **"Code with main character energy!"**
 
 #### Changes
-- Project renamed from "CCPM" to "Aura Frog"
+- Project renamed from "CCPM" to "Archon OS"
 - New visual identity with frog mascot
 - New agent banner format with aura messages
 

@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Bridges legacy AF_* / AURA_FROG_* variables onto their ARCHON_* names (v4 rebrand).
+. "$(dirname "${BASH_SOURCE[0]}")/lib/env-compat.sh"
+
 # Archon OS Integration Setup Script
 # Interactive setup for Jira, Confluence, Slack, and Figma integrations
 
@@ -278,7 +281,7 @@ export CONFLUENCE_URL="$CONFLUENCE_URL"
 export CONFLUENCE_EMAIL="$CONFLUENCE_EMAIL"
 export CONFLUENCE_API_TOKEN="$CONFLUENCE_API_TOKEN"
 export CONFLUENCE_SPACE_KEY="$CONFLUENCE_SPACE_KEY"
-export CONFLUENCE_DEFAULT_LABELS="aura-frog,generated,documentation"
+export CONFLUENCE_DEFAULT_LABELS="archon-os,generated,documentation"
 
 # ============================================
 # Slack Integration
@@ -301,11 +304,11 @@ export FIGMA_MCP_ENABLED="true"
 # ============================================
 # Archon OS Configuration
 # ============================================
-export AURA_FROG_AUTO_APPROVE="true"
-export AURA_FROG_DEFAULT_COVERAGE="80"
-export AURA_FROG_TDD_ENFORCE="true"
-export AURA_FROG_AUTO_NOTIFY="true"
-export AURA_FROG_TOKEN_WARNING="150000"
+export ARCHON_AUTO_APPROVE="true"
+export ARCHON_DEFAULT_COVERAGE="80"
+export ARCHON_TDD_ENFORCE="true"
+export ARCHON_AUTO_NOTIFY="true"
+export ARCHON_TOKEN_WARNING="150000"
 EOF
 
 echo -e "${GREEN}✅ Configuration file created: $ENVRC_FILE${NC}"

@@ -148,7 +148,7 @@ No. The 95% applies to the content (rules, skills, agent definitions, commands, 
 Portability costs you nothing. The design works great as a Claude Code–native plugin. Portability is future-proofing.
 
 **Q: Is there a runtime adapter, or do I have to maintain forks?**
-Planned: a single adapter repo per target tool (`archon-os-codex`, `archon-os-cursor`) that pulls the universal layer as a submodule or published package. See the roadmap for timelines.
+Planned: a single adapter repo per target tool (`archon-codex`, `archon-cursor`) that pulls the universal layer as a submodule or published package. See the roadmap for timelines.
 
 **Q: Can I contribute a Windsurf or Cline adapter?**
 Yes — we welcome it. Follow the Porting Guide above and open a PR. The reference implementation will be the Codex adapter when it ships (target Q2 2026).

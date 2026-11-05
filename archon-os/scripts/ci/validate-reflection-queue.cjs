@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 'use strict';
 
+// Mirrors legacy AF_* / AURA_FROG_* variables onto their ARCHON_* names.
+require('../../hooks/lib/env-compat.cjs');
+
 /**
  * CI self-test for hooks/lib/reflection-queue.cjs (KG-2.3).
  *
@@ -44,7 +47,7 @@ function readLines(file) {
 // --- 1. Gate OFF => everything a no-op, nothing written --------------------
 (function gateOff() {
   const dir = mkTmp();
-  const env = { AF_REFLECTION_QUEUE_DIR: dir }; // no AF_REFLECTION_QUEUE
+  const env = { ARCHON_REFLECTION_QUEUE_DIR: dir }; // no ARCHON_REFLECTION_QUEUE
   const file = q.resolveQueueFile(undefined, env);
   const r = q.enqueue({ a: 1 }, { env });
   const d = q.drain(() => true, { env });
@@ -58,7 +61,7 @@ function readLines(file) {
 // --- 2. Enqueue writes the documented shape --------------------------------
 (function enqueueShape() {
   const dir = mkTmp();
-  const env = { AF_REFLECTION_QUEUE: '1', AF_REFLECTION_QUEUE_DIR: dir };
+  const env = { ARCHON_REFLECTION_QUEUE: '1', ARCHON_REFLECTION_QUEUE_DIR: dir };
   const file = q.resolveQueueFile(undefined, env);
   const r = q.enqueue({ tool: 'Write', note: 'hello' }, { env });
   const lines = readLines(file);
@@ -75,7 +78,7 @@ function readLines(file) {
 // --- 3. Dedupe on content hash ---------------------------------------------
 (function dedupe() {
   const dir = mkTmp();
-  const env = { AF_REFLECTION_QUEUE: 'true', AF_REFLECTION_QUEUE_DIR: dir };
+  const env = { ARCHON_REFLECTION_QUEUE: 'true', ARCHON_REFLECTION_QUEUE_DIR: dir };
   const file = q.resolveQueueFile(undefined, env);
   const r1 = q.enqueue({ b: 2, a: 1 }, { env });
   const r2 = q.enqueue({ a: 1, b: 2 }, { env }); // same content, different key order
@@ -88,7 +91,7 @@ function readLines(file) {
 // --- 4. Drain handles pending, marks done ----------------------------------
 (function drainProcess() {
   const dir = mkTmp();
-  const env = { AF_REFLECTION_QUEUE: 'on', AF_REFLECTION_QUEUE_DIR: dir };
+  const env = { ARCHON_REFLECTION_QUEUE: 'on', ARCHON_REFLECTION_QUEUE_DIR: dir };
   const file = q.resolveQueueFile(undefined, env);
   q.enqueue({ n: 1 }, { env });
   q.enqueue({ n: 2 }, { env });
@@ -109,7 +112,7 @@ function readLines(file) {
 // --- 5. Crash recovery: pending entry re-seen; failed handler stays pending -
 (function crashRecovery() {
   const dir = mkTmp();
-  const env = { AF_REFLECTION_QUEUE: '1', AF_REFLECTION_QUEUE_DIR: dir };
+  const env = { ARCHON_REFLECTION_QUEUE: '1', ARCHON_REFLECTION_QUEUE_DIR: dir };
   q.enqueue({ n: 42 }, { env });
   // First drain: handler throws => entry must remain pending.
   const d1 = q.drain(() => { throw new Error('boom'); }, { env });
@@ -123,7 +126,7 @@ function readLines(file) {
 // --- 6. Retention: old done entries pruned; cap enforced -------------------
 (function retention() {
   const dir = mkTmp();
-  const env = { AF_REFLECTION_QUEUE: '1', AF_REFLECTION_QUEUE_DIR: dir };
+  const env = { ARCHON_REFLECTION_QUEUE: '1', ARCHON_REFLECTION_QUEUE_DIR: dir };
   const file = q.resolveQueueFile(undefined, env);
   fs.mkdirSync(dir, { recursive: true });
 
@@ -164,7 +167,7 @@ function readLines(file) {
 // --- 7. Fail-closed: bad inputs never throw --------------------------------
 (function failClosed() {
   const dir = mkTmp();
-  const env = { AF_REFLECTION_QUEUE: '1', AF_REFLECTION_QUEUE_DIR: dir };
+  const env = { ARCHON_REFLECTION_QUEUE: '1', ARCHON_REFLECTION_QUEUE_DIR: dir };
   let threw = false;
   try {
     check('fail-closed: null payload => null', q.enqueue(null, { env }) === null);

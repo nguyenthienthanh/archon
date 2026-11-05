@@ -37,7 +37,7 @@
  *     patterns anchored to mcp/playwright/jest-specific strings; never widen them
  *     to a bare browser name.
  *
- * Disable: AF_PLAYWRIGHT_REAPER_DISABLED=true
+ * Disable: ARCHON_PLAYWRIGHT_REAPER_DISABLED=true
  *
  * Exit codes:
  *   0 — always (best-effort janitor, never blocks a session start)
@@ -47,8 +47,12 @@
 
 'use strict';
 
+// Mirrors legacy AF_* / AURA_FROG_* variables onto their ARCHON_* names. This file
+// reads process.env without going through safe-stdin, so it bridges for itself.
+require('./lib/env-compat.cjs');
+
 const { execSync } = require('child_process');
-const { TIMEOUT_DEFAULT_MS, MAX_BUFFER_LARGE, warnExecLimit } = require('./lib/af-exec.cjs');
+const { TIMEOUT_DEFAULT_MS, MAX_BUFFER_LARGE, warnExecLimit } = require('./lib/exec.cjs');
 
 // Matches ONLY playwright-launched processes: the temp profile a playwright
 // Chrome runs under, the bundled ms-playwright browser path, or the MCP server.
@@ -122,7 +126,7 @@ function reap(pids) {
 }
 
 function main() {
-  if (process.env.AF_PLAYWRIGHT_REAPER_DISABLED === 'true') return;
+  if (process.env.ARCHON_PLAYWRIGHT_REAPER_DISABLED === 'true') return;
   const orphans = selectOrphans(listProcs(), { selfPid: process.pid });
   if (orphans.length === 0) return;
   const killed = reap(orphans);
