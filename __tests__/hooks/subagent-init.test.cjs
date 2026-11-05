@@ -52,4 +52,26 @@ describe('subagent-init', () => {
       expect(out).not.toBeNull();
     });
   });
+
+  describe("HARD rules reach every subagent (run phases + workflows)", () => {
+    const fs = require("fs");
+    const os = require("os");
+    const path = require("path");
+    const { spawnSync } = require("child_process");
+    const HOOK = path.join(__dirname, "../../archon-os/hooks/subagent-init.cjs");
+
+    it("injects the reuse-before-write rule even with no phase, plan or project", () => {
+      const cwd = fs.mkdtempSync(path.join(os.tmpdir(), "subagent-init-"));
+      try {
+        const r = spawnSync("node", [HOOK], { cwd, input: "{}", encoding: "utf8", env: { ...process.env, ARCHON_PHASE: "", AF_PHASE: "" } });
+        expect(r.status).toBe(0);
+        const ctx = JSON.parse(r.stdout).hookSpecificOutput.additionalContext;
+        expect(ctx).toMatch(/Reuse before write/);
+        expect(ctx).toMatch(/rules\/core\/simplicity-over-complexity\.md/);
+        expect(ctx).toMatch(/YAGNI/);
+      } finally {
+        fs.rmSync(cwd, { recursive: true, force: true });
+      }
+    });
+  });
 });

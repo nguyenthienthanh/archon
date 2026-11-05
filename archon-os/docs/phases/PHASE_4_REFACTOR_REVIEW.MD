@@ -25,6 +25,8 @@
 
 ## Refactoring Targets
 
+> **First target (HARD):** replace hand-written code that duplicates an existing stdlib / repo / installed-dependency function with that call (`rules/core/simplicity-over-complexity.md` Rule 0).
+
 ### 1. Remove Duplication
 
 ```tsx

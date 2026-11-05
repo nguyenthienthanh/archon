@@ -22,6 +22,11 @@ All notable changes to Archon OS will be documented in this file.
   also gains a best-practices table (smallest diff, delete over add, one source of truth, fail
   loudly, tests that can fail). It is a golden rule in `AGENTS.md`, and `code-reviewer` /
   `code-simplifier` flag a re-implemented existing function as a finding.
+- **The rule is activated at runtime, not only in prose.** `hooks/subagent-init.cjs` injects it
+  into every subagent (SubagentStart) — so the builders and reviewers a `/run` phase spawns get it even when they do not see
+  `AGENTS.md`. `run-orchestrator` loads it in pre-execution and binds it to
+  Phase 1 (reuse inventory), Phase 3 (search before writing) and Phase 4 (blocking reuse check),
+  and the phase guides say the same.
 
 ## [4.0.0-alpha.4] - 2026-11-05 (Plan-only research command, agent-team cost corrected)
 
