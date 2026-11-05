@@ -172,7 +172,7 @@ key_files[17]{file,detects}:
 
 ```javascript
 // In agent-detector skill
-const { detectProject, getCachedDetection } = require('./hooks/lib/af-project-cache.cjs');
+const { detectProject, getCachedDetection } = require('./hooks/lib/project-cache.cjs');
 
 // Fast path - try cache first
 let detection = getCachedDetection();
@@ -316,7 +316,7 @@ rm .claude/cache/project-detection.json
 When in a workspace, the system can match tasks to specific projects:
 
 ```javascript
-const { getProjectForTask } = require('./hooks/lib/af-project-cache.cjs');
+const { getProjectForTask } = require('./hooks/lib/project-cache.cjs');
 
 // User task: "Fix the login bug in backend-api"
 const result = getProjectForTask("Fix the login bug in backend-api");
@@ -333,9 +333,9 @@ const result = getProjectForTask("Fix the login bug in backend-api");
 
 ## Related Files
 
-- **Cache Library:** `hooks/lib/af-project-cache.cjs`
+- **Cache Library:** `hooks/lib/project-cache.cjs`
 - **Agent Detector:** `skills/agent-detector/SKILL.md`
-- **Config Utils:** `hooks/lib/af-config-utils.cjs`
+- **Config Utils:** `hooks/lib/config-utils.cjs`
 - **Commands:** `commands/project/refresh.md`, `commands/project/status.md`
 
 ---

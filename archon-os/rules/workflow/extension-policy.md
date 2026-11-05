@@ -100,7 +100,7 @@ Claude Code loads every `.claude/rules/**/*.md` without `paths:` frontmatter at 
 - **Stays under ~8k chars.** Incident logs, patch histories and quick-refs go to `docs/`, and the rule keeps a short summary plus a pointer.
 - **Gets a one-line entry in the project's CLAUDE.md rule index** so it is still discoverable for chat-only work that touches no file.
 
-Check before and after: `node archon-os/scripts/context-budget.cjs <project>`. Session start also warns once the total passes `AF_CONTEXT_BUDGET_WARN` (default 100k).
+Check before and after: `node archon-os/scripts/context-budget.cjs <project>`. Session start also warns once the total passes `ARCHON_CONTEXT_BUDGET_WARN` (default 100k).
 
 ---
 

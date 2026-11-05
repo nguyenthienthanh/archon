@@ -3,6 +3,12 @@ module.exports = {
   roots: ['<rootDir>/__tests__', '<rootDir>/archon-os/hooks/lib/__tests__', '<rootDir>/archon-os/scripts/__tests__'],
   testMatch: ['**/*.test.cjs'],
 
+  // Strips the host's own plugin configuration out of every worker's env. The
+  // suite is normally run from inside a Claude Code session running this plugin,
+  // so without it a test asserting an unconfigured default reads the developer's
+  // live session instead. See the header of jest.setup.cjs.
+  setupFiles: ['<rootDir>/jest.setup.cjs'],
+
   // Worker fan-out is the plugin's main RAM lever, and it scales with the
   // machine: jest's default is cpu-1 full node processes, so the same suite
   // costs 9 workers on a 10-core box and 15 on a 16-core one — which is why

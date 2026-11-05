@@ -2,7 +2,7 @@
  * Tests for archon-os/hooks/compact-handoff.cjs
  *
  * Pure helpers are called in-process. Anything that writes runs the hook as a
- * subprocess with AF_PROJECT_ROOT pointed at a tmp dir, so the working repo's
+ * subprocess with ARCHON_PROJECT_ROOT pointed at a tmp dir, so the working repo's
  * .claude/ is never touched.
  */
 
@@ -132,15 +132,15 @@ describe('compact-handoff', () => {
       return spawnSync('node', [HOOK, ...args], {
         input: JSON.stringify(input),
         encoding: 'utf8',
-        env: { ...process.env, AF_PROJECT_ROOT: root, ...env },
+        env: { ...process.env, ARCHON_PROJECT_ROOT: root, ...env },
       });
     }
 
     beforeEach(() => {
       root = fs.mkdtempSync(path.join(os.tmpdir(), 'af-handoff-'));
       savedEnv = { ...process.env };
-      process.env.AF_PROJECT_ROOT = root;
-      for (const k of ['AF_WORKFLOW_ID', 'AF_CURRENT_PHASE', 'PROJECT_NAME', 'AF_PROJECT_NAME', 'AF_CLAUDE_SESSION_ID', 'AF_TRANSCRIPT_PATH', 'CLAUDE_ENV_FILE']) delete process.env[k];
+      process.env.ARCHON_PROJECT_ROOT = root;
+      for (const k of ['ARCHON_WORKFLOW_ID', 'ARCHON_CURRENT_PHASE', 'PROJECT_NAME', 'ARCHON_PROJECT_NAME', 'ARCHON_CLAUDE_SESSION_ID', 'ARCHON_TRANSCRIPT_PATH', 'CLAUDE_ENV_FILE']) delete process.env[k];
     });
 
     afterEach(() => {
@@ -275,8 +275,8 @@ describe('compact-handoff', () => {
       const envFile = path.join(root, 'env.sh');
       run(['--resume'], { source: 'startup', session_id: 'sess-env', transcript_path: '/x/t.jsonl' }, { CLAUDE_ENV_FILE: envFile });
       const env = fs.readFileSync(envFile, 'utf8');
-      expect(env).toContain("AF_CLAUDE_SESSION_ID='sess-env'");
-      expect(env).toContain("AF_TRANSCRIPT_PATH='/x/t.jsonl'");
+      expect(env).toContain("ARCHON_CLAUDE_SESSION_ID='sess-env'");
+      expect(env).toContain("ARCHON_TRANSCRIPT_PATH='/x/t.jsonl'");
     });
 
     it('follows the project plan: plan tree resolved from the project root (not cwd) + plan docs', () => {
@@ -294,7 +294,7 @@ describe('compact-handoff', () => {
       spawnSync('node', [HOOK, '--pre-compact'], {
         cwd: sub, encoding: 'utf8',
         input: JSON.stringify({ trigger: 'auto', session_id: 'sess-plan0000' }),
-        env: { ...process.env, AF_PROJECT_ROOT: root },
+        env: { ...process.env, ARCHON_PROJECT_ROOT: root },
       });
       const saved = readSaved('session-sess-pla');
       expect(saved.plan).toEqual({ feature: 'FEAT-A', story: 'STORY-1', task: 'TASK-9' });
@@ -310,7 +310,7 @@ describe('compact-handoff', () => {
 
     it('non-code project: never creates run/plan logs', () => {
       // no .git, no manifest
-      run(['--pre-compact'], { trigger: 'auto', session_id: 'sess-doc' }, { AF_WORKFLOW_ID: 'WF-1', AF_CURRENT_PHASE: '2' });
+      run(['--pre-compact'], { trigger: 'auto', session_id: 'sess-doc' }, { ARCHON_WORKFLOW_ID: 'WF-1', ARCHON_CURRENT_PHASE: '2' });
       expect(fs.existsSync(path.join(root, '.claude', 'logs'))).toBe(false);
       expect(fs.existsSync(path.join(root, '.claude', 'plans'))).toBe(false);
       const saved = readSaved('session-sess-doc');
@@ -320,13 +320,13 @@ describe('compact-handoff', () => {
 
     it('code project keeps the legacy workflow pause marker', () => {
       fs.writeFileSync(path.join(root, 'package.json'), '{}');
-      run(['--pre-compact'], { trigger: 'auto', session_id: 'sess-code' }, { AF_WORKFLOW_ID: 'WF-1', AF_CURRENT_PHASE: '2' });
+      run(['--pre-compact'], { trigger: 'auto', session_id: 'sess-code' }, { ARCHON_WORKFLOW_ID: 'WF-1', ARCHON_CURRENT_PHASE: '2' });
       expect(fs.existsSync(path.join(root, '.claude', 'logs', 'workflows', 'WF-1', 'workflow-state.json'))).toBe(true);
     });
 
     it('manual --save uses the exported session env, keeps a note, survives resume; --show prints it', () => {
       const t = writeTranscript([{ type: 'custom-title', customTitle: 'Beta' }, { type: 'user', message: { content: 'beta work' } }]);
-      const env = { AF_CLAUDE_SESSION_ID: 'sess-b', AF_TRANSCRIPT_PATH: t };
+      const env = { ARCHON_CLAUDE_SESSION_ID: 'sess-b', ARCHON_TRANSCRIPT_PATH: t };
       const r = run(['--save', '--note', 'Next: wire the cron'], {}, env);
       expect(r.status).toBe(0);
       expect(r.stdout).toContain(path.join('.claude', 'handoffs', 'beta.md'));
@@ -359,9 +359,9 @@ describe('compact-handoff', () => {
       expect(readSaved('session-sess-sto').reason).toBe('stop-threshold');
     });
 
-    it('AF_COMPACT_HANDOFF_DISABLED=true writes nothing', () => {
+    it('ARCHON_COMPACT_HANDOFF_DISABLED=true writes nothing', () => {
       writeRun('fix-0913', 'in_progress');
-      run(['--pre-compact'], { trigger: 'auto', session_id: 's1' }, { AF_COMPACT_HANDOFF_DISABLED: 'true' });
+      run(['--pre-compact'], { trigger: 'auto', session_id: 's1' }, { ARCHON_COMPACT_HANDOFF_DISABLED: 'true' });
       expect(fs.existsSync(handoffsDir())).toBe(false);
     });
   });

@@ -53,15 +53,15 @@ Single-use override for the **next** tool call only. After consumption, normal p
 ## Protocol — `status`
 
 - Read `.claude/logs/.preflight-bypass-count` (session counter)
-- Check `AF_PREFLIGHT_DISABLED` env var
+- Check `ARCHON_PREFLIGHT_DISABLED` env var
 - Check `.claude/logs/.preflight-bypass` (armed bypass)
 - Print: bypass count, disabled-permanent state, armed-bypass reason if any
 
 ## Disable mechanisms
 
 - **Per-call**: `/archon-os:preflight bypass <reason>`
-- **Per-session**: `export AF_PREFLIGHT_DISABLED=true` (reverts on new session)
-- **Permanent**: add `AF_PREFLIGHT_DISABLED=true` to `.envrc` (NOT recommended; you lose secret-leak detection)
+- **Per-session**: `export ARCHON_PREFLIGHT_DISABLED=true` (reverts on new session)
+- **Permanent**: add `ARCHON_PREFLIGHT_DISABLED=true` to `.envrc` (NOT recommended; you lose secret-leak detection)
 
 ## Failure modes
 

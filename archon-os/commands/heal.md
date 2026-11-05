@@ -17,7 +17,7 @@
 
 ## Protocol — `diagnose`
 
-1. Refuse if `AF_SELF_HEAL_DISABLED=true` or `.claude/logs/.self-heal-disabled` exists
+1. Refuse if `ARCHON_SELF_HEAL_DISABLED=true` or `.claude/logs/.self-heal-disabled` exists
 2. Refuse if session cap reached (5 proposals total)
 3. Read failure-classifier output for the task — refuse if class ∉ {F2, F3}
 4. Refuse if task already has an accepted heal (max 1/task)
@@ -57,7 +57,7 @@ If `disabled: true`: show source (env / session flag), and how to re-enable.
 
 - **disable** writes `.claude/logs/.self-heal-disabled` flag (session-scoped)
 - **enable** removes the flag
-- Permanent disable: set `AF_SELF_HEAL_DISABLED=true` in `.envrc` (this command can't override env vars)
+- Permanent disable: set `ARCHON_SELF_HEAL_DISABLED=true` in `.envrc` (this command can't override env vars)
 
 ## Hard constraints (per spec §22.1)
 
@@ -81,4 +81,4 @@ When disabled, all `/archon-os:heal diagnose` calls refuse. Existing proposals r
 - **Rule:** `rules/workflow/checkpoint-discipline.md` — pre-apply snapshot
 - **Agent:** `master-planner` — applies the new T4 on `accept`
 - **File:** `.claude/plans/proposals/HEAL-*.yaml` — proposal artifacts
-- **Env:** `AF_SELF_HEAL_DISABLED=true` — permanent disable
+- **Env:** `ARCHON_SELF_HEAL_DISABLED=true` — permanent disable

@@ -107,8 +107,10 @@ cp .envrc.template .envrc
 ├── assets/brand/                    # Brand marks (SVG sources + derived PNG)
 ├── docs/                            # Human docs (architecture, guides, ADRs, reference)
 ├── scripts/                         # Repo-level scripts
-│   ├── af                           # CLI wrapper
+│   ├── archon                       # CLI wrapper
+│   ├── af                           # symlink -> archon (the pre-v4 name)
 │   ├── audit/                       # Reference-integrity + portability gates
+│   ├── gen-plugin-readme.sh         # archon-os/README.md <- README.md
 │   └── sync-version.sh              # Version synchronization
 ├── CONTRIBUTING.md                  # This file
 └── README.md                        # Project overview
@@ -194,7 +196,10 @@ The sync script updates (the authoritative list is `MD_FILES` / `JSON_FILES` /
 - `archon-os/.claude-plugin/plugin.json`
 - `.claude-plugin/marketplace.json`
 - `archon-os/CLAUDE.md` — the canonical-instructions comment
-- `README.md` — nav line and the sample `/af status` output
+- `README.md` — nav line and the sample `/archon status` output. It is the landing
+  page, not the spec: deep technical content belongs in `docs/` (see
+  `docs/contributing/README.md`). `archon-os/README.md` is GENERATED from it —
+  run `bash scripts/gen-plugin-readme.sh`, never edit it by hand.
 - `archon-os/ccpm-config.yaml` — only if you generated one locally (gitignored)
 
 **Manual Update:**

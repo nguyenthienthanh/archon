@@ -7,7 +7,7 @@
  * effects (no stdin read, no file writes).
  *
  * State file under test is namespaced into a per-test tmp dir; nothing
- * touches the real .aura-frog/runtime/ tree.
+ * touches the real .archon/runtime/ tree.
  */
 
 'use strict';
@@ -182,7 +182,7 @@ describe('task-track-model — pure helpers', () => {
     let tmpRoot, stackFile;
     beforeEach(() => {
       tmpRoot = mkTmp();
-      stackFile = path.join(tmpRoot, '.aura-frog', 'runtime', 'model-stack.jsonl');
+      stackFile = path.join(tmpRoot, '.archon', 'runtime', 'model-stack.jsonl');
     });
     afterEach(() => { fs.rmSync(tmpRoot, { recursive: true, force: true }); });
 
@@ -236,7 +236,7 @@ describe('task-track-model — processPreToolUse end-to-end', () => {
   let tmpRoot, stackFile;
   beforeEach(() => {
     tmpRoot = mkTmp();
-    stackFile = path.join(tmpRoot, '.aura-frog', 'runtime', 'model-stack.jsonl');
+    stackFile = path.join(tmpRoot, '.archon', 'runtime', 'model-stack.jsonl');
   });
   afterEach(() => { fs.rmSync(tmpRoot, { recursive: true, force: true }); });
 
@@ -326,7 +326,7 @@ describe('task-clear-model — processPostToolUse end-to-end', () => {
   let tmpRoot, stackFile;
   beforeEach(() => {
     tmpRoot = mkTmp();
-    stackFile = path.join(tmpRoot, '.aura-frog', 'runtime', 'model-stack.jsonl');
+    stackFile = path.join(tmpRoot, '.archon', 'runtime', 'model-stack.jsonl');
   });
   afterEach(() => { fs.rmSync(tmpRoot, { recursive: true, force: true }); });
 

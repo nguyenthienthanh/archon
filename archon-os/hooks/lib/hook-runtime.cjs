@@ -96,7 +96,7 @@ class HookConfigError extends HookRuntimeError {
  * inside the subdir.
  *
  * Resolution order:
- *   1. `process.env.AF_PROJECT_ROOT` — explicit override
+ *   1. `process.env.ARCHON_PROJECT_ROOT` — explicit override
  *   2. Walk up from `start` (or cwd) looking for `.claude/` or `.git/`
  *   3. Fallback to `start` (or cwd) — preserves legacy behavior
  *
@@ -104,8 +104,8 @@ class HookConfigError extends HookRuntimeError {
  * @returns {string}        absolute path to project root
  */
 function findProjectRoot(start) {
-  if (process.env.AF_PROJECT_ROOT) {
-    return path.resolve(process.env.AF_PROJECT_ROOT);
+  if (process.env.ARCHON_PROJECT_ROOT) {
+    return path.resolve(process.env.ARCHON_PROJECT_ROOT);
   }
   let dir = path.resolve(start || process.cwd());
   const parent = (p) => path.dirname(p);

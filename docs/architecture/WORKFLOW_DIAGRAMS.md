@@ -711,7 +711,7 @@ flowchart TB
     end
 
     subgraph "Temp Storage"
-        TMP[/tmp/aura-frog/agents/]
+        TMP[/tmp/archon/agents/]
     end
 
     MS1 --> MS2

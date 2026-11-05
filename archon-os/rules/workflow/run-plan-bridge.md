@@ -95,7 +95,7 @@ When the user picks `plan`, run-orchestrator writes `.claude/cache/pending-plan-
 - `/run task: <desc>` — force task mode, skip escalation entirely (treat as Quick/Standard).
 - `/run project: <desc>` — force project mode, skip ask (writes pending-plan-bootstrap.json and routes to `/archon-os:plan`).
 
-These bypass the heuristic; combine with `AF_ESCALATION_DISABLED=true` for full per-session opt-out.
+These bypass the heuristic; combine with `ARCHON_ESCALATION_DISABLED=true` for full per-session opt-out.
 
 ---
 
@@ -122,11 +122,11 @@ The user can also dispatch a different agent manually via the Agent tool — anc
 ## Disable
 
 ```
-export AF_RUN_PLAN_BRIDGE_DISABLED=true     # disable all three states (anchor/idle/heuristic)
-export AF_ESCALATION_DISABLED=true          # disable just the escalation heuristic (v3.7.2+)
+export ARCHON_RUN_PLAN_BRIDGE_DISABLED=true     # disable all three states (anchor/idle/heuristic)
+export ARCHON_ESCALATION_DISABLED=true          # disable just the escalation heuristic (v3.7.2+)
 ```
 
-`AF_RUN_PLAN_BRIDGE_DISABLED` makes `/run` behave exactly as in v3.7.0-rc.1 (no plan awareness). `AF_ESCALATION_DISABLED` is narrower — it skips the weight-≥-3 prompt but still allows anchoring to an existing active task.
+`ARCHON_RUN_PLAN_BRIDGE_DISABLED` makes `/run` behave exactly as in v3.7.0-rc.1 (no plan awareness). `ARCHON_ESCALATION_DISABLED` is narrower — it skips the weight-≥-3 prompt but still allows anchoring to an existing active task.
 
 ---
 
@@ -135,6 +135,6 @@ export AF_ESCALATION_DISABLED=true          # disable just the escalation heuris
 - **Skill:** `run-orchestrator` (consumes this rule in Phase 1 setup)
 - **Command:** `commands/run.md` (documents bridge in protocol)
 - **Command:** `commands/plan-next.md` (reverse-direction suggestion)
-- **Hook:** `plan-escalation-check.cjs` (UserPromptSubmit — enforces the weight-≥-3 escalation heuristic deterministically, even when `/run` isn't typed; respects `AF_ESCALATION_DISABLED` / `AF_RUN_PLAN_BRIDGE_DISABLED`)
+- **Hook:** `plan-escalation-check.cjs` (UserPromptSubmit — enforces the weight-≥-3 escalation heuristic deterministically, even when `/run` isn't typed; respects `ARCHON_ESCALATION_DISABLED` / `ARCHON_RUN_PLAN_BRIDGE_DISABLED`)
 - **Hook:** `post-execute-update-node.cjs` (writes task status back to plan tree on Phase 5)
-- **Spec:** `docs/specs/AURA_FROG_V3.7.0_TECH_SPEC.md` §10.1, §13
+- **Spec:** `docs/specs/ARCHON_V3.7.0_TECH_SPEC.md` §10.1, §13

@@ -36,7 +36,7 @@ const env = (over = {}) => ({
 
 const cacheOn = (branch, over = {}) => ({
   cachedAt: NOW - 1000,
-  envVars: branch === undefined ? {} : { AF_GIT_BRANCH: branch },
+  envVars: branch === undefined ? {} : { ARCHON_GIT_BRANCH: branch },
   ...over,
 });
 
@@ -78,7 +78,7 @@ describe('session-start — cacheStaleReason', () => {
   });
 
   // Regression guard for fcd1934 — without this the fast path replays a stale
-  // AF_GIT_BRANCH for up to an hour after `git checkout`.
+  // ARCHON_GIT_BRANCH for up to an hour after `git checkout`.
   describe('git branch switch (fcd1934)', () => {
     it('invalidates when the branch changed since caching', () => {
       expect(cacheStaleReason(cacheOn('main'), env({ currentBranch: 'feature/x' })))
@@ -129,7 +129,7 @@ describe('session-start — emitContextStalenessBanner', () => {
   // Read-only (reads the snapshot / detection cache and logs a line). Its whole
   // contract is "best-effort, never block startup", so both paths are asserted
   // to stay silent-and-safe rather than to produce a particular message.
-  const KEY = 'AF_CONTEXT_STALE_BANNER_DISABLED';
+  const KEY = 'ARCHON_CONTEXT_STALE_BANNER_DISABLED';
   let saved, log;
   beforeEach(() => { saved = process.env[KEY]; log = jest.spyOn(console, 'log').mockImplementation(() => {}); });
   afterEach(() => {

@@ -36,7 +36,7 @@ function run(specs, { stdin = "{}", env = {} } = {}) {
   const res = spawnSync(process.execPath, [DISPATCH, ...specs], {
     input: stdin,
     encoding: "utf-8",
-    env: { ...process.env, AF_DISPATCH_HOOK_DIR: fixtureDir, ...env },
+    env: { ...process.env, ARCHON_DISPATCH_HOOK_DIR: fixtureDir, ...env },
   });
   return { code: res.status, stdout: res.stdout, stderr: res.stderr };
 }
@@ -179,13 +179,13 @@ describe("spec parsing", () => {
   it("scopes that env to the one script that declared it", () => {
     const a = hook(
       "env-a",
-      `  console.log('a=' + (process.env.AF_TEST_VAR || 'unset'));`,
+      `  console.log('a=' + (process.env.ARCHON_TEST_VAR || 'unset'));`,
     );
     const b = hook(
       "env-b",
-      `  console.log('b=' + (process.env.AF_TEST_VAR || 'unset'));`,
+      `  console.log('b=' + (process.env.ARCHON_TEST_VAR || 'unset'));`,
     );
-    expect(run([`${a}+AF_TEST_VAR=x`, b]).stdout).toBe("a=x\nb=unset\n");
+    expect(run([`${a}+ARCHON_TEST_VAR=x`, b]).stdout).toBe("a=x\nb=unset\n");
   });
 
   it("routes stderr to stdout for the > form, reproducing the old 2>&1", () => {
@@ -245,7 +245,7 @@ describe("async hooks", () => {
     const leaky = hook("leaky", `  setInterval(() => {}, 20);`);
     const after = hook("after-leaky", `  console.log('REACHED');`);
     const { code, stdout } = run([leaky, after], {
-      env: { AF_DISPATCH_TIMEOUT_MS: "200" },
+      env: { ARCHON_DISPATCH_TIMEOUT_MS: "200" },
     });
     expect(code).toBe(0);
     expect(stdout).toContain("REACHED");
@@ -253,22 +253,22 @@ describe("async hooks", () => {
 });
 
 describe("safety net", () => {
-  it("AF_DISPATCH_DISABLED=1 spawns per script and yields the same exit code", () => {
+  it("ARCHON_DISPATCH_DISABLED=1 spawns per script and yields the same exit code", () => {
     const a = hook(
       "sn-block",
       `  console.error('BLOCKED');\n  process.exit(2);`,
     );
     const b = hook("sn-after", `  console.log('SHOULD-NOT-RUN');`);
-    const forked = run([a, b], { env: { AF_DISPATCH_DISABLED: "1" } });
+    const forked = run([a, b], { env: { ARCHON_DISPATCH_DISABLED: "1" } });
     expect(forked.code).toBe(2);
     expect(forked.stdout).not.toContain("SHOULD-NOT-RUN");
     expect(forked.code).toBe(run([a, b]).code);
   });
 
-  it("AF_DISPATCH_DISABLED=1 matches warn-continue semantics too", () => {
+  it("ARCHON_DISPATCH_DISABLED=1 matches warn-continue semantics too", () => {
     const warn = hook("sn-warn", `  process.exit(1);`);
     const after = hook("sn-after-warn", `  console.log('RAN-AFTER-WARN');`);
-    const forked = run([warn, after], { env: { AF_DISPATCH_DISABLED: "1" } });
+    const forked = run([warn, after], { env: { ARCHON_DISPATCH_DISABLED: "1" } });
     expect(forked.code).toBe(1);
     expect(forked.stdout).toContain("RAN-AFTER-WARN");
     const inproc = run([warn, after]);

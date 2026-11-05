@@ -26,7 +26,7 @@ NEVER skip. NEVER respond without loading env first.
 ```toon
 vars[2]{category,keys}:
   Integrations,"JIRA_URL JIRA_EMAIL JIRA_API_TOKEN FIGMA_API_TOKEN SLACK_BOT_TOKEN CONFLUENCE_URL"
-  Workflow,"AURA_FROG_AUTO_APPROVE AURA_FROG_DEFAULT_COVERAGE AURA_FROG_TDD_ENFORCE"
+  Workflow,"ARCHON_AUTO_APPROVE ARCHON_DEFAULT_COVERAGE ARCHON_TDD_ENFORCE"
 ```
 
 **Priority:** Environment Variable > Project Config > Global Config > Default

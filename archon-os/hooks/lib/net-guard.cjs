@@ -1,5 +1,9 @@
 'use strict';
 
+// Mirrors legacy AF_* / AURA_FROG_* variables onto their ARCHON_* names. This file
+// reads process.env without going through safe-stdin, so it bridges for itself.
+require('./env-compat.cjs');
+
 /**
  * Archon OS — outbound endpoint guard
  *
@@ -26,8 +30,8 @@
 
 // Default allowlists per endpoint kind. Overridable via the paired env var.
 const ENDPOINTS = {
-  supabase: { envVar: 'AF_LEARNING_HOST_ALLOWLIST', hosts: ['*.supabase.co'] },
-  jira: { envVar: 'AF_JIRA_HOST_ALLOWLIST', hosts: ['*.atlassian.net'] },
+  supabase: { envVar: 'ARCHON_LEARNING_HOST_ALLOWLIST', hosts: ['*.supabase.co'] },
+  jira: { envVar: 'ARCHON_JIRA_HOST_ALLOWLIST', hosts: ['*.atlassian.net'] },
 };
 
 // Pure: split an allowlist env value on commas/whitespace into normalised hosts.

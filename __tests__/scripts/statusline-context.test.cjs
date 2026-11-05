@@ -29,7 +29,7 @@ function render(payload, env = {}) {
   const res = spawnSync('python3', [RENDER], {
     input: JSON.stringify(payload),
     encoding: 'utf8',
-    env: { ...process.env, NO_COLOR: '1', AF_STATUSLINE_USAGE_DISABLED: '1', ...env },
+    env: { ...process.env, NO_COLOR: '1', ARCHON_STATUSLINE_USAGE_DISABLED: '1', ...env },
   });
   return { out: res.stdout || '', status: res.status };
 }
@@ -76,8 +76,8 @@ describe('statusline context % — nguồn sự thật là stdin.context_window'
     fs.rmSync(tmp, { recursive: true, force: true });
   });
 
-  test('AF_CTX_WINDOW vẫn ghi đè được cửa sổ', () => {
-    const { out } = render(base({ context_window_size: 1_000_000, total_input_tokens: 161_000, used_percentage: 16 }), { AF_CTX_WINDOW: '200000' });
+  test('ARCHON_CTX_WINDOW vẫn ghi đè được cửa sổ', () => {
+    const { out } = render(base({ context_window_size: 1_000_000, total_input_tokens: 161_000, used_percentage: 16 }), { ARCHON_CTX_WINDOW: '200000' });
     expect(ctxOf(out).pct).toBe(80);
   });
 

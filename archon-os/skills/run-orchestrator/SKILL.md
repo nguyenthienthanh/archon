@@ -37,7 +37,7 @@ Options:
 **Skip the prompt when:**
 
 - `.claude/plans/active.json` exists → fall through to Step 1 (plan_anchored / plan_idle states from `run-plan-bridge.md` apply).
-- `AF_ESCALATION_DISABLED=true` env var is set.
+- `ARCHON_ESCALATION_DISABLED=true` env var is set.
 - Task description has an override prefix: `task:` (force task mode, skip ask) or `project:` (force project mode, skip ask + write scratch file).
 - Force prefixes `must do:` / `just do:` / `exactly:` are present (these bypass the entire bridge per the bridge rule).
 
@@ -196,7 +196,7 @@ scaffold_map[5]{phase,files}:
    - If `.claude/plans/active.json#active.task` is set → **auto-anchor** run-state to that T4; Sprint Contract seeds from the task's acceptance criteria; Phase 5 syncs status back to the plan tree.
    - If `active.feature` is set but `active.task` is null → suggest `/archon-os:plan-next` to claim a task first (user may reply `proceed` to run inline).
    - If no plan exists and the task description triggers ≥3 escalation weight (multi-feature, multi-week, shipping/rollout/epic keywords) → suggest `/archon-os:plan` to bootstrap T0-T2 first. Honor `proceed` to run inline.
-   - Disable with `AF_RUN_PLAN_BRIDGE_DISABLED=true`. Force-mode prefixes (`must do:`, `just do:`, `exactly:`) skip the bridge.
+   - Disable with `ARCHON_RUN_PLAN_BRIDGE_DISABLED=true`. Force-mode prefixes (`must do:`, `just do:`, `exactly:`) skip the bridge.
 
    > ⚠️ **Anchoring does NOT skip phases.** The plan tree feeds Phase 1 (acceptance criteria → Sprint Contract; design notes → architecture inputs) — it does **not** replace Phase 1 or Phase 2. **All 5 phases run per task even when anchored.** A common failure mode is interpreting "the feature is already designed in the plan tree" as a license to skip straight to Phase 3 / Build GREEN. That is wrong. Phase 2 (Test RED) is mandatory — it converts the plan's acceptance criteria into executable failing tests before any code is written. Skipping Phase 2 because the plan exists is the bug we're trying to prevent. If you find yourself implementing without a failing test, stop and write the test first.
    >
@@ -318,7 +318,7 @@ Context pollution is the #1 failure mode for multi-phase TDD: P1 research artifa
 
 > **Critical: plugin agents are namespaced — by the plugin's runtime name, not a hardcoded string.** When you invoke the Agent tool, `subagent_type` is `${PLUGIN_PREFIX}:<id>` where `PLUGIN_PREFIX` comes from `plugin.json#name` (or run `bash scripts/get-plugin-prefix.sh`). Bare `architect` is NOT valid — the tool errors with `agent type 'architect' not found`. Built-in Claude Code agents (general-purpose, Explore, Plan, statusline-setup) stay unprefixed. See `rules/core/agent-namespacing.md` for full details.
 
-The dispatch table below uses **bare agent IDs**. Apply the runtime prefix at the moment you call the Agent tool — don't bake the literal "aura-frog" into your call.
+The dispatch table below uses **bare agent IDs**. Apply the runtime prefix at the moment you call the Agent tool — don't bake the literal "archon-os" into your call.
 
 ```toon
 execution[5]{phase,agent_id,main_thread_role}:

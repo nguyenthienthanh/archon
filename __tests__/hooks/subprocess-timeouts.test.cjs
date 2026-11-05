@@ -60,7 +60,7 @@ describe('hook subprocess calls are bounded', () => {
       const source = fs.readFileSync(file, 'utf-8');
       for (const site of findCallSites(source)) {
         // A call forwarding a caller-supplied options object inherits its
-        // bounds from the wrapper's defaults (see execSafe in af-config-utils).
+        // bounds from the wrapper's defaults (see execSafe in config-utils).
         const inheritsOpts = /\.\.\.opts\b/.test(site.text);
         if (!/\btimeout\s*:/.test(site.text) && !inheritsOpts) {
           unbounded.push(`${path.relative(ROOT, file)}:${site.line} ${site.fn}`);
@@ -73,14 +73,14 @@ describe('hook subprocess calls are bounded', () => {
   // The specific sites this change fixed — named so a regression points at the
   // exact hook rather than just "something is unbounded".
   const CALL_SITES = [
-    ['lib/af-config-utils.cjs', 'execSafe'],
+    ['lib/config-utils.cjs', 'execSafe'],
     ['firebase-cleanup.cjs', 'firebase login:list'],
     ['playwright-reaper.cjs', 'ps -Ao'],
     ['compact-handoff.cjs', 'git diff --name-only HEAD'],
     ['post-execute-conflict-rescan.cjs', 'git diff --name-only'],
     ['workflow-edit-learn.cjs', 'git'],
     ['lint-autofix.cjs', 'which'],
-    ['lib/af-project-cache.cjs', 'rev-parse'],
+    ['lib/project-cache.cjs', 'rev-parse'],
   ];
 
   it.each(CALL_SITES)('%s bounds its %s call', (relFile) => {

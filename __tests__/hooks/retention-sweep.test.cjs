@@ -50,10 +50,10 @@ const readLines = (p) =>
 
 beforeEach(() => {
   root = fs.mkdtempSync(path.join(os.tmpdir(), 'af-sweep-'));
-  for (const k of ['AF_PROJECT_ROOT', 'AF_PLANS_DIR', 'AF_AUDIT_RETENTION_DAYS']) savedEnv[k] = process.env[k];
-  process.env.AF_PROJECT_ROOT = root;
-  process.env.AF_PLANS_DIR = path.join(root, '.claude', 'plans');
-  delete process.env.AF_AUDIT_RETENTION_DAYS; // exercise the 30-day default
+  for (const k of ['ARCHON_PROJECT_ROOT', 'ARCHON_PLANS_DIR', 'ARCHON_AUDIT_RETENTION_DAYS']) savedEnv[k] = process.env[k];
+  process.env.ARCHON_PROJECT_ROOT = root;
+  process.env.ARCHON_PLANS_DIR = path.join(root, '.claude', 'plans');
+  delete process.env.ARCHON_AUDIT_RETENTION_DAYS; // exercise the 30-day default
 });
 
 afterEach(() => {
@@ -118,8 +118,8 @@ describe('sweepRetention — plan history + conflicts', () => {
     expect(fs.existsSync(history)).toBe(false);
   });
 
-  it('keeps everything when AF_AUDIT_RETENTION_DAYS=0', () => {
-    process.env.AF_AUDIT_RETENTION_DAYS = '0';
+  it('keeps everything when ARCHON_AUDIT_RETENTION_DAYS=0', () => {
+    process.env.ARCHON_AUDIT_RETENTION_DAYS = '0';
     const history = writeJsonl(path.join(root, '.claude', 'plans', 'history.jsonl'), [
       JSON.stringify({ ts: OLD_TS, event: 'a' }),
     ]);
@@ -127,8 +127,8 @@ describe('sweepRetention — plan history + conflicts', () => {
     expect(readLines(history)).toHaveLength(1);
   });
 
-  it('honours a custom AF_AUDIT_RETENTION_DAYS window', () => {
-    process.env.AF_AUDIT_RETENTION_DAYS = '90';
+  it('honours a custom ARCHON_AUDIT_RETENTION_DAYS window', () => {
+    process.env.ARCHON_AUDIT_RETENTION_DAYS = '90';
     const history = writeJsonl(path.join(root, '.claude', 'plans', 'history.jsonl'), [
       JSON.stringify({ ts: OLD_TS, event: 'a' }), // 60 days old — inside a 90-day window
     ]);
@@ -306,7 +306,7 @@ describe('pruneJsonlByTimestamp — streaming rewrite', () => {
 
 /**
  * Session state files in the OS temp dir had no cleanup at all — nothing ever
- * removed af-session-<id>.json. That is a correctness bug before a disk one:
+ * removed the session-state file. That is a correctness bug before a disk one:
  * the id is process.ppid, which the OS recycles, so a file left by a session
  * that ended last week gets read as live state by whatever new Claude Code
  * process lands on that pid.
@@ -320,7 +320,7 @@ describe('session-start — stale session state sweep', () => {
     readSessionState,
     writeSessionState,
     getSessionTempPath,
-  } = require('../../archon-os/hooks/lib/af-config-utils.cjs');
+  } = require('../../archon-os/hooks/lib/config-utils.cjs');
 
   let tmp;
   const NOW = Date.now();
@@ -337,19 +337,28 @@ describe('session-start — stale session state sweep', () => {
   afterEach(() => fs.rmSync(tmp, { recursive: true, force: true }));
 
   it('removes session state older than the 24h window', () => {
-    put('af-session-12345.json', 3 * DAY);
+    put('archon-session-12345.json', 3 * DAY);
     expect(sweepStaleSessionState(NOW, tmp)).toBe(1);
     expect(fs.readdirSync(tmp)).toEqual([]);
   });
 
   it('keeps state from a session that is still writing', () => {
-    put('af-session-12345.json', 60 * 1000);
+    put('archon-session-12345.json', 60 * 1000);
     expect(sweepStaleSessionState(NOW, tmp)).toBe(0);
-    expect(fs.readdirSync(tmp)).toEqual(['af-session-12345.json']);
+    expect(fs.readdirSync(tmp)).toEqual(['archon-session-12345.json']);
   });
 
   it('also collects the .<rand> sidecars a crashed write leaves behind', () => {
-    put('af-session-12345.json.k3n9x', 3 * DAY);
+    put('archon-session-12345.json.k3n9x', 3 * DAY);
+    expect(sweepStaleSessionState(NOW, tmp)).toBe(1);
+    expect(fs.readdirSync(tmp)).toEqual([]);
+  });
+
+  // v4 renamed the prefix af-session- -> archon-session-. The old one still
+  // lands here — an older plugin sharing this temp dir keeps writing it, and
+  // nothing else would ever collect those files.
+  it('sweeps the pre-v4 af-session- prefix as well', () => {
+    put('af-session-12345.json', 3 * DAY);
     expect(sweepStaleSessionState(NOW, tmp)).toBe(1);
     expect(fs.readdirSync(tmp)).toEqual([]);
   });

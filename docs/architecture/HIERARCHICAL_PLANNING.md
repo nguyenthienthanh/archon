@@ -362,7 +362,7 @@ def check_output_claim(claim, prior_events):
 User-facing surface (`/archon-os:trace`):
 
 ```text
-🦉 47 events recorded:
+47 events recorded:
    ✓ 14 file_read  (grounded evidence)
    ✓ 8  tool_call
    ✓ 24 output_claim  (23 grounded, 1 flagged)
@@ -585,7 +585,7 @@ Decision rules are regex over signals — no LLM call.
 F2 / F3 with budget remaining and confidence ≥ 0.7 triggers `self-healing-orchestrator`. It **proposes** a patch and **stops**. The user approves via `/archon-os:heal accept <id>`.
 
 ```
-🦉 Self-diagnosed (confidence 0.85, F3 local design):
+Self-diagnosed (confidence 0.85, F3 local design):
 
 Error: AssertionError — expected callback URL to use a query param.
 

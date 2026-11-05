@@ -19,7 +19,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const { isAgentTeamsEnabled } = require('./af-config-utils.cjs');
+const { isAgentTeamsEnabled } = require('./config-utils.cjs');
 
 // Phase slug mapping
 const PHASE_SLUGS = {
@@ -289,7 +289,7 @@ function cliCreateIfNeeded(phase, workflowId) {
   // Read session state for complexity check
   let sessionState = null;
   try {
-    const { readSessionState } = require('./af-config-utils.cjs');
+    const { readSessionState } = require('./config-utils.cjs');
     sessionState = readSessionState(process.ppid?.toString());
   } catch { /* ignore */ }
 

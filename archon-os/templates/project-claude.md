@@ -2,11 +2,11 @@
 
 **Project:** [PROJECT_NAME]
 **Tech Stack:** [TECH_STACK]
-**Archon OS Version:** [AF_VERSION]
+**Archon OS Version:** [ARCHON_VERSION]
 
 ---
 
-<!-- AURA-FROG:START - Do not edit this section manually -->
+<!-- ARCHON OS:START - Do not edit this section manually -->
 <!-- This section is auto-updated by project:regen -->
 
 ## Load Archon OS Plugin
@@ -36,7 +36,7 @@ Bundled MCP servers auto-invoke based on context:
 
 **Setup:** Copy `.envrc.template` and set tokens.
 
-<!-- AURA-FROG:END -->
+<!-- ARCHON OS:END -->
 
 ---
 
@@ -74,4 +74,4 @@ context_files[4]{file,purpose}:
 
 ---
 
-**Archon OS Version:** [AF_VERSION] | **Generated:** [DATE]
+**Archon OS Version:** [ARCHON_VERSION] | **Generated:** [DATE]

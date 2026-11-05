@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * af-net-guard — the gate every credentialed outbound request goes through.
+ * net-guard — the gate every credentialed outbound request goes through.
  *
  * Two failures it exists to prevent: the Supabase service key travelling in
  * cleartext because SUPABASE_URL began with http://, and a credentialed request
@@ -9,7 +9,7 @@
  * closed, so the negative cases carry as much weight here as the positive ones.
  */
 
-const guard = require('../af-net-guard.cjs');
+const guard = require('../net-guard.cjs');
 
 const {
   parseAllowlist, hostMatchesPattern, hostAllowed, allowlistFor,
@@ -71,7 +71,7 @@ describe('hostAllowed / allowlistFor', () => {
   });
 
   it('lets the env var REPLACE the default, so an operator can move hosts', () => {
-    const env = { AF_LEARNING_HOST_ALLOWLIST: 'db.corp.example' };
+    const env = { ARCHON_LEARNING_HOST_ALLOWLIST: 'db.corp.example' };
     expect(allowlistFor('supabase', env).hosts).toEqual(['db.corp.example']);
     expect(hostAllowed('x.supabase.co', allowlistFor('supabase', env).hosts)).toBe(false);
   });
@@ -105,17 +105,17 @@ describe('checkEndpoint', () => {
     const v = checkEndpoint('https://evil.test/rest/v1/patterns', 'supabase', {});
     expect(v.ok).toBe(false);
     expect(v.reason).toMatch(/not in the allowlist/);
-    expect(v.reason).toMatch(/AF_LEARNING_HOST_ALLOWLIST/);
+    expect(v.reason).toMatch(/ARCHON_LEARNING_HOST_ALLOWLIST/);
   });
 
   it('names the jira env var in the jira refusal, so self-hosters know the knob', () => {
     const v = checkEndpoint('https://jira.corp.example/rest/api/3/issue/AB-1', 'jira', {});
     expect(v.ok).toBe(false);
-    expect(v.reason).toMatch(/AF_JIRA_HOST_ALLOWLIST/);
+    expect(v.reason).toMatch(/ARCHON_JIRA_HOST_ALLOWLIST/);
   });
 
   it('accepts a self-hosted jira once it is allowlisted', () => {
-    const env = { AF_JIRA_HOST_ALLOWLIST: 'jira.corp.example' };
+    const env = { ARCHON_JIRA_HOST_ALLOWLIST: 'jira.corp.example' };
     expect(checkEndpoint('https://jira.corp.example/rest/api/3/issue/AB-1', 'jira', env).ok).toBe(true);
   });
 
@@ -148,21 +148,21 @@ describe('guardEndpoint', () => {
   afterEach(() => stderr.mockRestore());
 
   it('returns the URL and stays quiet when the endpoint is fine', () => {
-    const url = guardEndpoint('https://abcd.supabase.co/rest/v1/x', 'supabase', 'af-learning', {});
+    const url = guardEndpoint('https://abcd.supabase.co/rest/v1/x', 'supabase', 'learning', {});
     expect(url).not.toBeNull();
     expect(stderr).not.toHaveBeenCalled();
   });
 
   it('returns null and warns once per distinct reason', () => {
-    expect(guardEndpoint('http://abcd.supabase.co/a', 'supabase', 'af-learning', {})).toBeNull();
-    expect(guardEndpoint('http://abcd.supabase.co/b', 'supabase', 'af-learning', {})).toBeNull();
+    expect(guardEndpoint('http://abcd.supabase.co/a', 'supabase', 'learning', {})).toBeNull();
+    expect(guardEndpoint('http://abcd.supabase.co/b', 'supabase', 'learning', {})).toBeNull();
     expect(stderr).toHaveBeenCalledTimes(1);
-    expect(stderr.mock.calls[0][0]).toMatch(/\[af-learning] SECURITY: request skipped/);
+    expect(stderr.mock.calls[0][0]).toMatch(/\[learning] SECURITY: request skipped/);
   });
 
   it('still warns for a second, different reason', () => {
-    guardEndpoint('http://abcd.supabase.co/a', 'supabase', 'af-learning', {});
-    guardEndpoint('https://evil.test/a', 'supabase', 'af-learning', {});
+    guardEndpoint('http://abcd.supabase.co/a', 'supabase', 'learning', {});
+    guardEndpoint('https://evil.test/a', 'supabase', 'learning', {});
     expect(stderr).toHaveBeenCalledTimes(2);
   });
 });

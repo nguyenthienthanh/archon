@@ -34,9 +34,9 @@
 const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
-const { readSessionState } = require('./lib/af-config-utils.cjs');
+const { readSessionState } = require('./lib/config-utils.cjs');
 const { readHookInputCompat, findProjectRoot } = require('./lib/hook-runtime.cjs');
-const { acquireRunLock: acquireSharedLock } = require('./lib/af-run-lock.cjs');
+const { acquireRunLock: acquireSharedLock } = require('./lib/run-lock.cjs');
 
 // Resolve the edited file from the PostToolUse stdin payload (tool_input),
 // falling back to the legacy CLAUDE_FILE_PATHS env var. The old code read only
@@ -135,7 +135,7 @@ function detectTestRunner(filePath) {
  * run per edit, each with its own worker fan-out. Returns a release function,
  * or null when a live run already holds the lock.
  *
- * Shares lib/af-run-lock.cjs with lint-autofix — same hazard (a PostToolUse
+ * Shares lib/run-lock.cjs with lint-autofix — same hazard (a PostToolUse
  * hook launching an expensive child once per tool call), so same primitive.
  * Stale window is twice the test budget: a run still inside its own timeout
  * must not have its lock stolen.
@@ -164,7 +164,7 @@ function main() {
   // Check if we're in a TDD phase
   const sessionId = process.ppid?.toString();
   const state = readSessionState(sessionId);
-  const currentPhase = state?.phase || process.env.AF_CURRENT_PHASE;
+  const currentPhase = state?.phase || process.env.ARCHON_CURRENT_PHASE;
 
   // In TDD phase: always run. Outside workflow: only if editing a test file
   const inTddPhase = currentPhase && TDD_PHASES.includes(currentPhase);

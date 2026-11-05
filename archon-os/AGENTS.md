@@ -5,7 +5,7 @@
 
 ---
 
-## 🏛️ The 8 Pillars & OS Mental Model
+## The 8 Pillars & OS Mental Model
 
 ```toon
 os_map[5]{concept,implementation}:
@@ -113,7 +113,7 @@ commands[14]{cmd,purpose}:
   /check,"Code quality, security SAST, performance profiling, coverage audit"
   /design,"API endpoints, database schema, tech spec, architecture documentation"
   /project,"Detect stack, refresh context snapshots, env inspection, settings sync"
-  /archon,"System status, agent roster, prompt metrics, learning loop (/af alias supported)"
+  /archon,"System status, agent roster, prompt metrics, learning loop (/archon alias supported)"
   /help,"Interactive plugin documentation and routing guide"
   /archon:research,"Plan-only research: clarify until clear → scouts → plan → independent verify → artifact. Writes no code (hook-enforced)"
   /archon:plan,"Hierarchical planning engine: plan/expand/next/replan/promote/archive/status/undo"
@@ -154,7 +154,7 @@ core_paths[12]{topic,path}:
 ```toon
 resources[8]{name,location}:
   Agents (15),agents/
-  Commands (25),commands/
+  Commands (26),commands/
   Rules (73),rules/{core|agent|workflow}/
   Skills (45),skills/
   Hooks (54),hooks/

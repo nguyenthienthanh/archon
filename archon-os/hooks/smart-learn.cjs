@@ -21,7 +21,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { recordPattern, isLearningEnabled, isLocalMode } = require('./lib/af-learning.cjs');
+const { recordPattern, isLearningEnabled, isLocalMode } = require('./lib/learning.cjs');
 
 // Smart learn cache
 

@@ -3,18 +3,21 @@
  * Team Log Writer - Lightweight teammate log helper
  *
  * Minimal-dependency module for teammates to call from hooks.
- * Reads AF_TEAM_LOG_DIR and CLAUDE_TEAMMATE_NAME env vars.
+ * Reads ARCHON_TEAM_LOG_DIR and CLAUDE_TEAMMATE_NAME env vars.
  *
  * All writes are JSONL appends (one JSON object per line).
  *
  * @version 1.0.0
  */
 
+// Mirrors legacy AF_* / AURA_FROG_* variables onto their ARCHON_* names.
+require('./env-compat.cjs');
+
 const fs = require('fs');
 const path = require('path');
 
 function getLogDir() {
-  return process.env.AF_TEAM_LOG_DIR || null;
+  return process.env.ARCHON_TEAM_LOG_DIR || null;
 }
 
 function getAgentName() {

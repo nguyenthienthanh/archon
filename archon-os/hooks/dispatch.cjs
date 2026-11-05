@@ -65,10 +65,10 @@
  * SAFETY
  * ------
  * Blast radius is every tool call in every session, so:
- *   - AF_DISPATCH_DISABLED=1 falls back to spawning each script as before;
+ *   - ARCHON_DISPATCH_DISABLED=1 falls back to spawning each script as before;
  *   - a dispatcher-level crash falls back to spawning, but only if no hook has
  *     run yet — re-running hooks would repeat their side effects;
- *   - an unref'd watchdog (AF_DISPATCH_TIMEOUT_MS, default 5000) force-exits if
+ *   - an unref'd watchdog (ARCHON_DISPATCH_TIMEOUT_MS, default 5000) force-exits if
  *     a hook leaks a live handle, so a leak cannot wedge the user's tool call.
  *
  * USAGE (from hooks.json)
@@ -77,6 +77,9 @@
  */
 
 "use strict";
+
+// Mirrors legacy AF_* / AURA_FROG_* variables onto their ARCHON_* names.
+require("./lib/env-compat.cjs");
 
 const fs = require("node:fs");
 const path = require("node:path");
@@ -93,8 +96,8 @@ const REAL_EXIT = process.exit.bind(process);
 const hookContext = new AsyncLocalStorage();
 
 // Overridable so tests can point at fixture hooks instead of the real ones.
-const HOOK_DIR = process.env.AF_DISPATCH_HOOK_DIR || __dirname;
-const TIMEOUT_MS = Number(process.env.AF_DISPATCH_TIMEOUT_MS || 5000);
+const HOOK_DIR = process.env.ARCHON_DISPATCH_HOOK_DIR || __dirname;
+const TIMEOUT_MS = Number(process.env.ARCHON_DISPATCH_TIMEOUT_MS || 5000);
 
 /**
  * Parse a spec into {name, file, env, mergeStderr}.
@@ -265,7 +268,7 @@ function runSpawned(specs, raw) {
   let firstWarn = 0;
   for (const spec of specs) {
     if (!fs.existsSync(spec.file)) continue;
-    // NOT minimised through lib/af-child-env.cjs, unlike lint-autofix's linter
+    // NOT minimised through lib/child-env.cjs, unlike lint-autofix's linter
     // spawn. The children here are this plugin's own hooks, several of which
     // exist to use exactly the credentials that filter strips: jira-auto-fetch
     // needs JIRA_API_TOKEN, the learning hooks need SUPABASE_SECRET_KEY.
@@ -317,7 +320,7 @@ function main() {
     raw = "";
   }
 
-  if (process.env.AF_DISPATCH_DISABLED === "1") {
+  if (process.env.ARCHON_DISPATCH_DISABLED === "1") {
     finish(runSpawned(specs, raw));
     return;
   }

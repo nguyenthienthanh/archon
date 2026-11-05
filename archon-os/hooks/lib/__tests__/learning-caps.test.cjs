@@ -1,5 +1,5 @@
 /**
- * Cap test for af-learning's local pattern store.
+ * Cap test for learning's local pattern store.
  *
  * recordPattern() used to `allPatterns.push(...)` with no slice, unlike its
  * siblings (feedback -500, workflow events -1000) — and updateLearnedRulesMD()
@@ -17,34 +17,34 @@ let LOCAL_PATTERNS_FILE;
 let prevProjectRoot;
 
 beforeEach(() => {
-  prevProjectRoot = process.env.AF_PROJECT_ROOT;
+  prevProjectRoot = process.env.ARCHON_PROJECT_ROOT;
   jest.resetModules();
-  tmpRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'af-learning-caps-'));
-  // AF_PROJECT_ROOT short-circuits findProjectRoot(), sandboxing every path
-  // af-learning resolves at module load.
-  process.env.AF_PROJECT_ROOT = tmpRoot;
+  tmpRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'learning-caps-'));
+  // ARCHON_PROJECT_ROOT short-circuits findProjectRoot(), sandboxing every path
+  // learning resolves at module load.
+  process.env.ARCHON_PROJECT_ROOT = tmpRoot;
 
   // Force local mode (no Supabase) so recordPattern hits the local store.
   delete process.env.SUPABASE_URL;
   delete process.env.SUPABASE_SECRET_KEY;
-  process.env.AF_LEARNING_ENABLED = 'true';
+  process.env.ARCHON_LEARNING_ENABLED = 'true';
 
-  learning = require('../af-learning.cjs');
+  learning = require('../learning.cjs');
   LOCAL_PATTERNS_FILE = learning.LOCAL_PATTERNS_FILE;
 });
 
 afterEach(() => {
   jest.restoreAllMocks();
-  // Restore rather than delete — AF_PROJECT_ROOT may be set ambiently, and
+  // Restore rather than delete — ARCHON_PROJECT_ROOT may be set ambiently, and
   // other suites in this worker rely on it.
-  if (prevProjectRoot === undefined) delete process.env.AF_PROJECT_ROOT;
-  else process.env.AF_PROJECT_ROOT = prevProjectRoot;
+  if (prevProjectRoot === undefined) delete process.env.ARCHON_PROJECT_ROOT;
+  else process.env.ARCHON_PROJECT_ROOT = prevProjectRoot;
   fs.rmSync(tmpRoot, { recursive: true, force: true });
 });
 
 const readPatterns = () => JSON.parse(fs.readFileSync(LOCAL_PATTERNS_FILE, 'utf-8'));
 
-describe('af-learning local pattern cap', () => {
+describe('learning local pattern cap', () => {
   it('exposes a finite cap', () => {
     expect(learning.MAX_LOCAL_PATTERNS).toBeGreaterThan(0);
     expect(Number.isFinite(learning.MAX_LOCAL_PATTERNS)).toBe(true);

@@ -15,6 +15,9 @@
  * @version 1.0.0
  */
 
+// Mirrors legacy AF_* / AURA_FROG_* variables onto their ARCHON_* names.
+require('../../hooks/lib/env-compat.cjs');
+
 const fs = require('fs');
 const path = require('path');
 
@@ -674,7 +677,7 @@ function main() {
     console.log('Prompt logging is enabled via the `prompt-logger` hook.');
     console.log('');
     console.log('**To start collecting data:**');
-    console.log('1. Ensure `AF_PROMPT_LOGGING` is not set to `false`');
+    console.log('1. Ensure `ARCHON_PROMPT_LOGGING` is not set to `false`');
     console.log('2. Use Claude Code normally — prompts are logged automatically');
     console.log('3. Run this evaluation again after a few sessions');
     process.exit(0);

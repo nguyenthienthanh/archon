@@ -32,7 +32,7 @@ Phase start
   -> Returns team name for lead to use with TeamCreate()
 
 Teammates spawn
-  -> subagent-init.cjs injects AF_TEAM_LOG_DIR env var
+  -> subagent-init.cjs injects ARCHON_TEAM_LOG_DIR env var
   -> Teammates log actions via team-log-writer.cjs
 
 Phase ends
@@ -129,7 +129,7 @@ node team-bridge.cjs get-active <workflow-id>
 
 ## Log Writer: `team-log-writer.cjs`
 
-Lightweight helper for teammates. Reads `AF_TEAM_LOG_DIR` and `CLAUDE_TEAMMATE_NAME` env vars.
+Lightweight helper for teammates. Reads `ARCHON_TEAM_LOG_DIR` and `CLAUDE_TEAMMATE_NAME` env vars.
 
 ```javascript
 const logger = require('./lib/team-log-writer.cjs');

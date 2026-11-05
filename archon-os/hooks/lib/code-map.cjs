@@ -1,4 +1,8 @@
 'use strict';
+
+// Mirrors legacy AF_* / AURA_FROG_* variables onto their ARCHON_* names. This file
+// reads process.env without going through safe-stdin, so it bridges for itself.
+require('./env-compat.cjs');
 /**
  * Archon OS — Code map (FEAT-F)
  *
@@ -49,7 +53,7 @@
  * parser sees (computed specifiers, macro-generated imports); that is exactly
  * why the unresolved count is published rather than hidden.
  *
- * Disable entirely: AF_CODE_MAP_DISABLED=true
+ * Disable entirely: ARCHON_CODE_MAP_DISABLED=true
  *
  * @version 1.0.0
  */
@@ -101,12 +105,12 @@ const SKIP_DIRS = new Set([
 ]);
 
 function isDisabled() {
-    return process.env.AF_CODE_MAP_DISABLED === 'true';
+    return process.env.ARCHON_CODE_MAP_DISABLED === 'true';
 }
 
-/** AF_CODE_MAP_BUDGET, when it is a usable number. Clamped to the hook cap. */
+/** ARCHON_CODE_MAP_BUDGET, when it is a usable number. Clamped to the hook cap. */
 function envBudget() {
-    const n = parseInt(process.env.AF_CODE_MAP_BUDGET || '', 10);
+    const n = parseInt(process.env.ARCHON_CODE_MAP_BUDGET || '', 10);
     return Number.isFinite(n) && n > 0 ? Math.min(n, HOOK_CHAR_CAP) : null;
 }
 

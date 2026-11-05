@@ -92,7 +92,7 @@ The bypass file is single-use by design — you cannot leave pre-flight off.
 ## Disable mechanisms (escalation order)
 
 1. **Per-call**: `/archon-os:preflight bypass` (preferred for one-off needs)
-2. **Per-session**: `export AF_PREFLIGHT_DISABLED=true` (revertes on new session; emits a session-start warning)
+2. **Per-session**: `export ARCHON_PREFLIGHT_DISABLED=true` (revertes on new session; emits a session-start warning)
 3. **Permanent**: `.envrc` setting (strongly discouraged — disables the secret-leak net)
 
 The hook always tries to import `scripts/preflight/run-all.sh`. If absent, it silently no-ops (e.g., installs without the script, or in CI environments without bash).
@@ -111,7 +111,7 @@ The hook always tries to import `scripts/preflight/run-all.sh`. If absent, it si
 ## Anti-patterns
 
 - **Bypassing without a real reason** — vague "test it" gets refused; specific "verifying chmod -R 777 on test fixture in /tmp/sandbox" is fine
-- **Disabling AF_PREFLIGHT_DISABLED in `.envrc` to "make it stop"** — pre-flight catches your secrets being committed; turning it off is a foot-gun
+- **Disabling ARCHON_PREFLIGHT_DISABLED in `.envrc` to "make it stop"** — pre-flight catches your secrets being committed; turning it off is a foot-gun
 - **Adding new hard-block patterns to check-command-allowlist.sh without testing** — over-blocking is a usability tax; warns are usually the right level
 - **Using pre-flight as a code linter** — it's a safety net, not a style enforcer. ESLint / Prettier handle style.
 

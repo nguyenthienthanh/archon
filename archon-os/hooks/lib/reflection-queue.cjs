@@ -8,7 +8,7 @@
  * a handler over each pending entry and rewriting the file atomically. Nothing
  * here changes behaviour unless the operator turns the gate ON.
  *
- * Env gate: AF_REFLECTION_QUEUE. Default OFF. When unset / "" / "0" / "false" /
+ * Env gate: ARCHON_REFLECTION_QUEUE. Default OFF. When unset / "" / "0" / "false" /
  * "off" / "no" (case-insensitive), every export is a silent no-op — enqueue()
  * returns null, drain() returns { processed: 0, ... }, stats() returns zeros —
  * and NOT ONE byte is written to disk. This is the zero-behaviour-change path.
@@ -37,7 +37,7 @@
  * most recent MAX_ENTRIES. Done + old entries are dropped.
  *
  * Fail-closed: no export ever throws into the caller. On any I/O or parse error
- * the module warns ONCE per process (like af-net-guard) and degrades to a
+ * the module warns ONCE per process (like net-guard) and degrades to a
  * no-op / best-effort result.
  *
  * @version 1.0.0 (KG-2.3)
@@ -62,7 +62,7 @@ const RETENTION_SECONDS = RETENTION_DAYS * 24 * 60 * 60;
 
 // Truthy only for explicit opt-in. Anything falsy / unset => OFF.
 function isEnabled(env = process.env) {
-  const raw = env.AF_REFLECTION_QUEUE;
+  const raw = env.ARCHON_REFLECTION_QUEUE;
   if (raw == null) return false;
   const v = String(raw).trim().toLowerCase();
   if (v === '' || v === '0' || v === 'false' || v === 'off' || v === 'no') return false;
@@ -70,7 +70,7 @@ function isEnabled(env = process.env) {
 }
 
 // ---------------------------------------------------------------------------
-// Warn-once (per process), mirrors af-net-guard style
+// Warn-once (per process), mirrors net-guard style
 // ---------------------------------------------------------------------------
 
 const warned = new Set();
@@ -92,8 +92,8 @@ function _resetWarnings() {
 
 // Explicit override for tests / custom layouts; else <root>/.claude/reflection.
 function resolveQueueDir(root, env = process.env) {
-  if (env.AF_REFLECTION_QUEUE_DIR) {
-    return path.resolve(env.AF_REFLECTION_QUEUE_DIR);
+  if (env.ARCHON_REFLECTION_QUEUE_DIR) {
+    return path.resolve(env.ARCHON_REFLECTION_QUEUE_DIR);
   }
   const base = root || findProjectRoot();
   return path.join(base, '.claude', 'reflection');

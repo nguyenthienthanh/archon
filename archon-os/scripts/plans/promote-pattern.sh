@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+
+# Bridges legacy AF_* / AURA_FROG_* variables onto their ARCHON_* names (v4 rebrand).
+. "$(dirname "${BASH_SOURCE[0]}")/../lib/env-compat.sh"
+
 # KG-2.2 — Promote a durable learned pattern into the active plan tree as a new
 # `node_type: pattern` LEAF.
 #
@@ -8,11 +12,11 @@
 # it. It exists purely as user-approved learned memory hanging off a Feature
 # (T2) or the mission root. See rules/core/plan-trust-policy.md § Pattern Nodes.
 #
-# GATED: this is a NO-OP unless AF_KG_PROMOTE=true. Default behavior and the
+# GATED: this is a NO-OP unless ARCHON_KG_PROMOTE=true. Default behavior and the
 # on-disk plan format are unchanged unless the gate is explicitly opened.
 #
 # Usage:
-#   AF_KG_PROMOTE=true promote-pattern.sh "<pattern title / body>" \
+#   ARCHON_KG_PROMOTE=true promote-pattern.sh "<pattern title / body>" \
 #       [--parent <PARENT-ID>]   (default: mission root MISSION)
 #       [--source <epic/session>] (provenance string)
 #       [--confidence <0..1>]      (default: 0.5)
@@ -58,10 +62,10 @@ PLANS_DIR=$(plans_dir "$PLANS_DIR")
 
 # ------------------------------------------------------------------
 # GATE — off by default. Nothing is written, no counter is minted, the tree is
-# untouched, unless AF_KG_PROMOTE=true.
+# untouched, unless ARCHON_KG_PROMOTE=true.
 # ------------------------------------------------------------------
-if [ "${AF_KG_PROMOTE:-}" != "true" ]; then
-    echo "ℹ pattern promotion is OFF (KG-2.2). Set AF_KG_PROMOTE=true to enable."
+if [ "${ARCHON_KG_PROMOTE:-}" != "true" ]; then
+    echo "ℹ pattern promotion is OFF (KG-2.2). Set ARCHON_KG_PROMOTE=true to enable."
     echo "  No changes made — default plan format is unchanged."
     exit 0
 fi

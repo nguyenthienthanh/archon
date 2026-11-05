@@ -159,7 +159,7 @@ These prefixes also bypass confirmation prompts in scripts that have them (freez
 ## Disable mechanism
 
 ```
-AF_PLAN_ROUTING_DISABLED=true
+ARCHON_PLAN_ROUTING_DISABLED=true
 ```
 
 When set, this command falls through to the legacy `plan-*.md` alias stubs only — Stage 2 keyword routing is skipped.
@@ -172,5 +172,5 @@ When set, this command falls through to the legacy `plan-*.md` alias stubs only 
 - **Hook:** `hooks/bare-word-router.cjs` (Phase B — short bare-word activation)
 - **Rule:** `rules/workflow/run-plan-bridge.md` (`/run` ↔ plan anchor)
 - **Scripts:** `archon-os/scripts/plans/{_lib,resolve-node,expand-node,next-task,freeze-branch,thaw-branch,archive-feature,conflicts-scan,replan-node,promote-node,undo-decision}.sh`
-- **Spec:** `docs/specs/AURA_FROG_V3.7.0_TECH_SPEC.md` §6, §10.1
+- **Spec:** `docs/specs/ARCHON_V3.7.0_TECH_SPEC.md` §6, §10.1
 - **Legacy aliases:** `commands/plan-{expand,next,replan,promote,archive,status,undo,freeze,thaw,conflicts}.md` — ~10-line stubs that delegate to this command

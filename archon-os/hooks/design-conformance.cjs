@@ -18,7 +18,7 @@
  *           fail-open on anything unexpected (exit 0). Never blocks a write.
  *           Skips non-UI files and design-token/theme files (they DEFINE tokens).
  *
- * Disable: rename or chmod -x this file, or set AF_DESIGN_CONFORMANCE_DISABLED=1.
+ * Disable: rename or chmod -x this file, or set ARCHON_DESIGN_CONFORMANCE_DISABLED=1.
  *
  * @version 1.0.0 (FEAT-009 / STORY-0035 — design intelligence v2)
  */
@@ -145,7 +145,7 @@ function resolveScanPath(input) {
 
 function main() {
   try {
-    if (process.env.AF_DESIGN_CONFORMANCE_DISABLED === '1') process.exit(0);
+    if (process.env.ARCHON_DESIGN_CONFORMANCE_DISABLED === '1') process.exit(0);
 
     let input = {};
     try { input = readHookInputCompat(); } catch { /* fall back to env */ }

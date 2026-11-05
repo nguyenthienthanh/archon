@@ -12,7 +12,7 @@ A step-by-step walkthrough of a complete Archon OS workflow. Follow along in you
 
 ## Before You Start
 
-- Archon OS installed (`/plugin list` shows aura-frog)
+- Archon OS installed (`/plugin list` shows archon-os)
 - A project with at least one source file
 - Recommended: run `project:init` first
 
@@ -108,7 +108,7 @@ In 2 approvals:
 | Pause for later | `handoff` |
 | Resume | `/run resume` |
 | Undo a phase | `rollback <phase>` |
-| See agents | `/af agents` |
+| See agents | `/archon agents` |
 | Update plugin | `plugin:update` |
 
 ---

@@ -15,7 +15,7 @@ describe('subagent-init', () => {
   });
 
   describe('detectPhase', () => {
-    const KEY = 'AF_CURRENT_PHASE';
+    const KEY = 'ARCHON_CURRENT_PHASE';
     let saved;
     beforeEach(() => { saved = process.env[KEY]; delete process.env[KEY]; });
     afterEach(() => {

@@ -35,12 +35,12 @@ describe('next_counter — concurrency + missing-key (P0-4)', () => {
     // jest's per-test timeout CANNOT interrupt it (same hazard documented in
     // __tests__/scripts/plans.test.cjs). Without these bounds, CPU contention
     // during a full parallel run could block the worker for minutes (10 racing
-    // subshells x AF_LOCK_TIMEOUT_SEC). 30s per lock acquisition is still far
+    // subshells x ARCHON_LOCK_TIMEOUT_SEC). 30s per lock acquisition is still far
     // above the sub-second happy path; the property under test is atomicity
     // (no dupes / no drops), not latency.
     const p = spawnSync('bash', ['-c', prog], {
       encoding: 'utf8',
-      env: { ...process.env, AF_LOCK_TIMEOUT_SEC: '30' },
+      env: { ...process.env, ARCHON_LOCK_TIMEOUT_SEC: '30' },
       timeout: 30000,
       killSignal: 'SIGKILL',
     });

@@ -35,7 +35,7 @@ const fs = require('fs');
 const { readStdinSafely } = require('./lib/safe-stdin.cjs');
 const path = require('path');
 const { execFileSync } = require('child_process');
-const { guardEndpoint } = require('./lib/af-net-guard.cjs');
+const { guardEndpoint } = require('./lib/net-guard.cjs');
 
 const PLUGIN_ROOT = process.env.CLAUDE_PLUGIN_ROOT || path.join(__dirname, '..');
 const TOON_CONVERTER = path.join(PLUGIN_ROOT, 'scripts', 'json-to-toon.cjs');

@@ -124,7 +124,7 @@ When working as a teammate, scanner claims:
 - `skills/project-context-loader/SKILL.md` — Conventions loading
 
 **Infrastructure:**
-- `hooks/lib/af-project-cache.cjs` — Cache library
+- `hooks/lib/project-cache.cjs` — Cache library
 - `commands/project.md` — Project commands
 
 ---
