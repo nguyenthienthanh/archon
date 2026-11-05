@@ -1,5 +1,5 @@
 ---
-last_aligned_with: v4.0.0-alpha.4
+last_aligned_with: v4.0.0-alpha.5
 status: reference
 audience: contributor
 ---
@@ -11,6 +11,8 @@ All notable changes to Archon OS will be documented in this file.
 ---
 
 ## [Unreleased]
+
+## [4.0.0-alpha.5] - 2026-11-05 (HARD rule: reuse before write, active in every run phase and subagent)
 
 ### Changed
 
