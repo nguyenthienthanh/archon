@@ -18,6 +18,10 @@
 - /check — Run all quality checks
 - /check review / security / perf / complexity / debt / coverage / deps
 
+**Research (plan only, no code):**
+- /archon-os:research <topic> — Ask until clear, then write + verify + publish a plan
+- /archon-os:research status / done / resume <slug>
+
 **Design:**
 - /design api / db / doc — Design before coding
 

@@ -696,7 +696,7 @@ Use this checklist:
 | **All Documentation** | [docs/README.md](docs/README.md) |
 | **Getting Started** | [GET_STARTED.md](docs/getting-started/GET_STARTED.md) |
 | **First Workflow Tutorial** | [FIRST_WORKFLOW_TUTORIAL.md](docs/getting-started/FIRST_WORKFLOW_TUTORIAL.md) |
-| **All Commands (24)** | [commands/README.md](archon-os/commands/README.md) |
+| **All Commands (25)** | [commands/README.md](archon-os/commands/README.md) |
 | **All Skills (59)** | [skills/README.md](archon-os/skills/README.md) |
 | **Agent Teams Guide** | [AGENT_TEAMS_GUIDE.md](docs/guides/AGENT_TEAMS_GUIDE.md) |
 | **MCP Setup** | [MCP_GUIDE.md](docs/operations/MCP_GUIDE.md) |
@@ -716,7 +716,7 @@ TOON = Compression       Approval Gates = Interrupts    Handoffs = IPC
 archon-os/
 ├── agents/         15 processes (auto-dispatched per task)
 ├── skills/         59 skills (9 auto-invoke + 50 on-demand)
-├── commands/       24 commands (core /run /check /design /project /af /help + /archon-os:* hierarchical-planning suite)
+├── commands/       25 commands (core /run /check /design /project /af /help + /archon-os:* hierarchical-planning suite)
 ├── rules/          72 rules (22 core + 20 agent + 30 workflow)
 ├── hooks/          50 lifecycle hooks (conditional execution)
 ├── scripts/        utility scripts (CI, plans, preflight, workflow, security, …)

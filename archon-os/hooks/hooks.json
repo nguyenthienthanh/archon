@@ -25,11 +25,11 @@
     ],
     "PreToolUse": [
       {
-        "matcher": "Bash|Read|Write|Edit|Glob|Grep",
+        "matcher": "Bash|Read|Write|Edit|MultiEdit|NotebookEdit|Glob|Grep",
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/dispatch.cjs\" scout-block '>pre-execute-load-plan-context' '>tool-call-tracer+CLAUDE_HOOK_PHASE=pre' pre-flight-validate"
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/dispatch.cjs\" scout-block research-write-guard '>pre-execute-load-plan-context' '>tool-call-tracer+CLAUDE_HOOK_PHASE=pre' pre-flight-validate"
           },
           {
             "type": "command",

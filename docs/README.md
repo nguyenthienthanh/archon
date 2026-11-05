@@ -102,7 +102,7 @@ These live in `archon-os/` and are optimized for Claude to read:
 
 - [Agents](../archon-os/agents/README.md) — 15 agents with capabilities
 - [Skills](../archon-os/skills/README.md) — 60 skills (9 auto-invoke + 51 on-demand)
-- [Commands](../archon-os/commands/README.md) — 24 commands (core `/run`, `/check`, `/design`, `/project`, `/af`, `/help` + `/archon-os:*` hierarchical-planning suite)
+- [Commands](../archon-os/commands/README.md) — 25 commands (core `/run`, `/check`, `/design`, `/project`, `/af`, `/help` + `/archon-os:*` hierarchical-planning suite)
 - [Rules](../archon-os/rules/README.md) — 72 rules (3-tier loading: 22 core / 20 agent / 30 workflow)
 - [Hooks](../archon-os/hooks/README.md) — 51 lifecycle hooks
 - [Templates](../archon-os/templates/README.md) — 20 document templates (incl. phase deliverable skeletons)

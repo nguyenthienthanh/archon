@@ -330,7 +330,7 @@ Expected output:
                        master-planner, feature-architect, story-planner, replanner, epic-summarizer, conflict-arbiter)
   Skills:   45 available (10 auto-invoke, 35 on-demand)
   Rules:    73 loaded (22 core + 20 agent + 31 workflow)
-  Hooks:    53 registered
+  Hooks:    54 registered
   MCP:      context7, playwright, vitest, firebase, figma, slack
 ```
 
@@ -459,9 +459,9 @@ Details: `rules/core/execution-rules.md`, `skills/agent-detector/SKILL.md`, `ski
 |-----------|:-----:|----------------|
 | **Agents** | 15 | Right expert auto-selected per task (build + review + planning + safety roles) |
 | **Skills** | 45 | 10 auto-invoke on context, 33 on-demand (incl. `design-vision-loop`) |
-| **Commands** | 24 | Core: `/run`, `/check`, `/design`, `/project`, `/af`, `/help` + `/archon-os:*` hierarchical-planning suite (14 user-facing + 10 legacy `/archon-os:plan-<verb>` alias stubs) |
+| **Commands** | 25 | Core: `/run`, `/check`, `/design`, `/project`, `/af`, `/help` + `/archon-os:*` hierarchical-planning suite (15 user-facing + 10 legacy `/archon-os:plan-<verb>` alias stubs) |
 | **Rules** | 73 | 3-tier loading (22 core + 20 agent + 30 workflow) — only what's needed |
-| **Hooks** | 53 | Conditional — skip processing for non-code files (v3.7.2 adds `bare-word-router.cjs`) |
+| **Hooks** | 54 | Conditional — skip processing for non-code files (v3.7.2 adds `bare-word-router.cjs`) |
 | **Backing scripts** | 12 | Hierarchical-planning operations (v3.7.2): `new-plan`, `validate-plan-tree`, `render-plan-tree` + 9 new (`expand`, `next`, `freeze`, `thaw`, `archive`, `conflicts`, `replan`, `promote`, `undo`) + `resolve-node` + `_lib` |
 | **MCP Servers** | 6 | All enabled — every `.mcp.json` entry starts, so opt-in servers are unbundled ([snippets](docs/operations/MCP_GUIDE.md#optional-servers-not-bundled)) |
 | **Tests** | 317 | Coverage gate at 25% statements floor; +102 tests in v3.7.2 (38 plan scripts + 64 bare-word router) |
@@ -647,7 +647,7 @@ Honest comparison with two popular plugins in the ecosystem (April 2026).
 |---|---|---|---|
 | **Agents** | 15 curated | 184 across 78 plugins | ~20 |
 | **Skills** | 45 | 150 | Small focused set |
-| **Commands** | 24 (14 user-facing + 10 legacy aliases) | 98 | ~10 |
+| **Commands** | 25 (15 user-facing + 10 legacy aliases) | 98 | ~10 |
 | **Workflow** | 5-phase TDD with 2 gates | No structured workflow | Phase-gated workflow |
 | **Agent routing** | Task-content Layer 0 override | Manual `/agent-name` | Similar to Archon OS |
 | **TDD enforcement** | ✅ Mandatory RED→GREEN→REFACTOR | ❌ Per-agent | ✅ Phase-gated |
@@ -720,7 +720,7 @@ Use this checklist:
 | **All Documentation** | [docs/README.md](docs/README.md) |
 | **Getting Started** | [GET_STARTED.md](docs/getting-started/GET_STARTED.md) |
 | **First Workflow Tutorial** | [FIRST_WORKFLOW_TUTORIAL.md](docs/getting-started/FIRST_WORKFLOW_TUTORIAL.md) |
-| **All Commands (24)** | [commands/README.md](archon-os/commands/README.md) |
+| **All Commands (25)** | [commands/README.md](archon-os/commands/README.md) |
 | **All Skills (45)** | [skills/README.md](archon-os/skills/README.md) |
 | **Agent Teams Guide** | [AGENT_TEAMS_GUIDE.md](docs/guides/AGENT_TEAMS_GUIDE.md) |
 | **MCP Setup** | [MCP_GUIDE.md](docs/operations/MCP_GUIDE.md) |
@@ -740,7 +740,7 @@ TOON = Compression       Approval Gates = Interrupts    Handoffs = IPC
 archon-os/
 ├── agents/         15 processes (auto-dispatched per task)
 ├── skills/         43 skills (10 auto-invoke + 33 on-demand)
-├── commands/       24 commands (core /run /check /design /project /af /help + /archon-os:* hierarchical-planning suite)
+├── commands/       25 commands (core /run /check /design /project /af /help + /archon-os:* hierarchical-planning suite)
 ├── rules/          72 rules (22 core + 20 agent + 30 workflow)
 ├── hooks/          50 lifecycle hooks (conditional execution)
 ├── scripts/        utility scripts (CI, plans, preflight, workflow, security, …)
