@@ -1,5 +1,5 @@
 ---
-last_aligned_with: v4.0.0-alpha.3
+last_aligned_with: v4.0.0-alpha.4
 status: reference
 audience: contributor
 ---
@@ -11,6 +11,38 @@ All notable changes to Archon OS will be documented in this file.
 ---
 
 ## [Unreleased]
+
+## [4.0.0-alpha.4] - 2026-11-05 (Plan-only research command, agent-team cost corrected)
+
+### Added
+
+- **`/archon-os:research` — a plan-only research command.** It interviews until a 7-item
+  checklist (goal, scope/non-goals, constraints, done criteria, dependencies, risks, open
+  questions) is clean and the user confirms; there is no round cap. Questions the repo or public
+  docs can answer go to scouts (Explore/haiku, web-fetch/sonnet) instead of the user. A
+  plan-writer (architect/opus) drafts `.claude/research/<slug>/plan.md`, `independent-verifier`
+  grades it (never the writer), and the plan is published as a private claude-artifacts page
+  when that tool is available. It then *offers* to seed `/archon-os:plan`, never runs it.
+- **`hooks/research-write-guard.cjs`** enforces the "plan-only" part. While the session owns an
+  unexpired `.claude/research/.active` marker, Write/Edit/MultiEdit/NotebookEdit are blocked
+  outside `.claude/research/` (symlinks resolved, the marker itself protected). It binds to
+  `$CLAUDE_CODE_SESSION_ID`, so other sessions are never affected, and fails open on any
+  missing or bad marker. Bash writes are not visible to a hook; the command closes by diffing
+  `git status` against a snapshot taken at the start. Disable: `AF_RESEARCH_GUARD_DISABLED=1`.
+- **Subagent lifecycle policy** in `skills/run-orchestrator` — pause (a finished subagent keeps
+  its transcript), resume with `SendMessage` only inside the 5-minute subagent cache window,
+  close with `TaskStop` once the gate or verifier accepts, and never resume a builder to review
+  its own work.
+
+### Changed
+
+- **Agent-team cost corrected to ~7x** (Claude Code costs docs, plan-mode teammates), with
+  `rules/core/execution-rules.md` as the single source for the figure. The guides no longer
+  claim ~3x.
+- **`settings.example.json` no longer enables `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS`.**
+  `/project sync` merged that env into every synced project, and with it on every *named*
+  subagent silently becomes a billed teammate. Projects synced from the old template keep the
+  key — merging never removes keys — so delete it by hand from `.claude/settings.json`.
 
 ## [4.0.0-alpha.3] - 2026-10-29 (Rename finished: every identifier is Archon OS, every old name still works)
 
