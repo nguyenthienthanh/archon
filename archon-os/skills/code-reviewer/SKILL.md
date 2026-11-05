@@ -44,7 +44,7 @@ aspects[8]{aspect,priority,checks}:
   Error Handling,HIGH,"Swallowed errors, empty catch, fail-open on exceptions (OWASP A10), missing cleanup, errors that leak secrets/internals"
   Test Gaps,HIGH,"Changed behavior without a test; missing edge/failure-path test; tests that can't fail"
   Type Safety,MEDIUM,"any/unchecked casts, unhandled null, unvalidated external data"
-  Simplicity,MEDIUM,"Over-engineering, speculative code, dead code, unnecessary comments (rules below)"
+  Simplicity,MEDIUM,"Re-implemented stdlib/repo/installed-dep function (Rule 0 of rules/core/simplicity-over-complexity.md — fix = the existing call), over-engineering, speculative code, dead code, unnecessary comments (rules below)"
 ```
 
 Spend most effort on the three CRITICAL-priority aspects. Priority says where to look; severity (below) comes from impact.

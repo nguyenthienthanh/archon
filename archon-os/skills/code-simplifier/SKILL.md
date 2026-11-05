@@ -20,7 +20,7 @@ user-invocable: false
 
 # Code Simplifier
 
-KISS principle. Full guide: `rules/core/simplicity-over-complexity.md`
+KISS principle, and **reuse first**: before simplifying hand-written logic, check whether a stdlib, repo, or installed-dependency function already does it — replacing it with that call is the biggest simplification. Full guide: `rules/core/simplicity-over-complexity.md` (Rule 0 + reuse ladder).
 
 ## Signals → Actions
 

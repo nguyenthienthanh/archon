@@ -12,6 +12,17 @@ All notable changes to Archon OS will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+
+- **`rules/core/simplicity-over-complexity.md` is now a HARD rule with "reuse before write" as Rule 0.**
+  Before writing a helper, check the ladder: language stdlib → platform/framework API → code
+  already in the repo → a dependency already installed → a new dependency (stated reason + user
+  approval) → custom code last, with a one-line reason why nothing existing fit. Security
+  primitives (crypto, tokens, sanitising, SQL params, path checks) are never hand-rolled. The rule
+  also gains a best-practices table (smallest diff, delete over add, one source of truth, fail
+  loudly, tests that can fail). It is a golden rule in `AGENTS.md`, and `code-reviewer` /
+  `code-simplifier` flag a re-implemented existing function as a finding.
+
 ## [4.0.0-alpha.4] - 2026-11-05 (Plan-only research command, agent-team cost corrected)
 
 ### Added
