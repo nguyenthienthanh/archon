@@ -180,6 +180,7 @@ scaffold_map[5]{phase,files}:
 ## Pre-Execution (Phase 1 setup)
 
 1. agent-detector → select lead, complexity, model
+1b. **Load the HARD coding rule** — `rules/core/simplicity-over-complexity.md` (reuse before write · YAGNI · KISS). It binds every phase and every subagent.
 2. **Apply context-economy** — locate before Read, use Glob/Grep first, slice large files with `offset`+`limit`, delegate broad exploration to Explore subagent. See `rules/core/context-economy.md`. **If you hit `overloaded_error`, do NOT retry with the same context — distill, then resume.**
 3. **Validate prompt (6-dim benchmark)** — score per `rules/core/prompt-validation.md`. If below threshold, ask focused questions before proceeding (see `rules/core/no-assumption.md`)
 4. **Check for JIRA ticket context** — if the user prompt or `RUN_ID` matches `[A-Za-z]{2,10}-[0-9]{1,6}`, the `jira-auto-fetch.cjs` hook fires on `UserPromptSubmit` and writes `.claude/logs/jira/{TICKET_ID}.json` (TICKET_ID is always UPPERCASE — the hook normalises). Read it as the canonical requirements source (description + comments). Reference the ticket key in run-state under `context.jira_ticket`.
@@ -406,8 +407,10 @@ Skills (playbooks):
 - `rules/core/approval-gates.md` — Human-in-the-loop enforcement
 - `rules/core/execution-rules.md` — ALWAYS/NEVER orchestration rules
 - `rules/core/verification.md` — Verify before claiming done
+- **`rules/core/simplicity-over-complexity.md` — HARD: reuse before write, YAGNI, KISS** (also injected into every subagent by `hooks/subagent-init.cjs`)
 
 **Phase 1 (Understand + Design):**
+- **Reuse inventory (HARD)** — the design names the existing stdlib / repo / installed-dependency functions it will call; every planned new helper says why none fits (`rules/core/simplicity-over-complexity.md` Rule 0)
 - `rules/workflow/requirement-challenger.md` — Challenge assumptions
 - `rules/workflow/collaborative-planning.md` — Deep-task 3-perspective deliberation
 - `rules/workflow/impact-analysis.md` — Impact/effort matrix
@@ -416,11 +419,13 @@ Skills (playbooks):
 - `rules/workflow/diagram-requirements.md` — Mermaid diagrams for complex phases
 
 **Phase 3 (Build GREEN):**
+- **Reuse before write (HARD)** — grep the repo and check the stdlib + `package.json` before writing any helper; minimal code for today's callers only (YAGNI)
 - `rules/workflow/project-linting-precedence.md` — Project config wins
 - `rules/workflow/post-implementation-linting.md` — Lint after each file
 - `rules/workflow/smart-commenting.md` — WHY not WHAT
 
 **Phase 4 (Refactor + Review):**
+- **Reuse check (HARD, blocking)** — a hand-written function that duplicates an existing stdlib / repo / installed-dependency one is a finding; fix = the existing call
 - `skills/code-reviewer/SKILL.md` — The review itself: 8 aspects, verified findings, blocking/non-blocking/nit
 - `rules/workflow/cross-review-workflow.md` — Builder ≠ Reviewer
 - `rules/workflow/post-implementation-linting.md` — Final lint gate

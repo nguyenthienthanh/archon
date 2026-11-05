@@ -49,6 +49,11 @@ function saveSessionState(state) {
   return writeSessionState(sessionId, state);
 }
 
+const HARD_RULES =
+  "⛔ HARD — Reuse before write: an existing stdlib / platform / repo / installed-dependency " +
+  "function beats custom code; search first, write last, never hand-roll security primitives. " +
+  "YAGNI · KISS · DRY (rule of three) · smallest diff. Full rule: rules/core/simplicity-over-complexity.md";
+
 // Detect current workflow phase from environment or files
 function detectPhase() {
   // Check env var first
@@ -195,8 +200,10 @@ function main() {
     } catch { /* team-bridge not available */ }
   }
 
-  // Build context injection
-  const context = [];
+  // Build context injection. The HARD coding rule goes first and unconditionally:
+  // every subagent a /run phase spawns may write code, and none of them
+  // is guaranteed to see AGENTS.md, so the rule rides along here as well.
+  const context = [HARD_RULES];
 
   // Team mode header
   if (isTeammate && isAgentTeamsEnabled()) {
@@ -278,5 +285,5 @@ function main() {
 if (require.main === module) {
   main();
 } else {
-  module.exports = { loadSessionState, detectPhase, getProjectName, buildHostIndex };
+  module.exports = { loadSessionState, detectPhase, getProjectName, buildHostIndex, HARD_RULES };
 }

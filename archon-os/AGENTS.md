@@ -33,7 +33,8 @@ pillars[8]{n,name,theme,status,disable_env}:
 ## ⚡ Golden Rules (Zero Assumption & Strict Discipline)
 
 ```toon
-rules[8]{rule,detail}:
+rules[9]{rule,detail}:
+  Reuse before write,"HARD: an existing stdlib / platform / repo / installed-dependency function beats custom code — search first, write last (rules/core/simplicity-over-complexity.md Rule 0)"
   Never assume,"Ask when in doubt — probe constraints before implementing (rules/core/no-assumption.md)"
   TDD mandatory,"RED (failing test) → GREEN (minimal fix) → REFACTOR (rules/core/tdd-workflow.md)"
   Lazy load,"AGENTS.md on start — all domain rules and skills loaded strictly on demand"

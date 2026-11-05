@@ -9,6 +9,8 @@
 
 ## 🎯 Phase Objectives
 
+> **HARD — reuse inventory:** the design lists the existing functions/libraries it will call and why any new helper is needed (`rules/core/simplicity-over-complexity.md` Rule 0).
+
 1. **Understand** the business requirement completely
 2. **Extract** all user stories and acceptance criteria
 3. **Identify** stakeholders and their needs

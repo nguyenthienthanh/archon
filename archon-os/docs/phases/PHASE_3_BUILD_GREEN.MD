@@ -19,6 +19,8 @@
 
 ### 1. Implement Components
 
+> **HARD — reuse before write** (`rules/core/simplicity-over-complexity.md` Rule 0): before writing a helper, check the stdlib, the framework, this repo (grep) and the installed dependencies. Use what exists; write only the minimum today's callers need.
+
 ```tsx
 // ShareModal.tsx - Make tests pass
 export function ShareModal({ isOpen, onSubmit }: Props) {

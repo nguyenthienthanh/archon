@@ -42,7 +42,7 @@ core[22]{rule,priority,purpose}:
   small-to-large-routing,high,Prefer the session model (inherit); down-shift to haiku only for trivial work — never hardcode Opus
   code-quality,high,TypeScript strict + no any
   naming-conventions,medium,Consistent naming patterns
-  simplicity-over-complexity,critical,YAGNI + DRY + KISS consolidated
+  simplicity-over-complexity,critical,"HARD: reuse-first ladder (stdlib → platform → repo → installed dep → new dep → custom) + YAGNI + KISS + DRY + dev best practices"
   verification,critical,Fresh verification before claiming done
   env-loading,critical,Load .envrc at session start
   prefer-established-libraries,high,Use lodash/es-toolkit over custom utils
