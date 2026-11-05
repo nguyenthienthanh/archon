@@ -333,6 +333,20 @@ When you call Agent: read the prefix once per session (cheapest: from the sessio
 
 Each subagent returns a concise report. Main thread does NOT re-read phase research files. For Standard/Quick runs, inline execution is fine — the isolation cost only pays off when phases would otherwise compete for the same context budget.
 
+### Subagent lifecycle — pause, resume, close
+
+A finished subagent is **paused, not gone**: its transcript stays on disk and `SendMessage` to its id/name resumes it with full history. Whether that is cheap depends on the cache, and **subagent prompt cache lives 5 minutes** (even on a subscription — only the main conversation gets 1h). Source: code.claude.com/docs/en/prompt-caching, checked 2026-11-05.
+
+```toon
+lifecycle[4]{state,when,how}:
+  pause,"Default — the subagent returned its report","Keep only the report + agent id in run-state.json#agents. Do not re-read its files."
+  resume,"Gate rejected / small rework on the SAME deliverable, and last activity < 5 min or transcript small","SendMessage to the agent id with the delta only. Past 5 min a resume re-pays the whole transcript as uncached input — spawn fresh instead, briefed with the old report + the requested change."
+  close,"Its deliverable passed the phase gate or the verifier accepted it","TaskStop the id if still running; a user-stopped agent is never auto-resumed. Transcripts are swept by cleanupPeriodDays (30d default)."
+  never,"Grading its own work","A reviewer/verifier is always a fresh agent — resuming the builder to review violates Builder ≠ Reviewer."
+```
+
+Prefer a **fork** over a fresh subagent only when the child genuinely needs the main thread's context: a fork reads the parent's cache, a fresh subagent builds its own. A per-call `model` override always builds its own cache (one cache per model).
+
 ## Phase Transitions
 
 - P1→P2: Approval required. Blocker: no design approved.

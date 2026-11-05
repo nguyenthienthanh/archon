@@ -611,7 +611,7 @@ This overrides every agent/skill `model:` declaration. See [Per-Agent Model Over
 
 Each worktree has its own state in `.claude/logs/runs/<id>/`. See [Git skill](archon-os/skills/git/SKILL.md) (worktree isolation section).
 
-For full multi-agent parallel work, enable Agent Teams:
+For full multi-agent parallel work, enable Agent Teams **for that shell only** — teams cost several times a subagent run, and while the variable is on every named subagent becomes a teammate:
 ```bash
 export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
 ```
