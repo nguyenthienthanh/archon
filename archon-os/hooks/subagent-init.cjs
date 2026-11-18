@@ -285,5 +285,5 @@ function main() {
 if (require.main === module) {
   main();
 } else {
-  module.exports = { loadSessionState, detectPhase, getProjectName, buildHostIndex, HARD_RULES };
+  module.exports = { loadSessionState, detectPhase, getProjectName };
 }

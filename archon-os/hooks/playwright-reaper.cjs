@@ -147,6 +147,5 @@ if (require.main === module) {
     PLAYWRIGHT_PATTERN,
     CHROME_DEVTOOLS_PATTERN,
     JEST_WORKER_PATTERN,
-    REAP_PATTERN,
   };
 }

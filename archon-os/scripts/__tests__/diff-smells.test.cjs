@@ -164,6 +164,19 @@ describe('diff-smells — dead-export', () => {
   });
 });
 
+describe('diff-smells — large output through a pipe', () => {
+  it('is not truncated at the 64 KB pipe buffer (process.exit used to cut stdout)', () => {
+    const files = {};
+    for (let i = 0; i < 800; i++) files[`src/f${i}.js`] = `const p${i} = '/Users/alice/project/some/long/path/segment/number/${i}';\n`;
+    const dir = makeRepo({ 'src/keep.js': '\n' });
+    write(dir, files);
+    // A real shell pipe: the reader (cat) is slower than spawnSync's own drain.
+    const r = spawnSync('sh', ['-c', `node "${CLI}" --json | cat`], { cwd: dir, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 });
+    expect(r.stdout.length).toBeGreaterThan(65536);
+    expect(JSON.parse(r.stdout).findings.filter((f) => f.smell === 'user-path')).toHaveLength(800);
+  });
+});
+
 describe('diff-smells — --all scans the whole tree', () => {
   it('reports committed debt only with --all', () => {
     const dir = makeRepo({ 'src/a.js': "const CFG = '/Users/alice/cfg';\n" });

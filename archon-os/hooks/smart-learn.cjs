@@ -395,7 +395,6 @@ async function main() {
 module.exports = {
   detectCodePatterns,
   extractBashPattern,
-  recordSuccess,
   resolveToolContext,
   run,
   trimKeyedMap,

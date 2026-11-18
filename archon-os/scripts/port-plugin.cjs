@@ -672,8 +672,6 @@ function writePortBundle(target, outDir, opts = {}) {
 module.exports = {
   // collection
   collectUniversalLayer,
-  readPluginMeta,
-  readMcpConfig,
   // builders
   buildCopilotInstructions,
   buildCopilotAreaInstructions,
@@ -683,11 +681,8 @@ module.exports = {
   // writer
   writePortBundle,
   // helpers exposed for tests
-  safeRead,
   stripFrontmatter,
   extractFrontmatterField,
-  // constants
-  NON_PORTABLE,
 };
 
 // ---------------------------------------------------------------------------

@@ -28,7 +28,7 @@ const resolvePlansDir = require('./lib/plans-dir.cjs');
 const { readJsonlTail } = require('./lib/jsonl-tail.cjs');
 
 const PLANS_DIR = resolvePlansDir();
-const HISTORY_FILE = path.join(PLANS_DIR, 'history.jsonl');
+const HISTORY_FILE = path.join(PLANS_DIR, resolvePlansDir.PLAN_LOG_FILES.history);
 
 const { findProjectRoot } = require('./lib/hook-runtime.cjs');
 const SESSION_FLAG_DIR = path.join(findProjectRoot(), '.claude', 'logs');

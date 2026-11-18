@@ -309,13 +309,10 @@ module.exports = {
   enqueue,
   drain,
   stats,
-  isEnabled,
   // internals exposed for the CI self-test / observability
-  hashPayload,
   canonicalize,
   applyRetention,
   resolveQueueFile,
-  resolveQueueDir,
   _resetWarnings,
   MAX_ENTRIES,
   RETENTION_DAYS,

@@ -278,5 +278,5 @@ function main() {
 if (require.main === module) {
   main();
 } else {
-  module.exports = { getHookInput, getToolArgs, collectRecentJson, MIN_BYTES, MAX_BYTES };
+  module.exports = { getToolArgs, collectRecentJson };
 }

@@ -402,12 +402,8 @@ module.exports = {
   getActiveTeam,
   handlePhaseRejection,
   getTeammatesForPhase,
-  getPhaseSlug,
-  normalizePhase,
   resolveWorkflowDir,
-  resolveStateFile,
-  PHASE_SLUGS,
-  PHASE_TEAMS
+  resolveStateFile
 };
 
 // -------------------------------------------------------------------

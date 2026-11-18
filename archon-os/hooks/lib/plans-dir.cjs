@@ -61,6 +61,12 @@ function migrateLegacyPlansDir(cwd) {
     }
 }
 
+// The append-only plan logs inside the plans dir. Every hook names them through
+// this constant, and scripts/plans/_lib.sh is the shell mirror (bash cannot
+// import it).
+const PLAN_LOG_FILES = Object.freeze({ history: 'history.jsonl', conflicts: 'conflicts.jsonl' });
+
 module.exports = resolvePlansDir;
 module.exports.resolvePlansDir = resolvePlansDir;
+module.exports.PLAN_LOG_FILES = PLAN_LOG_FILES;
 module.exports.migrateLegacyPlansDir = migrateLegacyPlansDir;

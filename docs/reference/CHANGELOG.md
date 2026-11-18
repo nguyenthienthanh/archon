@@ -12,6 +12,51 @@ All notable changes to Archon OS will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+- **`scripts/quality/diff-smells.cjs` — the coding rules are machine-checked, with zero model calls.**
+  It scans the lines a change adds for user-specific paths, ad-hoc scheduling outside the one
+  scheduler seam (`archon:scheduler-seam`), magic literals duplicated across files, and new
+  exports nothing calls. It runs in the `code-reviewer` Phase 4 step and as `/check smells`
+  (`--all` audits the whole tree). It exits 1 on findings, because prose rules were being broken quietly.
+- **`/project init` seeds stack best-practice rules.** `scripts/project-rules-seed.cjs` reuses
+  `detectFramework()` and copies the matching `skills/framework-expert/refs/<stack>.md` into the
+  auto-loaded `.claude/rules/stack/` (Next.js + TS → nextjs, react, typescript). The file is
+  project-owned, is never overwritten without `--force`, and is never written through a symlink.
+- **One evidence-only rebuttal round for the verifier** (`verify-claim --rebuttal`,
+  `independent-verifier` Step 3b). The producer may concede, narrow the claim, or add new probes.
+  The argument is dropped, `outcome` must be `pass|fail`, `observation` is capped, and fresh blind
+  samples decide. A peer may challenge with a counter-probe but never votes. Round-1 → round-2
+  flips go to `.claude/logs/verifier-debate.jsonl`, so the round can be measured and removed.
+  It is bounded because majority vote beats multi-round debate (Choi et al. 2025). ADR-002 is amended.
+- **`scripts/web/fetch-text.sh` — plain main-content text from a URL.** It tries trafilatura,
+  then BeautifulSoup, then stdlib `html.parser`, so it works without either library. It allows
+  http(s) only, and a redirect to another scheme is refused before it is followed. In
+  `/archon-os:research`, a haiku web-scout extracts the text and a sonnet doc-reader processes it.
+
+### Changed
+
+- **`hooks/lib/hook-runtime.cjs#findPluginRoot()`** is now the one resolver for the plugin
+  directory, replacing six copied `CLAUDE_PLUGIN_ROOT || path.join(__dirname, '..')` fallbacks.
+- `rules/core/simplicity-over-complexity.md` gains machine-check enforcement and the
+  "scheduling goes through ONE seam" rule.
+- **`plans-dir.cjs#PLAN_LOG_FILES`** names `history.jsonl` / `conflicts.jsonl` once. It replaces
+  the file names that 7 hooks each spelled out by hand.
+
+### Removed
+
+- **144 dead exports across 40 files** (`/check smells --all`: 150 → 0). Each one had zero whole-word
+  references anywhere in the repo, including tests and docs. 31 definitions that nothing used
+  internally either are deleted with them, among them the unused monorepo-detection block in
+  `project-cache.cjs` and the team helpers in `session-state.cjs`. Net −883 lines.
+
+### Fixed
+
+- `diff-smells`, `project-rules-seed`, `verify-claim` and `verifier-corpus-eval` set
+  `process.exitCode` instead of calling `process.exit()`. That call cut piped stdout at 64 KB,
+  so `diff-smells --all --json | …` produced truncated JSON.
+- `diff-smells` no longer counts config-object keys (`jest.config.cjs`) as exported names.
+
 ## [4.0.0-alpha.5] - 2026-11-05 (HARD rule: reuse before write, active in every run phase and subagent)
 
 ### Changed

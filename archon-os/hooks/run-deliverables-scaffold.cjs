@@ -88,6 +88,4 @@ function main() {
 // Run as a hook; stay importable for tests.
 if (require.main === module) {
   main();
-} else {
-  module.exports = { phaseToScaffold, RUN_STATE_RE };
 }

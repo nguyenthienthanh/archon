@@ -129,7 +129,7 @@ function budgetWarning(projectDir, opts) {
   ].join('\n');
 }
 
-module.exports = { measure, budgetWarning, isPathScoped, importsOf, CLAUDE_LIMIT, DEFAULT_WARN };
+module.exports = { measure, budgetWarning };
 
 if (require.main === module) {
   const args = process.argv.slice(2);

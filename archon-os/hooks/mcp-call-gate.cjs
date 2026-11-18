@@ -302,10 +302,6 @@ module.exports = {
   resolveAgent,
   normalizeCounters,
   computeUsage,
-  getAllowlist,
-  getRateLimits,
   SESSION_WINDOW_MS,
   DEFAULT_LIMITS,
-  HARD_BLOCK_LIMIT,
-  SOFT_WARN_LIMIT,
 };

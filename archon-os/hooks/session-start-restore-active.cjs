@@ -26,7 +26,7 @@ const resolvePlansDir = require('./lib/plans-dir.cjs');
 
 const PLANS_DIR = resolvePlansDir();
 const ACTIVE_FILE = path.join(PLANS_DIR, 'active.json');
-const HISTORY_FILE = path.join(PLANS_DIR, 'history.jsonl');
+const HISTORY_FILE = path.join(PLANS_DIR, resolvePlansDir.PLAN_LOG_FILES.history);
 
 // Pure: the "active plan" banner parts for a parsed active.json. Feature wins
 // over initiative wins over mission; story/task hang off a feature. Empty array

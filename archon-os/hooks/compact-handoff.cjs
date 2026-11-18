@@ -806,19 +806,11 @@ function main() {
 }
 
 module.exports = {
-  getPaths,
   findActiveRun,
-  isCodeProject,
-  findPlanDocs,
   slugify,
   sessionTitle,
-  listHandoffs,
-  findHandoff,
-  generateHandoffIndex,
-  readContextUsage,
   shouldSaveOnStop,
   recentUserPrompts,
-  allocatePromptBudget,
   resolveTranscript,
   refreshTurnIndex,
   appendTurnIndex,
@@ -826,11 +818,8 @@ module.exports = {
   gitBranch,
   projectName,
   PROMPT_BUDGET_CHARS,
-  PROMPT_MAX_CHARS,
-  TURN_INDEX_HANDOFF_LIMIT,
   buildHandoff,
   saveHandoff,
-  loadHandoff,
   generateResumeContext,
 };
 

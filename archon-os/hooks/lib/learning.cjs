@@ -671,111 +671,6 @@ async function recordPattern(pattern) {
 }
 
 /**
- * Query agent success rates
- * @param {string} [taskType] - Filter by task type
- * @returns {Promise<Array|null>}
- */
-async function getAgentSuccessRates(taskType = null) {
-  if (!isLearningEnabled()) {
-    return null;
-  }
-
-  try {
-    const params = { select: '*' };
-    if (taskType) {
-      params['task_type'] = `eq.${taskType}`;
-    }
-    return await supabaseRequest('v_agent_success_rates', 'GET', null, params);
-  } catch (error) {
-    console.error(`Learning: Failed to get agent success rates: ${error.message}`);
-    return null;
-  }
-}
-
-/**
- * Get improvement suggestions
- * @param {number} [limit] - Max suggestions to return
- * @returns {Promise<Array|null>}
- */
-async function getImprovementSuggestions(limit = 10) {
-  if (!isLearningEnabled()) {
-    return null;
-  }
-
-  try {
-    const params = {
-      select: '*',
-      limit: limit.toString(),
-      order: 'confidence.desc'
-    };
-    return await supabaseRequest('v_improvement_suggestions', 'GET', null, params);
-  } catch (error) {
-    console.error(`Learning: Failed to get improvement suggestions: ${error.message}`);
-    return null;
-  }
-}
-
-/**
- * Get learning system status
- * @returns {Promise<object>}
- */
-async function getLearningStatus() {
-  const status = {
-    enabled: isLearningEnabled(),
-    feedbackEnabled: isFeedbackEnabled(),
-    metricsEnabled: isMetricsEnabled(),
-    supabaseConfigured: isSupabaseConfigured(),
-    localMode: isLocalMode(),
-    autoAnalyze: process.env.ARCHON_AUTO_ANALYZE || 'disabled'
-  };
-
-  if (status.enabled) {
-    if (status.localMode) {
-      // Get counts from local files
-      try {
-        const feedback = loadLocalFile(LOCAL_FEEDBACK_FILE);
-        const patterns = loadLocalFile(LOCAL_PATTERNS_FILE);
-        status.stats = {
-          feedbackCount: feedback.length,
-          activePatterns: patterns.length,
-          storageMode: 'local',
-          learningDir: LEARNING_DIR
-        };
-      } catch {
-        status.stats = { error: 'Could not read local files' };
-      }
-    } else {
-      // Get counts from Supabase
-      try {
-        const feedbackSummary = await supabaseRequest('v_feedback_summary', 'GET', null, { select: '*' });
-        const patternCount = await supabaseRequest('af_learned_patterns', 'GET', null, {
-          select: 'count',
-          active: 'eq.true'
-        });
-
-        status.stats = {
-          feedbackCount: feedbackSummary?.reduce((sum, f) => sum + (f.total_count || 0), 0) || 0,
-          activePatterns: patternCount?.[0]?.count || 0,
-          storageMode: 'supabase'
-        };
-      } catch {
-        status.stats = { error: 'Could not fetch stats' };
-      }
-    }
-  }
-
-  return status;
-}
-
-/**
- * Get local learned patterns for session context
- * @returns {Array}
- */
-function getLocalPatterns() {
-  return loadLocalFile(LOCAL_PATTERNS_FILE);
-}
-
-/**
  * Get recent feedback for context
  * @param {number} limit
  * @returns {Array}
@@ -799,20 +694,13 @@ module.exports = {
   getWorkflowEvents,
   getWorkflowEventStats,
   recordPattern,
-  getAgentSuccessRates,
-  getImprovementSuggestions,
-  getLearningStatus,
-  getLocalPatterns,
   getRecentFeedback,
   updateLearnedRulesMD,
   LEARNING_DIR,
   LEARNED_RULES_MD,
-  MAIN_INSTRUCTION_LINK,
   LOCAL_WORKFLOW_EVENTS_FILE,
   LOCAL_PATTERNS_FILE,
   MAX_LOCAL_PATTERNS,
-  MAX_LOCAL_FEEDBACK,
-  MAX_LOCAL_WORKFLOW_EVENTS,
   MAX_RENDERED_PATTERNS_PER_CATEGORY,
   saveLocalFile,
   loadLocalFile

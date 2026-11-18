@@ -597,12 +597,7 @@ function writeEnv(envFile, key, value) {
 
 module.exports = {
   // Config
-  LOCAL_CONFIG_PATH,
-  GLOBAL_CONFIG_PATH,
-  DEFAULT_CONFIG,
-  deepMerge,
   loadConfig,
-  loadConfigFromPath,
 
   // Project detection
   detectProjectType,
@@ -620,8 +615,6 @@ module.exports = {
   execSafe,
 
   // Plan resolution
-  sanitizeSlug,
-  extractSlugFromBranch,
   resolvePlanPath,
   getReportsPath,
 

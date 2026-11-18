@@ -188,7 +188,6 @@ if (require.main === module) {
 } else {
   module.exports = {
     DEFAULT_BLOCKED,
-    ALLOWED_COMMANDS,
     isBlocked,
     isAllowedBuildCommand,
     loadCustomPatterns,

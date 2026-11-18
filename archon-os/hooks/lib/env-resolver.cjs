@@ -140,5 +140,4 @@ module.exports = {
   parseEnvFile,
   resolveEnv,
   loadProjectEnv,
-  ALIAS_MAP,
 };

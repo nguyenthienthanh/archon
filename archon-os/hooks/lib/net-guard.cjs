@@ -134,7 +134,6 @@ function _resetWarnings() {
 }
 
 module.exports = {
-  ENDPOINTS,
   parseAllowlist,
   hostMatchesPattern,
   hostAllowed,

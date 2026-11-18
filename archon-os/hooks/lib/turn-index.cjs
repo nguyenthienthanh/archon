@@ -302,7 +302,6 @@ module.exports = {
   TURN_INDEX_MAX_CHARS,
   projectSlug,
   discoverTranscript,
-  promptText,
   buildTurnIndex,
   formatTurnIndex,
   renderLine,

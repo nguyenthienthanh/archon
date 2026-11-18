@@ -178,8 +178,6 @@ module.exports = {
   isSnapshotFresh,
   getSnapshotPath,
   contextDir,
-  SNAPSHOT_FILE,
-  SNAPSHOT_SCHEMA_VERSION,
 };
 
 // CLI entry — run the real generators + write the snapshot.

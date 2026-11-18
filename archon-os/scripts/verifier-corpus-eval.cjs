@@ -245,17 +245,15 @@ function main(argv) {
 }
 
 if (require.main === module) {
-  process.exit(main(process.argv));
+  // exitCode, not process.exit(): exit() can cut stdout at the 64 KB pipe buffer.
+  process.exitCode = main(process.argv);
 } else {
   module.exports = {
     RECALL_FLOORS,
-    COVE_NEEDLES,
-    SELF_EXCLUDE,
     loadCorpus,
     scoreCorpus,
     coveReferences,
     decideCove,
-    checkFloors,
     main,
   };
 }

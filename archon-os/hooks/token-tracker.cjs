@@ -185,6 +185,5 @@ if (require.main === module) {
     THRESHOLDS,
     CONTEXT_LIMIT,
     estimateFileTokens,
-    loadTracker,
   };
 }

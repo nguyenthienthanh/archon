@@ -60,4 +60,4 @@ function nextCounter(countersFile, kind) {
   }
 }
 
-module.exports = { nextCounter, acquireLock, releaseLock };
+module.exports = { nextCounter };

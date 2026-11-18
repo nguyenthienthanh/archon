@@ -692,7 +692,7 @@ function main() {
 }
 
 // Export for testing
-module.exports = { computeStats, generateSuggestions, generateGaps, detectIntent: null };
+module.exports = { detectIntent: null };
 
 if (require.main === module) {
   main();

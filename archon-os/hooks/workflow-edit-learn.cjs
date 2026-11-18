@@ -41,16 +41,6 @@ const WORKFLOW_PATHS = [
   'workflow'
 ];
 
-// File patterns to monitor
-const WORKFLOW_FILE_PATTERNS = [
-  /workflow.*\.md$/i,
-  /phase-?\d+.*\.md$/i,
-  /deliverable.*\.md$/i,
-  /plan\.md$/i,
-  /spec\.md$/i,
-  /requirements\.md$/i
-];
-
 /**
  * Ensure cache directory exists
  */
@@ -95,26 +85,6 @@ function hashFile(filePath) {
     }
   } catch { /* ignore */ }
   return null;
-}
-
-/**
- * Check if file is a workflow file
- */
-function isWorkflowFile(filePath) {
-  const relativePath = filePath.replace(process.cwd() + '/', '');
-
-  // Check path patterns
-  for (const wp of WORKFLOW_PATHS) {
-    if (relativePath.startsWith(wp)) return true;
-  }
-
-  // Check file name patterns
-  const fileName = path.basename(filePath);
-  for (const pattern of WORKFLOW_FILE_PATTERNS) {
-    if (pattern.test(fileName)) return true;
-  }
-
-  return false;
 }
 
 /**
@@ -432,7 +402,7 @@ async function main() {
   }
 }
 
-module.exports = { isWorkflowFile, extractChanges, analyzeChanges, gitShowHead };
+module.exports = { gitShowHead };
 
 if (require.main === module) {
   main();
