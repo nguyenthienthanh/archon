@@ -150,7 +150,14 @@ function exportNames(text) {
     const name = part.split(':')[0].replace(/\bas\b.*$/, '').trim();
     if (/^[A-Za-z_$][\w$]*$/.test(name)) names.add(name);
   });
-  for (const m of text.matchAll(/module\.exports\s*=\s*\{([^}]*)\}/g)) add(m[1].replace(/\/\/[^\n]*/g, ''));
+  // In `module.exports = {...}` only `name` and `name: identifier` export code.
+  // `key: 'literal'` is a config object (jest.config.cjs), not an API.
+  for (const m of text.matchAll(/module\.exports\s*=\s*\{([^}]*)\}/g)) {
+    for (const part of m[1].replace(/\/\/[^\n]*/g, '').split(',')) {
+      const entry = /^\s*([A-Za-z_$][\w$]*)\s*(?::\s*([A-Za-z_$][\w$.]*)\s*)?$/.exec(part);
+      if (entry) names.add(entry[1]);
+    }
+  }
   for (const m of text.matchAll(/^\s*export\s*\{([^}]*)\}/gm)) add(m[1]);
   for (const m of text.matchAll(/\b(?:module\.)?exports\.([A-Za-z_$][\w$]*)\s*=/g)) names.add(m[1]);
   for (const m of text.matchAll(/^\s*export\s+(?:default\s+)?(?:async\s+)?(?:function\*?|const|let|var|class)\s+([A-Za-z_$][\w$]*)/gm)) names.add(m[1]);
