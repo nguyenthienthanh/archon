@@ -1,5 +1,5 @@
 ---
-last_aligned_with: v4.0.0-alpha.5
+last_aligned_with: v4.0.0-alpha.6
 status: reference
 audience: contributor
 ---
@@ -11,6 +11,8 @@ All notable changes to Archon OS will be documented in this file.
 ---
 
 ## [Unreleased]
+
+## [4.0.0-alpha.6] - 2026-11-18 (Machine-checked coding rules, stack rules at init, one-round rebuttal, −883 lines of dead code)
 
 ### Added
 
