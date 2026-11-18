@@ -16,6 +16,12 @@
                        verifier is the producer or shared its context.
   --retry             {attempt, probe_ledger, new_probe} on stdin → whether the
                        retry adds EVIDENCE, or escalates to a human.
+ *   --rebuttal          {claim, round1, rebuttal, attempt, probe_ledger} → the
+ *                       producer's ONE reply (concede | narrow_claim |
+ *                       new_evidence). Prints fresh BLIND input; the argument
+ *                       and round-1 verdict never reach the final judge.
+ *                       --aggregate with round1_verdict logs the flip to
+ *                       .claude/logs/verifier-debate.jsonl (ARCHON_DEBATE_LOG).
  *
  * Flags
  *   --json              Machine-readable output (default for --gate/--aggregate
@@ -36,15 +42,24 @@ const {
   finalizeVerdict,
   loadVerifierConfig,
   evaluateRetry,
+  evaluateRebuttal,
   checkIndependence,
+  VERDICTS,
   VERDICT_JSON_SCHEMA,
 } = require(path.join(__dirname, '../hooks/lib/verifier-verdict.cjs'));
+const fs = require('fs');
+const { findProjectRoot } = require(path.join(__dirname, '../hooks/lib/hook-runtime.cjs'));
+
+// Round-1 -> round-2 flips: the sycophancy metric the rebuttal round must earn its place against.
+const debateLogPath = () => process.env.ARCHON_DEBATE_LOG
+  || path.join(findProjectRoot(), '.claude', 'logs', 'verifier-debate.jsonl');
 
 const USAGE = `Usage:
   verify-claim.cjs --hook                     # PostToolUse(Task) claim-scope gate
   verify-claim.cjs --gate [--json]      < claim.json
   verify-claim.cjs --aggregate [--json] < samples.json
   verify-claim.cjs --retry [--json]     < retry.json
+  verify-claim.cjs --rebuttal [--json]  < rebuttal.json   # ONE evidence-only rebuttal round
 
 Env: ARCHON_CLAIM_GATE=false (disable hook), ARCHON_VERIFIER_K, ARCHON_VERIFIER_THRESHOLD, ARCHON_VERIFIER_LOOP_CAP`;
 
@@ -179,6 +194,24 @@ function runAggregateMode(json) {
   }
 
   console.log(JSON.stringify(verdict, null, json ? 0 : 2));
+
+  // A metric write must never veto the verdict, so it happens after the print and fails open with a warning.
+  if (VERDICTS.includes(payload.round1_verdict)) {
+    try {
+      const file = debateLogPath();
+      fs.mkdirSync(path.dirname(file), { recursive: true });
+      fs.appendFileSync(file, JSON.stringify({
+        ts: new Date().toISOString(),
+        round1: payload.round1_verdict,
+        round2: verdict.verdict,
+        action: payload.rebuttal_action || null,
+        flipped: payload.round1_verdict !== verdict.verdict,
+      }) + '\n');
+    } catch (e) {
+      console.error(`verify-claim: flip log not written (${e.code || e.message}) — verdict unaffected`);
+    }
+  }
+
   return verdict.blocked ? 1 : 0;
 }
 
@@ -201,6 +234,40 @@ function runRetryMode(json) {
   return decision.allowed ? 0 : 1;
 }
 
+function runRebuttalMode(json) {
+  const payload = readJsonStdin();
+  if (!payload) {
+    console.error('verify-claim --rebuttal: expected {claim, round1, rebuttal, attempt, probe_ledger} on stdin');
+    return 2;
+  }
+
+  // A malformed attempt must not silently reset the cap to 0.
+  const attempt = payload.attempt === undefined ? 0 : Number(payload.attempt);
+  if (!Number.isInteger(attempt) || attempt < 0) {
+    console.error(`verify-claim --rebuttal: attempt must be a non-negative integer, got ${JSON.stringify(payload.attempt)}`);
+    return 2;
+  }
+
+  const decision = evaluateRebuttal({
+    claim: payload.claim || {},
+    round1: payload.round1 || {},
+    rebuttal: payload.rebuttal || {},
+    attempt,
+    probeLedger: payload.probe_ledger || payload.probeLedger || [],
+    config: loadVerifierConfig(process.env),
+  });
+
+  // The final judge gets fresh blind input: the original observation plus merged
+  // evidence. Neither the argument nor the round-1 verdict is ever in it.
+  const output = decision.allowed
+    ? { ...decision, gate: evaluateScope(decision.claim), blind_input: buildBlindInput(decision.claim), verdict_schema: VERDICT_JSON_SCHEMA }
+    : decision;
+  delete output.claim;
+
+  console.log(JSON.stringify(output, null, json ? 0 : 2));
+  return decision.allowed ? 0 : 1;
+}
+
 function main(argv) {
   const args = argv.slice(2);
   const json = args.includes('--json');
@@ -209,6 +276,7 @@ function main(argv) {
   if (args.includes('--gate')) return runGateMode(json);
   if (args.includes('--aggregate')) return runAggregateMode(json);
   if (args.includes('--retry')) return runRetryMode(json);
+  if (args.includes('--rebuttal')) return runRebuttalMode(json);
 
   console.error(USAGE);
   return 2;

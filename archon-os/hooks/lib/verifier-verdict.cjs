@@ -312,6 +312,55 @@ function checkIndependence({ producer, verifier, sharedContext = false, input = 
   return { independent: reasons.length === 0, reasons };
 }
 
+const REBUTTAL_ACTIONS = ['concede', 'narrow_claim', 'new_evidence'];
+// Only these probe fields reach the judge. `outcome` is an enum so it cannot carry
+// prose. `observation` is raw tool output the judge needs, so it is capped. That
+// cap is the one residual channel, and it is documented in SKILL Step 3b.
+const PROBE_OUTCOMES = ['pass', 'fail'];
+const MAX_OBSERVATION_CHARS = 2000;
+
+/**
+ * The ONE rebuttal round (skills/independent-verifier Step 3b). The producer may
+ * concede, narrow the claim, or add NEW probes. Its argument is never
+ * forwarded, because sycophancy rides on persuasive prose, not on evidence.
+ * Every probe goes through evaluateRetry, so the cap and the no-new-evidence
+ * rule stay in one place.
+ */
+function evaluateRebuttal({ claim = {}, round1 = {}, rebuttal = {}, attempt = 0, probeLedger = [], config = loadVerifierConfig() }) {
+  if (round1.blocked !== true && !isBlocking(round1.verdict)) {
+    return { allowed: false, reason: 'nothing_to_rebut', final: round1 };
+  }
+  if (attempt >= config.loopCap) {
+    return { allowed: false, reason: 'loop_cap_reached', escalate_to_human: true, final: round1 };
+  }
+  const action = rebuttal && rebuttal.action;
+  if (!REBUTTAL_ACTIONS.includes(action)) return { allowed: false, reason: 'invalid_rebuttal', final: round1 };
+
+  if (action === 'concede') return { allowed: false, action, reason: 'conceded', final: round1 };
+
+  if (action === 'narrow_claim') {
+    const narrowed = typeof rebuttal.narrowed_claim === 'string' ? rebuttal.narrowed_claim.trim() : '';
+    if (!narrowed) return { allowed: false, reason: 'invalid_rebuttal', final: round1 };
+    return { allowed: true, action, reason: 'narrowed', claim: { ...claim, conclusion: narrowed } };
+  }
+
+  let ledger = probeLedger;
+  const added = [];
+  for (const p of Array.isArray(rebuttal.probes) ? rebuttal.probes : []) {
+    if (!p || !PROBE_OUTCOMES.includes(p.outcome)) continue;
+    const decision = evaluateRetry({ attempt, probeLedger: ledger, newProbe: p.probe, config });
+    if (!decision.allowed) continue;
+    ledger = decision.probeLedger;
+    const probe = { probe: p.probe, outcome: p.outcome };
+    if (typeof p.observation === 'string') probe.observation = p.observation.slice(0, MAX_OBSERVATION_CHARS);
+    added.push(probe);
+  }
+  if (added.length === 0) return { allowed: false, action, reason: 'no_new_evidence', escalate_to_human: false, final: round1 };
+
+  const evidence = [...(Array.isArray(claim.evidence) ? claim.evidence : []), ...added];
+  return { allowed: true, action, reason: 'new_probe', probeLedger: ledger, claim: { ...claim, evidence } };
+}
+
 module.exports = {
   VERDICTS,
   BLOCKING_VERDICTS,
@@ -324,6 +373,7 @@ module.exports = {
   applyAuthority,
   finalizeVerdict,
   evaluateRetry,
+  evaluateRebuttal,
   checkIndependence,
   isBlocking,
 };

@@ -30,8 +30,9 @@ Approve when the change **definitely improves code health**, even if not perfect
 
 1. Scope: `git diff --name-only <base>...HEAD` (or the given path/PR). Read diff hunks + immediate callers/callees, not whole files.
 2. Size check: >400 changed lines → review in file groups and state which groups were covered. Never claim full coverage you didn't do.
-3. Read every changed line. Run the 8 aspects, CRITICAL-priority ones first.
-4. Verify each candidate finding (below), drop the unproven, report.
+3. Run `node "${CLAUDE_PLUGIN_ROOT}/scripts/quality/diff-smells.cjs" --base <base> --json` **from Bash, no model**. It is a structured check: user-specific paths, ad-hoc scheduling, magic literals duplicated across files, new exports with zero callers. Each finding is a Simplicity/Architecture candidate. Verify it like any other finding. If a subagent has to run it, use `haiku` and relay the JSON verbatim.
+4. Read every changed line. Run the 8 aspects, CRITICAL-priority ones first.
+5. Verify each candidate finding (below), drop the unproven, report.
 
 ## 8 Aspects
 

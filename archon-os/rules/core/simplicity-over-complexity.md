@@ -122,5 +122,11 @@ anti_patterns[8]{pattern,fix}:
 - **Phase 4 / review (`skills/code-reviewer`):** every hand-written helper that duplicates a stdlib,
   repo, or installed-dependency function is a finding, with the replacement call as the fix.
 - **`skills/code-simplifier`** applies the same ladder when simplifying.
+- **Machine check, zero model (`scripts/quality/diff-smells.cjs`, run at Phase 4 and by `/check smells`):**
+  user-specific paths, ad-hoc scheduling outside the one scheduler seam, magic literals duplicated across
+  files, and new exports with no caller. Prose rules are broken quietly. This one exits 1.
+- **Scheduling goes through ONE seam.** A new periodic job is a row, entry or registration in the
+  project's existing scheduler (cron table, job registry, queue). It is never another `setInterval`,
+  crontab line or launchd plist next to it. Mark the seam file `archon:scheduler-seam`.
 
 Three similar lines of code is better than a premature abstraction — and one library call is better than thirty lines of your own.

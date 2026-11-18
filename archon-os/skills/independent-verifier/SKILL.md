@@ -1,6 +1,6 @@
 ---
 name: independent-verifier
-description: "Second opinion on another agent's result from a cheap model. Deterministic scope gate first (free), then k=3 blind Haiku samples; confidence comes from AGREEMENT, never from self-report. One verdict back, no debate. May only lower confidence."
+description: "Second opinion on another agent's result from a cheap model. Deterministic scope gate first (free), then k=3 blind Haiku samples; confidence comes from AGREEMENT, never from self-report. One evidence-only rebuttal round, blind final judge, flips logged. May only lower confidence."
 when_to_use: "a result carries a conclusion (test/coverage claim, security finding, capability claim, 'X does not work'), before an approval gate, before a handoff, reason: verify, second opinion, independent check"
 allowed-tools: Bash, Task, Read
 effort: low
@@ -18,7 +18,7 @@ three non-negotiable:
 constraints[3]{rule,why}:
   Not the producer,"An agent asked to grade its own output agrees with itself — that is the failure this exists to catch"
   No shared context,"Self-preference, familiarity and agreement bias all ride in on shared context"
-  One verdict back,"No debate, no conversation — debate between models escalates sycophancy"
+  One rebuttal; evidence only,"No open debate. Multi-round debate loses to majority vote and degrades with rounds (Choi et al. 2025, arXiv 2508.17536). The producer gets ONE reply (Step 3b), its prose is dropped, and a fresh blind judge decides"
 ```
 
 **The verifier may only ever LOWER confidence.** `SUPPORTED` is advisory and
@@ -132,6 +132,42 @@ echo '{"attempt":1,"probe_ledger":["claude -p \"/run\""],
   `allowed: false, reason: "no_new_evidence"` → the retry is a rewording; do not
   run it. `escalate_to_human: true` → the loop cap is reached: **stop and ask the
   human.** Do not re-run the verifier.
+
+### Step 3b — the ONE rebuttal round (and peer challenge)
+
+An adverse verdict goes back to the producer **once**, as `{verdict, reasons, required_probes}` only. The verifier's
+identity and its samples are not included. The producer replies with exactly one of:
+
+```toon
+actions[3]{action,effect}:
+  concede,"Round-1 verdict is final"
+  narrow_claim,"`narrowed_claim` is re-gated, then fresh samples are drawn"
+  new_evidence,"`probes[]` that were not run before are merged into the evidence; repeats are refused (no_new_evidence)"
+```
+
+```bash
+echo '{"claim":<original claim>,"round1":<aggregate verdict>,"attempt":1,
+       "probe_ledger":[...],"rebuttal":{"action":"new_evidence","probes":[{"probe":"<cmd>","outcome":"pass"}]}}' \
+  | node "${CLAUDE_PLUGIN_ROOT}/scripts/verify-claim.cjs" --rebuttal
+```
+
+- `allowed: true` → draw **k fresh Haiku samples** on the printed `blind_input`. They never see round 1, the
+  argument or the producer. Then `--aggregate` with `"round1_verdict"` and `"rebuttal_action"`. That appends the
+  flip to `.claude/logs/verifier-debate.jsonl` (override with `ARCHON_DEBATE_LOG`).
+- `allowed: false` → the round-1 verdict stands (`final`), or `escalate_to_human`.
+- Any `argument` text is **discarded by the script**. Persuasion is the channel sycophancy rides on.
+  `outcome` must be `pass|fail`, and a probe with any other value is dropped. `observation` is cut to 2000 chars.
+  It is the one remaining free-text channel, so fill it with captured tool output, never with the producer's words.
+- Cap: `ARCHON_VERIFIER_LOOP_CAP`, shared with Step 3 retries, and it applies to every action. The script is
+  stateless, so "one round" holds only if the caller passes the real `attempt`. A malformed attempt exits 2.
+
+**Peer challenge (cross-debate).** When two agents produce results in parallel, each may challenge the other once,
+with a **counter-probe**: a command plus its outcome. That probe enters the other result's evidence through the
+same `--rebuttal`/`new_evidence` path, and the blind judge decides. A peer never casts a verdict, because a producer
+grading a producer is the bias this skill exists to remove.
+
+**Earn its place:** if the flip log shows round 2 overturning correct round-1 verdicts more often than it fixes
+wrong ones, turn the round off. Measure it; don't argue it.
 
 ```toon
 config[3]{env,default,meaning}:

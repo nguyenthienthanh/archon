@@ -100,6 +100,15 @@ This is the same mechanism `rules/workflow/cross-review-workflow.md` already use
 for Builder ≠ Reviewer in Phase 4; this decision extends that discipline to every
 step that produces a result rather than adding a gate beside it.
 
+## Amendment — 2026-11-18: one rebuttal round
+
+"No debate" is narrowed to **no open debate**. The producer now gets ONE evidence-only reply
+(concede / narrow the claim / new probes). Its prose is dropped, and fresh blind samples decide.
+Peers may challenge each other with a counter-probe but never vote. The roles and their hard
+constraints are otherwise unchanged. Why: owner request, bounded by Choi et al. 2025 (arXiv 2508.17536,
+majority vote beats debate and accuracy falls with rounds). Flips are logged so the round can
+be measured and removed. Live spec: `skills/independent-verifier/SKILL.md` Step 3b.
+
 ## More information
 
 - `rules/workflow/three-role-dispatch.md` — the operative rule, including the
