@@ -41,6 +41,14 @@ For deep profiling of a specific bottleneck (not just surface metrics), delegate
 
 ---
 
+## /check smells
+
+Deterministic, zero-model scan of the lines a change adds. It looks for hardcoded user paths, ad-hoc scheduling (`setInterval`, crontab, `launchctl load`) outside the one scheduler seam, magic literals duplicated across files, and new exports nothing calls. Run it straight from Bash: `node "${CLAUDE_PLUGIN_ROOT}/scripts/quality/diff-smells.cjs" [--base <ref>] [--all]`. Exit 1 means it found something. `--all` audits the whole tree (old debt included).
+
+**Usage:** `/check smells`, `/check smells --all`
+
+---
+
 ## /check complexity
 
 Cyclomatic + cognitive complexity analysis. Scale: 1-5 simple, 6-10 moderate, 11-20 complex, 21+ critical. Reports hotspots and refactoring priorities.

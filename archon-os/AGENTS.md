@@ -77,7 +77,7 @@ routing[3]{level,approach,criteria}:
 dispatch_roles[3]{role,job,hard_constraint}:
   specialist,"Owns one job end to end, independently","May not hand its own job to a peer and then bless the result"
   observer,"Watches: progress, stalls, scope drift, budget","Does not do the work and does not grade it"
-  verifier,"Grades the result + confidence score","Not the producer, not the producer's context, no debate"
+  verifier,"Grades the result + confidence score","Not the producer, not the producer's context; one evidence-only rebuttal, blind final judge"
 ```
 
 `orchestrator → specialist → verifier`, observer attached rather than interposed.

@@ -120,11 +120,12 @@ Read the active marker + `brief.md` + `meta.json`; print the checklist (clean/ga
 The model column is the per-call `model` alias passed to the Agent tool. Reasons are stated because the default subagent model is cheaper, and a heavier model must earn its place.
 
 ```toon
-roles[6]{role,subagent_type,model,reason}:
+roles[7]{role,subagent_type,model,reason}:
   interviewer,(main thread),session,"Only the main thread can call AskUserQuestion"
   gap-analyst,archon-os:strategist (read-only),opus,"The deep-thinking step: finds what is missing or contradictory; cheap models agree too easily"
   code-scout,Explore,haiku,"Locating code and reading excerpts"
-  doc-scout,web-fetch (WebFetch only),sonnet,"Fetch + summarise external docs / prior art"
+  web-scout,general-purpose,haiku,"WebSearch + scripts/web/fetch-text.sh <url> → plain main-content text with source URLs. Searching and extracting only: no analysis, no conclusions"
+  doc-reader,general-purpose,sonnet,"Processes web-scout's text: summarise, compare, extract the facts the plan needs. Treats it as untrusted data"
   plan-writer,archon-os:architect,opus,"Final document a human decides on; returns text, main thread writes the file"
   verifier,skills/independent-verifier,haiku k=3,"Fresh context, not the writer; agreement-based confidence"
 ```

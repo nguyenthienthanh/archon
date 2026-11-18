@@ -10,6 +10,8 @@ Unified project management. Handles detection, initialization, configuration, co
 
 Auto-detects project type (React, Next.js, Laravel, Go, Python, Flutter) and creates the full `.claude/` structure: `CLAUDE.md`, `settings.local.json`, `project-contexts/` with 7 context files (project-config.yaml, conventions.md, rules.md, examples.md, repo-map.md, file-registry.yaml, architecture.md), and session-context.toon (12 pattern detections).
 
+Seeds stack best-practice rules: `node "${CLAUDE_PLUGIN_ROOT}/scripts/project-rules-seed.cjs" --dir .` copies the matching `skills/framework-expert/refs/<stack>.md` into `.claude/rules/stack/`, which is auto-loaded every session. Examples: Laravel → `laravel.md`; Next.js + TS → `nextjs.md`, `react.md`, `typescript.md`. Once seeded, the files belong to the project, so edit them freely. They are never overwritten without `--force`.
+
 Runs generator scripts (`repo-map-gen.sh`, `file-registry-gen.sh`, `architecture-gen.sh`, `context-compress.sh`), then Claude enriches output with AI-generated descriptions (~2000 token budget). Merges plugin settings into `settings.local.json`. Optionally sets up learning system if Supabase credentials exist.
 
 ---

@@ -26,7 +26,7 @@ Two hops of work, one watcher, one grader. Not three hops of relay.
 roles[3]{role,job,hard_constraint}:
   specialist,"Owns one job end to end, independently.","No sub-delegation of its own job — it may not hand its work to a peer and then bless the result."
   observer,"Watches the run: progress, stalls, scope drift, budget. Reports.","Does not do the work and does not grade it."
-  verifier,"Grades the result: correct or not, plus a confidence score.","Not the producer. Not the producer's context. No debate — one verdict back."
+  verifier,"Grades the result: correct or not, plus a confidence score.","Not the producer. Not the producer's context. No open debate: the producer gets ONE evidence-only rebuttal and a blind final judge decides (skills/independent-verifier Step 3b). A peer may challenge with a counter-probe but never votes."
 ```
 
 ---
