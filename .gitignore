@@ -42,6 +42,8 @@ archon-os/archive/
 node_modules/
 package-lock.json
 coverage/
+# Playwright MCP page snapshots (written while browsing)
+.playwright-mcp/
 
 # v3.7.0 hierarchical planning runtime data (per spec Q2)
 .aura/
