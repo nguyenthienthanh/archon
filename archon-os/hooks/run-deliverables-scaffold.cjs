@@ -60,7 +60,7 @@ function main() {
   const phase = phaseToScaffold(runState);
   if (phase === null) return;
 
-  const pluginRoot = process.env.CLAUDE_PLUGIN_ROOT || path.join(__dirname, '..');
+  const pluginRoot = require('./lib/hook-runtime.cjs').findPluginRoot();
   const script = path.join(pluginRoot, 'scripts', 'workflow', 'scaffold-phase-deliverables.sh');
   if (!fs.existsSync(script)) return;
 

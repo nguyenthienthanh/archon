@@ -48,7 +48,7 @@ const path = require('path');
 
 if (process.env.ARCHON_JSON_TOON_DISABLED === 'true') process.exit(0);
 
-const PLUGIN_ROOT = process.env.CLAUDE_PLUGIN_ROOT || path.join(__dirname, '..');
+const PLUGIN_ROOT = require('./lib/hook-runtime.cjs').findPluginRoot();
 const TOON_CONVERTER_PATH = path.join(PLUGIN_ROOT, 'scripts', 'json-to-toon.cjs');
 const MIN_BYTES = parseInt(process.env.ARCHON_JSON_TOON_MIN_BYTES || '2000', 10);
 // Upper cap. Projecting means holding the raw string + the parsed object + the
