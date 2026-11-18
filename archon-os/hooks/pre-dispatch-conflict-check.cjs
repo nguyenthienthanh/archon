@@ -34,11 +34,11 @@ const path = require('path');
 const { spawnSync } = require('child_process');
 const resolvePlansDir = require('./lib/plans-dir.cjs');
 
-const PLUGIN_ROOT = process.env.CLAUDE_PLUGIN_ROOT || path.join(__dirname, '..');
+const PLUGIN_ROOT = require('./lib/hook-runtime.cjs').findPluginRoot();
 const PLANS_DIR = resolvePlansDir();
 const ACTIVE_FILE = path.join(PLANS_DIR, 'active.json');
-const HISTORY_FILE = path.join(PLANS_DIR, 'history.jsonl');
-const CONFLICTS_FILE = path.join(PLANS_DIR, 'conflicts.jsonl');
+const HISTORY_FILE = path.join(PLANS_DIR, resolvePlansDir.PLAN_LOG_FILES.history);
+const CONFLICTS_FILE = path.join(PLANS_DIR, resolvePlansDir.PLAN_LOG_FILES.conflicts);
 const COUNTERS_FILE = path.join(PLANS_DIR, '.counters.json');
 const L1_SCRIPT = path.join(PLUGIN_ROOT, 'scripts', 'conflicts', 'check-l1-files.sh');
 const L2_SCRIPT = path.join(PLUGIN_ROOT, 'scripts', 'conflicts', 'check-l2-syntactic.sh');

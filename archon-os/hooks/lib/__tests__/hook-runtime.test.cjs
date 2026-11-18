@@ -1143,6 +1143,28 @@ describe('hook-runtime: back-compat re-exports', () => {
 });
 
 // ============================================================================
+// findPluginRoot — the ONE resolver for the plugin's own directory
+// ============================================================================
+
+describe('hook-runtime: findPluginRoot', () => {
+  const saved = process.env.CLAUDE_PLUGIN_ROOT;
+  afterEach(() => {
+    if (saved === undefined) delete process.env.CLAUDE_PLUGIN_ROOT;
+    else process.env.CLAUDE_PLUGIN_ROOT = saved;
+  });
+
+  it('returns CLAUDE_PLUGIN_ROOT when the host sets it', () => {
+    process.env.CLAUDE_PLUGIN_ROOT = '/opt/some-plugin';
+    expect(rt().findPluginRoot()).toBe('/opt/some-plugin');
+  });
+
+  it('falls back to the plugin directory (the parent of hooks/) when unset', () => {
+    delete process.env.CLAUDE_PLUGIN_ROOT;
+    expect(rt().findPluginRoot()).toBe(path.join(REPO_ROOT, 'archon-os'));
+  });
+});
+
+// ============================================================================
 // findProjectRoot — fixes CWD ≠ project root cache pollution (v3.8.0-alpha.2)
 // ============================================================================
 

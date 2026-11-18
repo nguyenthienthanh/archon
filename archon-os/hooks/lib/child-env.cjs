@@ -80,4 +80,4 @@ function droppedKeys(source = process.env) {
   return Object.keys(source).filter(isSecretName).sort();
 }
 
-module.exports = { SECRET_FRAGMENT, PAT_WORD, ALWAYS_KEEP, isSecretName, filterChildEnv, droppedKeys };
+module.exports = { isSecretName, filterChildEnv, droppedKeys };

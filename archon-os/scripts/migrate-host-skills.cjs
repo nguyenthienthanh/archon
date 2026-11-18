@@ -61,7 +61,7 @@ function migrate(skillsDir, { apply = false } = {}) {
   return plans;
 }
 
-module.exports = { migrate, planOne, describe };
+module.exports = { migrate, describe };
 
 if (require.main === module) {
   const args = process.argv.slice(2);

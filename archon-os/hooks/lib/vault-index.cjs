@@ -431,8 +431,8 @@ if (require.main === module) {
 }
 
 module.exports = {
-    SCHEMA_VERSION, INDEX_NAME, indexPath,
-    parseFrontmatter, entryFrom, listNodeFiles,
+    SCHEMA_VERSION, indexPath,
+    parseFrontmatter, listNodeFiles,
     buildIndex, writeIndex, readIndex, rebuildIndex, updateEntry,
     stalenessReason, childrenOf, readyTasks, renderTree, renderLine, cli,
 };

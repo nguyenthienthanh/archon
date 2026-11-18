@@ -102,5 +102,5 @@ function main() {
 if (require.main === module) {
   main();
 } else {
-  module.exports = { STATE_PATHS, HANDOFFS_DIR, validateStateFile, collectWarnings, sessionHandoffPaths };
+  module.exports = { STATE_PATHS, validateStateFile, collectWarnings };
 }

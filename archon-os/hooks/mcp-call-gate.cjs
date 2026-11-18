@@ -39,10 +39,10 @@
 const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
-const { readHookInputCompat, findProjectRoot } = require('./lib/hook-runtime.cjs');
+const { readHookInputCompat, findProjectRoot, findPluginRoot } = require('./lib/hook-runtime.cjs');
 const { resolveMcpAuditFile } = require('./lib/security-dir.cjs');
 
-const PLUGIN_ROOT = process.env.CLAUDE_PLUGIN_ROOT || path.join(__dirname, '..');
+const PLUGIN_ROOT = findPluginRoot();
 const SANITIZER = path.join(PLUGIN_ROOT, 'scripts', 'security', 'sanitize-mcp-input.sh');
 const PLUGIN_JSON = path.join(PLUGIN_ROOT, '.claude-plugin', 'plugin.json');
 const AGENTS_DIR = path.join(PLUGIN_ROOT, 'agents');
@@ -302,10 +302,6 @@ module.exports = {
   resolveAgent,
   normalizeCounters,
   computeUsage,
-  getAllowlist,
-  getRateLimits,
   SESSION_WINDOW_MS,
   DEFAULT_LIMITS,
-  HARD_BLOCK_LIMIT,
-  SOFT_WARN_LIMIT,
 };

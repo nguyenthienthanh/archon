@@ -352,4 +352,4 @@ if (require.main === module) {
   main();
 }
 
-module.exports = { project, encode, convert, SCHEMAS, getPath, adfToText };
+module.exports = { project, encode, convert };

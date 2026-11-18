@@ -35,7 +35,7 @@ const { readJsonlTail } = require('./lib/jsonl-tail.cjs');
 
 const PLANS_DIR = resolvePlansDir();
 const ACTIVE_FILE = path.join(PLANS_DIR, 'active.json');
-const HISTORY_FILE = path.join(PLANS_DIR, 'history.jsonl');
+const HISTORY_FILE = path.join(PLANS_DIR, resolvePlansDir.PLAN_LOG_FILES.history);
 
 function safeExit(code = 0) { process.exit(code); }
 

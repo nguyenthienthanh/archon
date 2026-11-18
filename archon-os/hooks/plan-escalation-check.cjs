@@ -195,8 +195,6 @@ if (require.main === module) {
 
 module.exports = {
   ESCALATION_THRESHOLD,
-  BYPASS_PREFIXES,
-  SIGNALS,
   computeWeight,
   classify,
   planActive,

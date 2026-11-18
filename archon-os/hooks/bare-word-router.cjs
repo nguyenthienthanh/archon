@@ -142,4 +142,4 @@ if (require.main === module) {
 }
 
 // Exported for unit tests.
-module.exports = { PLAN_VERBS, MAX_WORDS, OVERRIDE_PREFIXES, classify, planActive, readPrompt, main, emitHint };
+module.exports = { PLAN_VERBS, MAX_WORDS, classify, planActive, readPrompt, main, emitHint };

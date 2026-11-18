@@ -37,10 +37,11 @@ const path = require('path');
 const { execFileSync } = require('child_process');
 const { guardEndpoint } = require('./lib/net-guard.cjs');
 
-const PLUGIN_ROOT = process.env.CLAUDE_PLUGIN_ROOT || path.join(__dirname, '..');
+const { findProjectRoot, findPluginRoot } = require('./lib/hook-runtime.cjs');
+
+const PLUGIN_ROOT = findPluginRoot();
 const TOON_CONVERTER = path.join(PLUGIN_ROOT, 'scripts', 'json-to-toon.cjs');
 
-const { findProjectRoot } = require('./lib/hook-runtime.cjs');
 const PROJECT_CACHE_DIR = path.join(findProjectRoot(), '.claude', 'logs', 'jira');
 const SESSION_HINT_FLAG = path.join(findProjectRoot(), '.claude', 'logs', '.jira-env-hint-shown');
 

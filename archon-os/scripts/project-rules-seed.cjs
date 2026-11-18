@@ -119,4 +119,5 @@ function main(argv) {
   return 0;
 }
 
-process.exit(main(process.argv));
+// exitCode, not process.exit(): exit() can cut stdout at the 64 KB pipe buffer.
+process.exitCode = main(process.argv);

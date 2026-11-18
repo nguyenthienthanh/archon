@@ -219,12 +219,6 @@ function saveAvailabilityCache(linters, cwd = process.cwd()) {
   } catch { /* fs/cache write - non-blocking, probe just re-runs next time */ }
 }
 
-/** Drop both memo layers. Test seam. */
-function resetAvailabilityCache() {
-  availabilityMemo.clear();
-  try { fs.unlinkSync(AVAILABILITY_CACHE()); } catch { /* not there */ }
-}
-
 /**
  * Check if a linter is available in the project.
  *
@@ -569,10 +563,7 @@ async function main() {
 module.exports = {
   getAvailableLinters,
   isLinterAvailable,
-  probeLinterAvailable,
-  resetAvailabilityCache,
   computeProbeHash,
-  runLinter,
   extractFilePath,
   isDebounced,
   recordLinted,

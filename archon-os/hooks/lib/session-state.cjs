@@ -63,12 +63,6 @@ function updateState(field, value) {
   return saveState(state);
 }
 
-// Get specific state field
-function getState(field) {
-  const state = loadState();
-  return state[field];
-}
-
 // Set current phase
 function setPhase(phase) {
   return updateState('phase', phase);
@@ -87,56 +81,6 @@ function setApproval(phase, status) {
   return saveState(state);
 }
 
-// Add active agent
-function addAgent(agentName) {
-  const state = loadState();
-  if (!state.agents.includes(agentName)) {
-    state.agents.push(agentName);
-    return saveState(state);
-  }
-  return true;
-}
-
-// Set active team
-function setActiveTeam(name, phase, logDir) {
-  const state = loadState();
-  state.activeTeam = name;
-  state.activeTeamPhase = phase;
-  state.teamLogDir = logDir;
-  state.updatedAt = new Date().toISOString();
-  return saveState(state);
-}
-
-// Clear active team (move to history)
-function clearActiveTeam() {
-  const state = loadState();
-  if (state.activeTeam) {
-    if (!state.teamHistory) state.teamHistory = [];
-    state.teamHistory.push({
-      name: state.activeTeam,
-      phase: state.activeTeamPhase,
-      logDir: state.teamLogDir,
-      clearedAt: new Date().toISOString()
-    });
-  }
-  state.activeTeam = null;
-  state.activeTeamPhase = null;
-  state.teamLogDir = null;
-  state.updatedAt = new Date().toISOString();
-  return saveState(state);
-}
-
-// Get active team info
-function getActiveTeamInfo() {
-  const state = loadState();
-  if (!state.activeTeam) return null;
-  return {
-    name: state.activeTeam,
-    phase: state.activeTeamPhase,
-    logDir: state.teamLogDir
-  };
-}
-
 // Clear session
 function clearSession() {
   const file = getSessionFile();
@@ -152,17 +96,6 @@ function clearSession() {
 
 // Export functions
 module.exports = {
-  loadState,
-  saveState,
-  updateState,
-  getState,
-  setPhase,
-  setActivePlan,
-  setApproval,
-  addAgent,
-  setActiveTeam,
-  clearActiveTeam,
-  getActiveTeamInfo,
   clearSession,
   getSessionFile
 };

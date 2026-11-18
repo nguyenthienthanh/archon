@@ -29,13 +29,13 @@ const { spawnSync } = require('child_process');
 
 if (process.env.ARCHON_PREFLIGHT_DISABLED === 'true') process.exit(0);
 
-const PLUGIN_ROOT = process.env.CLAUDE_PLUGIN_ROOT || path.join(__dirname, '..');
+const { findProjectRoot, readHookInputCompat, findPluginRoot } = require('./lib/hook-runtime.cjs');
+
+const PLUGIN_ROOT = findPluginRoot();
 const RUN_ALL = path.join(PLUGIN_ROOT, 'scripts', 'preflight', 'run-all.sh');
 
 if (!fs.existsSync(RUN_ALL)) process.exit(0);
 
-
-const { findProjectRoot, readHookInputCompat } = require('./lib/hook-runtime.cjs');
 
 // Bridge the stdin tool context onto the env vars run-all.sh reads (it still
 // auto-dispatches from CLAUDE_TOOL_* env). The old code read the tool name from

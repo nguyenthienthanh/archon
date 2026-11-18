@@ -175,6 +175,6 @@ if (require.main === module) {
   main();
 } else {
   module.exports = {
-    SCANNABLE, UI_LIBRARIES, scanContent, isScannable, isTokenFile, resolveScanPath,
+    SCANNABLE, scanContent, isScannable, isTokenFile, resolveScanPath,
   };
 }

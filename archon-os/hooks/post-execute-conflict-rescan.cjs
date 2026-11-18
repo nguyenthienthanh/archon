@@ -32,8 +32,8 @@ const resolvePlansDir = require('./lib/plans-dir.cjs');
 const { readJsonlTail } = require('./lib/jsonl-tail.cjs');
 
 const PLANS_DIR = resolvePlansDir();
-const HISTORY_FILE = path.join(PLANS_DIR, 'history.jsonl');
-const CONFLICTS_FILE = path.join(PLANS_DIR, 'conflicts.jsonl');
+const HISTORY_FILE = path.join(PLANS_DIR, resolvePlansDir.PLAN_LOG_FILES.history);
+const CONFLICTS_FILE = path.join(PLANS_DIR, resolvePlansDir.PLAN_LOG_FILES.conflicts);
 const RESCAN_WINDOW_MS = 60 * 1000;
 
 // Pure: newest-first scan of history lines for execution_completed(exit 0) events

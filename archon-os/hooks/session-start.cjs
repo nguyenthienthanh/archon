@@ -557,8 +557,8 @@ function sweepRetention() {
     require('./lib/security-dir.cjs').resolveMcpAuditFile(findProjectRoot()),
     // The two append-only plan logs. Six hooks append to these and nothing
     // truncated them before; three Stop-registered hooks read their tails.
-    path.join(plansDir, 'history.jsonl'),
-    path.join(plansDir, 'conflicts.jsonl'),
+    path.join(plansDir, resolvePlansDir.PLAN_LOG_FILES.history),
+    path.join(plansDir, resolvePlansDir.PLAN_LOG_FILES.conflicts),
     ...listFiles(path.join(plansDir, 'traces')),
     // v3.7.3+ tool-call-tracer writes {taskFolder}/trace.jsonl, not the legacy
     // traces/ dir — those co-located files escaped the sweep entirely.

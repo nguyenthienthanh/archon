@@ -103,6 +103,16 @@ class HookConfigError extends HookRuntimeError {
  * @param {string} [start]  optional starting dir; defaults to process.cwd()
  * @returns {string}        absolute path to project root
  */
+/**
+ * The plugin's own directory: CLAUDE_PLUGIN_ROOT when the host sets it,
+ * otherwise the parent of hooks/. This is the one place it is resolved. Hooks
+ * used to each carry their own copy of this fallback.
+ * @returns {string}
+ */
+function findPluginRoot() {
+  return process.env.CLAUDE_PLUGIN_ROOT || path.join(__dirname, '..', '..');
+}
+
 function findProjectRoot(start) {
   if (process.env.ARCHON_PROJECT_ROOT) {
     return path.resolve(process.env.ARCHON_PROJECT_ROOT);
@@ -682,6 +692,7 @@ module.exports = {
 
   // Project root resolver (v3.8.0-alpha.2 — fixes CWD pollution)
   findProjectRoot,
+  findPluginRoot,
 
   // 5 error classes + base
   HookRuntimeError,

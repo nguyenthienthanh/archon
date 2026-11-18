@@ -143,11 +143,37 @@ describe('diff-smells — dead-export', () => {
     expect(dead.map((f) => f.evidence)).toEqual(['neverCalledHelper']);
   });
 
+  it('does not treat config-object keys with literal values as exported names', () => {
+    const dir = makeRepo({ 'src/keep.js': '\n' });
+    write(dir, { 'jest.config.cjs': "module.exports = {\n  testEnvironment: 'node',\n  maxWorkers: '50%',\n  roots: ['<rootDir>'],\n};\n" });
+    expect(scan(dir).out.findings.filter((f) => f.smell === 'dead-export')).toEqual([]);
+  });
+
+  it('still counts `name: identifier` entries as exports', () => {
+    const dir = makeRepo({ 'src/keep.js': '\n' });
+    write(dir, { 'src/u.js': 'function impl() {}\nmodule.exports = { publicName: impl };\n' });
+    const dead = scan(dir).out.findings.filter((f) => f.smell === 'dead-export');
+    expect(dead.map((f) => f.evidence)).toEqual(['publicName']);
+  });
+
   it('matches whole words, not prefixes (composeMusic vs composeMusicPlan)', () => {
     const dir = makeRepo({ 'src/keep.js': '\n' });
     write(dir, { 'src/m.js': 'export function composeMusic() {}\n', 'src/n.js': "import { composeMusicPlan } from './p';\n" });
     const dead = scan(dir).out.findings.filter((f) => f.smell === 'dead-export');
     expect(dead.map((f) => f.evidence)).toEqual(['composeMusic']);
+  });
+});
+
+describe('diff-smells — large output through a pipe', () => {
+  it('is not truncated at the 64 KB pipe buffer (process.exit used to cut stdout)', () => {
+    const files = {};
+    for (let i = 0; i < 800; i++) files[`src/f${i}.js`] = `const p${i} = '/Users/alice/project/some/long/path/segment/number/${i}';\n`;
+    const dir = makeRepo({ 'src/keep.js': '\n' });
+    write(dir, files);
+    // A real shell pipe: the reader (cat) is slower than spawnSync's own drain.
+    const r = spawnSync('sh', ['-c', `node "${CLI}" --json | cat`], { cwd: dir, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 });
+    expect(r.stdout.length).toBeGreaterThan(65536);
+    expect(JSON.parse(r.stdout).findings.filter((f) => f.smell === 'user-path')).toHaveLength(800);
   });
 });
 

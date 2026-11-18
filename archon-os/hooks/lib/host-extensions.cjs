@@ -156,4 +156,4 @@ function formatIndex(found, { projectDir = process.cwd(), forSubagent = false } 
   return lines.join('\n');
 }
 
-module.exports = { discover, formatIndex, frontmatter, listSkills, listRules };
+module.exports = { discover, formatIndex, frontmatter, listSkills };

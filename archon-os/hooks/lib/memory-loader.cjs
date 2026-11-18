@@ -275,35 +275,6 @@ async function loadMemory(options = {}) {
   }
 }
 
-/**
- * Get cached memory content (for Claude to read)
- */
-function getMemoryContent() {
-  const cachePath = getMemoryCachePath();
-  try {
-    return fs.readFileSync(cachePath, 'utf-8');
-  } catch {
-    return null;
-  }
-}
-
-/**
- * Clear memory cache
- */
-function clearMemoryCache() {
-  const cachePath = getMemoryCachePath();
-  try {
-    fs.unlinkSync(cachePath);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
 module.exports = {
-  loadMemory,
-  getMemoryContent,
-  clearMemoryCache,
-  getMemoryCachePath,
-  getSupabaseConfig
+  loadMemory
 };

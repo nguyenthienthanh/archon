@@ -196,7 +196,7 @@ function extractToolFields(data) {
   };
 }
 
-module.exports = { recordAiOperation, detectCorrection, extractToolFields, run };
+module.exports = { extractToolFields, run };
 
 // Run if called directly
 if (require.main === module) {

@@ -97,7 +97,6 @@ module.exports = {
   shouldRefresh,
   readLastRefresh,
   writeLastRefresh,
-  markerPathFor,
   DEBOUNCE_MS,
 };
 
